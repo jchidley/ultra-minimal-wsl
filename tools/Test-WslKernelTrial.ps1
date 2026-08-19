@@ -63,9 +63,13 @@ $configBefore = Get-HashOrNull $config
 $ledgerBefore = Get-HashOrNull $ledger
 if ((Get-HashOrNull $candidate) -ne $stockBefore) { throw 'External stock-kernel copy hash mismatch.' }
 
-& $harness -Mode StockValidation -TrialId SELFTEST-PLAN -CandidateKernel $candidate `
+$planOutput = @(& $harness -Mode StockValidation -TrialId SELFTEST-PLAN -CandidateKernel $candidate `
     -TestDistribution 'Toybox-Minimal' -RecoveryDistribution 'Debian' `
-    -StateRoot $stateRoot -WslRoot $WslRoot -TrialLedger $ledger
+    -StateRoot $stateRoot -WslRoot $WslRoot -TrialLedger $ledger)
+$planJson = @($planOutput | Where-Object { $_ -is [string] -and $_.TrimStart().StartsWith('{') })
+if ($planJson.Count -ne 1) { throw 'Kernel plan did not emit exactly one JSON object.' }
+$plan = $planJson[0] | ConvertFrom-Json
+if ($plan.requiresElevation -ne $false) { throw 'Ordinary kernel plan incorrectly requires elevation.' }
 
 Invoke-ExpectedFailure {
     & $harness -Mode KernelTrial -TrialId SELFTEST-GUARD -CandidateKernel $candidate `

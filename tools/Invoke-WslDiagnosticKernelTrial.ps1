@@ -67,6 +67,8 @@ $trialArguments = @{
 Write-Output ([ordered]@{
     diagnosticMode = 'Microsoft WSL ETW profile plus transactional debugConsole'
     execute = [bool]$Execute
+    requiresElevation = [bool]$Execute
+    elevationReason = 'WPR starts privileged WSL, kernel, and Hyper-V ETW providers; the underlying kernel harness does not require elevation.'
     wprProfile = $profile
     wprProfileSha256 = $profileHash
     wprProfileName = 'WSL'

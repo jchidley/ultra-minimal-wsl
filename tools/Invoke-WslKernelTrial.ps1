@@ -512,6 +512,7 @@ try {
 
     $plan = [ordered]@{
         mode = $Mode; trialId = $TrialId; execute = [bool]$Execute
+        requiresElevation = $false
         candidateKernel = $candidate; packagedKernel = $stock; wslVersion = $wslVersion
         originalWslConfig = [ordered]@{ exists = $config.exists; length = $config.bytes.Length; sha256 = if ($config.exists) { Get-Sha256 $wslConfigPath } else { $null } }
         testDistribution = $TestDistribution; recoveryDistribution = $RecoveryDistribution; timeoutSeconds = $TimeoutSeconds

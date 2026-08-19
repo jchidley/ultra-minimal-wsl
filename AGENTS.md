@@ -31,7 +31,9 @@ inventory synchronizer. Never rewrite completed ledger rows or trial evidence.
 ## Safety
 
 - Require explicit approval before `-Execute`, WSL shutdown, `.wslconfig`
-  changes, elevation, or custom-kernel boot.
+  changes, or custom-kernel boot.
+- Run ordinary kernel trials unelevated. Elevate only the WPR/ETW diagnostic
+  wrapper or optional installer, after separate explicit approval.
 - Never write under `C:\Program Files\WSL` or replace its initrd.
 - Keep builds and source worktrees on `LFS-Builder` ext4.
 - Commit configs, metadata, hashes, extracted evidence, and analysis; exclude
@@ -39,6 +41,16 @@ inventory synchronizer. Never rewrite completed ledger rows or trial evidence.
 - Do not accept new WSL package hashes without an approved stock recovery trial.
 
 ## Commands
+
+From PowerShell 5.1, start fresh scoped sessions:
+
+```powershell
+& .\tools\Start-Pi.ps1 -Mode RefreshDocs
+& .\tools\Start-Pi.ps1 -Mode Work
+```
+
+Refresh records after evidence-producing work and before handing off. Do not use
+`pi -c` as the project entry point; current repository evidence is authoritative.
 
 ```bash
 uv run python tools/inventory.py trial

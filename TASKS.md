@@ -60,7 +60,8 @@ Next:
 4. run `uv run python tools/inventory_records.py` and require SQLite integrity `ok`;
 5. build, hash, archive, and plan-validate without booting;
 6. continue excluding cgroups, networking/seccomp, page reporting, and console support;
-7. obtain new explicit approval before any overlay candidate boot.
+7. plan the ordinary unelevated kernel harness by default; select elevated WPR/ETW diagnostics only if pre-dispatch evidence is needed;
+8. obtain new explicit approval before any overlay candidate boot.
 
 Do not manually change the installed initrd. WSL 2.7.12.0 and initrd `a76ddd9b...6b118` are now the recovery-validated fixed condition.
 

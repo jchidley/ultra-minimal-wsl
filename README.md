@@ -7,6 +7,28 @@ the mkroot Toybox system and then Alpine. Networking, DrvFs, systemd,
 containers, GUI integration, and unrelated Microsoft control-plane policy are
 deferred.
 
+Use two separate fresh-session workflows from PowerShell 5.1:
+
+```powershell
+# Reconcile status, task, inventory, recovery, and handoff documents safely.
+& .\tools\Start-Pi.ps1 -Mode RefreshDocs
+
+# Start a new implementation/research session from verified repository context.
+& .\tools\Start-Pi.ps1 -Mode Work
+```
+
+Both modes enter the repository, synchronize and test SQLite, capture the
+canonical live state, and start a new named Pi session. `RefreshDocs` is
+restricted to evidence-backed record updates; `Work` selects the first current
+non-disruptive task. Neither uses `pi -c` or trusts prior-session memory.
+
+Validate the entry point or run its complete preflight without starting Pi:
+
+```powershell
+& .\tools\Start-Pi.ps1 -Mode Work -Check
+& .\tools\Start-Pi.ps1 -Mode Work -PreflightOnly
+```
+
 ## Source checkouts (WSL ext4)
 
 Inside the dedicated `LFS-Builder` distro:
