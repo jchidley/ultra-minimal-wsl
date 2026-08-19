@@ -9,8 +9,8 @@ Updated 2026-08-19. This is the factual project state. `MINIMAL-BOOT-PLAN.md` de
 - Every mkroot-derived kernel was activated only inside a journaled trial; the latest reached `B3`, and the stock kernel is active again.
 - The project has not written any file under `C:\Program Files\WSL`.
 - Windows updated WSL from 2.7.11.0 to 2.7.12.0. Approved stock-copy trial `K-RECOVERY-002` revalidated the new package state: Toybox passed `B6-T`, the exact `.wslconfig` was restored, stock Debian booted, and the packaged kernel/initrd hashes were independently rechecked. `recovery-harness\expected-safe-state.json` accepts WSL 2.7.12.0, kernel `d540850b...bc861`, and initrd `a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118`.
-- After approved `K-STORAGE-001`, the canonical verifier reports `safe:true`: WSL is stopped, exact `.wslconfig` and packaged hashes match, no recovery journal or management operation remains, WPR is idle, and stock Debian recovery passed.
-- `tools\Test-WslSafeState.ps1` now emits the complete check set as JSON and is the canonical verifier; it reports version/package drift or active WSL state as unsafe rather than silently treating teardown races as success.
+- Approved `K-STORAGE-001` ended with verified `safe:true`, exact restoration, and stock Debian recovery. The current preflight reports `safe:false` only because `Debian-Recovered` and the WSL utility VM are running; hashes, `.wslconfig`, journals, trial rows, management operations, relay state, and WPR state all pass. Do not stop the running distribution automatically; require a fresh `safe:true` check before a trial.
+- `tools\Test-WslSafeState.ps1` emits the complete check set as JSON and is the canonical verifier; it reports version/package drift or active WSL state as unsafe rather than silently treating teardown races as success.
 - The existing Stage 1–3 configs and images remain untouched.
 - The independent `Debian-Recovered` export ended with an archive renamed `.partial.failed`. No WSL management operation was active before the latest trial; always recheck before another disruptive trial.
 
@@ -70,9 +70,9 @@ Important files:
 
 ## Dependency inventory updated
 
-SQLite now records eight full config snapshots: `mkroot`, `baseline`, `stage1`,
-`stage2`, `stage3`, `k-hvcore-001`, `k-hostchan-001`, and `k-storage-001`.
-It also imports all eight immutable trial-ledger rows plus supplemental parent,
+SQLite now records nine full config snapshots: `mkroot`, `baseline`, `stage1`,
+`stage2`, `stage3`, `k-hvcore-001`, `k-hostchan-001`, `k-storage-001`, and
+`k-overlay-001`. It also imports all eight immutable trial-ledger rows plus supplemental parent,
 bundle, symbol, checkpoint, config, and analysis metadata.
 
 Current counts:
@@ -81,7 +81,7 @@ Current counts:
 - 126,629 conditional relationships
 - 608 symbols enabled in mkroot’s full config
 - 1,792 mkroot-to-Stage-1 differences
-- 106 reviewed annotations, including 52 mkroot-to-Stage-1 differences
+- 113 reviewed annotations, including 52 mkroot-to-Stage-1 differences
 
 Durable inputs are `inventory\annotations.csv`, `config-snapshots.csv`,
 `trials.csv`, and `trial-metadata.csv`; `tools\inventory_records.py` verifies
@@ -211,7 +211,20 @@ Approved `K-STORAGE-001` retained `K-HOSTCHAN-001` and added only `CONFIG_SCSI_L
 - exact WSL 2.7.12 source next calls `UtilMountOverlayFs`, while `CONFIG_OVERLAY_FS` is disabled; this is the high-confidence next narrow blocker;
 - exact `.wslconfig` restoration, stock Debian recovery, WPR stop, relay cleanup, terminal ledger append, and evidence hashing passed.
 
-Evidence is under `recovery-harness/trials/K-STORAGE-001/`. The storage bundle is retained provisionally. Any overlay candidate boot requires a new explicit approval.
+Evidence is under `recovery-harness/trials/K-STORAGE-001/`. The storage bundle is retained provisionally.
+
+## Prepared post-B3 overlay candidate
+
+`K-OVERLAY-001` was generated from `K-STORAGE-001` with only `CONFIG_OVERLAY_FS=y` added explicitly. Kconfig selected `CONFIG_FS_STACK=y`; `CONFIG_EXPORTFS=y` was already present. Six visible optional overlay defaults were held disabled, and the NFS-export default remained invisible because overlay indexing is disabled.
+
+- full-config SHA-256: `ab0c68a2e96b36a397226f71e45d59a99c59f10ac1019c62bfde4e321a45e3f7`;
+- kernel: 3,777,536 bytes, SHA-256 `3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b`;
+- source/toolchain unchanged at kernel commit `14794180686c2fb6307fbe359c359bec765249f3`, musl GCC 15.1.0, and binutils 2.44;
+- config snapshot, parent, hashes, and trial ID are synchronized in SQLite and the durable manifest;
+- all exposed overlay defaults are reviewed; inventory integrity is `ok`;
+- candidate checksums and the ordinary unelevated plan-only harness validation pass.
+
+The candidate has not been booted. A trial requires fresh explicit approval and canonical `safe:true`; current live state is unsafe only because a distribution and utility VM are running.
 
 ## Selected target and next gate
 
@@ -226,4 +239,4 @@ Rationale:
 - bypassing WSL would lose distribution registration, `wsl.exe` dispatch and WSL lifecycle management, changing the project rather than minimising it;
 - the reduced control plane retains the defining host/guest command path while allowing unrelated services to be excluded.
 
-Custom-kernel recovery is supported and does not replace Microsoft’s kernel: candidates remain outside `C:\Program Files\WSL`, and removing `.wslconfig` `kernel=` restores the packaged kernel. `K-RECOVERY-001` selected the external byte-identical stock copy, passed the Toybox smoke test at `B6-T`, restored the exact original `.wslconfig`, reverified the packaged-kernel hash, and booted stock Debian. A PowerShell 5.1 lazy `File.ReadLines` handle blocked ledger append and left the completed PASS journaled; the hardened `-Recover` path reverified stock startup, finalized the PASS row, and removed the journal. The harness now reads the header eagerly, retries genuine transient locks, and treats repeated finalization idempotently. `K-MKROOT-001` then tested the unchanged mkroot kernel with Microsoft’s stock initrd and reached `B0`: no output, no command dispatch, and timeout. `K-HVCORE-001` added only the reviewed Hyper-V execution-core closure and its first uninstrumented trial was conservatively classified `B0`. Both trials restored exact stock state and proved stock Debian startup. `K-HVCORE-DIAG-001` then proved the unchanged artifact reached `B1` and executed stock `/init`. The diagnostic gate identified missing runtime VMBus platform enumeration and AF_VSOCK transport. `K-HOSTCHAN-001` then proved ACPI/VMBus and Hyper-V VSOCK operation at `B2`. Later exact-source correlation showed its terminal exception was storage-LUN discovery with `CONFIG_HYPERV_STORAGE` disabled; the cgroup log was non-terminal and mirrored fallback reflected absent seccomp. Approved `K-STORAGE-001` proved the reviewed storage closure and advanced to `B3`, then reproduced Stage 3's exact post-ext4 `mini_init` crash. The next gate is generated-config review of the narrow `OVERLAY_FS` plus selected `FS_STACK` closure; `EXPORTFS` is already enabled. No next custom boot is authorized, and cgroups, networking/seccomp, page reporting, and console remain excluded. Reduced-init testing remains a later controlled-package track, preferably in a disposable Hyper-V Windows VM. The optional approximately 3 GB Windows workload remains uninstalled. See `TASKS.md` and `WSL-DEVELOPMENT-AND-RECOVERY.md`.
+Custom-kernel recovery is supported and does not replace Microsoft’s kernel: candidates remain outside `C:\Program Files\WSL`, and removing `.wslconfig` `kernel=` restores the packaged kernel. `K-RECOVERY-001` selected the external byte-identical stock copy, passed the Toybox smoke test at `B6-T`, restored the exact original `.wslconfig`, reverified the packaged-kernel hash, and booted stock Debian. A PowerShell 5.1 lazy `File.ReadLines` handle blocked ledger append and left the completed PASS journaled; the hardened `-Recover` path reverified stock startup, finalized the PASS row, and removed the journal. The harness now reads the header eagerly, retries genuine transient locks, and treats repeated finalization idempotently. `K-MKROOT-001` then tested the unchanged mkroot kernel with Microsoft’s stock initrd and reached `B0`: no output, no command dispatch, and timeout. `K-HVCORE-001` added only the reviewed Hyper-V execution-core closure and its first uninstrumented trial was conservatively classified `B0`. Both trials restored exact stock state and proved stock Debian startup. `K-HVCORE-DIAG-001` then proved the unchanged artifact reached `B1` and executed stock `/init`. The diagnostic gate identified missing runtime VMBus platform enumeration and AF_VSOCK transport. `K-HOSTCHAN-001` then proved ACPI/VMBus and Hyper-V VSOCK operation at `B2`. Later exact-source correlation showed its terminal exception was storage-LUN discovery with `CONFIG_HYPERV_STORAGE` disabled; the cgroup log was non-terminal and mirrored fallback reflected absent seccomp. Approved `K-STORAGE-001` proved the reviewed storage closure and advanced to `B3`, then reproduced Stage 3's exact post-ext4 `mini_init` crash. `K-OVERLAY-001` now contains the reviewed `OVERLAY_FS` plus selected `FS_STACK` closure; `EXPORTFS` was already enabled. The next gate is an ordinary unelevated trial after fresh explicit approval and a canonical `safe:true` preflight. No custom boot is authorized, and cgroups, networking/seccomp, page reporting, and console remain excluded. Reduced-init testing remains a later controlled-package track, preferably in a disposable Hyper-V Windows VM. The optional approximately 3 GB Windows workload remains uninstalled. See `TASKS.md` and `WSL-DEVELOPMENT-AND-RECOVERY.md`.

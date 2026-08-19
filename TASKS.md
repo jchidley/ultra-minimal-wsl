@@ -22,13 +22,14 @@ Completed:
 - post-trial source/trace correlation corrected the preliminary diagnosis: the terminal exception was WSL 2.7.12 `GetLunDeviceName` timing out because Hyper-V storage was absent; cgroup failure was non-terminal, and mirrored-mode rejection was caused by `SeccompAvailable=0`;
 - `K-STORAGE-001` added only `SCSI_LOWLEVEL` and `HYPERV_STORAGE`, proved `B3` through direct `storvsc` disk and system-distro ext4 evidence, then reproduced Stage 3's exact `mini_init` segfault/panic;
 - exact restoration, stock recovery, WPR/relay cleanup, terminal ledger state, decoded ETL, extracted logs, crash artifacts, analysis, and hashes all passed;
-- the canonical safe-state verifier passes;
-- SQLite records the five reference configs, three evidence-directed candidate configs, and all eight trials; durable config/trial manifests supplement immutable ledger rows and integrity passes.
+- `K-OVERLAY-001` was generated from `K-STORAGE-001` with only `OVERLAY_FS` explicitly added and selected `FS_STACK`; optional overlay defaults remain disabled;
+- its 3,777,536-byte kernel, full config, metadata, review, hashes, and ordinary unelevated plan validation are archived;
+- SQLite records the five reference configs, four evidence-directed candidate configs, and all eight completed trials; durable config/trial manifests supplement immutable ledger rows and integrity passes;
+- the latest canonical preflight is `safe:false` only because `Debian-Recovered` and the WSL utility VM are running; all persistent recovery checks pass.
 
 Not completed:
 
-- no candidate has kept `mini_init` alive after the system-distro root mount (`B4`);
-- the narrow overlayfs candidate has not been generated or built;
+- `K-OVERLAY-001` has not been booted, so no candidate has kept `mini_init` alive after the system-distro root mount (`B4`);
 - most of the 1,792-symbol delta remains unreviewed;
 - no reduced Microsoft init exists;
 - no custom initrd or WSL package has been deployed.
@@ -52,16 +53,21 @@ Not completed:
 - exact source calls `UtilMountOverlayFs` immediately after this ext4 mount, and `CONFIG_OVERLAY_FS=n` in both failing configs;
 - `OVERLAY_FS` selects `FS_STACK`; `EXPORTFS` is already enabled.
 
+Preparation is complete:
+
+- explicit delta: `CONFIG_OVERLAY_FS=y`;
+- selected closure: `CONFIG_FS_STACK=y`; `CONFIG_EXPORTFS=y` was already present;
+- redirect, xino, index, metacopy, NFS-export, and debug defaults were reviewed and held disabled or invisible;
+- config snapshot and annotations are synchronized; SQLite integrity is `ok`;
+- build, candidate manifest, and ordinary unelevated plan-only validation pass.
+
 Next:
 
-1. generate a candidate from `K-STORAGE-001` with only `CONFIG_OVERLAY_FS=y` explicitly added;
-2. add its full config, parent, hash, and trial ID to `inventory/config-snapshots.csv`;
-3. review all resulting defaults, especially overlay redirect/xino options, and hold unrelated options disabled where possible;
-4. run `uv run python tools/inventory_records.py` and require SQLite integrity `ok`;
-5. build, hash, archive, and plan-validate without booting;
-6. continue excluding cgroups, networking/seccomp, page reporting, and console support;
-7. plan the ordinary unelevated kernel harness by default; select elevated WPR/ETW diagnostics only if pre-dispatch evidence is needed;
-8. obtain new explicit approval before any overlay candidate boot.
+1. obtain fresh explicit approval for an ordinary unelevated `K-OVERLAY-001` trial;
+2. before execution, require canonical `safe:true`—never stop the currently running distribution automatically;
+3. run without WPR/ETW first; use elevated diagnostics only after separate approval if ordinary output cannot classify the result;
+4. after the trial, preserve immutable evidence, append ledger metadata, synchronize SQLite, and classify the highest checkpoint;
+5. continue excluding cgroups, networking/seccomp, page reporting, and console support unless new evidence selects them.
 
 Do not manually change the installed initrd. WSL 2.7.12.0 and initrd `a76ddd9b...6b118` are now the recovery-validated fixed condition.
 

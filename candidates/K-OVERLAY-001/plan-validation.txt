@@ -1,0 +1,67 @@
+validated_utc=2026-08-19T14:16:24Z
+mode=ordinary-plan-only
+trial_id=K-OVERLAY-001
+execute=false
+{
+    "mode":  "KernelTrial",
+    "trialId":  "K-OVERLAY-001",
+    "execute":  false,
+    "requiresElevation":  false,
+    "candidateKernel":  {
+                            "path":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\candidates\\K-OVERLAY-001\\linux-kernel",
+                            "length":  3777536,
+                            "sha256":  "3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b",
+                            "bootProtocol":  "2.15"
+                        },
+    "packagedKernel":  {
+                           "path":  "C:\\Program Files\\WSL\\tools\\kernel",
+                           "length":  17334784,
+                           "lastWriteUtc":  "2026-06-18T21:41:14.0000000Z",
+                           "sha256":  "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861"
+                       },
+    "wslVersion":  "WSL version: 2.7.12.0\r\n\r\nKernel version: 6.18.33.2-2\r\n\r\nWSLg version: 1.0.73.2\r\n\r\nMSRDC version: 1.2.7214\r\n\r\nDirect3D version: 1.611.1-81528511\r\n\r\nDXCore version: 10.0.26100.1-240331-1435.ge-release\r\n\r\nWindows version: 10.0.26200.9168",
+    "originalWslConfig":  {
+                              "exists":  true,
+                              "length":  312,
+                              "sha256":  "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577"
+                          },
+    "testDistribution":  "Toybox-Minimal",
+    "recoveryDistribution":  "Debian",
+    "timeoutSeconds":  45,
+    "debugConsole":  false,
+    "activeWslProcesses":  [
+                               {
+                                   "Name":  "vmmemWSL",
+                                   "Id":  10840
+                               },
+                               {
+                                   "Name":  "wslhost",
+                                   "Id":  16092
+                               },
+                               {
+                                   "Name":  "wslhost",
+                                   "Id":  23064
+                               },
+                               {
+                                   "Name":  "wslhost",
+                                   "Id":  30796
+                               }
+                           ],
+    "blockingWslManagementProcesses":  [
+
+                                       ],
+    "writesUnderInstalledWsl":  false,
+    "operations":  [
+                       "validate external kernel",
+                       "save exact .wslconfig",
+                       "atomically select external kernel in .wslconfig",
+                       "shutdown WSL",
+                       "run designated distro with timeout",
+                       "unconditionally restore exact .wslconfig",
+                       "shutdown and verify packaged-kernel/config hashes",
+                       "boot stock recovery distro",
+                       "shutdown and append terminal trial row"
+                   ]
+}
+result=PASS
+note=Ordinary unelevated harness plan completed without -Execute. Running Debian-Recovered kept canonical live state unsafe; validation did not stop it or alter runtime state.

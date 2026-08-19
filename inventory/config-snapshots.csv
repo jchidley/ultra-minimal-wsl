@@ -7,3 +7,4 @@ stage3,config-wsl-ultramin-stage3,,e28a81274a3a572978b73ef169b3a066794a997fece8f
 k-hvcore-001,candidates/K-HVCORE-001/linux-fullconfig,mkroot,7def23e912c4b4734eaf76b2a70d0a21e51a2a37b75247f3e94bb3310d50ed1d,K-HVCORE-001
 k-hostchan-001,candidates/K-HOSTCHAN-001/linux-fullconfig,k-hvcore-001,8a6d7bd1731e6af350a6138a92dc157e5d7c0b36602cf87a697520fd125bbc6e,K-HOSTCHAN-001
 k-storage-001,candidates/K-STORAGE-001/linux-fullconfig,k-hostchan-001,b8d9068b9dc901ad66a4e5ff03fdfd78b02a09261ffebfdc006699b91a437bd8,K-STORAGE-001
+k-overlay-001,candidates/K-OVERLAY-001/linux-fullconfig,k-storage-001,ab0c68a2e96b36a397226f71e45d59a99c59f10ac1019c62bfde4e321a45e3f7,K-OVERLAY-001

@@ -1,0 +1,14 @@
+started_utc=2026-08-19T14:09:51.434428039Z
+kernel_commit=14794180686c2fb6307fbe359c359bec765249f3
+parent_artifact=K-STORAGE-001
+parent_config_sha256=b8d9068b9dc901ad66a4e5ff03fdfd78b02a09261ffebfdc006699b91a437bd8
+requested_fragment_sha256=d5708e8066f5a25fe4126a8df8591539d1b73aa5d6dc3529055d352fa6ef9d51
+compiler=x86_64-linux-musl-gcc (GCC) 15.1.0
+linker=GNU ld (GNU Binutils) 2.44
+pahole_override=__minimal_wsl_no_pahole__
+finished_utc=2026-08-19T14:13:36.870355155Z
+fullconfig_sha256=ab0c68a2e96b36a397226f71e45d59a99c59f10ac1019c62bfde4e321a45e3f7
+kernel_sha256=3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b
+kernel_bytes=3777536
+explicit_additions=CONFIG_OVERLAY_FS
+resulting_enabled_closure=CONFIG_FS_STACK

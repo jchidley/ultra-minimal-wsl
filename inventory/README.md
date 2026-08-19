@@ -113,7 +113,8 @@ cd /mnt/c/Users/jackc/git/ultra-minimal-wsl
   --config stage3=config-wsl-ultramin-stage3 \
   --config k-hvcore-001=candidates/K-HVCORE-001/linux-fullconfig \
   --config k-hostchan-001=candidates/K-HOSTCHAN-001/linux-fullconfig \
-  --config k-storage-001=candidates/K-STORAGE-001/linux-fullconfig
+  --config k-storage-001=candidates/K-STORAGE-001/linux-fullconfig \
+  --config k-overlay-001=candidates/K-OVERLAY-001/linux-fullconfig
 /root/.local/bin/uv run python tools/inventory_records.py
 ```
 

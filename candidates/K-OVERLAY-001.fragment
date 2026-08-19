@@ -1,0 +1,22 @@
+# Evidence-directed post-B3 overlay closure after K-STORAGE-001 mounted the
+# read-only WSL system-distro ext4 filesystem and stock mini_init crashed at
+# the next source operation, UtilMountOverlayFs.
+CONFIG_OVERLAY_FS=y
+
+# Hold optional overlay defaults disabled. Stock WSL's system-distro mount does
+# not require these default policies, and Stage 1 also disables all except
+# REDIRECT_ALWAYS_FOLLOW.
+# CONFIG_OVERLAY_FS_REDIRECT_DIR is not set
+# CONFIG_OVERLAY_FS_REDIRECT_ALWAYS_FOLLOW is not set
+# CONFIG_OVERLAY_FS_INDEX is not set
+# CONFIG_OVERLAY_FS_NFS_EXPORT is not set
+# CONFIG_OVERLAY_FS_XINO_AUTO is not set
+# CONFIG_OVERLAY_FS_METACOPY is not set
+# CONFIG_OVERLAY_FS_DEBUG is not set
+
+# Continue excluding non-terminal or deferred paths.
+# CONFIG_CGROUPS is not set
+# CONFIG_NET_NS is not set
+# CONFIG_SECCOMP is not set
+# CONFIG_HYPERV_NET is not set
+# CONFIG_VIRTIO_CONSOLE is not set
