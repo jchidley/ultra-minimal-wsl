@@ -1,0 +1,14 @@
+started_utc=2026-08-19T07:30:27.084116636Z
+kernel_commit=14794180686c2fb6307fbe359c359bec765249f3
+parent_artifact=K-HOSTCHAN-001
+parent_config_sha256=8a6d7bd1731e6af350a6138a92dc157e5d7c0b36602cf87a697520fd125bbc6e
+requested_fragment_sha256=b47c54feb1dfcc2520d7b87b2998199cee555437a24da260d75b3a290ebbd367
+compiler=x86_64-linux-musl-gcc (GCC) 15.1.0
+linker=GNU ld (GNU Binutils) 2.44
+pahole_override=__minimal_wsl_no_pahole__
+finished_utc=2026-08-19T07:34:05.539089991Z
+fullconfig_sha256=b8d9068b9dc901ad66a4e5ff03fdfd78b02a09261ffebfdc006699b91a437bd8
+kernel_sha256=3d3a4f9cee018590d986912b4379119cf22bb8b6e4aee3c29ad43f5450efa367
+kernel_bytes=3720192
+explicit_additions=CONFIG_SCSI_LOWLEVEL CONFIG_HYPERV_STORAGE
+resulting_enabled_closure=none

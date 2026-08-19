@@ -1,0 +1,15 @@
+validated_utc=2026-08-19T07:38Z
+mode=diagnostic-plan-only
+trial_id=K-STORAGE-001
+execute=false
+candidate_kernel_bytes=3720192
+candidate_kernel_sha256=3d3a4f9cee018590d986912b4379119cf22bb8b6e4aee3c29ad43f5450efa367
+kernel_config_sha256=b8d9068b9dc901ad66a4e5ff03fdfd78b02a09261ffebfdc006699b91a437bd8
+boot_protocol=2.15
+wpr_profile_sha256=3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2
+writes_under_installed_wsl=false
+wpr_started=false
+wsl_shutdown=false
+wslconfig_changed=false
+result=PASS
+note=Invoke-WslDiagnosticKernelTrial.ps1 completed its full plan/preflight path without -Execute. The host already had Debian-Recovered and the WSL utility VM running; no runtime state was changed by validation.

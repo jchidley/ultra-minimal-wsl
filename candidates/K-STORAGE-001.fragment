@@ -1,0 +1,16 @@
+# Evidence-directed B3 storage bundle after K-HOSTCHAN-001 reached B2.
+#
+# Exact WSL 2.7.12 source maps the terminal guest exception at main.cpp:972
+# to GetLunDeviceName timing out while opening the Hyper-V SCSI LUN sysfs
+# block path. K-HOSTCHAN-001 already has CONFIG_SCSI=y and runtime-proven
+# CONFIG_HYPERV_VMBUS=y. SCSI_LOWLEVEL is the only missing direct Kconfig
+# prerequisite for the Hyper-V storage driver.
+CONFIG_SCSI_LOWLEVEL=y
+CONFIG_HYPERV_STORAGE=y
+
+# Do not widen this B3 discovery candidate with non-terminal or deferred paths.
+# CONFIG_CGROUPS is not set
+# CONFIG_NET_NS is not set
+# CONFIG_SECCOMP is not set
+# CONFIG_HYPERV_NET is not set
+# CONFIG_VIRTIO_CONSOLE is not set

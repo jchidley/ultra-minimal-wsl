@@ -1,0 +1,69 @@
+{
+  "trialId": "K-STORAGE-001",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "checkpointAdvancedFromParent": true,
+    "basis": "The custom guest registered hv_storvsc, created storvsc_host_t, attached two Microsoft Virtual Disks, and mounted the system-distro ext4 filesystem on sda read-only. mini_init then segfaulted and PID 1 termination panicked the kernel, so B4 is not proved."
+  },
+  "parentArtifact": "K-HOSTCHAN-001",
+  "artifactSha256": "3d3a4f9cee018590d986912b4379119cf22bb8b6e4aee3c29ad43f5450efa367",
+  "configSha256": "b8d9068b9dc901ad66a4e5ff03fdfd78b02a09261ffebfdc006699b91a437bd8",
+  "bundleOutcome": {
+    "hypervStorageDriverRegistered": true,
+    "storvscHostCreated": true,
+    "systemDiskAttached": true,
+    "secondDiskAttached": true,
+    "systemDistroExt4Mounted": true,
+    "retainProvisionally": true
+  },
+  "fatalObservedFailure": "Immediately after EXT4-fs (sda) mounted the read-only system distro, mini_init dereferenced address zero at IP 0x2e99dc, exited with SIGSEGV, and triggered 'Kernel panic - not syncing: Attempted to kill init'. The host reported WSL_E_VM_CRASHED and 0x80072746 during consequential networking teardown.",
+  "nextBlockerAssessment": {
+    "candidate": "CONFIG_OVERLAY_FS",
+    "confidence": "high",
+    "basis": "Exact WSL 2.7.12 source calls UtilMountOverlayFs unconditionally immediately after MountDevice mounts the system distro. CONFIG_OVERLAY_FS is disabled in K-STORAGE-001 but enabled in the working Stage 1 upper bound. The earlier Stage 3 config also disabled OVERLAY_FS and produced the identical mini_init IP, instruction bytes, ext4-mount ordering, SIGSEGV, and panic under WSL 2.7.11.",
+    "crashMechanismInference": "UtilMountOverlayFs calls UtilMount with a null Source for filesystem type overlay. With overlayfs unavailable, the mount fails; UtilMount's error formatter then receives that null Source. The faulting instruction copies a NUL-terminated string from a null RBX. This explains the segfault rather than a clean ENODEV log, but symbol-level confirmation is not available from the stripped installed init.",
+    "kconfigClosure": [
+      "CONFIG_OVERLAY_FS=y",
+      "CONFIG_FS_STACK=y (selected)",
+      "CONFIG_EXPORTFS=y (selected but already enabled)"
+    ]
+  },
+  "evidence": {
+    "traceStartedUtc": "2026-08-19T12:35:28.0058050Z",
+    "trialStartedUtc": "2026-08-19T12:35:28.8538097Z",
+    "trialFinishedUtc": "2026-08-19T12:35:51.0071154Z",
+    "traceStoppedUtc": "2026-08-19T12:35:51.8974274Z",
+    "customVmId": "cfe42f71-de4c-4be8-8443-723748c5c37e",
+    "customGuestLogRecords": 265,
+    "customGuestLogFirst": "Linux version 6.18.40.1+",
+    "customCreateVmEndPresent": false,
+    "customFailedToStartError": "0x80072746",
+    "testExitCode": -1,
+    "testTimedOut": false,
+    "panicPath": "wsl-crashes/kernel-panic-1787142945-{cfe42f71-de4c-4be8-8443-723748c5c37e}.txt",
+    "coreDumpPath": "wsl-crashes/wsl-crash-1787142944-1-_init-11.dmp",
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "stockKernelRelease": "6.18.33.2-microsoft-standard-WSL2",
+    "stockRecoveryVmId": "1925d964-9ce6-4c68-b614-2bb1eca4356d",
+    "stockRecoveryGuestLogRecords": 148,
+    "stockRecoveryCreateVmEndPresent": true,
+    "elevatedRunExitCode": 1,
+    "elevatedRunInterpretation": "Expected nonzero wrapper result because the candidate command failed; the same durable log records safeStateExit=0 after verified restoration.",
+    "elevatedRunLogPath": "elevated-run.log",
+    "etlPath": "windows-wsl.etl",
+    "decodedXmlPath": "windows-wsl-lr.xml",
+    "customGuestLogPath": "guest-log-custom.txt",
+    "stockGuestLogPath": "guest-log-stock-recovery.txt"
+  },
+  "secondaryObservations": [
+    "The storage closure directly advanced B2 to B3 and should be retained provisionally.",
+    "The cgroup mount still failed but execution continued; it was not terminal.",
+    "SeccompAvailable remained zero, so mirrored networking again fell back to NAT; networking remains deferred.",
+    "Missing /dev/hvc1 and /dev/console remained observable but did not block storage discovery or the system-distro ext4 mount.",
+    "CONFIG_PAGE_REPORTING remained disabled and produced the same non-terminal parameter-file error.",
+    "The segfault exactly reproduces the prior Stage 3 crash boundary with a much smaller evidence-directed kernel."
+  ],
+  "decision": "Retain SCSI_LOWLEVEL plus HYPERV_STORAGE provisionally because they directly proved B3. The next narrow discovery candidate should add OVERLAY_FS and its Kconfig-selected FS_STACK closure only, after generated-config review. Do not add cgroups, seccomp/networking, page reporting, or console support. Any further custom-kernel boot requires new explicit approval."
+}

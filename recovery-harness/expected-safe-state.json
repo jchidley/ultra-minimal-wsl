@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "recordedUtc": "2026-08-18T03:28:08Z",
-  "wslVersion": "2.7.11.0",
+  "recordedUtc": "2026-08-19T06:57:04Z",
+  "wslVersion": "2.7.12.0",
   "wslConfigSha256": "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577",
   "packagedKernelSha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861",
-  "packagedInitrdSha256": "bd9c56155acbe058220fcdc454360974ef88d8d2c708b8c6cefb7d194f7cd968",
-  "evidenceTrialId": "K-RECOVERY-001"
+  "packagedInitrdSha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118",
+  "evidenceTrialId": "K-RECOVERY-002"
 }

@@ -1,0 +1,36 @@
+{
+    "trialId":  "K-RECOVERY-002",
+    "status":  "PASS",
+    "startedUtc":  "2026-08-19T06:56:55.9073911Z",
+    "finishedUtc":  "2026-08-19T06:57:04.8125174Z",
+    "candidateKernel":  {
+                            "path":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\candidates\\wsl-2.7.11-stock-kernel",
+                            "length":  17334784,
+                            "sha256":  "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861",
+                            "bootProtocol":  "2.15"
+                        },
+    "packagedKernel":  {
+                           "path":  "C:\\Program Files\\WSL\\tools\\kernel",
+                           "length":  17334784,
+                           "lastWriteUtc":  "2026-06-18T21:41:14.0000000Z",
+                           "sha256":  "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861"
+                       },
+    "wslVersion":  "WSL version: 2.7.12.0\r\n\r\nKernel version: 6.18.33.2-2\r\n\r\nWSLg version: 1.0.73.2\r\n\r\nMSRDC version: 1.2.7214\r\n\r\nDirect3D version: 1.611.1-81528511\r\n\r\nDXCore version: 10.0.26100.1-240331-1435.ge-release\r\n\r\nWindows version: 10.0.26200.9168",
+    "debugConsoleEnabled":  false,
+    "testResult":  {
+                       "exitCode":  0,
+                       "timedOut":  false,
+                       "stdout":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\recovery-harness\\trials\\K-RECOVERY-002\\test-boot.stdout.log",
+                       "stderr":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\recovery-harness\\trials\\K-RECOVERY-002\\test-boot.stderr.log"
+                   },
+    "kernelLogResult":  {
+                            "exitCode":  0,
+                            "timedOut":  false,
+                            "stdout":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\recovery-harness\\trials\\K-RECOVERY-002\\kernel-dmesg.stdout.log",
+                            "stderr":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\recovery-harness\\trials\\K-RECOVERY-002\\kernel-dmesg.stderr.log"
+                        },
+    "stockRestoreVerified":  true,
+    "stockBootVerified":  true,
+    "primaryError":  null,
+    "restoreError":  null
+}

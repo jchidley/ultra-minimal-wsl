@@ -1,0 +1,56 @@
+{
+  "trialId": "K-HOSTCHAN-001",
+  "classification": {
+    "highestCheckpoint": "B2",
+    "confidence": "high",
+    "checkpointAdvancedFromParent": true,
+    "basis": "The custom guest log proves ACPI platform discovery, VMBus 5.3 enumeration, AF_VSOCK registration, and hv_sock driver registration. No Hyper-V storage device or ext4 distribution root was detected, so B3 is not proved. mini_init and host-side mini_init messaging became active out of checkpoint order, but command dispatch did not complete."
+  },
+  "parentArtifact": "K-HVCORE-001",
+  "artifactSha256": "7dbf16c3bb9129f3634f3700ed2dfc59974df4de9a7ad0b9aec6a05b7cc8703b",
+  "configSha256": "8a6d7bd1731e6af350a6138a92dc157e5d7c0b36602cf87a697520fd125bbc6e",
+  "bundleOutcome": {
+    "acpiPlatformEnumerationRestored": true,
+    "vmbusEnumerated": true,
+    "vsockProtocolRegistered": true,
+    "hypervVsockDriverRegistered": true,
+    "retainProvisionally": true
+  },
+  "firstGuestUserspaceFailure": "mini_init could not mount /sys/fs/cgroup: UtilMkdir returned errno 1 (EPERM); CONFIG_CGROUPS is disabled.",
+  "fatalObservedFailure": "The host sent a GNS request, the GNS socket closed before the expected result, and CreateInstance ended with 0x80072746 (WSAECONNRESET). wsl.exe reported mirrored networking unsupported, NAT configuration failure, fallback to networkingMode None, and CreateVm/ConfigureNetworking/E_UNEXPECTED.",
+  "evidence": {
+    "traceStartedUtc": "2026-08-19T06:58:56.7361602Z",
+    "trialStartedUtc": "2026-08-19T06:58:57.5655664Z",
+    "trialFinishedUtc": "2026-08-19T06:59:35.3864753Z",
+    "traceStoppedUtc": "2026-08-19T06:59:36.2727232Z",
+    "customVmId": "fe2eab0c-e30d-4185-b3b7-2aa8163dbb28",
+    "customGuestLogRecords": 222,
+    "customGuestLogFirst": "Linux version 6.18.40.1+",
+    "vmbusVersion": "5.3",
+    "miniInitHostMessagesPresent": true,
+    "gnsRequestPresent": true,
+    "customCreateVmEndPresent": false,
+    "customCreateInstanceEndError": "0x80072746 (WSAECONNRESET)",
+    "userVisibleError": "Wsl/Service/CreateInstance/CreateVm/0x80072746",
+    "testExitCode": -1,
+    "testTimedOut": false,
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "stockKernelRelease": "6.18.33.2-microsoft-standard-WSL2",
+    "stockRecoveryVmId": "57d0de71-3b41-4726-bbf0-c279a63260f7",
+    "stockRecoveryCreateVmEndPresent": true,
+    "stockRecoveryMiniInitMessagingPresent": true,
+    "etlPath": "windows-wsl.etl",
+    "decodedXmlPath": "windows-wsl-lr.xml",
+    "customGuestLogPath": "guest-log-custom.txt",
+    "stockGuestLogPath": "guest-log-stock-recovery.txt",
+    "testStderrPath": "test-boot.stderr.log"
+  },
+  "secondaryObservations": [
+    "The console errors remain: /dev/hvc1 and /dev/console are absent, but they did not prevent VMBus, hv_sock, or mini_init host messaging.",
+    "The page_reporting sysfs parameter is absent because CONFIG_PAGE_REPORTING and CONFIG_HYPERV_BALLOON remain disabled; this was logged but was not the terminal error.",
+    "CONFIG_NET_NS is disabled while the preserved host .wslconfig requests mirrored networking; the exact minimal GNS/network-namespace closure requires review before another candidate.",
+    "CONFIG_HYPERV_STORAGE is disabled and no storvsc disk appeared, so the distribution root could not reach B3."
+  ],
+  "decision": "Retain the ACPI plus VSOCK/Hyper-V VSOCK bundle provisionally: it directly advanced B1 to B2 and restored host-channel messaging. Before another boot, review the minimal stock-control-plane cgroup/GNS/network-namespace closure versus moving to the selected reduced-init track. Do not infer a need for the broad Stage 1 networking or storage configuration, and do not add the console bundle solely for observability. A new explicit decision is required for any next custom-kernel boot."
+}

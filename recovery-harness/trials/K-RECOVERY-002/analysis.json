@@ -1,0 +1,37 @@
+{
+  "trialId": "K-RECOVERY-002",
+  "purpose": "Accept the WSL 2.7.12.0 package state only after a supported external byte-identical stock-kernel trial and verified recovery.",
+  "status": "PASS",
+  "wslVersion": "2.7.12.0",
+  "testCheckpoint": "B6-T",
+  "toyboxMarker": "toybox-ok",
+  "candidateKernel": {
+    "length": 17334784,
+    "sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861",
+    "byteIdenticalToPackagedKernel": true
+  },
+  "packagedKernelAfterTrial": {
+    "length": 17334784,
+    "sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861"
+  },
+  "packagedInitrdAfterTrial": {
+    "length": 2836768,
+    "sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118",
+    "note": "Independently hashed after the completed stock-validation trial; the kernel harness does not write beneath the installed WSL directory."
+  },
+  "wslConfigAfterTrial": {
+    "length": 312,
+    "sha256": "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577",
+    "restoredExactly": true,
+    "customKernelSettingPresent": false
+  },
+  "stockRecovery": {
+    "verified": true,
+    "distribution": "Debian",
+    "kernelRelease": "6.18.33.2-microsoft-standard-WSL2"
+  },
+  "startedUtc": "2026-08-19T06:56:55.9073911Z",
+  "finishedUtc": "2026-08-19T06:57:04.8125174Z",
+  "activeJournalAfterTrial": false,
+  "acceptedBaselinePath": "../../expected-safe-state.json"
+}
