@@ -19,8 +19,15 @@
 /control-plane-build/native-build/init.debug
 /control-plane-build/native-build/initrd.img
 
-# Generated dependency database; CSV exports remain reviewable in Git
+# Generated dependency database and exports. Durable inventory inputs are
+# explicitly unignored below.
 /inventory/kconfig-dependencies.sqlite
+/inventory/*.csv
+/inventory/summary.json
+!/inventory/annotations.csv
+!/inventory/config-snapshots.csv
+!/inventory/trials.csv
+!/inventory/trial-metadata.csv
 
 # Bulky raw diagnostic captures; extracted logs, analysis, metadata, and hashes
 # remain tracked

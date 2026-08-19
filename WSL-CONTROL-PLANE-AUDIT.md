@@ -1,134 +1,54 @@
-# WSL control-plane audit
+# WSL control-plane boundary
 
-Status: the reduced single-user control plane is selected for `minimal-viable-wsl-v1`; Alpine, Arch, and Debian compatibility then defines `ultra-minimal-wsl-v1`. The matching unmodified Linux-side init/initrd builds reproducibly. Kernel-only discovery proceeds first through Microsoft’s supported external-kernel setting with the stock initrd; reduced-init deployment is deferred to an isolated platform-development track. No reduced init or installed WSL modification has occurred.
+Microsoft’s Linux-side `/init` serves a broad WSL product. Minimal Viable WSL retains only the host/guest contract needed to control one registered distro through `wsl.exe`.
 
-## Question
+## Why `/init` matters
 
-Microsoft’s WSL init processes serve a broad product audience. This experiment serves one user and should not retain kernel facilities merely because optional WSL services expect them. The goal is to separate the smallest host/guest command-dispatch contract from automount, interop, networking, GUI, GPU, systemd, disk-management and policy features.
+The kernel does not enter a registered distro directly. Microsoft’s initramfs starts `mini_init`, which communicates with `wslservice.exe`, receives the attached distro disk, establishes the distro execution context, launches commands, and relays their results.
 
-## Exact environment examined
+The retained contract is:
 
-- Installed WSL: `2.7.11.0`
-- Installed kernel reported by WSL: `6.18.33.2-2`
-- Installed Windows build: `10.0.26200.9168`
-- Installed artifacts:
-  - `C:\Program Files\WSL\tools\init` — 2,836,528 bytes
-  - `C:\Program Files\WSL\tools\initrd.img` — 2,836,768 bytes
-  - `C:\Program Files\WSL\tools\kernel` — 17,334,784 bytes
-  - `C:\Program Files\WSL\system.vhd` — 374,252,032 bytes
-- Matching open-source WSL tag: `2.7.11`
-- Matching source commit: `acbcb81fc61079b74835ea7dc2563046b2557033`
-- Matching source worktree: `/root/src/WSL-2.7.11`
-- A current-master reference checkout also exists at `/root/src/WSL`, commit `1ef0817a0465b9ad7458f155bec0a2c877462e6d`.
+- service handshake and capabilities;
+- per-distro VHDX attachment and ext4 mount;
+- minimum root transition or isolation;
+- process/session creation;
+- stdin, stdout, stderr, and exit-status relay;
+- child-exit notification and shutdown.
 
-The tagged source, not current master, is the primary evidence for this installed WSL version.
+Replacing this entire chain would produce a small Hyper-V VM, not a WSL system controllable by `wsl.exe`.
 
-## Architecture confirmed from Microsoft documentation
+## Stock control-plane tax
 
-WSL supplies its own initramfs containing `mini_init`. The VM boots the selected stock/custom kernel and then runs that `/init`. Normal `wsl.exe` process launch depends on this chain:
+Stock `mini_init` also performs or supports work outside the target:
 
-1. `mini_init` establishes Hyper-V socket channels with `wslservice.exe`.
-2. It receives a request to mount a distribution VHD.
-3. It creates mount, PID, IPC and UTS namespaces, mounts/chroots the distribution and executes the per-distribution WSL `/init`.
-4. Distribution init establishes another host channel and creates a session leader.
-5. A relay process carries stdin, stdout and stderr between the Linux command and `wsl.exe`.
+- cgroup policy;
+- Windows executable registration through `binfmt_misc`;
+- shared resolver/tmpfs policy;
+- networking, GNS, DNS tunnelling, and localhost tracking;
+- Microsoft’s system distro and writable overlay;
+- WSLg/GPU integration;
+- module and swap VHDs;
+- memory-reclaim and resource policy;
+- disk import/export/format/resize operations;
+- cross-distro mounts and debugging services.
 
-Therefore Microsoft init is not ordinary distro PID 1 that can simply be replaced while retaining normal `wsl.exe -d ... -- command` behavior. At least the host protocol, VHD mount, namespace, command creation and relay functions need an implementation.
+A facility is not part of Minimal Viable WSL merely because stock init requests it. Current discovery uses stock init to expose the platform one failure at a time; the reduced control plane must later remove stock-only dependencies.
 
-Primary documentation:
+## Selected design
 
-- <https://wsl.dev/technical-documentation/boot-process/>
-- <https://wsl.dev/technical-documentation/mini_init/>
-- <https://wsl.dev/technical-documentation/init/>
-- Matching source: `src/linux/init/main.cpp`, `src/shared/inc/lxinitshared.h`
+Build a reduced single-user control plane from matching WSL source. Keep normal select/start/execute/terminate/shutdown behavior for registered distros, but omit general management and integration services.
 
-## What `mini_init` does before launching a distribution
+The per-distro VHDX remains because it is WSL’s simple container for a native Linux filesystem. Microsoft’s separate system-distro VHD and overlay are excluded if the retained command path works without them.
 
-The matching 2.7.11 source shows several unconditional operations that can force kernel configuration beyond a generic Toybox boot:
+## Deployment constraint
 
-- mount devtmpfs, procfs and sysfs;
-- open `/dev/kmsg`, `/dev/console` and `/dev/null`;
-- connect two Hyper-V socket channels to `wslservice.exe`;
-- mount cgroup v2;
-- create a signalfd and poll the service/signalfd channels;
-- set dmesg, inotify, file-descriptor and locked-memory policy;
-- create an IPv4 datagram socket and enable loopback;
-- mount a shared tmpfs at `/mnt/wsl`;
-- replace `/etc/resolv.conf` with a cross-distro symlink;
-- mount binfmt_misc and register `/init` as the Windows executable interpreter;
-- start the guest network service after early configuration.
+WSL supports an external kernel through `.wslconfig` but exposes no equivalent custom-initrd setting. Kernel discovery can therefore run on the host with the guarded recovery harness. Reduced-init testing must use a controlled WSL build in a disposable Hyper-V Windows VM; do not replace the host’s installed initrd.
 
-This confirms the user’s suspicion: some facilities that appeared to be mysterious WSL kernel requirements are requirements of Microsoft’s chosen control plane, not requirements for Linux or Toybox to boot.
+## Primary sources
 
-## Conditional or audience-wide facilities
+- WSL boot process: <https://wsl.dev/technical-documentation/boot-process/>
+- `mini_init`: <https://wsl.dev/technical-documentation/mini_init/>
+- per-distro init: <https://wsl.dev/technical-documentation/init/>
+- WSL source: <https://github.com/microsoft/WSL>
 
-The source also supports or starts facilities according to host/config messages:
-
-- system distribution VHD and writable overlays;
-- swap;
-- chronyd/PTP time synchronization;
-- kernel-module VHD and module loading;
-- memory reclaim workers;
-- GNS networking and DNS tunneling;
-- localhost/port tracking;
-- mirrored-networking seccomp/BPF interception;
-- DHCP and IPv6 policy;
-- GPU and WSLg shares;
-- debug shell and crash dumps;
-- disk format, mount, resize, import and export;
-- cross-distribution mounts;
-- user-process cgroup resource reservation.
-
-The machine currently requests mirrored networking and DNS tunneling in `.wslconfig`, so it selects more of this surface than a boot-only profile would.
-
-## Existing reduction controls
-
-Per-distribution `/etc/wsl.conf` can disable automount, fstab processing, Windows PATH injection, Windows interop, generated hosts/resolver files, Plan 9, GPU/GUI integration and systemd. WSL safe mode applies many of those reductions.
-
-However, source inspection shows that safe mode is not equivalent to a minimal `mini_init`: core mini-init startup still mounts cgroup2, initializes network-related state, registers binfmt interop and starts GNS in the normal early-config path. Configuration can reduce launched distribution services without removing every kernel dependency of the utility-VM control plane.
-
-## Candidate targets
-
-### A. Minimal profile using Microsoft’s unmodified init
-
-Disable every exposed optional feature and discover the remaining kernel closure. This preserves normal WSL servicing and command dispatch but accepts unconditional Microsoft policy as part of the floor.
-
-### B. Minimal Viable WSL control plane
-
-Build from the matching WSL source and retain only:
-
-- service protocol handshake/capabilities;
-- per-distribution VHDX attachment and ext4 mounting;
-- only the namespaces/root transition required to enter the selected distro;
-- process/session creation and stdin/stdout/stderr plus exit-status relay;
-- child exit notification and shutdown.
-
-The VHDX is retained as the simple native-Linux filesystem container behind WSL’s registered-distribution model. It is distinct from Microsoft’s system distro VHD, which is not part of the selected target unless reduced-control-plane testing proves it indispensable.
-
-Candidates for removal or compile-time exclusion include GNS, localhost tracking, binfmt Windows interop, cross-distro tmpfs, GPU/WSLg, system distro, disk-management operations, module VHD, memory reclaim policy, cgroup resource reservation, debug/crash facilities and automatic resolver policy.
-
-This remains the best final fit for an audience of one. The Linux-side init can be built without the full Windows toolchain, but WSL exposes no external initrd selection. Reduced-init runtime testing should therefore use a controlled WSL package in a disposable Hyper-V Windows VM rather than blocking supported host kernel discovery or modifying the host’s installed initrd.
-
-### C. Bypass WSL’s control plane
-
-Boot the mkroot kernel/initramfs directly under QEMU or another Hyper-V VM. This gives the smallest conventional Linux system but loses normal WSL distribution registration, `wsl.exe` process dispatch, Windows integration and WSL lifecycle management.
-
-## Decision recorded
-
-The selected target is **B: Minimal Viable WSL**, a single-user patched control plane preserving basic registered-distro selection/start, `wsl.exe` command dispatch, termination, and shutdown. Import/export, resize, arbitrary-disk mounting, and other general management operations are not acceptance criteria.
-
-`minimal-viable-wsl-v1` combines this contract with the mkroot/Toybox floor. `ultra-minimal-wsl-v1` then adds only facilities proved necessary by Alpine, Arch, and Debian smoke tests. This matches the audience-of-one requirement without redefining the project as a generic QEMU/Hyper-V VM. Stock Microsoft init remains a reference and temporary discovery profile, not the intended minimum.
-
-The reproducible-build part of the feasibility gate has passed for the Linux-side binary. `tools/build-control-plane-linux.sh` produced identical unmodified `init` and deterministic `initrd.img` artifacts in two clean runs from source commit `acbcb81fc61079b74835ea7dc2563046b2557033`.
-
-The stock-copy recovery gate is complete and was repeated as `K-RECOVERY-002` after WSL updated to 2.7.12.0. The first uninstrumented trials, `K-MKROOT-001` and the reviewed Hyper-V execution-core derivative `K-HVCORE-001`, were conservatively classified `B0`; both restored stock operation. Diagnostic retry `K-HVCORE-DIAG-001` then proved the unchanged derivative reached `B1`, executed stock `/init`, and failed its host connection with VSOCK `EAFNOSUPPORT` before VMBus enumeration. Approved `K-HOSTCHAN-001` restored ACPI/VMBus and Hyper-V VSOCK, proving `B2` and active mini-init host messaging. A follow-up audit against exact WSL 2.7.12 source commit `68f601bba8eac1df20a0bbd403c6c87c92369ade` corrected the preliminary diagnosis: cgroup setup failure was ignored, mirrored networking was rejected because seccomp capability was absent, and the terminal exception was `GetLunDeviceName` timing out on the absent Hyper-V storage LUN. The GNS closure and host `0x80072746` followed guest termination. Approved `K-STORAGE-001` then restored Hyper-V storage and proved `B3`, but reproduced Stage 3's exact `mini_init` segfault immediately after mounting the system-distro ext4 filesystem. Exact source next invokes the stock control plane's mandatory writable overlay setup, selecting `CONFIG_OVERLAY_FS` as the next narrow discovery feature. See `POST-B2-CLOSURE-ANALYSIS.md` and `recovery-harness/trials/K-STORAGE-001/analysis.json`.
-
-For the later reduced-control-plane track:
-
-1. map the exact retained host protocol, VHD mount, namespace/chroot, process relay, exit-notification and shutdown code paths;
-2. build the reduced variant twice and verify identical outputs;
-3. separately install the optional Windows build workload only when the user chooses;
-4. deploy a controlled package or service-level initrd override to a disposable Hyper-V Windows VM;
-5. fail closed if any protocol, packaging or recovery assumption cannot be verified.
-
-Source inspection shows WSL 2.7.11 assigns `InitRdPath` from its installation tools directory and exposes no `.wslconfig` custom-initrd setting. The approximately 3 GB Visual Studio workload remains a separate optional task in `TASKS.md` and must not be installed automatically.
+Exact trial/source correlations are preserved in `recovery-harness/trials/*/analysis.json` and candidate reviews rather than repeated here.

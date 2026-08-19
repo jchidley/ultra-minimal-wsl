@@ -2,59 +2,35 @@
 
 ## Objective
 
-Produce `minimal-viable-wsl-v1`: the mkroot/Toybox floor plus only the
-registered-distro VHDX/ext4, basic `wsl.exe` select/start/execute/terminate,
-command relay, and shutdown contract proved necessary. Then produce
-`ultra-minimal-wsl-v1` by adding only
-requirements proved by Alpine, Arch, and Debian smoke tests. Defer networking,
-DrvFs, Windows interop, systemd, containers, GUI, and unrelated Microsoft
-control-plane policy.
+Build `minimal-viable-wsl-v1` from the mkroot/Toybox floor plus only proven Hyper-V entry, VSOCK, registered-distro VHDX mount, root transition, `wsl.exe` command relay, termination, and recovery requirements. Then add only requirements proved by Alpine, Arch, and Debian to produce `ultra-minimal-wsl-v1`.
+
+Networking, DNS, DrvFs, Windows interop, WSLg, systemd, containers, cgroup policy, USB, general disk management, and cross-distro integration are out of scope.
 
 ## Read first
 
-Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Treat
-`inventory/kconfig-dependencies.sqlite` as the searchable experiment record and
-the CSV manifests under `inventory/` as its durable inputs.
+Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Query `inventory/kconfig-dependencies.sqlite`; durable inputs are `inventory/annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`.
 
-## Record every candidate
+## Candidate records
 
 Before any boot:
 
-1. Add the full config, parent, hash, and trial ID to
-   `inventory/config-snapshots.csv`.
-2. Review explicit and selected symbols with `tools/inventory.py`; update
-   annotations only through `tools/inventory.py set`.
-3. Run `uv run python tools/inventory_records.py` and require SQLite integrity
-   `ok`.
-4. Plan-validate the candidate and obtain explicit user approval.
+1. Record the full config, parent, hash, and trial ID in `inventory/config-snapshots.csv`.
+2. Review explicit and selected symbols with `tools/inventory.py`; update annotations only through `tools/inventory.py set`.
+3. Run `uv run python tools/inventory_records.py` and require integrity `ok`.
+4. Plan-validate and obtain explicit user approval.
 
-After a trial, require the harness to append `inventory/trials.csv`; add one
-`inventory/trial-metadata.csv` row, preserve `analysis.json`, and rerun the
-inventory synchronizer. Never rewrite completed ledger rows or trial evidence.
+After a trial, preserve the harness evidence, append metadata, and resynchronize SQLite. Never rewrite completed ledger rows or trial evidence.
 
 ## Safety
 
-- Require explicit approval before `-Execute`, WSL shutdown, `.wslconfig`
-  changes, or custom-kernel boot.
-- Run ordinary kernel trials unelevated. Elevate only the WPR/ETW diagnostic
-  wrapper or optional installer, after separate explicit approval.
+- Require explicit approval before `-Execute`, WSL shutdown, `.wslconfig` changes, elevation, or custom-kernel boot.
+- Use the ordinary unelevated harness unless separately approved WPR/ETW diagnostics are necessary.
 - Never write under `C:\Program Files\WSL` or replace its initrd.
-- Keep builds and source worktrees on `LFS-Builder` ext4.
-- Commit configs, metadata, hashes, extracted evidence, and analysis; exclude
-  reproducible binaries and raw ETL/XML.
-- Do not accept new WSL package hashes without an approved stock recovery trial.
+- Keep kernel builds and source worktrees on `LFS-Builder` ext4.
+- Do not accept new packaged WSL hashes without an approved stock recovery trial.
+- A timeout does not prove a remote or elevated process stopped; verify durable state independently.
 
 ## Commands
-
-From PowerShell 5.1, start fresh scoped sessions:
-
-```powershell
-& .\tools\Start-Pi.ps1 -Mode RefreshDocs
-& .\tools\Start-Pi.ps1 -Mode Work
-```
-
-Refresh records after evidence-producing work and before handing off. Do not use
-`pi -c` as the project entry point; current repository evidence is authoritative.
 
 ```bash
 uv run python tools/inventory.py trial
@@ -63,10 +39,4 @@ uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_inventory_records
 ```
 
-Run Windows scripts only through `windows-env/ps-exec`. Use
-`tools/Test-WslSafeState.ps1` for live state and `tools/Test-WslKernelTrial.ps1`
-for non-mutating trial validation. A timeout does not prove a remote or elevated
-process stopped; verify durable status independently.
-
-Historical paths in completed trial records may refer to the former Downloads
-location. Preserve them.
+Run Windows scripts through `windows-env/ps-exec`. Use `tools/Test-WslSafeState.ps1` for live state and `tools/Test-WslKernelTrial.ps1` for non-mutating validation.

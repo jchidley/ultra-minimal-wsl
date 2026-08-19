@@ -1,101 +1,78 @@
-# WSL kernel development and recovery
+# WSL kernel trial and recovery runbook
 
-This page explains how the stock kernel is preserved, how Microsoft documents development/testing, and where this experiment differs from the supported path.
+A custom WSL kernel is global to every WSL 2 distro. Use the guarded harness; never switch kernels manually during an experiment.
 
-## Custom kernels do not replace the stock kernel
+## Supported kernel override
 
-WSL’s packaged kernel remains under:
-
-`C:\Program Files\WSL\tools\kernel`
-
-The supported `.wslconfig` setting points WSL at a separate custom image:
+Microsoft’s packaged kernel remains at `C:\Program Files\WSL\tools\kernel`. The supported override points `.wslconfig` at a separate image:
 
 ```ini
 [wsl2]
-kernel=C:/Users/jackc/git/ultra-minimal-wsl/candidates/kernel-test
+kernel=C:/path/to/candidate/kernel
 ```
 
-The setting is global to WSL 2 and takes effect after `wsl.exe --shutdown`. It does not overwrite the packaged kernel.
+Removing `kernel=` and shutting WSL down restores selection of the packaged kernel. An empty value is not a fallback.
 
-To return to Microsoft’s kernel:
+## Before any trial
 
-1. run `wsl.exe --shutdown`;
-2. remove only the `kernel=` line from `%USERPROFILE%\.wslconfig`;
-3. also remove `kernelModules=` if it belongs to that custom kernel;
-4. start the designated distro;
-5. verify `uname -r` and basic command execution.
+1. Obtain explicit approval for interruption of every WSL 2 distro.
+2. Require `tools/Test-WslSafeState.ps1` to report `safe:true`.
+3. Record WSL version and packaged kernel/initrd hashes.
+4. Preserve `.wslconfig` byte-for-byte.
+5. Verify candidate config, image, metadata, and hashes.
+6. Synchronize inventory records and require SQLite integrity `ok`.
+7. Run `tools/Test-WslKernelTrial.ps1` and harness plan mode.
 
-An empty custom-kernel setting is not the fallback. Absence of the setting makes WSL select its packaged kernel.
+No approval is implied by a prepared candidate or plan validation.
 
-Before testing, record:
+## Ordinary trial
 
-- `wsl.exe --version`;
-- SHA-256 of the packaged kernel;
-- a byte-for-byte backup of `.wslconfig`;
-- SHA-256 and source/config metadata for the candidate.
+`tools/Invoke-WslKernelTrial.ps1` journals before changing `.wslconfig`, enforces serial execution and timeouts, restores the exact original file in `finally`, verifies packaged hashes, and boots a recovery distro before finalizing the ledger.
 
-The packaged kernel may legitimately change after `wsl.exe --update`, so version and hash must be recorded together.
+Run it unelevated. Its execute path requires both the explicit custom-kernel guard and `-Execute`. It has no write path beneath `C:\Program Files\WSL`.
 
-## Kernel trials remain serial
+After completion, independently run `tools/Test-WslSafeState.ps1`. A timeout does not prove a process, VM, or elevated child stopped.
 
-All WSL 2 distributions use the same utility VM and selected kernel. A kernel change therefore requires `wsl.exe --shutdown` and affects the next start of every WSL 2 distro. Keep multiple image files, but test them one at a time.
+## Diagnostic trial
 
-## The initrd is different
+Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cannot classify a pre-dispatch failure. It adds Microsoft’s WPR profile, exact trace timing, and transactional `debugConsole=true` around the same recovery harness.
 
-Microsoft documents `.wslconfig` overrides for `kernel`, `kernelModules` and `kernelCommandLine`, but not for the WSL initrd. WSL 2.7.11 source sets `InitRdPath` from its installation tools directory, normally:
+Diagnostic execution requires separate approval and elevation because WPR enables privileged ETW providers. Transport a reviewed fixed PowerShell script through `windows-env/ps-elevate`; do not rely on an agent-side timeout to stop it.
 
-`C:\Program Files\WSL\tools\initrd.img`
+Interpret only evidence inside the recorded interval:
 
-Therefore:
+| Evidence | Highest supported conclusion |
+|---|---|
+| host loader/compute failure | guest entry not established |
+| early kernel `GuestLog` | `B1` |
+| VMBus/VSOCK enumeration | `B2` |
+| Hyper-V disk plus ext4 mount | `B3` |
+| stable host/control messaging | `B4` candidate |
+| command output marker | `B5` or the applicable `B6-*` |
 
-- kernel testing uses a supported external path and leaves packaged files untouched;
-- reduced-control-plane testing cannot use the same mechanism;
-- transient initrd replacement on the host would modify an installed WSL artifact and requires stronger recovery controls;
-- the Microsoft-aligned isolation option is to build/deploy a custom WSL package into a disposable Hyper-V Windows VM, ideally with a checkpoint.
+Absence is meaningful only when the relevant provider was active and trace start/stop succeeded.
 
-No custom initrd should be tested on the host until its separate deployment/recovery approach is explicitly approved and dry-run with a byte-identical stock copy.
+## Recovery invariants
 
-## Microsoft’s documented development workflow
+Every trial must leave:
 
-For WSL platform development, Microsoft documents:
+- the original `.wslconfig` restored exactly;
+- no custom kernel selected;
+- packaged kernel/initrd hashes verified;
+- stock Debian command execution proven;
+- a terminal immutable ledger row;
+- no active journal, WPR session, or diagnostic relay;
+- analysis and hashes preserved under `recovery-harness/trials/<TRIAL_ID>/`.
 
-1. build the WSL repository on Windows with Visual Studio, CMake and Windows SDK 26100;
-2. deploy the generated MSI to the host with `tools\deploy\deploy-to-host.ps1`, or to a Hyper-V VM with `tools\deploy\deploy-to-vm.ps1`;
-3. run `bin\<platform>\<target>\test.bat`, optionally selecting unit tests or a specific test;
-4. use `WSL_DEV_BINARY_PATH` and `WSL_BUILD_THIN_PACKAGE` for faster development iterations;
-5. collect ETL traces, enable `debugConsole=true`, or use `wsl --debug-shell` for diagnostics.
+If finalization is interrupted, use the harness recovery path. Never hand-edit a completed ledger row.
 
-For this experiment, host `.wslconfig` switching is appropriate for kernel-only trials. A disposable Hyper-V VM is preferable once `wslservice.exe`, the MSI, or the installed initrd must change.
+## Initrd and control-plane work
 
-## Local kernel-only harness
+`.wslconfig` has no custom-initrd setting. Do not replace the installed initrd. Build and deploy reduced-control-plane changes as a controlled WSL package inside a disposable Hyper-V Windows VM with a checkpoint.
 
-`tools\Invoke-WslKernelTrial.ps1` implements the supported external-kernel path. It reads and hashes the packaged kernel but has no write path beneath `C:\Program Files\WSL`. It journals before changing `.wslconfig`, restores the exact original bytes in `finally`, enforces serial trials and timeouts, captures command/dmesg/event/crash output, verifies hashes, and boots a recovery distro on the packaged kernel before completing the ledger row.
+## References
 
-`tools\Test-WslKernelTrial.ps1` and `-SelfTest` exercise parsing, guards, candidate hashes, encoding/newline transforms and plan mode without shutting WSL down. `tools\Test-WslSafeState.ps1` replaces ad-hoc inline verifiers: it emits one JSON document, uses process exit codes and encoding-aware native-output capture rather than `$LASTEXITCODE`/NUL heuristics, and checks the versioned `recovery-harness\expected-safe-state.json` baseline, custom settings, the recovery journal and ledger, WSL management/runtime state, debug relays, WPR, and optional Visual Studio components. A safe result exits 0; an unsafe result still emits complete JSON and exits 1. `-SelfTest` is host-state-independent and is included in the plan-only test suite. Do not update the baseline merely because a hash drifted: finish any installer/update, record the new WSL version, and repeat the stock recovery validation first.
-
-Run it through the boundary helper:
-
-```bash
-windows-env/ps-exec --stdin <<'POWERSHELL'
-& 'C:\Users\jackc\git\ultra-minimal-wsl\tools\Test-WslSafeState.ps1'
-POWERSHELL
-```
-
-`tools\Invoke-WslDiagnosticKernelTrial.ps1` adds a plan-only-by-default wrapper around the same recovery harness. Only its execute path requires elevation, solely because WPR starts privileged WSL, kernel, and Hyper-V ETW providers. Run the underlying kernel harness unelevated by default; choose the diagnostic wrapper only when ETW evidence is needed. It retains the explicit custom-kernel gates, starts the pinned Microsoft WSL 2.7.11 WPR profile, transactionally enables `debugConsole=true`, and stops ETW capture in `finally`. See `PRE-DISPATCH-DIAGNOSTICS.md`. The first execute-mode validation, `K-RECOVERY-001`, passed with the external byte-identical copy at `candidates\wsl-2.7.11-stock-kernel`: Toybox booted, exact `.wslconfig` restoration and packaged-kernel hashes passed, and stock Debian booted. A PowerShell 5.1 lazy ledger-read handle was diagnosed after the journaled recovery path reverified stock startup; ledger headers are now read eagerly, genuine locks are retried, and repeated finalization is idempotent.
-
-The harness changes a global WSL setting and invokes `wsl.exe --shutdown`; even stock-copy validation should run only when interruption of every active WSL distribution is acceptable.
-
-## Primary Microsoft sources
-
-- Advanced WSL settings (`kernel`, `kernelModules`, `safeMode`, shutdown semantics):
-  <https://learn.microsoft.com/windows/wsl/wsl-config>
-- WSL build, deployment and test loop:
-  <https://wsl.dev/dev-loop/>
-- WSL debugging and logging:
-  <https://wsl.dev/debugging/>
-- WSL architecture and boot process:
-  <https://wsl.dev/technical-documentation/boot-process/>
-- WSL source, matching development configuration:
-  <https://github.com/microsoft/WSL>
-- Microsoft WSL kernel source:
-  <https://github.com/microsoft/WSL2-Linux-Kernel>
+- WSL advanced settings: <https://learn.microsoft.com/windows/wsl/wsl-config>
+- WSL development loop: <https://wsl.dev/dev-loop/>
+- WSL diagnostics: <https://wsl.dev/debugging/>
+- WSL architecture: <https://wsl.dev/technical-documentation/boot-process/>

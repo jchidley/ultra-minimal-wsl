@@ -29,7 +29,7 @@ The resulting full config retains:
 - `CONFIG_HYPERV_NET=n`
 - `CONFIG_VIRTIO_CONSOLE=n`
 
-These paths are non-terminal or deferred according to `POST-B2-CLOSURE-ANALYSIS.md`.
+The exact source/trace correlation is preserved in `recovery-harness/trials/K-HOSTCHAN-001/analysis.json`; these paths were non-terminal or outside the selected target.
 
 ## Artifact integrity
 
