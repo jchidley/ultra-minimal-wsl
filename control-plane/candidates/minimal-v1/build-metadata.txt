@@ -1,6 +1,6 @@
 source_base_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
-source_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
-source_patch_sha256=none
+source_commit=f3d502ab4073c24fa31bd3f3ad4f6009a36076fa
+source_patch_sha256=3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a
 source_date_epoch=1786988799
 clang=Debian clang version 19.1.7 (3+b1)
 lld=Debian LLD 19.1.7 (compatible with GNU linkers)

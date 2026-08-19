@@ -5,10 +5,10 @@
 ## Immediate
 
 1. Keep additive stock-init kernel discovery frozen at `K-OVERLAY-DIAG-001`; do not add GNS or networking support.
-2. Create a disposable Hyper-V Windows VM checkpoint for controlled-package testing.
-3. Turn the exact 2.7.12 source map into protocol fixtures for handshake, instance creation, command relay, exit status, and termination.
-4. Patch the host to omit the Microsoft system distro and not await GNS, DNS, DrvFs, WSLg, or other excluded channels.
-5. Patch the guest control path to mount only the selected distro VHDX and retain direct command/lifecycle handling.
+2. Record and hash approved Windows installation media, obtain separate elevation approval, and execute the plan-validated disposable Hyper-V VM creation.
+3. Install Windows, establish a stock WSL 2.7.12 recovery baseline, power the VM off, and create `controlled-package-baseline`.
+4. Build the `control-plane/minimal-v1` Windows service/package in the VM; its protocol fixture, host/guest patch, and reproducible Linux build are prepared.
+5. Define the controlled-package runtime record, then prove direct distro command/lifecycle handling and checkpoint recovery before further reduction.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.
 

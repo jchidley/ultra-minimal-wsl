@@ -100,13 +100,14 @@ common=(
     -I "$SOURCE/src/linux/inc" -I "$SOURCE/src/linux/mountutil"
     -I "$SOURCE/src/linux/plan9" -I "$SOURCE/src/linux/netlinkutil"
     -I "$SOURCE/src/linux/init" -I "$SOURCE/src/shared/configfile"
-    -I "$SOURCE/src/shared/inc" -I "$DEPS/json/include" -I "$OUT/generated"
+    -I "$SOURCE/src/shared/inc" -I "$DEPS/json/include" -I "$(dirname "$LOCALIZATION_HEADER")"
     --no-standard-libraries -Werror -Wall -Wpointer-arith
     -D_POSIX_C_SOURCE=200809L -Dswprintf_s=swprintf -fms-extensions
     -target x86_64-unknown-linux-musl -D_GNU_SOURCE=1 -D_LARGEFILE64_SOURCE
     -DWSL_PACKAGE_VERSION='"2.7.12.0"' -DWSL_PACKAGE_VERSION_MAJOR=2
     -DWSL_PACKAGE_VERSION_MINOR=7 -DWSL_PACKAGE_VERSION_REVISION=12 -D_AMD64_
-    -ffile-prefix-map="$SOURCE"=/usr/src/wsl -ffile-prefix-map="$ROOT"=/usr/src/build
+    -ffile-prefix-map="$SOURCE"=/usr/src/wsl -ffile-prefix-map="$BUILD"=/usr/src/build/candidate
+    -ffile-prefix-map="$ROOT"=/usr/src/build
     -fdebug-compilation-dir=/usr/src/build -g -O2 -DNDEBUG
 )
 

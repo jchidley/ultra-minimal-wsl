@@ -59,6 +59,18 @@ The retained host/guest path is mapped against the recovery baseline’s exact p
 
 Source inspection also proves that a guest-only reduced init is insufficient: the stock host waits for an excluded GNS connection after early configuration and advertises the Microsoft system distro. Reduced-control-plane testing must patch both the Windows service and Linux init inside the disposable VM.
 
+## Reduced control-plane prototype
+
+The first source candidate is preserved under `control-plane/` against pinned WSL 2.7.12:
+
+- a compiler-extracted protocol fixture pins retained message IDs, constants, structure sizes, and offsets to the shared-header hash;
+- `minimal-v1` patches both `WslCoreVm`/`WslCoreInstance` and Linux `mini_init` to omit or reject the system distro, GNS/networking/DNS, WSLg, DrvFs, interop, OOBE, swap, modules, and memory policy while retaining the registered-distro launch and command/lifecycle channel;
+- the patch applies cleanly and its complete source diff matches the recorded SHA-256;
+- two clean Linux-side builds in distinct output directories are byte-identical, with hashes recorded in `control-plane/candidates/minimal-v1/`;
+- the Windows side has not yet been built or runtime-tested.
+
+Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. No disposable VM has been created: no pinned Windows ISO or generalized VHDX is recorded, and elevated execution has not been separately approved.
+
 ## Target gap
 
 No mkroot-derived candidate has reached Toybox command dispatch under WSL. Additive stock discovery has now reached an excluded service boundary, so the next phase is the reduced host and guest control plane. It must preserve VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing the system distro, GNS, and unrelated stock policy. Neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet.

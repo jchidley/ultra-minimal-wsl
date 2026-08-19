@@ -1,0 +1,50 @@
+{
+  "source": {
+    "commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "header": "src/shared/inc/lxinitshared.h",
+    "header_sha256": "50ccb4e6aab4d6f422e41c6003717d8eacb926ab657a61fdb9b62f6298bb8b93"
+  },
+  "constants": {
+    "LX_INIT_UTILITY_VM_INIT_PORT": 50000,
+    "LX_INIT_UTILITY_VM_INIT_SOCKET_FD": 100,
+    "LX_INIT_UTILITY_VM_CREATE_PROCESS_SOCKET_COUNT": 5,
+    "LX_INIT_STD_FD_COUNT": 3
+  },
+  "message_types": {
+    "LxInitMessageInitialize": 5,
+    "LxInitMessageInitializeResponse": 6,
+    "LxInitMessageCreateProcessUtilityVm": 8,
+    "LxInitMessageExitStatus": 9,
+    "LxInitMessageTerminateInstance": 14,
+    "LxMiniInitMessageLaunchInit": 29,
+    "LxMiniInitMessageCreateInstanceResult": 33,
+    "LxMiniInitMessageEarlyConfig": 36,
+    "LxMiniInitMessageInitialConfig": 37,
+    "LxMiniInitMessageGuestCapabilities": 43
+  },
+  "layouts": {
+    "sizeof(MESSAGE_HEADER)": 16,
+    "offsetof(MESSAGE_HEADER,MessageType)": 0,
+    "offsetof(MESSAGE_HEADER,MessageSize)": 4,
+    "offsetof(MESSAGE_HEADER,TransactionId)": 8,
+    "offsetof(MESSAGE_HEADER,TransactionStep)": 12,
+    "offsetof(LX_INIT_GUEST_CAPABILITIES,Buffer)": 17,
+    "offsetof(LX_MINI_INIT_EARLY_CONFIG_MESSAGE,Buffer)": 56,
+    "offsetof(LX_MINI_INIT_CONFIG_MESSAGE,Buffer)": 48,
+    "offsetof(LX_MINI_INIT_MESSAGE,Buffer)": 60,
+    "offsetof(LX_MINI_INIT_CREATE_INSTANCE_RESULT,Buffer)": 40,
+    "offsetof(LX_INIT_CONFIGURATION_INFORMATION,Buffer)": 56,
+    "offsetof(LX_INIT_CONFIGURATION_INFORMATION_RESPONSE,Buffer)": 48,
+    "offsetof(LX_INIT_CREATE_PROCESS_COMMON,Buffer)": 52,
+    "offsetof(LX_INIT_CREATE_PROCESS_UTILITY_VM,Common)": 20,
+    "sizeof(LX_INIT_PROCESS_EXIT_STATUS)": 20,
+    "offsetof(LX_INIT_PROCESS_EXIT_STATUS,ExitCode)": 16,
+    "sizeof(LX_INIT_TERMINATE_INSTANCE)": 20,
+    "offsetof(LX_INIT_TERMINATE_INSTANCE,Force)": 16
+  },
+  "retained_flags": {
+    "LxMiniInitMessageFlagNone": 0,
+    "LxInitCreateProcessFlagsNone": 0,
+    "LxInitFeatureNone": 0
+  }
+}
