@@ -11,7 +11,9 @@
 /mkroot-baseline/linux-kernel
 /mkroot-baseline/initramfs.cpio.gz
 
-# Reproducible control-plane staging and native binaries
+# Reproducible control-plane staging, local dependency cache, and native binaries
+/control-plane-build/cache/
+/control-plane-build/deps/
 /control-plane-build/localization-stage/
 /control-plane-build/generated/
 /control-plane-build/native-build/generated/

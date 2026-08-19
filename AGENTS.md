@@ -10,6 +10,10 @@ Networking, DNS, DrvFs, Windows interop, WSLg, systemd, containers, cgroup polic
 
 Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Query `inventory/kconfig-dependencies.sqlite`; durable inputs are `inventory/annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`.
 
+## Local inputs
+
+Ordinary build, extraction, and trial workflows must not download dependencies or artifacts. Consume pinned, hash-verified local inputs; where reusable archives are necessary, use an explicitly configured local cache and fail closed when an entry is missing or corrupt. Populate that cache only as a separate, deliberate operation.
+
 ## Candidate records
 
 Before any boot:
