@@ -4,7 +4,7 @@ The Apache-2.0/MIT choice applies only to original project code and documentatio
 
 | Material | Source | Terms |
 |---|---|---|
-| Microsoft WSL diagnostic profile under `references/microsoft/WSL-2.7.11/` | <https://github.com/microsoft/WSL/tree/2.7.11> | Microsoft MIT license copied alongside it |
+| Microsoft WSL diagnostic profile under `references/microsoft/WSL-2.7.12/` | <https://github.com/microsoft/WSL/tree/2.7.12> | Microsoft MIT license copied alongside it |
 | Linux kernel configurations and Kconfig-derived inventory | <https://github.com/microsoft/WSL2-Linux-Kernel> and upstream Linux | Generated/derived material; consult upstream GPL-2.0-only notices and source |
 | Toybox-generated configs and `mkroot-baseline/toybox-init` | <https://github.com/landley/toybox> | Consult Toybox’s upstream 0BSD license and generated-file notices |
 | Build and runtime logs | Outputs of the named upstream projects and local experiments | Factual evidence; embedded excerpts retain applicable upstream terms |

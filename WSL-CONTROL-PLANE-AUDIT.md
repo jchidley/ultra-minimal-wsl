@@ -36,7 +36,7 @@ A facility is not part of Minimal Viable WSL merely because stock init requests 
 
 ## Pinned source map
 
-The retained path was traced against the pinned public WSL tag `2.7.11`, commit `acbcb81fc61079b74835ea7dc2563046b2557033`. The recovery-validated installed package is 2.7.12.0, while the local public-source clone currently exposes no `2.7.12` tag. Treat this as the nearest published source map, not an exact package-source identity; diff it against the corresponding package revision before implementation if Microsoft publishes one. Line numbers below identify the pinned revision and may move later.
+The retained path is traced against the recovery-validated package’s exact public source: WSL tag `2.7.12`, commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`. The previously audited 2.7.11 mapped files differ only by an unrelated two-line change in `WslCoreVm::MountRootNamespaceFolder`; the control-path references below are unchanged. Line numbers identify the pinned 2.7.12 revision.
 
 | Contract step | Guest implementation | Host implementation | Required behavior |
 |---|---|---|---|
@@ -60,6 +60,12 @@ A guest-only replacement is insufficient. Immediately after early configuration,
 - shared protocol: preserve existing layouts where practical so unmodified `wsl.exe` remains the client.
 
 This is a source-level candidate contract, not proof that every listed namespace, message field, or socket is necessary. Runtime ablation must establish the final minimum.
+
+## Runtime stopping gate
+
+`K-OVERLAY-DIAG-001` confirmed the source-map boundary. Overlay construction completed without the prior crash, then the host logged `Expected message LxGnsMessageResult, but socket GNS was closed`. NAT and no-network fallbacks did not recover the already closed control path. The guest then shut down cleanly.
+
+This selects host/guest control-plane reduction, not another kernel bundle. Networking and GNS are outside the target, so no Hyper-V network, seccomp, cgroup, PTP, `/proc` children, or console additions follow from this trial. Detailed timing, guest logs, ETW, and analysis are preserved under `recovery-harness/trials/K-OVERLAY-DIAG-001/`.
 
 ## Selected design
 

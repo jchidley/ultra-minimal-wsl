@@ -10,7 +10,7 @@ param(
     [string]$ExpectedConfigSha256 = '',
     [string]$ExpectedKernelSha256 = '',
     [string]$ExpectedInitrdSha256 = '',
-    [string[]]$ExpectedTrialId = @('G-001', 'K-RECOVERY-001', 'K-MKROOT-001', 'K-HVCORE-001', 'K-HVCORE-DIAG-001', 'K-RECOVERY-002', 'K-HOSTCHAN-001', 'K-STORAGE-001', 'K-OVERLAY-001'),
+    [string[]]$ExpectedTrialId = @('G-001', 'K-RECOVERY-001', 'K-MKROOT-001', 'K-HVCORE-001', 'K-HVCORE-DIAG-001', 'K-RECOVERY-002', 'K-HOSTCHAN-001', 'K-STORAGE-001', 'K-OVERLAY-001', 'K-OVERLAY-DIAG-001'),
     [string[]]$OptionalVisualStudioComponent = @(
         'Microsoft.VisualStudio.Component.Windows11SDK.26100',
         'Microsoft.VisualStudio.Component.VC.ATL',

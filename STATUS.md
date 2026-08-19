@@ -28,20 +28,26 @@ Validated package baseline:
 
 Every completed custom trial restored the exact stock configuration and proved stock Debian startup. Detailed evidence remains in each trial’s `analysis.json` and manifest.
 
-## Overlay trial
+## Stock-init discovery boundary
 
-`K-OVERLAY-001` derived from `K-STORAGE-001` with explicit `CONFIG_OVERLAY_FS=y` and selected `CONFIG_FS_STACK=y`. Its ordinary unelevated trial completed with verified stock restoration but produced no guest log, kernel ring, crash dump, or command marker. The host reported `CreateVm/0x80072746` after networking fallback. The strict evidence ceiling is therefore B0, not evidence that the candidate regressed from its B3 parent.
+`K-OVERLAY-001` derived from `K-STORAGE-001` with explicit `CONFIG_OVERLAY_FS=y` and selected `CONFIG_FS_STACK=y`. The ordinary run was unobservable beyond B0, so the byte-identical `K-OVERLAY-DIAG-001` rerun used the approved elevated ETW path.
 
-The trial neither proves nor disproves that overlayfs removed the prior stock-`mini_init` crash. A byte-identical diagnostic rerun is justified because ordinary evidence cannot classify the boundary, but requires separate approval and elevated WPR/ETW capture.
+The diagnostic rerun proved B3 and advanced the failure boundary:
 
-Overlayfs remains a stock system-distro discovery candidate, not an accepted Minimal Viable WSL requirement.
+- the system-distro ext4 filesystem mounted;
+- overlay construction returned without the prior `mini_init` segfault or kernel panic;
+- stock startup then failed because the excluded GNS networking socket closed before `LxGnsMessageResult`;
+- the host attempted NAT and then no-network fallback, but the control channel was already closed;
+- the guest powered down cleanly and stock recovery passed.
 
-Post-trial recovery independently reported `safe:true`: the exact `.wslconfig` and packaged hashes were restored, stock Debian booted, no distro or utility VM remained running, and WPR was idle.
+B4 is not proved. Overlayfs is required by Microsoft’s stock system-distro path, not accepted for Minimal Viable WSL. GNS is the first stable blocker and networking is explicitly excluded, so additive stock-init kernel discovery stops here.
+
+Post-trial recovery independently reported `safe:true`: the exact `.wslconfig` and packaged hashes were restored, stock Debian booted, no distro or utility VM remained running, WPR was idle, and the diagnostic relay was removed.
 
 ## Inventory
 
 - 9 config snapshots;
-- 9 completed trials;
+- 10 completed trials;
 - 113 reviewed annotations;
 - SQLite integrity `ok` at the last synchronization.
 
@@ -49,10 +55,10 @@ Durable inputs are `annotations.csv`, `config-snapshots.csv`, `trials.csv`, and 
 
 ## Control-plane preparation
 
-The retained host/guest path is mapped against the nearest pinned public source, WSL tag `2.7.11` at commit `acbcb81fc61079b74835ea7dc2563046b2557033`, in `WSL-CONTROL-PLANE-AUDIT.md`. The installed recovery baseline is 2.7.12.0 and the local public-source clone exposes no corresponding tag, so exact source identity remains to be established before implementation. The map identifies the VSOCK handshake, registered-distro VHDX message, namespace/root transition, inherited distro-init channel, command sockets, stdio/exit relay, and termination messages.
+The retained host/guest path is mapped against the recovery baseline’s exact public source, WSL tag `2.7.12` at commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`, in `WSL-CONTROL-PLANE-AUDIT.md`. The map identifies the VSOCK handshake, registered-distro VHDX message, namespace/root transition, inherited distro-init channel, command sockets, stdio/exit relay, and termination messages. The Linux-side init and deterministic initrd build byte-identically in two clean runs from separate working directories; hashes are recorded under `control-plane-build/native-build/`.
 
 Source inspection also proves that a guest-only reduced init is insufficient: the stock host waits for an excluded GNS connection after early configuration and advertises the Microsoft system distro. Reduced-control-plane testing must patch both the Windows service and Linux init inside the disposable VM.
 
 ## Target gap
 
-No mkroot-derived candidate has reached Toybox command dispatch under WSL. Therefore neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet. The final result requires a reduced host and guest control plane that preserves VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing unrelated stock policy.
+No mkroot-derived candidate has reached Toybox command dispatch under WSL. Additive stock discovery has now reached an excluded service boundary, so the next phase is the reduced host and guest control plane. It must preserve VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing the system distro, GNS, and unrelated stock policy. Neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet.

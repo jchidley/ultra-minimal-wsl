@@ -4,17 +4,17 @@
 
 ## Immediate
 
-1. Preserve and commit the completed `K-OVERLAY-001` ordinary trial as inconclusive at the B0 evidence ceiling.
-2. Obtain separate explicit approval for elevation and a byte-identical `K-OVERLAY-DIAG-001` WPR/ETW rerun.
-3. Require canonical `safe:true`; do not stop a running distro automatically unless that interruption is also approved.
-4. Classify whether overlay removed the prior crash without adding networking or another excluded feature.
-5. Stop additive stock-init discovery if the next stable failure selects an excluded service rather than a retained control-contract primitive.
+1. Keep additive stock-init kernel discovery frozen at `K-OVERLAY-DIAG-001`; do not add GNS or networking support.
+2. Create a disposable Hyper-V Windows VM checkpoint for controlled-package testing.
+3. Turn the exact 2.7.12 source map into protocol fixtures for handshake, instance creation, command relay, exit status, and termination.
+4. Patch the host to omit the Microsoft system distro and not await GNS, DNS, DrvFs, WSLg, or other excluded channels.
+5. Patch the guest control path to mount only the selected distro VHDX and retain direct command/lifecycle handling.
 
-Continue excluding cgroups, networking/seccomp, Hyper-V networking, page reporting, and extra console support unless the earliest stable failure selects one of them.
+Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.
 
 ## Minimal Viable WSL
 
-After stock-init discovery reaches Toybox command dispatch:
+Starting from the proven stock-init boundary:
 
 1. Use the pinned host/guest source map in `WSL-CONTROL-PLANE-AUDIT.md` to define protocol fixtures for handshake, instance creation, command relay, exit status, and termination.
 2. Retain only distro VHDX/ext4 mount, minimum root transition/isolation, process creation, stdio/exit relay, termination, and shutdown.

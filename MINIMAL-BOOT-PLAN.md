@@ -40,7 +40,7 @@ Changing WSL, Windows, kernel source, toolchain, or a test rootfs starts a new m
 1. Generate the lower bound with mkroot; do not approximate it manually.
 2. Expand every candidate with `make olddefconfig` against the pinned kernel tree.
 3. Preserve requested fragments separately from generated full configs.
-4. Keep discovery additive until command dispatch works.
+4. Keep discovery additive until command dispatch works or the earliest stable blocker is an excluded stock service; at that boundary, pivot to control-plane reduction.
 5. Change one evidence-selected feature group at a time.
 6. Query outgoing and incoming Kconfig relationships before changing a symbol.
 7. Treat selected dependencies separately from explicit requests.
@@ -114,10 +114,11 @@ Alpine additionally runs `/bin/busybox true`; Arch and Debian run `/bin/true`. D
 2. **Hyper-V entry:** add only the platform execution closure selected by the earliest WSL failure.
 3. **Host channel:** establish VMBus and VSOCK communication with `wslservice.exe`.
 4. **Distro storage:** attach and mount the registered distro VHDX.
-5. **Command dispatch:** establish the minimum root transition, process creation, relay, and lifecycle path.
-6. **Reduce control plane:** remove stock-only policy and the Microsoft system distro/overlay if avoidable.
-7. **Prove minimality:** ablate every provisional WSL bundle and freeze `minimal-viable-wsl-v1`.
-8. **Compatibility:** test Alpine, Arch, and Debian in order; attribute and ablate each addition; freeze `ultra-minimal-wsl-v1`.
+5. **Stock stopping gate:** if an excluded stock service is the earliest stable blocker, preserve that boundary and stop adding kernel support for stock policy.
+6. **Reduce control plane:** remove stock-only host and guest policy, including the Microsoft system distro/overlay and GNS path.
+7. **Command dispatch:** establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
+8. **Prove minimality:** ablate every provisional WSL bundle and freeze `minimal-viable-wsl-v1`.
+9. **Compatibility:** test Alpine, Arch, and Debian in order; attribute and ablate each addition; freeze `ultra-minimal-wsl-v1`.
 
 If a failure does not select a narrow subsystem, delta-debug coherent feature groups between the candidate and Stage 1. Never bisect arbitrary individual symbols across dependency boundaries.
 

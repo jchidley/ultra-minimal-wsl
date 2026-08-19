@@ -32,7 +32,7 @@ param(
     [switch]$Execute,
 
     [string]$ProjectRoot = (Split-Path -Parent $PSScriptRoot),
-    [string]$WprProfilePath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'references\microsoft\WSL-2.7.11\diagnostics\wsl.wprp'),
+    [string]$WprProfilePath = (Join-Path (Split-Path -Parent $PSScriptRoot) 'references\microsoft\WSL-2.7.12\diagnostics\wsl.wprp'),
     [string]$ExpectedWprProfileSha256 = '3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2'
 )
 

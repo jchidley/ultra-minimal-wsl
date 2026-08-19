@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Reproducibly build WSL 2.7.11's Linux-side init on Debian/WSL without the
+# Reproducibly build WSL 2.7.12's Linux-side init on Debian/WSL without the
 # unavailable Windows SDK. This reproduces the Linux target, not wslservice.exe.
 set -euo pipefail
 export LC_ALL=C
 
-SOURCE=${SOURCE:-/root/src/WSL-2.7.11}
+SOURCE=${SOURCE:-/root/src/WSL-2.7.12}
 ROOT=${ROOT:-/root/experiments/minimal-wsl/control-plane-build}
 LOCALIZATION_HEADER=${LOCALIZATION_HEADER:-$ROOT/Localization.h}
 JOBS=${JOBS:-$(nproc)}
@@ -14,7 +14,7 @@ DEPS=$ROOT/deps
 OUT=$BUILD/out
 OBJ=$BUILD/obj
 
-expected_commit=acbcb81fc61079b74835ea7dc2563046b2557033
+expected_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
 linuxsdk_version=1.20.0
 wsldeps_version=10.0.27820.1000-250318-1700.rs-base2-hyp
 linuxsdk_sha=942d36f760446853b29c97f2ee689819bb9305d959342d21df537c1d6981491e
@@ -27,8 +27,10 @@ feed=https://pkgs.dev.azure.com/shine-oss/13eb32df-d33f-470f-b930-499535a958b4/_
 fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null || fail "missing command: $1"; }
 for command in git curl unzip tar clang clang++ llvm-ar llvm-strip llvm-objcopy sha256sum; do need "$command"; done
-[[ $(git -C "$SOURCE" rev-parse HEAD) == "$expected_commit" ]] || fail "source is not pinned WSL 2.7.11"
+[[ $(git -C "$SOURCE" rev-parse HEAD) == "$expected_commit" ]] || fail "source is not pinned WSL 2.7.12"
 [[ -z $(git -C "$SOURCE" status --porcelain) ]] || fail "source worktree is dirty"
+SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git -C "$SOURCE" show -s --format=%ct "$expected_commit")}
+export SOURCE_DATE_EPOCH
 [[ -f $LOCALIZATION_HEADER ]] || fail "missing generated Localization.h: $LOCALIZATION_HEADER"
 printf '%s  %s\n' "$localization_sha" "$LOCALIZATION_HEADER" | sha256sum -c -
 
@@ -76,10 +78,10 @@ common=(
     --no-standard-libraries -Werror -Wall -Wpointer-arith
     -D_POSIX_C_SOURCE=200809L -Dswprintf_s=swprintf -fms-extensions
     -target x86_64-unknown-linux-musl -D_GNU_SOURCE=1 -D_LARGEFILE64_SOURCE
-    -DWSL_PACKAGE_VERSION='"2.7.11.0"' -DWSL_PACKAGE_VERSION_MAJOR=2
-    -DWSL_PACKAGE_VERSION_MINOR=7 -DWSL_PACKAGE_VERSION_REVISION=11 -D_AMD64_
+    -DWSL_PACKAGE_VERSION='"2.7.12.0"' -DWSL_PACKAGE_VERSION_MAJOR=2
+    -DWSL_PACKAGE_VERSION_MINOR=7 -DWSL_PACKAGE_VERSION_REVISION=12 -D_AMD64_
     -ffile-prefix-map="$SOURCE"=/usr/src/wsl -ffile-prefix-map="$ROOT"=/usr/src/build
-    -g -O2 -DNDEBUG
+    -fdebug-compilation-dir=/usr/src/build -g -O2 -DNDEBUG
 )
 
 sources=(
@@ -110,9 +112,9 @@ sources=(
 compile_one() {
     local rel=$1 object=$2
     if [[ $rel == *.c ]]; then
-        clang "${common[@]}" -std=c99 "$SOURCE/$rel" -c -o "$object"
+        clang "${common[@]}" -frandom-seed="$rel" -std=c99 "$SOURCE/$rel" -c -o "$object"
     else
-        clang++ "${common[@]}" -std=c++20 "$SOURCE/$rel" -c -o "$object"
+        clang++ "${common[@]}" -frandom-seed="$rel" -std=c++20 "$SOURCE/$rel" -c -o "$object"
     fi
 }
 export -f compile_one
@@ -138,8 +140,7 @@ llvm-strip "$OUT/init.debug" -o "$OUT/init"
 llvm-objcopy --add-gnu-debuglink="$OUT/init.debug" "$OUT/init"
 
 # Deterministic newc archive: fixed inode and SOURCE_DATE_EPOCH-derived mtime.
-SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-$(git -C "$SOURCE" show -s --format=%ct "$expected_commit")}
-export SOURCE_DATE_EPOCH INIT_INPUT="$OUT/init" INITRD_OUTPUT="$OUT/initrd.img"
+export INIT_INPUT="$OUT/init" INITRD_OUTPUT="$OUT/initrd.img"
 uv run python "$ROOT/create-initrd-repro.py"
 
 (

@@ -1,0 +1,17 @@
+{
+    "schemaVersion":  1,
+    "trialId":  "K-OVERLAY-DIAG-001",
+    "traceStartedUtc":  "2026-08-19T17:17:44.7203827Z",
+    "traceStoppedUtc":  "2026-08-19T17:18:08.9780551Z",
+    "wprProfile":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\references\\microsoft\\WSL-2.7.11\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "wprProfileName":  "WSL",
+    "debugConsoleEnabledForTrial":  true,
+    "etlCreated":  true,
+    "trialError":  "System.Management.Automation.RuntimeException: Trial failed after verified restoration: Test distro exited with code -1.",
+    "traceStopError":  null,
+    "diagnosticRelayProcessIds":  [
+                                      34164
+                                  ],
+    "diagnosticRelayCleanupError":  null
+}

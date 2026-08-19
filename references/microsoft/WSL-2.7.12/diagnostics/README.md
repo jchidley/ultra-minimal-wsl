@@ -1,8 +1,8 @@
 # Pinned Microsoft WSL diagnostic profile
 
-Source: `microsoft/WSL` tag `2.7.11`, commit `acbcb81fc61079b74835ea7dc2563046b2557033`.
+Source: `microsoft/WSL` tag `2.7.12`, commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`.
 
-- upstream: <https://github.com/microsoft/WSL/blob/2.7.11/diagnostics/wsl.wprp>
+- upstream: <https://github.com/microsoft/WSL/blob/2.7.12/diagnostics/wsl.wprp>
 - local SHA-256: `3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2`
 - license: `../LICENSE` (Microsoft MIT)
 

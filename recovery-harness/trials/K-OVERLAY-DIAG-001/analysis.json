@@ -1,0 +1,69 @@
+{
+  "trialId": "K-OVERLAY-DIAG-001",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "checkpointAdvancedFromParent": false,
+    "failureBoundaryAdvanced": true,
+    "basis": "The custom guest registered VMBus, Hyper-V VSOCK and hv_storvsc, attached both virtual disks, and mounted the system-distro ext4 filesystem. Unlike K-STORAGE-001, mini_init did not segfault or panic after that mount. Source ordering and subsequent system-distro startup messages show that overlay construction returned successfully. Stable control messaging was not established because the excluded guest networking service closed its GNS socket, so B4 is not proved."
+  },
+  "parentTrial": "K-OVERLAY-001",
+  "parentArtifact": "K-STORAGE-001",
+  "artifactSha256": "3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b",
+  "configSha256": "ab0c68a2e96b36a397226f71e45d59a99c59f10ac1019c62bfde4e321a45e3f7",
+  "bundleOutcome": {
+    "overlayEnabled": true,
+    "fsStackSelected": true,
+    "priorNullDereferenceRemoved": true,
+    "systemDistroOverlayConstructionSucceeded": true,
+    "retainForStockDiscovery": true,
+    "retainForMinimalViableWsl": false
+  },
+  "terminalObservedFailure": {
+    "subsystem": "stock GNS networking control path",
+    "hostError": "Expected message LxGnsMessageResult, but socket GNS was closed",
+    "hostSequence": [
+      "Mirrored networking was rejected and fell back to NAT.",
+      "GNS closed before returning LxGnsMessageResult.",
+      "The host fell back to networkingMode None.",
+      "A later LX_MINI_INIT_CONFIG_MESSAGE send failed with 0x80072746 because the guest channel had closed."
+    ],
+    "guestSequence": [
+      "mini_init completed the system-distro ext4 mount without the prior segfault.",
+      "The host closed the failed startup path.",
+      "Guest cleanup detached disks and powered down without a kernel panic."
+    ]
+  },
+  "secondaryObservations": [
+    "The cgroup mount, missing hvc console, page-reporting parameter, and missing PTP clock remained non-terminal.",
+    "The /proc/self/task/1/children ReadFile error occurred in mini_init ErrorExit cleanup after the host-side GNS failure. CONFIG_PROC_CHILDREN is not selected from this evidence.",
+    "The host's kernel-version warning is a misleading consequence of the reduced capability report; the captured guest kernel identifies itself as Linux 6.18.40.1+.",
+    "No custom-guest segfault, panic, or crash dump was observed."
+  ],
+  "evidence": {
+    "traceStartedUtc": "2026-08-19T17:17:44.7203827Z",
+    "trialStartedUtc": "2026-08-19T17:17:45.5174038Z",
+    "trialFinishedUtc": "2026-08-19T17:18:08.1381536Z",
+    "traceStoppedUtc": "2026-08-19T17:18:08.9780551Z",
+    "customVmId": "6c3127b7-ace7-4311-9236-b5ef6d018c38",
+    "stockRecoveryVmId": "7bf18920-3d8c-4096-94aa-ae6df5b5effd",
+    "customGuestLogRecords": 251,
+    "stockGuestLogRecords": 147,
+    "customGuestLogFirst": "Linux version 6.18.40.1+",
+    "customGuestLogLast": "reboot: Power down",
+    "customCreateVmEndPresent": false,
+    "stockCreateVmEndPresent": true,
+    "testExitCode": -1,
+    "testTimedOut": false,
+    "etlPath": "windows-wsl.etl",
+    "decodedXmlPath": "windows-wsl-lr.xml",
+    "customGuestLogPath": "guest-log-custom.txt",
+    "stockGuestLogPath": "guest-log-stock-recovery.txt",
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "postTrialSafeState": true,
+    "wprStopped": true,
+    "diagnosticRelayRemoved": true
+  },
+  "decision": "Overlayfs removed the K-STORAGE-001 crash and exposed stock GNS networking as the next stable blocker. Networking is explicitly outside Minimal Viable WSL, so stop additive stock-init kernel discovery here. Do not add HYPERV_NET, networking, seccomp, cgroups, PTP, PROC_CHILDREN, page reporting, or console features from this trial. Pivot to the reduced host-and-guest control plane: prevent the host from awaiting GNS or advertising the system distro, remove the guest networking path, and preserve only VSOCK, registered-distro VHDX/ext4, root transition, command relay, exit status, and termination."
+}

@@ -45,7 +45,7 @@ Everything beyond this boundary is an optional integration profile.
 
 ## Current position
 
-The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates have progressed through Hyper-V entry, VMBus/VSOCK, and Hyper-V storage. The prepared `K-OVERLAY-001` candidate is the next stock-init discovery step; it has not been booted and requires explicit approval. See `STATUS.md` and `TASKS.md`.
+The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates have proved Hyper-V entry, VMBus/VSOCK, Hyper-V storage, and successful stock system-distro overlay construction. `K-OVERLAY-DIAG-001` then exposed excluded GNS networking as the next stock blocker, so additive stock-init kernel discovery is frozen. Work now moves to the reduced host and guest control plane. See `STATUS.md` and `TASKS.md`.
 
 ## Documentation
 
