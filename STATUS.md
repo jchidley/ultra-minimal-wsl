@@ -55,6 +55,12 @@ Overlayfs is being measured only because stock `mini_init` enters Microsoft’s 
 
 Durable inputs are `annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`. Other inventory exports are generated locally.
 
+## Control-plane preparation
+
+The retained host/guest path is mapped against the nearest pinned public source, WSL tag `2.7.11` at commit `acbcb81fc61079b74835ea7dc2563046b2557033`, in `WSL-CONTROL-PLANE-AUDIT.md`. The installed recovery baseline is 2.7.12.0 and the local public-source clone exposes no corresponding tag, so exact source identity remains to be established before implementation. The map identifies the VSOCK handshake, registered-distro VHDX message, namespace/root transition, inherited distro-init channel, command sockets, stdio/exit relay, and termination messages.
+
+Source inspection also proves that a guest-only reduced init is insufficient: the stock host waits for an excluded GNS connection after early configuration and advertises the Microsoft system distro. Reduced-control-plane testing must patch both the Windows service and Linux init inside the disposable VM.
+
 ## Target gap
 
-No mkroot-derived candidate has reached Toybox command dispatch under WSL. Therefore neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet. The final result requires a reduced control plane that preserves VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing unrelated stock-init policy.
+No mkroot-derived candidate has reached Toybox command dispatch under WSL. Therefore neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet. The final result requires a reduced host and guest control plane that preserves VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing unrelated stock policy.

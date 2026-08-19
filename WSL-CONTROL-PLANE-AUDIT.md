@@ -34,11 +34,38 @@ Stock `mini_init` also performs or supports work outside the target:
 
 A facility is not part of Minimal Viable WSL merely because stock init requests it. Current discovery uses stock init to expose the platform one failure at a time; the reduced control plane must later remove stock-only dependencies.
 
+## Pinned source map
+
+The retained path was traced against the pinned public WSL tag `2.7.11`, commit `acbcb81fc61079b74835ea7dc2563046b2557033`. The recovery-validated installed package is 2.7.12.0, while the local public-source clone currently exposes no `2.7.12` tag. Treat this as the nearest published source map, not an exact package-source identity; diff it against the corresponding package revision before implementation if Microsoft publishes one. Line numbers below identify the pinned revision and may move later.
+
+| Contract step | Guest implementation | Host implementation | Required behavior |
+|---|---|---|---|
+| VM channel | `src/linux/init/main.cpp:4086-4105` connects two Hyper-V sockets | `src/windows/service/exe/WslCoreVm.cpp:324-351` listens before starting the VM | Keep the primary control channel and termination notification; port `50000` is defined in `src/shared/inc/lxinitshared.h:110-148`. |
+| Initial handshake | `main.cpp:3637-3673` sends `LX_INIT_GUEST_CAPABILITIES` | `WslCoreVm.cpp:516-533` sends `LX_MINI_INIT_EARLY_CONFIG_MESSAGE` | Keep version/capability negotiation but report only retained facilities. |
+| Distro storage | `main.cpp:2461-2495` mounts the supplied LUN | `WslCoreVm.cpp:1170-1226` attaches the registered VHDX and sends LUN, `ext4`, and mount options | Keep one per-distro VHDX attachment and ext4 mount. |
+| Isolation and root transition | `main.cpp:3221-3243` creates IPC, mount, PID, and UTS namespaces; `main.cpp:247-265` moves the mount and chroots; `main.cpp:2581-2594` launches distro init | `WslCoreVm.cpp:1225-1246` waits for the distro channel | Determine experimentally which namespaces can be removed; retain the root transition and absolute-symlink correctness. |
+| Distro control loop | `src/linux/init/init.cpp:2248-2315` adopts inherited fd `100` and reports instance creation; `init.cpp:2407-2527` handles initialization, sessions, processes, and termination | `src/windows/service/exe/WslCoreInstance.cpp` owns the corresponding instance channel | Keep only initialization needed for direct command execution and lifecycle. |
+| Command creation | `init.cpp:1339-1427` advertises a per-command VSOCK port; `init.cpp:1490-1690` creates pipes/PTY and execs; `init.cpp:1810-2069` relays stdio and returns `LxInitMessageExitStatus` | `WslCoreInstance.cpp:143-242` sends `LxInitMessageCreateProcessUtilityVm` and connects five sockets | Keep stdin, stdout, stderr, control, process creation, and exit status. Disable the fifth interop path rather than implement Windows executable interop. |
+| Termination | `init.cpp:2514-2518` handles `LxInitMessageTerminateInstance`; `init.cpp:2733-2768` powers off | `WslCoreInstance.cpp:465-489` requests termination | Keep forced and clean termination without Plan 9 or systemd policy. |
+
+The wire structures and message identifiers are centralized in `src/shared/inc/lxinitshared.h`. The minimum candidate subset is `LX_MINI_INIT_MESSAGE`, `LX_MINI_INIT_CREATE_INSTANCE_RESULT`, `LX_INIT_CREATE_PROCESS_UTILITY_VM`, `LX_INIT_PROCESS_EXIT_STATUS`, and `LX_INIT_TERMINATE_INSTANCE`, plus their common message and process fields.
+
+## Required host and guest reductions
+
+A guest-only replacement is insufficient. Immediately after early configuration, stock `WslCoreVm.cpp:535-545` waits for a guest networking-service connection. Stock early configuration also supplies the Microsoft system-distro device, and `main.cpp:3313-3317` mounts it before normal instance creation. Therefore the controlled WSL package must change both sides:
+
+- host: do not attach or advertise the system distro, and do not wait for GNS, DNS, DrvFs, WSLg, or other excluded channels;
+- guest `mini_init`: skip system-distro overlay construction and dispatch only retained instance operations;
+- distro `/init`: keep the inherited control channel, direct command path, relay, and poweroff behavior while omitting networking, DrvFs, interop, systemd, and Plan 9 setup;
+- shared protocol: preserve existing layouts where practical so unmodified `wsl.exe` remains the client.
+
+This is a source-level candidate contract, not proof that every listed namespace, message field, or socket is necessary. Runtime ablation must establish the final minimum.
+
 ## Selected design
 
-Build a reduced single-user control plane from matching WSL source. Keep normal select/start/execute/terminate/shutdown behavior for registered distros, but omit general management and integration services.
+Build a reduced single-user host and Linux control plane from a source revision matched to the tested package. Keep normal select/start/execute/terminate/shutdown behavior for registered distros, but omit general management and integration services.
 
-The per-distro VHDX remains because it is WSL’s simple container for a native Linux filesystem. Microsoft’s separate system-distro VHD and overlay are excluded if the retained command path works without them.
+The per-distro VHDX remains because it is WSL’s simple container for a native Linux filesystem. Microsoft’s separate system-distro VHD and overlay are excluded.
 
 ## Deployment constraint
 
