@@ -30,11 +30,21 @@ Completed:
 Not completed:
 
 - `K-OVERLAY-001` has not been booted, so no candidate has kept `mini_init` alive after the system-distro root mount (`B4`);
+- no mkroot-derived candidate has dispatched a command into Toybox, so `minimal-viable-wsl-v1` does not yet exist;
+- Alpine, Arch, and Debian have not been tested against a Minimal Viable WSL candidate;
 - most of the 1,792-symbol delta remains unreviewed;
 - no reduced Microsoft init exists;
 - no custom initrd or WSL package has been deployed.
 
-## Immediate task: classify and prepare the post-B3 overlay closure
+## Target sequence
+
+1. Freeze **`minimal-viable-wsl-v1`** when the mkroot/Toybox base preserves basic `wsl.exe` list/select, start, command dispatch, terminate, and shutdown behavior using only the required host handshake, distro VHDX/ext4 mount, root transition, process/stdio relay, exit notification, and shutdown contract. Import/export, resize, and arbitrary-disk management are not acceptance criteria.
+2. Test Alpine, Arch, and Debian in that order. Add only evidence-selected compatibility facilities and classify them per distribution.
+3. Freeze **`ultra-minimal-wsl-v1`** when Toybox, Alpine, Arch, and Debian command smoke tests pass reproducibly.
+
+Before the Arch and Debian trials, extend the harness/inventory result fields and documented checkpoints so their outcomes are first-class durable evidence rather than free-form notes. Do not broaden the smoke tests to networking, package management, systemd, Windows interop, or Windows-drive access.
+
+## Immediate task: trial the prepared post-B3 overlay closure after approval
 
 `POST-B2-CLOSURE-ANALYSIS.md` correlates the immutable `K-HOSTCHAN-001` trace with exact WSL 2.7.12 source commit `68f601b...69ade`:
 
@@ -85,7 +95,9 @@ Before adding a bundle:
 
 ## Later track: reduced Microsoft control plane
 
-The final target remains a reduced single-user WSL control plane preserving `wsl.exe` dispatch. It is no longer a prerequisite for the first supported kernel trials.
+The final Minimal Viable WSL target is a reduced single-user control plane preserving basic registered-distro selection/start, `wsl.exe` command dispatch, termination, and shutdown. Its retained contract is the host handshake, per-distribution VHDX attachment and ext4 mount, minimum root transition/isolation, process creation, stdio and exit-status relay, exit notification, and shutdown. It is no longer a prerequisite for the first supported kernel trials.
+
+The Microsoft system distro and its writable overlay are stock-init discovery requirements, not accepted final requirements. Remove them from the reduced target if command dispatch works without them.
 
 Microsoft provides no `.wslconfig` custom-initrd setting. Do not replace the host’s installed initrd as part of the normal kernel workflow. For reduced-init testing, prefer Microsoft’s documented platform-development route:
 
@@ -112,7 +124,7 @@ cd C:\Users\jackc\git\ultra-minimal-wsl
 
 The script does nothing without `-Install` and must never be started automatically.
 
-## Deferred until minimal command dispatch works
+## Deferred beyond `ultra-minimal-wsl-v1`
 
 - networking and DNS;
 - DrvFs/9P/virtiofs;

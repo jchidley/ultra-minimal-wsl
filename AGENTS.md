@@ -2,9 +2,13 @@
 
 ## Objective
 
-Produce the smallest reproducible WSL kernel config that boots the mkroot
-Toybox system, then Alpine. Defer networking, DrvFs, systemd, containers, GUI,
-and unrelated Microsoft control-plane policy.
+Produce `minimal-viable-wsl-v1`: the mkroot/Toybox floor plus only the
+registered-distro VHDX/ext4, basic `wsl.exe` select/start/execute/terminate,
+command relay, and shutdown contract proved necessary. Then produce
+`ultra-minimal-wsl-v1` by adding only
+requirements proved by Alpine, Arch, and Debian smoke tests. Defer networking,
+DrvFs, Windows interop, systemd, containers, GUI, and unrelated Microsoft
+control-plane policy.
 
 ## Read first
 

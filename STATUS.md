@@ -192,7 +192,7 @@ The completed trial directory remains immutable evidence. `POST-B2-CLOSURE-ANALY
 - The storage candidate reached `B3`, but no candidate has kept `mini_init` alive (`B4`) or reached command dispatch.
 - The target is a patched single-user WSL control plane preserving `wsl.exe` command dispatch; only an unmodified reference init/initrd has been built, and no replacement has been deployed.
 - The 1,792-symbol delta has not been grouped or reviewed.
-- Toybox and Alpine have not been tested under a mkroot-derived WSL kernel.
+- Toybox has not been tested under a mkroot-derived WSL kernel; Alpine, Arch, and Debian compatibility testing follows only after the Minimal Viable WSL core works.
 - No project-wide checksum manifest has been refreshed; the mkroot-baseline and candidate subdirectories have their own verified manifests.
 
 ## B3 storage diagnostic result
@@ -228,15 +228,18 @@ The candidate has not been booted. A trial requires fresh explicit approval and 
 
 ## Selected target and next gate
 
-Immediate target: **the smallest reproducible WSL kernel config that boots the
-mkroot Toybox system and then Alpine**. Preserve `wsl.exe` command dispatch;
-reduce Microsoft’s control plane later only where stock init imposes unrelated
-requirements.
+The project now has two explicit completion boundaries:
+
+1. **Minimal Viable WSL (`minimal-viable-wsl-v1`)** — the mkroot/Toybox minimal Linux base plus only the Hyper-V and WSL control contract needed for `wsl.exe` to select/start a registered distribution, execute a command, terminate it, and shut the VM down: host handshake, per-distribution VHDX attachment and ext4 mount, minimum root transition/isolation, process creation, stdio and exit-status relay, and lifecycle shutdown.
+2. **Ultra-minimal WSL (`ultra-minimal-wsl-v1`)** — the proven Minimal Viable WSL core plus only additions demonstrated necessary to run the selected Alpine, Arch, and Debian command smoke tests.
+
+Immediate work remains evidence-directed discovery with stock init until Toybox command dispatch is reached. The final control plane is reduced where stock init imposes unrelated requirements; Microsoft’s system distro, writable overlay, networking, DrvFs, interop, WSLg, systemd, containers, and general disk-management policy are not part of the target unless evidence proves one indispensable to the retained command path.
 
 Rationale:
 
+- mkroot/Toybox supplies the principled generic minimal-Linux lower bound;
+- basic registered-distro selection/start, `wsl.exe` dispatch, VHDX-backed distro storage, command relay, termination, and shutdown are the defining minimum that makes the result WSL rather than a generic Hyper-V VM; import/export, resize, and arbitrary-disk management are outside the acceptance boundary;
 - unmodified Microsoft init would make audience-wide policy and optional services part of the measured minimum;
-- bypassing WSL would lose distribution registration, `wsl.exe` dispatch and WSL lifecycle management, changing the project rather than minimising it;
-- the reduced control plane retains the defining host/guest command path while allowing unrelated services to be excluded.
+- Alpine, Arch, and Debian then test practical musl and glibc distribution compatibility without silently adding Windows-integration services.
 
 Custom-kernel recovery is supported and does not replace Microsoft’s kernel: candidates remain outside `C:\Program Files\WSL`, and removing `.wslconfig` `kernel=` restores the packaged kernel. `K-RECOVERY-001` selected the external byte-identical stock copy, passed the Toybox smoke test at `B6-T`, restored the exact original `.wslconfig`, reverified the packaged-kernel hash, and booted stock Debian. A PowerShell 5.1 lazy `File.ReadLines` handle blocked ledger append and left the completed PASS journaled; the hardened `-Recover` path reverified stock startup, finalized the PASS row, and removed the journal. The harness now reads the header eagerly, retries genuine transient locks, and treats repeated finalization idempotently. `K-MKROOT-001` then tested the unchanged mkroot kernel with Microsoft’s stock initrd and reached `B0`: no output, no command dispatch, and timeout. `K-HVCORE-001` added only the reviewed Hyper-V execution-core closure and its first uninstrumented trial was conservatively classified `B0`. Both trials restored exact stock state and proved stock Debian startup. `K-HVCORE-DIAG-001` then proved the unchanged artifact reached `B1` and executed stock `/init`. The diagnostic gate identified missing runtime VMBus platform enumeration and AF_VSOCK transport. `K-HOSTCHAN-001` then proved ACPI/VMBus and Hyper-V VSOCK operation at `B2`. Later exact-source correlation showed its terminal exception was storage-LUN discovery with `CONFIG_HYPERV_STORAGE` disabled; the cgroup log was non-terminal and mirrored fallback reflected absent seccomp. Approved `K-STORAGE-001` proved the reviewed storage closure and advanced to `B3`, then reproduced Stage 3's exact post-ext4 `mini_init` crash. `K-OVERLAY-001` now contains the reviewed `OVERLAY_FS` plus selected `FS_STACK` closure; `EXPORTFS` was already enabled. The next gate is an ordinary unelevated trial after fresh explicit approval and a canonical `safe:true` preflight. No custom boot is authorized, and cgroups, networking/seccomp, page reporting, and console remain excluded. Reduced-init testing remains a later controlled-package track, preferably in a disposable Hyper-V Windows VM. The optional approximately 3 GB Windows workload remains uninstalled. See `TASKS.md` and `WSL-DEVELOPMENT-AND-RECOVERY.md`.

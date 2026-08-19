@@ -1,37 +1,38 @@
-# Minimal WSL kernel boot plan
+# Minimal Viable WSL and distribution compatibility plan
 
 ## Objective
 
-Find the smallest Linux kernel configuration that can reliably:
+Build two measured profiles:
 
-1. Start as the WSL 2 VM kernel.
-2. Complete the selected reduced WSL host control-plane startup while preserving `wsl.exe` dispatch.
-3. Launch a command in the existing `Toybox-Minimal` root filesystem.
-4. Launch a command in the existing `Alpine` root filesystem.
+1. **Minimal Viable WSL (`minimal-viable-wsl-v1`)** — the smallest reproducible mkroot/Toybox-based kernel and control plane that starts as the WSL 2 VM, retains basic registered-distribution control through `wsl.exe`, mounts a distro’s VHDX-backed ext4 root, executes a command, relays stdio and exit status, and shuts down reliably.
+2. **Ultra-minimal WSL (`ultra-minimal-wsl-v1`)** — that unchanged core plus only facilities proved necessary for command execution in Alpine, Arch, and Debian.
 
-Networking, Windows-drive mounting, systemd, containers, USB, additional filesystems and other services are explicitly deferred until after this milestone.
+Networking, Windows-drive mounting, Windows executable interop, WSLg/GPU, systemd, containers, USB, additional filesystems and other services are outside both profiles unless evidence proves one indispensable to the retained command path.
 
 The starting point is Toybox `mkroot`'s x86-64 Linux microconfig, expanded by Kconfig against the Microsoft WSL kernel source. Rob Landley’s documented derivation and test method is captured in `MKROOT-MINIMAL-BOOT-METHOD.md` and governs how that baseline is established. The known-good Stage 1 configuration is the upper bound and recovery/reference configuration.
 
 ## Important distinction
 
-A generic mkroot kernel can boot Toybox directly as an initramfs under QEMU. WSL has an additional requirement: before a command can run inside an imported Toybox or Alpine distribution, Microsoft's WSL control process (`mini_init`/`/init`) must start successfully.
+A generic mkroot kernel can boot Toybox directly as an initramfs under QEMU. WSL adds a host/guest contract before Windows can launch a command in a registered distribution. That minimum consists of a host handshake, per-distribution VHDX attachment and filesystem mount, enough root transition/isolation to enter the distro, process creation, stdio and exit-status relay, exit notification, and lifecycle shutdown. “Basic control” means list/select, cold-start, execute, terminate, and shut down registered distros; install, import/export, resize, mount arbitrary disks, and other general management operations are not acceptance criteria.
 
-Consequently, requirements will be classified separately as:
+Microsoft’s stock `mini_init` also starts audience-wide services. Stock-init discovery can temporarily select facilities—such as the Microsoft system distro and its writable overlay—that are not accepted as final Minimal Viable WSL requirements until the reduced control plane proves them necessary.
 
-- generic Linux boot requirements;
+Requirements are classified separately as:
+
+- generic mkroot/Toybox Linux requirements;
 - Hyper-V virtual-machine requirements;
-- WSL control-plane requirements;
-- Toybox or Alpine root-filesystem requirements;
-- optional post-boot services.
+- retained WSL management and command-dispatch requirements;
+- stock Microsoft control-plane implementation requirements;
+- Alpine, Arch, or Debian compatibility requirements;
+- optional Windows-integration and post-boot services.
 
-This prevents a facility required only by Microsoft's WSL startup from being incorrectly described as a generic minimal-Linux requirement.
+This prevents stock-init policy or one distribution’s userspace requirement from being incorrectly described as part of generic minimal Linux or the WSL management floor.
 
 ## Selected control-plane target
 
 The open-source WSL 2.7.11 audit in `WSL-CONTROL-PLANE-AUDIT.md` confirms that stock `mini_init` unconditionally requests facilities beyond generic Linux boot. The selected target is a **patched single-user WSL control plane preserving `wsl.exe` command dispatch**.
 
-The retained minimum is the service handshake/capability contract, distribution VHD attachment and ext4 mount, required namespaces/chroot, process/session creation and stdio relay, child exit notification, and shutdown. Audience-wide services are not presumed required merely because stock `mini_init` starts them.
+The retained minimum is the service handshake/capability contract, per-distribution VHDX attachment and ext4 mount, only the namespaces/root transition actually required to enter the distro, process/session creation and stdio/exit-status relay, child exit notification, and shutdown. A VHDX is retained as the simple native-Linux filesystem container used by registered WSL distributions. Microsoft’s separate system distro, writable overlay, and audience-wide services are not presumed required merely because stock `mini_init` starts them.
 
 The matching unmodified Linux-side init/initrd now has a reproducible build path. Microsoft supports external custom kernels through `.wslconfig`; removing `kernel=` restores the untouched packaged kernel. Kernel discovery trials will therefore begin with Microsoft’s stock initrd and must not modify installed WSL artifacts.
 
@@ -46,11 +47,12 @@ Use the same inputs throughout a minimisation run:
 - Toolchain: record compiler and linker versions
 - Lower bound: mkroot-generated x86-64 config
 - Upper bound: `config-wsl-ultramin-stage1`
-- Toybox test distro: `Toybox-Minimal`
-- Alpine test distro: `Alpine`
+- Minimal-core test distro: `Toybox-Minimal`
+- First compatibility distro: `Alpine`
+- Later compatibility distros: Arch and Debian registrations whose exact names, rootfs/VHDX hashes, and versions must be fixed before their first trials
 - Stock kernel retained as the recovery kernel
 
-Do not update WSL, Windows, the kernel source, Toybox, Alpine or the compiler in the middle of a run. A changed input begins a new run.
+Do not update WSL, Windows, the kernel source, Toybox, a test distro/rootfs, or the compiler in the middle of a run. A changed input begins a new run.
 
 ## Configuration rules
 
@@ -136,14 +138,16 @@ Every explicit symbol or coherent feature group is entered in the experiment led
 |---|---|
 | `BASE` | Supplied by mkroot's generic minimal Linux configuration |
 | `PROVEN_WSL_REQUIRED` | Removing it from an otherwise working candidate reproducibly prevents WSL startup |
-| `PROVEN_TOYBOX_REQUIRED` | WSL starts, but removing it prevents the Toybox milestone |
-| `PROVEN_ALPINE_REQUIRED` | Toybox still works, but removing it prevents the Alpine milestone |
+| `PROVEN_TOYBOX_REQUIRED` | WSL starts, but removing it prevents the Toybox Minimal Viable WSL milestone |
+| `PROVEN_ALPINE_REQUIRED` | Minimal Viable WSL still works, but removing it prevents the Alpine smoke test |
+| `PROVEN_ARCH_REQUIRED` | Earlier targets still work, but removing it prevents the Arch smoke test |
+| `PROVEN_DEBIAN_REQUIRED` | Earlier targets still work, but removing it prevents the Debian smoke test |
 | `TRANSITIVE` | Selected by Kconfig as a dependency; not independently requested |
 | `DOCUMENTED_PLATFORM` | Microsoft documents it as part of WSL/Hyper-V operation |
 | `DOCUMENTED_SCENARIO` | Microsoft enabled it for an optional user scenario such as USB/IP, Ceph or Kubernetes |
 | `MAINTENANCE_INHERITED` | Carried from Microsoft's Azure Linux base for maintenance alignment, without a WSL-specific requirement stated |
-| `NOT_REQUIRED_STAGE1` | Removal was tested and both Toybox and Alpine still pass |
-| `DEFERRED` | Not needed for the first milestone; reconsider for later services |
+| `NOT_REQUIRED_STAGE1` | Historical Stage-1 removal classification; the exact tested distro suite must remain recorded with the trial |
+| `DEFERRED` | Not needed for Minimal Viable WSL or the selected distro suite; reconsider only for later integration profiles |
 | `UNRESOLVED` | Present in a successful bundle but not yet isolated or removed |
 | `INCOMPATIBLE` | Causes a build or runtime regression when enabled/disabled as tested |
 
@@ -151,7 +155,7 @@ Documentation status and experimental requirement status are separate columns. F
 
 A feature is not called “required” merely because it appears in Microsoft’s config or in a successful candidate. It becomes proven required only after a controlled ablation fails twice and restoring it passes. Conversely, documented rationale should be recorded before testing so that we do not rediscover an already-known purpose from crash logs.
 
-The immutable ledger is `inventory/trials.csv`; `inventory/trial-metadata.csv` supplements omitted historical fields without rewriting evidence. Their SQLite `trial_inventory` view records status/timestamps, source and toolchain, parent/change group, requested and auto-selected symbols, config/image hashes, boot level, Toybox and Alpine results, failure evidence, analysis path, classification, and stock restoration. No new trial may begin until the previous row has a terminal status and recovery result and both inputs have been synchronized.
+The immutable ledger is `inventory/trials.csv`; `inventory/trial-metadata.csv` supplements omitted historical fields without rewriting evidence. Their SQLite `trial_inventory` view currently records status/timestamps, source and toolchain, parent/change group, requested and auto-selected symbols, config/image hashes, boot level, Toybox and Alpine results, failure evidence, analysis path, classification, and stock restoration. Before Arch or Debian trials, extend the durable schema and harness so those results and checkpoints are first-class fields. No new trial may begin until the previous row has a terminal status and recovery result and both inputs have been synchronized.
 
 ## Boot checkpoints
 
@@ -175,14 +179,16 @@ Then each WSL trial receives the highest checkpoint reached:
 | `B3` | WSL system storage is detected and its ext4 root is mounted |
 | `B4` | Microsoft `mini_init` starts and remains alive |
 | `B5` | WSL accepts and dispatches a command into a distribution |
-| `B6-T` | Toybox smoke test passes |
+| `B6-T` | Toybox smoke test passes; candidate can enter Minimal Viable WSL minimality proof |
 | `B6-A` | Alpine smoke test passes |
+| `B6-ARCH` | Arch smoke test passes; add this checkpoint to the durable schema before use |
+| `B6-D` | Debian smoke test passes; add this checkpoint to the durable schema before use |
 
-This classification is essential: later exact evidence places the Stage 3-equivalent post-ext4 `mini_init` crash at `B3`, whereas Stage 2 failed much earlier. Those are different missing dependency groups.
+This classification is essential: later exact evidence places the Stage 3-equivalent post-ext4 `mini_init` crash at `B3`, whereas Stage 2 failed much earlier. Those are different missing dependency groups. `B6-T` establishes the functional core; the remaining `B6-*` checkpoints measure distribution compatibility without redefining that core.
 
 ## Minimal smoke tests
 
-The first milestone does not require networking or systemd. Tests should verify only kernel/userspace execution and fundamental virtual filesystems.
+The target does not require networking or systemd. Tests verify only command dispatch, kernel/userspace execution, and fundamental virtual filesystems.
 
 Toybox:
 
@@ -207,7 +213,31 @@ Alpine:
 '
 ```
 
-Do not include DNS, package management, Windows executables, `/mnt/c`, systemd or container tests yet; those would silently expand the definition of “minimal boot.”
+Arch:
+
+```sh
+/bin/sh -c '
+  test -r /proc/self/status &&
+  test -d /sys &&
+  test -c /dev/null &&
+  /bin/true &&
+  printf arch-ok
+'
+```
+
+Debian:
+
+```sh
+/bin/sh -c '
+  test -r /proc/self/status &&
+  test -d /sys &&
+  test -c /dev/null &&
+  /bin/true &&
+  printf debian-ok
+'
+```
+
+Do not include DNS, package management, Windows executables, `/mnt/c`, systemd or container tests; those would silently expand the selected target.
 
 ## Feature bundles for discovery
 
@@ -228,7 +258,7 @@ Keep additions coherent so that logs remain interpretable. Derive exact symbols 
 7. **Windows filesystem integration**
    - 9P/virtiofs/DrvFs-related support, deferred unless WSL cannot reach `B5` without it.
 8. **Networking**
-   - Hyper-V `netvsc` and the desired IP stack, deferred until after `B6-T` and `B6-A`.
+   - Hyper-V `netvsc` and the desired IP stack, deferred beyond `ultra-minimal-wsl-v1`.
 9. **Later services**
    - systemd/cgroups, containers, firewalling, VPN/tunnelling, USB, filesystems and observability, all deferred.
 
@@ -321,7 +351,7 @@ Examples:
 - No VMBus enumeration: investigate the Hyper-V execution bundle.
 - No WSL system disk: investigate Hyper-V storage/SCSI/block support.
 - Root mounts but `mini_init` dies: investigate the WSL init substrate, not more storage drivers.
-- Commands dispatch but Alpine fails while Toybox passes: investigate ELF loader/compatibility and Alpine userspace expectations, not Hyper-V.
+- Commands dispatch but one compatibility distro fails after earlier targets pass: investigate that userspace’s ELF loader, syscall, pseudo-filesystem, and terminal expectations before changing Hyper-V support.
 
 ### Phase 3 — Use Stage 1 as the upper bound
 
@@ -335,18 +365,29 @@ If an error does not identify a narrow subsystem, use config delta debugging rat
 
 Feature groups, rather than arbitrary halves of individual symbols, avoid invalid combinations and account for dependencies. This normally isolates a missing subsystem in logarithmically fewer trials than enabling options individually, although interacting requirements can require follow-up tests.
 
-### Phase 4 — Prove minimality
+### Phase 4 — Prove the Minimal Viable WSL core
 
-Once both root filesystems pass:
+Once Toybox passes `B6-T` through the retained WSL management path:
 
-1. Remove each provisional bundle in turn.
+1. Remove each provisional WSL bundle in turn.
 2. For a failing removal, split that bundle and use delta debugging to identify its smallest required subset.
 3. Repeat the failure once.
 4. Restore the suspected requirement and repeat the success once.
-5. Mark unrelated removable symbols `NOT_REQUIRED_STAGE1`.
+5. Remove stock-init-only facilities, including the Microsoft system distro/overlay path where the reduced control plane permits it.
 6. Run `make listnewconfig` and inspect all remaining explicit selections.
+7. Freeze the reproducible result as `minimal-viable-wsl-v1`.
 
-The result is minimal relative to the tested source revision, WSL version, hardware interface and two selected root filesystems—not a universal Linux minimum.
+### Phase 5 — Add distribution compatibility
+
+Starting from the frozen Minimal Viable WSL core:
+
+1. Run the unchanged smoke test in Alpine, then Arch, then Debian.
+2. If a distro fails, add only the coherent compatibility bundle selected by its earliest stable failure.
+3. Prove each addition necessary by removal and restoration while rerunning all earlier target smoke tests.
+4. Classify additions as `PROVEN_ALPINE_REQUIRED`, `PROVEN_ARCH_REQUIRED`, or `PROVEN_DEBIAN_REQUIRED`; do not fold them into the generic WSL floor.
+5. Freeze the combined result as `ultra-minimal-wsl-v1` after all four targets pass.
+
+Both results are minimal only relative to the pinned source revision, WSL version, Hyper-V interface, control-plane implementation, and selected root filesystems—not universal Linux minima.
 
 ## Failure handling and safety
 
@@ -367,16 +408,28 @@ The host kernel harness must first pass with an external byte-identical stock-ke
 
 Initrd, Windows-service and package trials follow a separate recovery plan in a disposable Hyper-V Windows VM. They are not covered by the host kernel harness.
 
-## First-stage completion criteria
+## Completion criteria
 
-The minimal-boot stage is complete when one candidate:
+### `minimal-viable-wsl-v1`
+
+The core is complete when one candidate:
 
 - retains a reproducible mkroot baseline that passes `G4` under QEMU;
-- passes `B6-T` and `B6-A` under WSL;
+- passes `B6-T` through basic registered-distro selection/start and `wsl.exe` command dispatch;
+- retains only the proved host handshake, distro VHDX/ext4 mount, root transition/isolation, process/stdio relay, exit notification, and shutdown contract;
 - passes ten cold-start cycles after `wsl.exe --shutdown`;
 - has no unexpected kernel warnings, oopses or init crashes in captured logs;
 - has reproducible source, config and image hashes;
 - has every non-mkroot explicit feature classified;
 - can be replaced by the stock kernel through the tested host recovery procedure, with any reduced-init package independently recoverable in its isolated test environment.
 
-At that point freeze it as `minimal-boot-v1`. Only then define the next service profile, such as networking, Windows filesystem integration, systemd or containers. Each later profile should be a separate additive config fragment so the minimal boot core remains measurable.
+### `ultra-minimal-wsl-v1`
+
+The distribution target is complete when the frozen core plus classified additions:
+
+- passes Toybox, Alpine, Arch, and Debian smoke tests;
+- reruns all earlier targets after every compatibility addition;
+- records each non-core addition against the distribution that proved it necessary;
+- passes the same reproducibility, cold-start, warning-free, and recovery gates as the core.
+
+Networking, Windows filesystem integration, Windows executable interop, WSLg, systemd, containers, USB, and alternative filesystems remain separate additive profiles so the measured core stays intact.

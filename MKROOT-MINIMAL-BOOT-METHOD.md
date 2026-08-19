@@ -9,7 +9,7 @@ Landley’s material addresses two related targets that must not be conflated:
 1. **Minimal boot-to-shell system:** Linux, a libc supplied by the toolchain, and Toybox, packaged as an initramfs and booted under QEMU.
 2. **Minimal self-hosting development system:** the smallest environment capable of rebuilding itself and then building a full distribution. Aboriginal Linux reached this with seven source packages: Linux, BusyBox, uClibc, GCC, binutils, make and bash.
 
-Our first WSL milestone is the first target: boot and launch a shell in Toybox and Alpine. Self-hosting is a later profile.
+Our first WSL milestone uses the first target as its generic Linux floor: boot Toybox, then add only the WSL management and command-dispatch contract to create `minimal-viable-wsl-v1`. Alpine, Arch, and Debian compatibility produce `ultra-minimal-wsl-v1`. A complete self-hosting development environment remains a later profile rather than a boot criterion.
 
 ## Primary source hierarchy
 
@@ -102,7 +102,7 @@ Its `/init`:
 - when running as PID 1, uses Toybox `oneit` to run one child and shut down when it exits;
 - when used in a chroot, launches a shell and unmounts virtual filesystems on exit.
 
-Static linking removes the ELF interpreter/shared-library closure from this first rootfs. Alpine later tests the dynamic-userland case separately.
+Static linking removes the ELF interpreter/shared-library closure from this first rootfs. Alpine later tests musl dynamic userspace; Arch and Debian test glibc userspace separately.
 
 ### 6. Package the rootfs as initramfs
 
@@ -128,7 +128,7 @@ Exact symbols and dependencies evolve across kernel versions, so the current mkr
 
 `mkroot/testroot.sh` automates QEMU boots with timeouts and verifies serial execution, a compiled program, block access, clock and networking. It turns emulator exit status and expected output into regression evidence.
 
-Our first WSL profile intentionally narrows that suite to Toybox and Alpine command execution. Later service profiles should add similarly explicit tests rather than silently broadening “boot works.”
+Minimal Viable WSL intentionally narrows that suite to Toybox command execution through normal `wsl.exe` management. The ultra-minimal compatibility stage adds Alpine, Arch, and Debian smoke tests. Later integration profiles should add similarly explicit tests rather than silently broadening “boot works.”
 
 ### 9. Keep the build hermetic and recorded
 
@@ -148,7 +148,8 @@ The shortest evidence-preserving sequence is:
 6. Classify the earliest WSL checkpoint reached.
 7. Replace QEMU hardware assumptions with the smallest coherent Hyper-V/WSL bundle indicated by that failure.
 8. Preserve requested versus Kconfig-selected symbols and retest.
-9. Once WSL dispatches commands, run Toybox and Alpine smoke tests.
-10. Prove additions necessary by controlled removal; defer networking and integration services to later profiles.
+9. Once WSL dispatches commands, run the Toybox smoke test and prove the retained WSL additions necessary by controlled removal; freeze `minimal-viable-wsl-v1`.
+10. Test Alpine, Arch, and Debian in order, classify only their proved compatibility additions, and freeze `ultra-minimal-wsl-v1`.
+11. Defer networking and Windows-integration services to later additive profiles.
 
 This is Landley’s process extended by one extra platform layer: generic Linux boot is established first, then the undocumented Microsoft WSL startup contract is discovered without losing the known-good minimal baseline.

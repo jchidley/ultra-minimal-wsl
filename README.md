@@ -2,10 +2,7 @@
 
 Prepared 2026-08-17. The normal Microsoft kernel remains active; no custom kernel is currently configured in `C:\Users\jackc\.wslconfig`.
 
-The current objective is the smallest reproducible WSL kernel config that boots
-the mkroot Toybox system and then Alpine. Networking, DrvFs, systemd,
-containers, GUI integration, and unrelated Microsoft control-plane policy are
-deferred.
+The project has two measured targets. **Minimal Viable WSL** is the mkroot/Toybox minimal Linux base plus only the host handshake, registered-distro VHDX/ext4 mount, root transition, command relay, and lifecycle support required for basic `wsl.exe` selection/start, execution, termination, and shutdown. **Ultra-minimal WSL** adds only facilities proved necessary to run Alpine, Arch, and Debian command smoke tests. Networking, DrvFs, Windows executable interop, systemd, containers, GUI integration, and unrelated Microsoft control-plane policy remain deferred.
 
 Use two separate fresh-session workflows from PowerShell 5.1:
 
@@ -97,7 +94,7 @@ Microsoft's 6.18 config contains roughly:
 
 It includes far more than a minimal WSL boot requires: Btrfs, XFS, F2FS, Ceph, NFS, CIFS, ISO/UDF/FAT/exFAT, KVM, Bluetooth, sound, media, CAN and many USB drivers. Btrfs is configured as a module and is loaded by the normal WSL system even when no Btrfs filesystem is mounted.
 
-The first minimal-boot milestone is expected to need a dependency closure around:
+Minimal Viable WSL discovery is expected to need a dependency closure around:
 
 - x86-64 and ELF execution
 - Hyper-V/VMBus, timers and hypervisor integration
@@ -107,7 +104,7 @@ The first minimal-boot milestone is expected to need a dependency closure around
 - devtmpfs, procfs, sysfs, tmpfs, Unix sockets and PTYs
 - the exact syscall/features expected by Microsoft's `/init`
 
-These are hypotheses until demonstrated by the mkroot-to-Stage-1 experiments. Hyper-V networking, 9P/virtiofs Windows integration, systemd/cgroups, containers and other services are deferred profiles rather than first-milestone assumptions. The distinction matters: a kernel can mount the WSL system disk successfully but still panic if Microsoft's `/init` encounters a missing facility.
+These are hypotheses until demonstrated by the mkroot-to-Stage-1 experiments. The per-distribution VHDX/ext4 path is part of the retained management model; Microsoft’s separate system distro and overlay are stock-init requirements to remove from the reduced target if command dispatch permits. Hyper-V networking, 9P/virtiofs Windows integration, systemd/cgroups, containers and other services are deferred profiles. The distinction matters: a kernel can mount the WSL system disk successfully but still panic if Microsoft’s broad `/init` encounters a missing facility that Minimal Viable WSL does not ultimately need.
 
 ## Built kernels and test results
 
@@ -187,7 +184,7 @@ The kernel-enabled mkroot baseline has now been built in protected worktrees and
 
 ## Minimal-boot experiment plan and dependency inventory
 
-Rob Landley’s documented minimal-boot derivation is summarized with primary sources in `MKROOT-MINIMAL-BOOT-METHOD.md`. The WSL adaptation plan is in `MINIMAL-BOOT-PLAN.md`, current active/optional work is in `TASKS.md`, supported kernel switching and Microsoft’s development workflow are explained in `WSL-DEVELOPMENT-AND-RECOVERY.md`, the ETL/debug-console workflow is documented in `PRE-DISPATCH-DIAGNOSTICS.md`, the corrected B2-to-B3 diagnosis is in `POST-B2-CLOSURE-ANALYSIS.md`, kernel configuration provenance is recorded in `KERNEL-CONFIG-PROVENANCE.md`, and the control-plane audit is in `WSL-CONTROL-PLANE-AUDIT.md`.
+Rob Landley’s documented minimal-boot derivation is summarized with primary sources in `MKROOT-MINIMAL-BOOT-METHOD.md`. `MINIMAL-BOOT-PLAN.md` defines the Minimal Viable WSL core, the Alpine/Arch/Debian compatibility stage, and completion criteria. Current active/optional work is in `TASKS.md`; supported kernel switching and Microsoft’s development workflow are explained in `WSL-DEVELOPMENT-AND-RECOVERY.md`; the ETL/debug-console workflow is documented in `PRE-DISPATCH-DIAGNOSTICS.md`; the corrected B2-to-B3 diagnosis is in `POST-B2-CLOSURE-ANALYSIS.md`; kernel configuration provenance is recorded in `KERNEL-CONFIG-PROVENANCE.md`; and the control-plane audit is in `WSL-CONTROL-PLANE-AUDIT.md`.
 
 The searchable Kconfig dependency graph and review checklist are under `inventory/`; begin with `inventory/README.md`. It contains SQLite and CSV representations of 18,449 symbols, 126,629 conditional relationships and nine config snapshots through the prepared `K-OVERLAY-001` candidate. `inventory/mkroot-stage1-delta.csv` contains the 1,792-symbol lower-to-upper-bound review queue.
 

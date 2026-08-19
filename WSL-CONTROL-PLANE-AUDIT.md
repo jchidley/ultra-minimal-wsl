@@ -1,6 +1,6 @@
 # WSL control-plane audit
 
-Status: reduced single-user control plane selected as the final target. The matching unmodified Linux-side init/initrd builds reproducibly. Kernel-only discovery will proceed first through Microsoft’s supported external-kernel setting with the stock initrd; reduced-init deployment is deferred to an isolated platform-development track. No custom WSL boot or installed WSL modification has occurred.
+Status: the reduced single-user control plane is selected for `minimal-viable-wsl-v1`; Alpine, Arch, and Debian compatibility then defines `ultra-minimal-wsl-v1`. The matching unmodified Linux-side init/initrd builds reproducibly. Kernel-only discovery proceeds first through Microsoft’s supported external-kernel setting with the stock initrd; reduced-init deployment is deferred to an isolated platform-development track. No reduced init or installed WSL modification has occurred.
 
 ## Question
 
@@ -93,15 +93,17 @@ However, source inspection shows that safe mode is not equivalent to a minimal `
 
 Disable every exposed optional feature and discover the remaining kernel closure. This preserves normal WSL servicing and command dispatch but accepts unconditional Microsoft policy as part of the floor.
 
-### B. Single-user patched WSL control plane
+### B. Minimal Viable WSL control plane
 
-Build from the matching 2.7.11 source and retain only:
+Build from the matching WSL source and retain only:
 
 - service protocol handshake/capabilities;
-- VHD attachment and ext4 mounting;
-- required namespaces/chroot;
-- process/session creation and stdio relay;
+- per-distribution VHDX attachment and ext4 mounting;
+- only the namespaces/root transition required to enter the selected distro;
+- process/session creation and stdin/stdout/stderr plus exit-status relay;
 - child exit notification and shutdown.
+
+The VHDX is retained as the simple native-Linux filesystem container behind WSL’s registered-distribution model. It is distinct from Microsoft’s system distro VHD, which is not part of the selected target unless reduced-control-plane testing proves it indispensable.
 
 Candidates for removal or compile-time exclusion include GNS, localhost tracking, binfmt Windows interop, cross-distro tmpfs, GPU/WSLg, system distro, disk-management operations, module VHD, memory reclaim policy, cgroup resource reservation, debug/crash facilities and automatic resolver policy.
 
@@ -113,9 +115,9 @@ Boot the mkroot kernel/initramfs directly under QEMU or another Hyper-V VM. This
 
 ## Decision recorded
 
-The selected target is **B: a single-user patched WSL control plane preserving normal `wsl.exe` command dispatch**.
+The selected target is **B: Minimal Viable WSL**, a single-user patched control plane preserving basic registered-distro selection/start, `wsl.exe` command dispatch, termination, and shutdown. Import/export, resize, arbitrary-disk mounting, and other general management operations are not acceptance criteria.
 
-This best matches the audience-of-one requirement without redefining the project as a generic QEMU/Hyper-V VM. Stock Microsoft init remains a reference and possible temporary diagnostic profile, not the intended minimum.
+`minimal-viable-wsl-v1` combines this contract with the mkroot/Toybox floor. `ultra-minimal-wsl-v1` then adds only facilities proved necessary by Alpine, Arch, and Debian smoke tests. This matches the audience-of-one requirement without redefining the project as a generic QEMU/Hyper-V VM. Stock Microsoft init remains a reference and temporary discovery profile, not the intended minimum.
 
 The reproducible-build part of the feasibility gate has passed for the Linux-side binary. `tools/build-control-plane-linux.sh` produced identical unmodified `init` and deterministic `initrd.img` artifacts in two clean runs from source commit `acbcb81fc61079b74835ea7dc2563046b2557033`.
 

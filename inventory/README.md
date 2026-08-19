@@ -84,7 +84,7 @@ uv run python tools/inventory.py set CONFIG_HYPERV `
   rationale="Hyper-V guest core"
 ```
 
-The annotations distinguish documented purpose from experimentally proven necessity. Do not mark a symbol `PROVEN_*_REQUIRED` merely because it is enabled or selected.
+The annotations distinguish documented purpose from experimentally proven necessity. Do not mark a symbol `PROVEN_*_REQUIRED` merely because it is enabled or selected. Use `PROVEN_WSL_REQUIRED` or `PROVEN_TOYBOX_REQUIRED` for the Minimal Viable WSL core; reserve `PROVEN_ALPINE_REQUIRED`, `PROVEN_ARCH_REQUIRED`, and `PROVEN_DEBIAN_REQUIRED` for compatibility additions isolated after that core is frozen. `MINIMAL-BOOT-PLAN.md` is the canonical status definition.
 
 ## Synchronize records
 
