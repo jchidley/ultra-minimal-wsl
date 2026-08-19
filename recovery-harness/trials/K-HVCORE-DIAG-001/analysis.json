@@ -1,0 +1,53 @@
+{
+  "trialId": "K-HVCORE-DIAG-001",
+  "classification": {
+    "highestCheckpoint": "B1",
+    "confidence": "high",
+    "checkpointAdvancedFromPriorObservation": true,
+    "basis": "The pinned Microsoft WSL ETW profile captured 180 GuestLog records from the custom VM. They prove Linux 6.18.40.1+ entry, Hyper-V detection, CPU/memory/clock initialization, initramfs unpack, and execution of stock /init. No VMBus device enumeration occurred, so B2 is not proved. mini_init executed but did not remain alive, so B4 is not assigned."
+  },
+  "firstObservableFailure": "The kernel could not open an initial console; mini_init reported missing /dev/hvc1 and /dev/console.",
+  "fatalControlPlaneFailure": "mini_init UtilConnectVsock failed with errno 97 (EAFNOSUPPORT), then halted. CONFIG_VSOCKETS and CONFIG_HYPERV_VSOCKETS were disabled.",
+  "parentArtifact": "K-HVCORE-001",
+  "artifactUnchanged": true,
+  "artifactSha256": "19473ce41f28bcb0c3872c5b111270a323f2675af1674454839a6094843ddffd",
+  "evidence": {
+    "traceStartedUtc": "2026-08-19T05:19:14.6672335Z",
+    "trialStartedUtc": "2026-08-19T05:19:16.3128231Z",
+    "trialFinishedUtc": "2026-08-19T05:20:28.4203249Z",
+    "traceStoppedUtc": "2026-08-19T05:20:29.9653218Z",
+    "customVmId": "0a473c04-97f6-4fc9-9a4b-34db56958c14",
+    "customGuestLogRecords": 180,
+    "customGuestLogFirst": "Linux version 6.18.40.1+",
+    "hypervisorDetected": "Microsoft Hyper-V",
+    "initExecuted": true,
+    "vmbusEnumerated": false,
+    "consoleErrors": [
+      "open(/dev/hvc1) failed 2",
+      "/init was started without /dev/console"
+    ],
+    "vsockError": "UtilConnectVsock: socket failed 97",
+    "customCreateVmEndPresent": false,
+    "customCreateInstanceEndError": "0x800705b4 (timeout)",
+    "testTimedOut": true,
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "stockKernelRelease": "6.18.33.2-microsoft-standard-WSL2",
+    "stockRecoveryVmId": "4437f269-a564-437d-93a2-0e0fdac83826",
+    "stockRecoveryCreateVmEndPresent": true,
+    "stockRecoveryMiniInitMessagingPresent": true,
+    "etlPath": "windows-wsl.etl",
+    "decodedXmlPath": "windows-wsl-lr.xml",
+    "customGuestLogPath": "guest-log-custom.txt",
+    "stockGuestLogPath": "guest-log-stock-recovery.txt"
+  },
+  "rootCauseAssessment": {
+    "imageRejection": "ruled out",
+    "unobservedKernelEntry": "ruled out",
+    "missingConsole": "observed but not the final fatal error",
+    "missingVmbusRuntimeEnumeration": "observed; CONFIG_HYPERV_VMBUS=y alone did not probe without the x86 platform enumeration substrate",
+    "missingVsockProtocolAndHyperVTransport": "directly implicated by EAFNOSUPPORT and disabled CONFIG_VSOCKETS/CONFIG_HYPERV_VSOCKETS",
+    "confidence": "high"
+  },
+  "decision": "Retain the Hyper-V execution core. The next coherent discovery bundle should add the minimal x86 ACPI/platform-enumeration closure needed for VMBus plus built-in CONFIG_VSOCKETS and CONFIG_HYPERV_VSOCKETS. Do not add storage, networking, or the separate virtio/HVC console bundle yet. A new explicit decision is required before booting that candidate."
+}

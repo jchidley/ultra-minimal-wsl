@@ -1,0 +1,35 @@
+{
+  "trialId": "K-HVCORE-001",
+  "classification": {
+    "highestCheckpoint": "B0",
+    "confidence": "medium",
+    "checkpointAdvancedFromParent": false,
+    "basis": "The candidate again produced zero stdout and stderr, never dispatched the Toybox smoke test, produced no in-guest dmesg or crash artifact, and timed out after 45 seconds. Windows events contain only informational Hyper-V virtual-switch lifecycle messages and do not prove guest kernel entry or VMBus enumeration."
+  },
+  "firstObservableFailure": "wsl.exe did not dispatch the Toybox command before the 45-second timeout",
+  "parentTrial": "K-MKROOT-001",
+  "changeGroup": "hyperv-execution-core",
+  "semanticConfigChanges": [
+    "CONFIG_HYPERVISOR_GUEST=n->y",
+    "CONFIG_HYPERV=n->y",
+    "CONFIG_PARAVIRT=n->y",
+    "CONFIG_X86_HV_CALLBACK_VECTOR=n->y",
+    "CONFIG_HYPERV_TIMER=n->y",
+    "CONFIG_HYPERV_VMBUS=n->y",
+    "CONFIG_X86_X2APIC=n->y",
+    "CONFIG_IRQ_MSI_LIB=n->y",
+    "CONFIG_GENERIC_MSI_IRQ=n->y"
+  ],
+  "evidence": {
+    "testTimedOut": true,
+    "testStdoutBytes": 0,
+    "testStderrBytes": 0,
+    "kernelLogCaptured": false,
+    "windowsEvents": "informational Hyper-V VmSwitch lifecycle only",
+    "crashArtifacts": false,
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "stockKernelRelease": "6.18.33.2-microsoft-standard-WSL2"
+  },
+  "decision": "Do not retain or extend this bundle on checkpoint evidence alone. It did not advance beyond B0. Preserve the artifact as evidence, return to the mkroot parent for reasoning, and collect Microsoft ETL/debug-console evidence before selecting another coherent subsystem bundle."
+}

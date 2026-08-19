@@ -1,0 +1,10 @@
+started_utc=2026-08-17T21:12:03Z
+toybox_commit=b7ec52ac35e075caffca5d330995d44e8dbfc8c3
+kernel_commit=14794180686c2fb6307fbe359c359bec765249f3
+compiler=x86_64-linux-musl-gcc (GCC) 15.1.0
+linker=GNU ld (GNU Binutils) 2.44
+host=Linux black 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 GNU/Linux
+qemu=QEMU emulator version 10.0.11 (Debian 1:10.0.11+ds-0+deb13u1)
+command=mkroot/mkroot.sh CROSS_COMPILE=/root/src/toybox/ccc/x86_64-linux-musl-cross/bin/x86_64-linux-musl- LINUX=/root/experiments/minimal-wsl/mkroot-baseline/WSL2-Linux-Kernel
+finished_utc=2026-08-17T21:22:03Z
+build_exit=0

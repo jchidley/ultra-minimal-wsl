@@ -1,0 +1,10 @@
+archived_utc=2026-08-17T21:24:12Z
+g4=PASS
+g4_marker=MKROOT_G4_PASS_V2
+kernel_size=3441664
+initramfs_size=514424
+rootfs_size=769316
+rootfs_entries=268
+microconfig_lines=3
+miniconfig_lines=58
+fullconfig_lines=2273

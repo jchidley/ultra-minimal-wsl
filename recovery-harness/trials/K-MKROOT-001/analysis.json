@@ -1,0 +1,57 @@
+{
+  "trialId": "K-MKROOT-001",
+  "classification": {
+    "highestCheckpoint": "B0",
+    "confidence": "medium",
+    "basis": "The plan defines B0 as kernel rejection or no useful kernel output. The custom-kernel invocation produced zero stdout and stderr, never dispatched the Toybox smoke test, produced no dmesg, Windows event, or crash artifact, and was killed after the strict 45-second timeout. This proves no checkpoint above B0; it does not distinguish image rejection from failure during unobserved early kernel startup."
+  },
+  "firstObservableFailure": "wsl.exe did not dispatch the Toybox command before the 45-second timeout",
+  "evidence": {
+    "testTimedOut": true,
+    "testStdoutBytes": 0,
+    "testStderrBytes": 0,
+    "kernelLogCaptured": false,
+    "windowsEventBytes": 0,
+    "crashArtifacts": false,
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "stockKernelRelease": "6.18.33.2-microsoft-standard-WSL2"
+  },
+  "interpretation": "The unchanged mkroot kernel is a valid generic Linux lower bound because it passed G4 under QEMU, but it lacks the Hyper-V guest core present in every captured WSL-oriented config. The evidence points first to the Hyper-V execution bundle, not storage, host sockets, networking, or the WSL init syscall substrate.",
+  "nextBundle": {
+    "name": "hyperv-execution-core",
+    "explicitSymbols": [
+      "CONFIG_HYPERVISOR_GUEST=y",
+      "CONFIG_HYPERV=y"
+    ],
+    "expectedTransitiveOrDefaultSymbols": [
+      "CONFIG_PARAVIRT=y",
+      "CONFIG_X86_HV_CALLBACK_VECTOR=y",
+      "CONFIG_HYPERV_TIMER=y",
+      "CONFIG_HYPERV_VMBUS=y",
+      "CONFIG_X86_X2APIC=y",
+      "CONFIG_IRQ_MSI_LIB=y",
+      "CONFIG_GENERIC_MSI_IRQ=y"
+    ],
+    "excludedForNow": [
+      "CONFIG_HYPERV_STORAGE",
+      "CONFIG_HYPERV_VSOCKETS",
+      "CONFIG_HYPERV_NET",
+      "CONFIG_HYPERV_UTILS",
+      "CONFIG_HYPERV_BALLOON",
+      "CONFIG_HYPERV_IOMMU",
+      "CONFIG_PCI_HYPERV",
+      "CONFIG_HVC_DRIVER"
+    ]
+  },
+  "preparedCandidate": {
+    "trialId": "K-HVCORE-001",
+    "directory": "candidates/K-HVCORE-001",
+    "fullConfigSha256": "7def23e912c4b4734eaf76b2a70d0a21e51a2a37b75247f3e94bb3310d50ed1d",
+    "kernelSha256": "19473ce41f28bcb0c3872c5b111270a323f2675af1674454839a6094843ddffd",
+    "kernelBytes": 3486720,
+    "semanticChangesFromMkroot": 9,
+    "planValidationPassed": true,
+    "booted": false
+  }
+}

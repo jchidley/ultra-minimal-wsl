@@ -1,0 +1,10 @@
+# Error-directed Hyper-V execution-core addition after K-MKROOT-001 reached B0.
+# Explicit additions:
+CONFIG_HYPERVISOR_GUEST=y
+CONFIG_HYPERV=y
+
+# Preserve the mkroot/Stage-1 values for unrelated hypervisor defaults exposed
+# by HYPERVISOR_GUEST. These are controls, not additions to the bundle.
+# CONFIG_KVM_GUEST is not set
+# CONFIG_ARCH_CPUIDLE_HALTPOLL is not set
+# CONFIG_PARAVIRT_CLOCK is not set

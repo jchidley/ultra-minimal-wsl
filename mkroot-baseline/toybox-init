@@ -1,0 +1,42 @@
+#!/bin/sh
+
+export HOME=/home PATH=/bin:/sbin
+
+if ! mountpoint -q dev; then
+  mount -t devtmpfs dev dev
+  [ $$ -eq 1 ] && ! 2>/dev/null <0 && exec 0<>/dev/console 1>&0 2>&1
+  for i in ,fd /0,stdin /1,stdout /2,stderr
+  do ln -sf /proc/self/fd${i/,*/} dev/${i/*,/}; done
+  mkdir -p dev/shm
+  chmod +t /dev/shm
+fi
+mountpoint -q dev/pts || { mkdir -p dev/pts && mount -t devpts dev/pts dev/pts;}
+mountpoint -q proc || mount -t proc proc proc
+mountpoint -q sys || mount -t sysfs sys sys
+echo 0 99999 > /proc/sys/net/ipv4/ping_group_range
+
+if [ $$ -eq 1 ]; then
+  mountpoint -q mnt || [ -e /dev/?da ] && mount /dev/?da /mnt
+
+  # Setup networking for QEMU (needs /proc)
+  ifconfig lo 127.0.0.1
+  ifconfig eth0 10.0.2.15
+  route add default gw 10.0.2.2
+  [ "$(date +%s)" -lt 1000 ] && timeout 2 sntp -sq 10.0.2.2 # Ask host
+  [ "$(date +%s)" -lt 10000000 ] && sntp -sq time.google.com
+
+  # Run package scripts (if any)
+  for i in $(ls -1 /etc/rc 2>/dev/null | sort); do . /etc/rc/"$i"; done
+  echo 3 > /proc/sys/kernel/printk
+
+  [ -z "$HANDOFF" ] && [ -e /mnt/init ] && HANDOFF=/mnt/init
+  [ -z "$HANDOFF" ] && HANDOFF=/bin/sh && echo -e '\e[?7hType exit when done.'
+
+  setsid -c <>/dev/$(sed '$s@.*[ /]@@' /sys/class/tty/console/active) >&0 2>&1 \
+    $HANDOFF
+  reboot -f &
+  sleep 5
+else # for chroot
+  /bin/sh
+  umount /dev/pts /dev /sys /proc
+fi

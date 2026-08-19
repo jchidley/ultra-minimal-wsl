@@ -1,0 +1,7 @@
+source_commit=acbcb81fc61079b74835ea7dc2563046b2557033
+source_date_epoch=1784849482
+clang=Debian clang version 19.1.7 (3+b1)
+lld=Debian LLD 19.1.7 (compatible with GNU linkers)
+linuxsdk_sha256=942d36f760446853b29c97f2ee689819bb9305d959342d21df537c1d6981491e
+wsldeps_sha256=893411830c3bbf58744c44da8d6361018bfee41f22923697b85033aebfc94c7b
+localization_sha256=374fec04eeff025d2500ff2fcaf61b6f8421debb7d26df3030c24a01feaa8515

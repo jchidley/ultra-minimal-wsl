@@ -1,0 +1,41 @@
+# Downloaded toolchains and exported root filesystems
+/x86_64-linux-musl-cross.tar.xz
+/toybox-minimal-rootfs.tar.gz
+/toybox-minimal-wsl-rootfs.tar.gz
+
+# Reproducible kernel and initramfs binaries (configs, logs, metadata, and
+# SHA256SUMS remain tracked)
+/vmlinux-wsl-*
+/candidates/wsl-*-stock-kernel
+/candidates/*/linux-kernel
+/mkroot-baseline/linux-kernel
+/mkroot-baseline/initramfs.cpio.gz
+
+# Reproducible control-plane staging and native binaries
+/control-plane-build/localization-stage/
+/control-plane-build/generated/
+/control-plane-build/native-build/generated/
+/control-plane-build/native-build/init
+/control-plane-build/native-build/init.debug
+/control-plane-build/native-build/initrd.img
+
+# Generated dependency database; CSV exports remain reviewable in Git
+/inventory/kconfig-dependencies.sqlite
+
+# Bulky raw diagnostic captures; extracted logs, analysis, metadata, and hashes
+# remain tracked
+/recovery-harness/trials/*/*.etl
+/recovery-harness/trials/*/windows-wsl-lr.xml
+/recovery-harness/trials/*/wsl-crashes/
+
+# Transactional and local machine state
+/recovery-harness/active-kernel-trial.json
+/recovery-harness/trace-staging/
+*.tmp
+*.partial
+*.partial.failed
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*~

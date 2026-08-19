@@ -1,0 +1,180 @@
+2026-08-19T06:19:18.562668300+00:59 Linux version 6.18.40.1+ (root@black) (x86_64-linux-musl-gcc (GCC) 15.1.0, GNU ld (GNU Binutils) 2.44) #2 Tue Aug 18 15:14:25 BST 2026
+2026-08-19T06:19:18.598454300+00:59 Command line: initrd=\initrd.img WSL_ROOT_INIT=1 panic=-1 nr_cpus=12 hv_utils.timesync_implicit=1 earlycon=uart8250,io,0x3f8,115200 console=hvc0 debug pty.legacy_count=0 WSL_ENABLE_CRASH_DUMP=1
+2026-08-19T06:19:18.604465900+00:59 BIOS-provided physical RAM map:
+2026-08-19T06:19:18.614092900+00:59 BIOS-e820: [mem 0x0000000000000000-0x000000000009ffff] usable
+2026-08-19T06:19:18.623619500+00:59 BIOS-e820: [mem 0x00000000000e0000-0x00000000000e0fff] reserved
+2026-08-19T06:19:18.635394400+00:59 BIOS-e820: [mem 0x0000000000100000-0x00000000001fffff] ACPI data
+2026-08-19T06:19:18.643776100+00:59 BIOS-e820: [mem 0x0000000000200000-0x00000000f7ffffff] usable
+2026-08-19T06:19:18.653815300+00:59 BIOS-e820: [mem 0x0000000100000000-0x0000000207ffffff] usable
+2026-08-19T06:19:18.662441400+00:59 earlycon: uart8250 at I/O port 0x3f8 (options '115200')
+2026-08-19T06:19:18.671304200+00:59 printk: legacy bootconsole [uart8250] enabled
+2026-08-19T06:19:18.678766500+00:59 NX (Execute Disable) protection: active
+2026-08-19T06:19:18.684218200+00:59 APIC: Static calls initialized
+2026-08-19T06:19:18.688831900+00:59 DMI not present or invalid.
+2026-08-19T06:19:18.695292500+00:59 Hypervisor detected: Microsoft Hyper-V
+2026-08-19T06:19:18.710998100+00:59 Hyper-V: privilege flags low 0xae7f, high 0x3b8030, ext 0x2, hints 0x900c2c, misc 0xe0bed7b6
+2026-08-19T06:19:18.717098700+00:59 Hyper-V: Nested features: 0x4a0000
+2026-08-19T06:19:18.722136000+00:59 Hyper-V: LAPIC Timer Frequency: 0xc3500
+2026-08-19T06:19:18.729519800+00:59 Hyper-V: Using hypercall for remote TLB flush
+2026-08-19T06:19:18.749250000+00:59 clocksource: hyperv_clocksource_tsc_page: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns
+2026-08-19T06:19:18.768912900+00:59 clocksource: hyperv_clocksource_msr: mask: 0xffffffffffffffff max_cycles: 0x24e6a1710, max_idle_ns: 440795202120 ns
+2026-08-19T06:19:18.775723700+00:59 tsc: Detected 2195.790 MHz processor
+2026-08-19T06:19:18.786706100+00:59 e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+2026-08-19T06:19:18.792672000+00:59 e820: remove [mem 0x000a0000-0x000fffff] usable
+2026-08-19T06:19:18.800723900+00:59 last_pfn = 0x208000 max_arch_pfn = 0x400000000
+2026-08-19T06:19:18.810230500+00:59 MTRR map: 5 entries (4 fixed + 1 variable; max 20), built from 8 variable MTRRs
+2026-08-19T06:19:18.820875300+00:59 x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT
+2026-08-19T06:19:18.826041700+00:59 last_pfn = 0xf8000 max_arch_pfn = 0x400000000
+2026-08-19T06:19:18.836570100+00:59 Using GB pages for direct mapping
+2026-08-19T06:19:18.842354200+00:59 RAMDISK: [mem 0x01ea7000-0x0215bfff]
+2026-08-19T06:19:18.845263700+00:59 Zone ranges:
+2026-08-19T06:19:18.854514700+00:59   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+2026-08-19T06:19:18.865424000+00:59   DMA32    [mem 0x0000000001000000-0x00000000ffffffff]
+2026-08-19T06:19:18.875811900+00:59   Normal   [mem 0x0000000100000000-0x0000000207ffffff]
+2026-08-19T06:19:18.881901900+00:59 Movable zone start for each node
+2026-08-19T06:19:18.886300700+00:59 Early memory node ranges
+2026-08-19T06:19:18.895729400+00:59   node   0: [mem 0x0000000000001000-0x000000000009ffff]
+2026-08-19T06:19:18.906597800+00:59   node   0: [mem 0x0000000000200000-0x00000000f7ffffff]
+2026-08-19T06:19:18.916758700+00:59   node   0: [mem 0x0000000100000000-0x0000000207ffffff]
+2026-08-19T06:19:18.927296100+00:59 Initmem setup node 0 [mem 0x0000000000001000-0x0000000207ffffff]
+2026-08-19T06:19:18.937036000+00:59 On node 0, zone DMA: 1 pages in unavailable ranges
+2026-08-19T06:19:18.945572600+00:59 On node 0, zone DMA: 352 pages in unavailable ranges
+2026-08-19T06:19:19.112142600+00:59 CPU topo: Max. logical packages:   1
+2026-08-19T06:19:19.115741600+00:59 CPU topo: Max. logical dies:       1
+2026-08-19T06:19:19.119457500+00:59 CPU topo: Max. dies per package:   1
+2026-08-19T06:19:19.123118700+00:59 CPU topo: Max. threads per core:   1
+2026-08-19T06:19:19.129163200+00:59 CPU topo: Num. cores per package:     1
+2026-08-19T06:19:19.135741600+00:59 CPU topo: Num. threads per package:   1
+2026-08-19T06:19:19.144921700+00:59 CPU topo: Allowing 1 present CPUs plus 0 hotplug CPUs
+2026-08-19T06:19:19.153764900+00:59 [mem 0xf8000000-0xffffffff] available for PCI devices
+2026-08-19T06:19:19.160807900+00:59 Booting paravirtualized kernel on Hyper-V
+2026-08-19T06:19:19.178037000+00:59 clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
+2026-08-19T06:19:19.185893000+00:59 pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+2026-08-19T06:19:19.189039700+00:59 pcpu-alloc: [0] 0
+2026-08-19T06:19:19.223785300+00:59 Kernel command line: initrd=\initrd.img WSL_ROOT_INIT=1 panic=-1 nr_cpus=12 hv_utils.timesync_implicit=1 earlycon=uart8250,io,0x3f8,115200 console=hvc0 debug pty.legacy_count=0 WSL_ENABLE_CRASH_DUMP=1
+2026-08-19T06:19:19.244707500+00:59 Unknown kernel command line parameters "WSL_ROOT_INIT=1 nr_cpus=12 WSL_ENABLE_CRASH_DUMP=1", will be passed to user space.
+2026-08-19T06:19:19.248950300+00:59 random: crng init done
+2026-08-19T06:19:19.260161000+00:59 printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
+2026-08-19T06:19:19.285582100+00:59 Dentry cache hash table entries: 1048576 (order: 11, 8388608 bytes, linear)
+2026-08-19T06:19:19.305696700+00:59 Inode-cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+2026-08-19T06:19:19.311247200+00:59 software IO TLB: area num 1.
+2026-08-19T06:19:19.418106200+00:59 Built 1 zonelists, mobility grouping on.  Total pages: 2096799
+2026-08-19T06:19:19.427534200+00:59 mem auto-init: stack:all(zero), heap alloc:off, heap free:off
+2026-08-19T06:19:19.462675400+00:59 SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+2026-08-19T06:19:19.466666100+00:59 Using NULL legacy PIC
+2026-08-19T06:19:19.475024800+00:59 NR_IRQS: 4352, nr_irqs: 24, preallocated irqs: 0
+2026-08-19T06:19:19.492541000+00:59 clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
+2026-08-19T06:19:19.498821700+00:59 Console: colour dummy device 80x25
+2026-08-19T06:19:19.505194500+00:59 APIC: ACPI MADT or MP tables are not detected
+2026-08-19T06:19:19.512720400+00:59 Failed to register legacy timer interrupt
+2026-08-19T06:19:19.523600800+00:59 APIC: Switch to virtual wire mode setup with no configuration
+2026-08-19T06:19:19.535244100+00:59 Not enabling interrupt remapping due to skipped IO-APIC setup
+2026-08-19T06:19:19.540931700+00:59 Hyper-V: Host Build 10.0.26100.9168-9-0
+2026-08-19T06:19:19.548423000+00:59 Hyper-V: enabling crash_kexec_post_notifiers
+2026-08-19T06:19:19.554125000+00:59 Hyper-V: Using IPI hypercalls
+2026-08-19T06:19:19.562838400+00:59 APIC: send_IPI() replaced with hv_send_ipi()
+2026-08-19T06:19:19.571493000+00:59 APIC: send_IPI_mask() replaced with hv_send_ipi_mask()
+2026-08-19T06:19:19.583690200+00:59 APIC: send_IPI_mask_allbutself() replaced with hv_send_ipi_mask_allbutself()
+2026-08-19T06:19:19.594219300+00:59 APIC: send_IPI_allbutself() replaced with hv_send_ipi_allbutself()
+2026-08-19T06:19:19.603660500+00:59 APIC: send_IPI_all() replaced with hv_send_ipi_all()
+2026-08-19T06:19:19.613282000+00:59 APIC: send_IPI_self() replaced with hv_send_ipi_self()
+2026-08-19T06:19:19.620904300+00:59 Hyper-V: Using enlightened APIC (xapic mode)
+2026-08-19T06:19:19.627271200+00:59 APIC: eoi() replaced with hv_apic_eoi_write()
+2026-08-19T06:19:19.634906300+00:59 APIC: read() replaced with hv_apic_read()
+2026-08-19T06:19:19.642931900+00:59 APIC: write() replaced with hv_apic_write()
+2026-08-19T06:19:19.651821500+00:59 APIC: icr_write() replaced with hv_apic_icr_write()
+2026-08-19T06:19:19.658199800+00:59 APIC: icr_read() replaced with hv_apic_icr_read()
+2026-08-19T06:19:19.673363600+00:59 clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1fa6a9a926d, max_idle_ns: 440795224317 ns
+2026-08-19T06:19:19.689088800+00:59 Calibrating delay loop (skipped), value calculated using timer frequency.. 4391.58 BogoMIPS (lpj=8783160)
+2026-08-19T06:19:19.699568600+00:59 x86/cpu: User Mode Instruction Prevention (UMIP) activated
+2026-08-19T06:19:19.706965600+00:59 Last level iTLB entries: 4KB 1024, 2MB 1024, 4MB 512
+2026-08-19T06:19:19.717073400+00:59 Last level dTLB entries: 4KB 2048, 2MB 2048, 4MB 1024, 1GB 0
+2026-08-19T06:19:19.729756900+00:59 CPU: AMD Ryzen 5 Microsoft Surface (R) Edition (family: 0x17, model: 0x60, stepping: 0x1)
+2026-08-19T06:19:19.738725600+00:59 mitigations: Enabled attack vectors: SMT mitigations: off
+2026-08-19T06:19:19.747054800+00:59 Speculative Store Bypass: Vulnerable
+2026-08-19T06:19:19.753178300+00:59 Spectre V2 : Vulnerable
+2026-08-19T06:19:19.757426700+00:59 RETBleed: Vulnerable
+2026-08-19T06:19:19.766811500+00:59 Speculative Return Stack Overflow: Vulnerable
+2026-08-19T06:19:19.781291500+00:59 Spectre V1 : Vulnerable: __user pointer sanitization and usercopy barriers only; no swapgs barriers
+2026-08-19T06:19:19.794077300+00:59 x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+2026-08-19T06:19:19.803930300+00:59 x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+2026-08-19T06:19:19.811846400+00:59 x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+2026-08-19T06:19:19.820816400+00:59 x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+2026-08-19T06:19:19.833922800+00:59 x86/fpu: Enabled xstate features 0x7, context size is 832 bytes, using 'compacted' format.
+2026-08-19T06:19:19.839880300+00:59 pid_max: default: 32768 minimum: 301
+2026-08-19T06:19:19.851768400+00:59 Mount-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+2026-08-19T06:19:19.861702400+00:59 Mountpoint-cache hash table entries: 16384 (order: 5, 131072 bytes, linear)
+2026-08-19T06:19:19.871315200+00:59 Performance Events: Fam17h+ core perfctr, AMD PMU driver.
+2026-08-19T06:19:19.876441400+00:59 ... version:                   0
+2026-08-19T06:19:19.882072300+00:59 ... bit width:                 48
+2026-08-19T06:19:19.887405200+00:59 ... generic counters:          6
+2026-08-19T06:19:19.895793700+00:59 ... generic bitmap:            000000000000003f
+2026-08-19T06:19:19.902112200+00:59 ... fixed-purpose counters:    0
+2026-08-19T06:19:19.909210700+00:59 ... fixed-purpose bitmap:      0000000000000000
+2026-08-19T06:19:19.917624400+00:59 ... value mask:                0000ffffffffffff
+2026-08-19T06:19:19.927188700+00:59 ... max period:                00007fffffffffff
+2026-08-19T06:19:19.934954400+00:59 ... global_ctrl mask:          000000000000003f
+2026-08-19T06:19:19.939688000+00:59 signal: max sigframe size: 1360
+2026-08-19T06:19:19.961933500+00:59 Memory: 8159084K/8387196K available (6815K kernel code, 853K rwdata, 1200K rodata, 696K init, 432K bss, 225476K reserved, 0K cma-reserved)
+2026-08-19T06:19:19.966298800+00:59 devtmpfs: initialized
+2026-08-19T06:19:19.978336300+00:59 posixtimers hash table entries: 512 (order: 0, 4096 bytes, linear)
+2026-08-19T06:19:19.990415100+00:59 futex hash table entries: 256 (8192 bytes on 1 NUMA nodes, total 8 KiB, linear).
+2026-08-19T06:19:19.999338300+00:59 NET: Registered PF_NETLINK/PF_ROUTE protocol family
+2026-08-19T06:19:20.006639900+00:59 PCI: Fatal: No config space access function found
+2026-08-19T06:19:20.012305500+00:59 SCSI subsystem initialized
+2026-08-19T06:19:20.017169300+00:59 libata version 3.00 loaded.
+2026-08-19T06:19:20.021826700+00:59 PCI: System does not support PCI
+2026-08-19T06:19:20.023851000+00:59 vgaarb: loaded
+2026-08-19T06:19:20.032017600+00:59 clocksource: Switched to clocksource tsc-early
+2026-08-19T06:19:20.039633800+00:59 NET: Registered PF_INET protocol family
+2026-08-19T06:19:20.053268800+00:59 IP idents hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+2026-08-19T06:19:20.069935600+00:59 tcp_listen_portaddr_hash hash table entries: 4096 (order: 3, 32768 bytes, linear)
+2026-08-19T06:19:20.082585900+00:59 Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
+2026-08-19T06:19:20.093392000+00:59 TCP established hash table entries: 65536 (order: 7, 524288 bytes, linear)
+2026-08-19T06:19:20.104808600+00:59 TCP bind hash table entries: 65536 (order: 8, 1048576 bytes, linear)
+2026-08-19T06:19:20.115060600+00:59 TCP: Hash tables configured (established 65536 bind 65536)
+2026-08-19T06:19:20.126868800+00:59 UDP hash table entries: 4096 (order: 6, 262144 bytes, linear)
+2026-08-19T06:19:20.138319400+00:59 UDP-Lite hash table entries: 4096 (order: 6, 262144 bytes, linear)
+2026-08-19T06:19:20.145990600+00:59 NET: Registered PF_UNIX/PF_LOCAL protocol family
+2026-08-19T06:19:20.150942800+00:59 PCI: CLS 0 bytes, default 64
+2026-08-19T06:19:20.160231400+00:59 PCI-DMA: Using software bounce buffering for IO (SWIOTLB)
+2026-08-19T06:19:20.172512500+00:59 software IO TLB: mapped [mem 0x00000000f4000000-0x00000000f8000000] (64MB)
+2026-08-19T06:19:20.188259000+00:59 clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x1fa6a9a926d, max_idle_ns: 440795224317 ns
+2026-08-19T06:19:20.194620200+00:59 clocksource: Switched to clocksource tsc
+2026-08-19T06:19:20.205162900+00:59 platform rtc_cmos: registered platform RTC device (no PNP device found)
+2026-08-19T06:19:20.208990300+00:59 Unpacking initramfs...
+2026-08-19T06:19:20.223424900+00:59 Freeing initrd memory: 2772K
+2026-08-19T06:19:20.233068000+00:59 workingset: timestamp_bits=62 max_order=21 bucket_order=0
+2026-08-19T06:19:20.240612400+00:59 squashfs: version 4.0 (2009/01/31) Phillip Lougher
+2026-08-19T06:19:20.250321800+00:59 Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+2026-08-19T06:19:20.264322200+00:59 serial8250: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+2026-08-19T06:19:20.276913500+00:59 serial8250: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+2026-08-19T06:19:20.283459600+00:59 loop: module loaded
+2026-08-19T06:19:20.289307700+00:59 e1000: Intel(R) PRO/1000 Network Driver
+2026-08-19T06:19:20.297196100+00:59 e1000: Copyright (c) 1999-2006 Intel Corporation.
+2026-08-19T06:19:20.304663100+00:59 NET: Registered PF_INET6 protocol family
+2026-08-19T06:19:20.308458000+00:59 Segment Routing with IPv6
+2026-08-19T06:19:20.313417400+00:59 In-situ OAM (IOAM) with IPv6
+2026-08-19T06:19:20.320292700+00:59 NET: Registered PF_PACKET protocol family
+2026-08-19T06:19:20.332594700+00:59 sched_clock: Marking stable (1033818553, 196191269)->(1544557351, -314547529)
+2026-08-19T06:19:20.341852000+00:59 netconsole: network logging started
+2026-08-19T06:19:20.349677600+00:59 Warning: unable to open an initial console.
+2026-08-19T06:19:20.357629000+00:59 Freeing unused kernel image (initmem) memory: 696K
+2026-08-19T06:19:20.366683800+00:59 Write protecting the kernel read-only data: 10240k
+2026-08-19T06:19:20.375774200+00:59 Freeing unused kernel image (text/rodata gap) memory: 1376K
+2026-08-19T06:19:20.386308200+00:59 Freeing unused kernel image (rodata/data gap) memory: 848K
+2026-08-19T06:19:20.389590700+00:59 Run /init as init process
+2026-08-19T06:19:20.393129500+00:59   with arguments:
+2026-08-19T06:19:20.394997500+00:59     /init
+2026-08-19T06:19:20.398487400+00:59   with environment:
+2026-08-19T06:19:20.400586100+00:59     HOME=/
+2026-08-19T06:19:20.403389800+00:59     TERM=linux
+2026-08-19T06:19:20.406336500+00:59     WSL_ROOT_INIT=1
+2026-08-19T06:19:20.408831700+00:59     nr_cpus=12
+2026-08-19T06:19:20.413999700+00:59     WSL_ENABLE_CRASH_DUMP=1
+2026-08-19T06:19:20.427651900+00:59 WSL (1 - ) ERROR: InitializeLogging:1633: open(/dev/hvc1) failed 2
+2026-08-19T06:19:20.439850000+00:59 WSL (1 - ) ERROR: main:3982: /init was started without /dev/console
+2026-08-19T06:19:20.446754500+00:59 WSL (1 - ): WSL version 2.7.11.0
+2026-08-19T06:19:35.470939300+00:59 WSL (1 - ) ERROR: UtilConnectVsock:572: socket failed 97 (from: int main(int, char **)[main.cpp:4089])
+2026-08-19T06:19:35.493905700+00:59 WSL (1) ERROR: No such file or directory @C:/__w/1/s/src/shared/inc\stringshared.h:563 (ReadFile)
+2026-08-19T06:19:35.505809300+00:59 reboot: Power off not available: System halted instead

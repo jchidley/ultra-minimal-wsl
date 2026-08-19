@@ -1,0 +1,8 @@
+* text=auto
+*.sh text eol=lf
+*.py text eol=lf
+*.wprp -text
+inventory/*.csv whitespace=-trailing-space
+*.log whitespace=-trailing-space
+mkroot-baseline/linux-microconfig whitespace=-blank-at-eof
+references/** whitespace=-trailing-space,-blank-at-eof

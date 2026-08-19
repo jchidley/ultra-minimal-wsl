@@ -1,0 +1,29 @@
+# Evidence-directed host-channel bundle after K-HVCORE-DIAG-001 reached B1.
+# Explicit additions:
+CONFIG_ACPI=y
+CONFIG_VSOCKETS=y
+CONFIG_HYPERV_VSOCKETS=y
+
+# Preserve the K-HVCORE-001 values for optional defaults exposed by ACPI and
+# VSOCKETS. Hidden, non-prompt defaults that Kconfig requires remain recorded
+# separately as resulting closure rather than explicit requirements.
+# CONFIG_CPU_IDLE is not set
+# CONFIG_POWER_SUPPLY is not set
+# CONFIG_THERMAL is not set
+# CONFIG_ACPI_AC is not set
+# CONFIG_ACPI_BATTERY is not set
+# CONFIG_ACPI_BUTTON is not set
+# CONFIG_ACPI_CPU_FREQ_PSS is not set
+# CONFIG_ACPI_DEBUG is not set
+# CONFIG_ACPI_EC is not set
+# CONFIG_ACPI_FAN is not set
+# CONFIG_ACPI_PROCESSOR is not set
+# CONFIG_ACPI_REV_OVERRIDE_POSSIBLE is not set
+# CONFIG_ACPI_SPCR_TABLE is not set
+# CONFIG_ACPI_TABLE_UPGRADE is not set
+# CONFIG_ACPI_THERMAL is not set
+# CONFIG_ATA_ACPI is not set
+# CONFIG_NET_VENDOR_HISILICON is not set
+# CONFIG_PCI_MMCONFIG is not set
+# CONFIG_VSOCKETS_DIAG is not set
+# CONFIG_VSOCKETS_LOOPBACK is not set

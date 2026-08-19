@@ -1,0 +1,13 @@
+{
+    "schemaVersion":  1,
+    "trialId":  "K-HVCORE-DIAG-001",
+    "traceStartedUtc":  "2026-08-19T05:19:14.6672335Z",
+    "traceStoppedUtc":  "2026-08-19T05:20:29.9653218Z",
+    "wprProfile":  "C:\\Users\\jackc\\Downloads\\ultra-minimal-wsl\\references\\microsoft\\WSL-2.7.11\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "wprProfileName":  "WSL",
+    "debugConsoleEnabledForTrial":  true,
+    "etlCreated":  true,
+    "trialError":  "System.Management.Automation.RuntimeException: Trial failed after verified restoration: Test distro exceeded the 45-second timeout.",
+    "traceStopError":  null
+}

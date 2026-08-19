@@ -1,0 +1,121 @@
+﻿{
+    "diagnosticMode":  "Microsoft WSL ETW profile plus transactional debugConsole",
+    "execute":  true,
+    "wprProfile":  "C:\\Users\\jackc\\Downloads\\ultra-minimal-wsl\\references\\microsoft\\WSL-2.7.11\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "wprProfileName":  "WSL",
+    "etlDestination":  "C:\\Users\\jackc\\Downloads\\ultra-minimal-wsl\\recovery-harness\\trials\\K-HVCORE-DIAG-001\\windows-wsl.etl",
+    "exactTimingMetadata":  "C:\\Users\\jackc\\Downloads\\ultra-minimal-wsl\\recovery-harness\\trials\\K-HVCORE-DIAG-001\\diagnostic-trace.json",
+    "debugConsole":  true,
+    "note":  "The console window is supplementary; Microsoft.Windows.Lxss.Manager GuestLog events in ETL are the programmatic kernel-log source."
+}
+{
+    "mode":  "KernelTrial",
+    "trialId":  "K-HVCORE-DIAG-001",
+    "execute":  false,
+    "candidateKernel":  {
+                            "path":  "C:\\Users\\jackc\\Downloads\\ultra-minimal-wsl\\candidates\\K-HVCORE-001\\linux-kernel",
+                            "length":  3486720,
+                            "sha256":  "19473ce41f28bcb0c3872c5b111270a323f2675af1674454839a6094843ddffd",
+                            "bootProtocol":  "2.15"
+                        },
+    "packagedKernel":  {
+                           "path":  "C:\\Program Files\\WSL\\tools\\kernel",
+                           "length":  17334784,
+                           "lastWriteUtc":  "2026-06-18T21:41:14.0000000Z",
+                           "sha256":  "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861"
+                       },
+    "wslVersion":  "WSL version: 2.7.11.0\r\n\r\nKernel version: 6.18.33.2-2\r\n\r\nWSLg version: 1.0.73.2\r\n\r\nMSRDC version: 1.2.7214\r\n\r\nDirect3D version: 1.611.1-81528511\r\n\r\nDXCore version: 10.0.26100.1-240331-1435.ge-release\r\n\r\nWindows version: 10.0.26200.9168",
+    "originalWslConfig":  {
+                              "exists":  true,
+                              "length":  312,
+                              "sha256":  "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577"
+                          },
+    "testDistribution":  "Toybox-Minimal",
+    "recoveryDistribution":  "Debian",
+    "timeoutSeconds":  45,
+    "debugConsole":  true,
+    "activeWslProcesses":  [
+
+                           ],
+    "blockingWslManagementProcesses":  [
+
+                                       ],
+    "writesUnderInstalledWsl":  false,
+    "operations":  [
+                       "validate external kernel",
+                       "save exact .wslconfig",
+                       "atomically select external kernel and debugConsole=true in .wslconfig",
+                       "shutdown WSL",
+                       "run designated distro with timeout",
+                       "unconditionally restore exact .wslconfig",
+                       "shutdown and verify packaged-kernel/config hashes",
+                       "boot stock recovery distro",
+                       "shutdown and append terminal trial row"
+                   ]
+}
+PLAN ONLY: no shutdown or configuration change was performed.
+{
+    "mode":  "KernelTrial",
+    "trialId":  "K-HVCORE-DIAG-001",
+    "execute":  true,
+    "candidateKernel":  {
+                            "path":  "C:\\Users\\jackc\\Downloads\\ultra-minimal-wsl\\candidates\\K-HVCORE-001\\linux-kernel",
+                            "length":  3486720,
+                            "sha256":  "19473ce41f28bcb0c3872c5b111270a323f2675af1674454839a6094843ddffd",
+                            "bootProtocol":  "2.15"
+                        },
+    "packagedKernel":  {
+                           "path":  "C:\\Program Files\\WSL\\tools\\kernel",
+                           "length":  17334784,
+                           "lastWriteUtc":  "2026-06-18T21:41:14.0000000Z",
+                           "sha256":  "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861"
+                       },
+    "wslVersion":  "WSL version: 2.7.11.0\r\n\r\nKernel version: 6.18.33.2-2\r\n\r\nWSLg version: 1.0.73.2\r\n\r\nMSRDC version: 1.2.7214\r\n\r\nDirect3D version: 1.611.1-81528511\r\n\r\nDXCore version: 10.0.26100.1-240331-1435.ge-release\r\n\r\nWindows version: 10.0.26200.9168",
+    "originalWslConfig":  {
+                              "exists":  true,
+                              "length":  312,
+                              "sha256":  "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577"
+                          },
+    "testDistribution":  "Toybox-Minimal",
+    "recoveryDistribution":  "Debian",
+    "timeoutSeconds":  45,
+    "debugConsole":  true,
+    "activeWslProcesses":  [
+
+                           ],
+    "blockingWslManagementProcesses":  [
+
+                                       ],
+    "writesUnderInstalledWsl":  false,
+    "operations":  [
+                       "validate external kernel",
+                       "save exact .wslconfig",
+                       "atomically select external kernel and debugConsole=true in .wslconfig",
+                       "shutdown WSL",
+                       "run designated distro with timeout",
+                       "unconditionally restore exact .wslconfig",
+                       "shutdown and verify packaged-kernel/config hashes",
+                       "boot stock recovery distro",
+                       "shutdown and append terminal trial row"
+                   ]
+}
+
+
+PSMessageDetails      : 
+Exception             : System.Management.Automation.RuntimeException: Trial failed after verified restoration: Test 
+                        distro exceeded the 45-second timeout.
+TargetObject          : Trial failed after verified restoration: Test distro exceeded the 45-second timeout.
+CategoryInfo          : OperationStopped: (Trial failed af...second timeout.:String) [], RuntimeException
+FullyQualifiedErrorId : Trial failed after verified restoration: Test distro exceeded the 45-second timeout.
+ErrorDetails          : 
+InvocationInfo        : System.Management.Automation.InvocationInfo
+ScriptStackTrace      : at <ScriptBlock>, C:\Users\jackc\Downloads\ultra-minimal-wsl\tools\Invoke-WslKernelTrial.ps1: 
+                        line 611
+                        at <ScriptBlock>, 
+                        C:\Users\jackc\Downloads\ultra-minimal-wsl\tools\Invoke-WslDiagnosticKernelTrial.ps1: line 111
+                        at <ScriptBlock>, C:\Users\jackc\AppData\Local\Temp\run-K-HVCORE-DIAG-001.ps1: line 6
+PipelineIterationInfo : {}
+
+
+
