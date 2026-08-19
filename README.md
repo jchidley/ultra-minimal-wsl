@@ -117,7 +117,7 @@ A `.wslconfig` kernel setting is global to all WSL 2 distros. Preserve the stock
 Add under `[wsl2]`:
 
 ```ini
-kernel=C:/Users/jackc/Downloads/ultra-minimal-wsl/vmlinux-wsl-ultramin-stage1
+kernel=C:/Users/jackc/git/ultra-minimal-wsl/vmlinux-wsl-ultramin-stage1
 ```
 
 Then:

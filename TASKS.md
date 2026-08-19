@@ -84,7 +84,7 @@ The Visual Studio installer estimated approximately **3 GB**. The attempted inst
 From an elevated PowerShell, explicitly invoke:
 
 ```powershell
-cd C:\Users\jackc\Downloads\ultra-minimal-wsl
+cd C:\Users\jackc\git\ultra-minimal-wsl
 .\tools\install-wsl-windows-build-prereqs.ps1 -Install
 ```
 

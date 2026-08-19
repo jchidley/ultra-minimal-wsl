@@ -22,7 +22,7 @@ This directory is the external dependency graph and review checklist for the min
 
 ## Search
 
-From `C:\Users\jackc\Downloads\ultra-minimal-wsl`:
+From `C:\Users\jackc\git\ultra-minimal-wsl`:
 
 ```powershell
 uv run python tools/inventory.py show CONFIG_HYPERV

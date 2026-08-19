@@ -53,7 +53,7 @@ The generated kernel/initramfs booted with the generated QEMU launcher. It unpac
 
 Archived, hashed artifacts:
 
-`C:\Users\jackc\Downloads\ultra-minimal-wsl\mkroot-baseline\`
+`C:\Users\jackc\git\ultra-minimal-wsl\mkroot-baseline\`
 
 Important files:
 

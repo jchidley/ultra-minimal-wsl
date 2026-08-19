@@ -35,7 +35,10 @@
 *.partial
 *.partial.failed
 
-# Editor and OS noise
+# Language, editor, and OS noise
+__pycache__/
+*.py[cod]
+.venv/
 .DS_Store
 Thumbs.db
 *~

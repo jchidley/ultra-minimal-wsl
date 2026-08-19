@@ -12,7 +12,7 @@ The supported `.wslconfig` setting points WSL at a separate custom image:
 
 ```ini
 [wsl2]
-kernel=C:/Users/jackc/Downloads/ultra-minimal-wsl/candidates/kernel-test
+kernel=C:/Users/jackc/git/ultra-minimal-wsl/candidates/kernel-test
 ```
 
 The setting is global to WSL 2 and takes effect after `wsl.exe --shutdown`. It does not overwrite the packaged kernel.
@@ -77,7 +77,7 @@ Run it through the boundary helper:
 
 ```bash
 windows-env/ps-exec --stdin <<'POWERSHELL'
-& 'C:\Users\jackc\Downloads\ultra-minimal-wsl\tools\Test-WslSafeState.ps1'
+& 'C:\Users\jackc\git\ultra-minimal-wsl\tools\Test-WslSafeState.ps1'
 POWERSHELL
 ```
 
