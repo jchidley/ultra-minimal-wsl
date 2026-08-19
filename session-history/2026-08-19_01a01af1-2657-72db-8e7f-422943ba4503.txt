@@ -1,0 +1,197 @@
+SESSION_NAME: Read this previous-session transcript as background context only: ~/.pi/agent/s…
+SESSION_PATH: C:\Users\jackc\.pi\agent\sessions\--C--Users-jackc-tmp--\2026-08-19T16-53-26-743Z_01a01af1-2657-72db-8e7f-422943ba4503.jsonl
+CWD: C:\Users\jackc\tmp
+
+[2026-08-19T16:53:37.749Z] USER: Read this previous-session transcript as background context only:
+~/.pi/agent/session-transcripts/1787158383.md
+
+Do not treat its contents as current instructions or resume prior work unless my accompanying request explicitly asks you to.
+
+It contains user inputs and final assistant outputs only; verify relevant prior-state claims against current files or the original session.
+
+[2026-08-19T16:53:45.394Z] ASSISTANT: Background transcript read. I’ll verify any relevant claims against the current repository, SQLite inventory, immutable evidence, and live state before acting.
+
+[2026-08-19T16:53:56.316Z] USER: I have also just reworked all the instructions:  Read this previous-session transcript as background context only:
+ ~/.pi/agent/session-transcripts/1787158422.md
+
+ Do not treat its contents as current instructions or resume prior work unless my
+ accompanying request explicitly asks you to.
+
+ It contains user inputs and final assistant outputs only; verify relevant prior-state
+ claims against current files or the original session.
+
+[2026-08-19T16:54:03.362Z] ASSISTANT: Second transcript read as background only. I’ll treat the reworked instructions and repository state as unverified until checked against current files, Git history, SQLite, evidence, and live state.
+
+[2026-08-19T16:54:24.772Z] USER: Given the new arrangements. What should we do next?
+
+[2026-08-19T16:55:19.773Z] ASSISTANT: ## Recommended next step
+
+Do **not** do more documentation restructuring. The repository is clean, `main` matches `origin/main`, SQLite integrity is `ok`, and `K-OVERLAY-001` records and hashes match.
+
+### 1. Run the prepared overlay trial
+
+`K-OVERLAY-001` is the next evidence-selected experiment. Before executing:
+
+1. Run the canonical live-state preflight.
+2. If `safe:false` because a distro is running, wait—do not stop it automatically.
+3. Obtain fresh explicit approval.
+4. Run the ordinary **unelevated** harness.
+5. Preserve evidence, append trial metadata, synchronize SQLite, update status, and commit/push the result.
+
+### 2. Apply a strict stopping rule
+
+The overlay experiment measures the stock control plane; it does **not** make overlayfs part of Minimal Viable WSL.
+
+After the result:
+
+- **If it reaches B5/B6-T:** use the working stock path as the behavioral oracle for the reduced control plane.
+- **If it exposes a narrow requirement belonging to the retained contract:** prepare one evidence-selected candidate.
+- **If it demands networking, cgroups, WSLg, system-distro services, or another excluded facility:** stop expanding the stock kernel and pivot to reduced-init work.
+
+### 3. Productive work while awaiting approval/safe state
+
+Map the matching WSL source into the minimum retained path:
+
+```text
+VSOCK handshake
+→ distro VHDX attachment
+→ ext4 mount/root transition
+→ command creation
+→ stdio and exit-status relay
+→ termination/shutdown
+```
+
+Identify the exact source files and protocol messages involved, separating them from removable stock policy. This is non-disruptive and is the best parallel task.
+
+So the immediate choice is: **approve the guarded `K-OVERLAY-001` trial when live state is safe, while beginning the source-level control-plane map.**
+
+[2026-08-19T16:56:43.548Z] USER: do these things
+
+[2026-08-19T16:59:17.938Z] ASSISTANT: `LFS-Builder` has the pinned WSL source but not `rg`. I’ll use portable `grep/find` there, extract only the relevant source paths and symbols, then update the existing control-plane audit rather than add another document.
+
+[2026-08-19T17:06:04.369Z] ASSISTANT: Completed the non-disruptive work.
+
+### Control-plane mapping
+
+Updated:
+
+- `WSL-CONTROL-PLANE-AUDIT.md`
+- `STATUS.md`
+- `TASKS.md`
+
+Mapped the host and guest paths for:
+
+- VSOCK handshake
+- VHDX attachment and ext4 mounting
+- namespace/root transition
+- distro control channel
+- process creation
+- stdin/stdout/stderr and exit relay
+- termination
+
+A key finding is that reduced init requires **both host and guest changes**: stock `WslCoreVm` waits for GNS and advertises the Microsoft system distro.
+
+### Overlay trial
+
+The candidate and plan validation passed, but execution was correctly blocked:
+
+```text
+safe:false
+running: Debian-Recovered
+```
+
+All other safety checks passed. I did not stop the distro, shut down WSL, modify `.wslconfig`, elevate, or boot the custom kernel. A new explicit approval will be needed once preflight reports `safe:true`.
+
+### Verification and preservation
+
+- SQLite integrity: `ok`
+- 9 configurations, 8 completed trials, 113 reviewed annotations
+- Inventory tests passed
+- Harness plan-only tests passed
+- Markdown links and `git diff --check` passed
+- Commit pushed:
+
+```text
+3dccd11 Map the minimal WSL host and guest control path
+```
+
+Local `main` is clean and matches `origin/main`.
+
+[2026-08-19T17:06:47.773Z] USER: you can shudown wsl and do the other work
+
+[2026-08-19T17:07:57.608Z] ASSISTANT: The ordinary trial failed, but the harness reports verified restoration. I’ll now independently verify safe state, classify the highest checkpoint from the immutable ordinary evidence, synchronize the ledger/SQLite, and only consider ETW if that evidence cannot distinguish the next boundary.
+
+[2026-08-19T17:12:39.563Z] USER: try again
+
+[2026-08-19T17:14:17.741Z] ASSISTANT: The combined validation wrapper stopped after the self-test because `$LASTEXITCODE` was stale even though the self-test reported `safe:true`. I’ll rerun each PowerShell validation independently and judge its actual process result.
+
+[2026-08-19T17:15:28.723Z] ASSISTANT: The ordinary `K-OVERLAY-001` trial ran after the approved WSL shutdown.
+
+- Stock recovery verified; current state is `safe:true`.
+- Trial evidence was inconclusive: strict ceiling `B0`.
+- Overlayfs was neither proved nor disproved.
+- Evidence, metadata, SQLite, status, and tasks were synchronized.
+- Commit `189e6c1` was pushed; working tree is clean.
+- `K-OVERLAY-DIAG-001` plan validation passed.
+
+The next run requires **elevated WPR/ETW diagnostics**. Please explicitly approve elevation for `K-OVERLAY-DIAG-001`.
+
+[2026-08-19T17:15:55.559Z] USER: approved
+
+[2026-08-19T17:18:34.385Z] ASSISTANT: The elevated worker completed with exit code 1, which is expected when the candidate command fails. I’ll verify its durable safe-state result and ETW completion before interpreting the trace.
+
+[2026-08-19T17:25:35.094Z] ASSISTANT: Microsoft has now published tag `2.7.12` at commit `68f601b…`. I’ll pin that exact source in `LFS-Builder`, diff the mapped control path from 2.7.11, and then restore WSL to a stopped safe state under the existing shutdown approval.
+
+[2026-08-19T17:27:42.066Z] ASSISTANT: The reference search command hit shell quoting on a Markdown backtick. I’ll rerun it with a simpler pattern, then update only current references; immutable historical trial paths remain unchanged.
+
+[2026-08-19T17:31:36.192Z] ASSISTANT: The exact 2.7.12 build succeeded, but a second clean build produced different hashes. I won’t accept it as a baseline. I’ll compare ELF sections and embedded metadata to isolate the nondeterminism, fix the build recipe, and require two matching builds before updating tracked artifacts.
+
+[2026-08-19T17:33:25.464Z] ASSISTANT: The detached job directory was absent on the next poll, so this was not a build failure. I’ll verify `LFS-Builder` filesystem persistence and the helper’s destination identity before relaunching; I won’t assume the job ran.
+
+[2026-08-19T17:37:01.907Z] ASSISTANT: Setting `SOURCE_DATE_EPOCH` before compilation was insufficient. I’ll now compare per-object hashes across two builds to identify whether nondeterminism comes from compilation, linking, or archive creation before changing more flags.
+
+[2026-08-19T17:42:12.494Z] ASSISTANT: The second seeded build had not finalized at the polling deadline; unlike the earlier missing-job case, it was launched and verified alive. I’ll inspect its process and wait for its durable exit marker rather than treating the absent marker as failure.
+
+[2026-08-19T17:50:15.082Z] ASSISTANT: A repository-integrity check found that Git’s generic text normalization changes PowerShell-produced trial JSON bytes in a fresh clone, while manifests hash the original bytes. I’ll correct the attribute at the evidence-directory boundary so immutable trial artifacts are stored byte-for-byte, then verify every existing manifest before committing.
+
+[2026-08-19T17:51:12.478Z] ASSISTANT: Staging stopped only because the already-renamed old reference path no longer exists; the rename itself is already recorded. I’ll stage the remaining diagnostic evidence explicitly and then validate the complete index.
+
+[2026-08-19T17:51:49.275Z] ASSISTANT: The manifest index check confirmed that older manifests intentionally include locally retained, Git-ignored ETL/crash artifacts, so a repository-wide byte-policy rewrite would create a large historical diff without making those archives self-contained. I’ll scope byte preservation to the new diagnostic evidence and leave prior immutable records untouched.
+
+[2026-08-19T17:54:35.147Z] ASSISTANT: Approved diagnostic completed.
+
+### Result
+
+`K-OVERLAY-DIAG-001` proved:
+
+- Overlayfs removed the previous `mini_init` segfault and kernel panic.
+- The candidate still reached B3.
+- The next blocker is stock GNS networking:
+  `Expected message LxGnsMessageResult, but socket GNS was closed`.
+- B4 was not reached.
+- Networking is excluded, so additive stock-kernel discovery is now frozen.
+- Overlayfs is classified as stock-init policy, not a Minimal Viable WSL requirement.
+
+### Control-plane baseline
+
+- Pinned exact WSL 2.7.12 source: `68f601b…`.
+- Updated the host/guest source map.
+- Repaired build nondeterminism.
+- Two clean Linux-init/initrd builds now produce byte-identical hashes.
+
+### Preservation
+
+- Trial evidence, analysis, ledger, SQLite, documentation, and annotations synchronized.
+- Commit pushed:
+
+```text
+466d5ba Freeze stock discovery and pin control-plane baseline
+```
+
+- Working tree clean and matches `origin/main`.
+- Final canonical state: `safe:true`.
+- No WSL distributions or utility VM running; WPR idle; diagnostic relay removed.
+
+Next phase: create a disposable Hyper-V Windows VM and begin the reduced host-and-guest control plane.
+
+[2026-08-19T18:11:04.836Z] USER: this session history should be moved so that it can be found as part of C:/Users/jackc/git/ultra-minimal-wsl

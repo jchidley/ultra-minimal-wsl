@@ -56,6 +56,7 @@ The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates ha
 - `WSL-CONTROL-PLANE-AUDIT.md` — why stock `/init` is not the final minimum.
 - `MKROOT-MINIMAL-BOOT-METHOD.md` — rationale for the generic lower bound.
 - `inventory/README.md` — Kconfig graph and durable experiment records.
+- `session-history/README.md` — historical, grep-friendly project-session transcripts.
 
 ## Verify the repository
 
