@@ -28,28 +28,20 @@ Validated package baseline:
 
 Every completed custom trial restored the exact stock configuration and proved stock Debian startup. Detailed evidence remains in each trial’s `analysis.json` and manifest.
 
-## Prepared candidate
+## Overlay trial
 
-`K-OVERLAY-001` is derived from `K-STORAGE-001` with only:
+`K-OVERLAY-001` derived from `K-STORAGE-001` with explicit `CONFIG_OVERLAY_FS=y` and selected `CONFIG_FS_STACK=y`. Its ordinary unelevated trial completed with verified stock restoration but produced no guest log, kernel ring, crash dump, or command marker. The host reported `CreateVm/0x80072746` after networking fallback. The strict evidence ceiling is therefore B0, not evidence that the candidate regressed from its B3 parent.
 
-- explicit `CONFIG_OVERLAY_FS=y`;
-- selected `CONFIG_FS_STACK=y`.
+The trial neither proves nor disproves that overlayfs removed the prior stock-`mini_init` crash. A byte-identical diagnostic rerun is justified because ordinary evidence cannot classify the boundary, but requires separate approval and elevated WPR/ETW capture.
 
-Facts:
+Overlayfs remains a stock system-distro discovery candidate, not an accepted Minimal Viable WSL requirement.
 
-- kernel size: 3,777,536 bytes;
-- kernel SHA-256: `3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b`;
-- full-config SHA-256: `ab0c68a2e96b36a397226f71e45d59a99c59f10ac1019c62bfde4e321a45e3f7`;
-- optional overlay policy/debug defaults remain disabled;
-- config review, inventory synchronization, hashes, and ordinary plan validation pass;
-- it has not been booted or approved for boot.
-
-Overlayfs is being measured only because stock `mini_init` enters Microsoft’s system-distro overlay path. It is not accepted as a final Minimal Viable WSL requirement.
+Post-trial recovery independently reported `safe:true`: the exact `.wslconfig` and packaged hashes were restored, stock Debian booted, no distro or utility VM remained running, and WPR was idle.
 
 ## Inventory
 
 - 9 config snapshots;
-- 8 completed trials;
+- 9 completed trials;
 - 113 reviewed annotations;
 - SQLite integrity `ok` at the last synchronization.
 

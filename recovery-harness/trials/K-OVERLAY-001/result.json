@@ -1,0 +1,31 @@
+{
+    "trialId":  "K-OVERLAY-001",
+    "status":  "FAIL",
+    "startedUtc":  "2026-08-19T17:07:20.0648023Z",
+    "finishedUtc":  "2026-08-19T17:07:41.7234632Z",
+    "candidateKernel":  {
+                            "path":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\candidates\\K-OVERLAY-001\\linux-kernel",
+                            "length":  3777536,
+                            "sha256":  "3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b",
+                            "bootProtocol":  "2.15"
+                        },
+    "packagedKernel":  {
+                           "path":  "C:\\Program Files\\WSL\\tools\\kernel",
+                           "length":  17334784,
+                           "lastWriteUtc":  "2026-06-18T21:41:14.0000000Z",
+                           "sha256":  "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861"
+                       },
+    "wslVersion":  "WSL version: 2.7.12.0\r\n\r\nKernel version: 6.18.33.2-2\r\n\r\nWSLg version: 1.0.73.2\r\n\r\nMSRDC version: 1.2.7214\r\n\r\nDirect3D version: 1.611.1-81528511\r\n\r\nDXCore version: 10.0.26100.1-240331-1435.ge-release\r\n\r\nWindows version: 10.0.26200.9168",
+    "debugConsoleEnabled":  false,
+    "testResult":  {
+                       "exitCode":  -1,
+                       "timedOut":  false,
+                       "stdout":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\recovery-harness\\trials\\K-OVERLAY-001\\test-boot.stdout.log",
+                       "stderr":  "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\recovery-harness\\trials\\K-OVERLAY-001\\test-boot.stderr.log"
+                   },
+    "kernelLogResult":  null,
+    "stockRestoreVerified":  true,
+    "stockBootVerified":  true,
+    "primaryError":  "System.Management.Automation.RuntimeException: Test distro exited with code -1.",
+    "restoreError":  null
+}

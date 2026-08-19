@@ -1,0 +1,11 @@
+[wsl2]
+# Increased for compiling helix
+memory=8GB
+swap=4GB
+# No processor limit - use all 12 cores for maximum performance
+
+[experimental]
+# Enable mirrored networking - allows localhost to work between WSL and Windows
+networkingMode=mirrored
+# Use Windows host DNS config (router at 10.0.0.1)
+dnsTunneling=true

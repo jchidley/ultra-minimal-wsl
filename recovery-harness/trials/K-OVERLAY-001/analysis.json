@@ -1,0 +1,42 @@
+{
+  "trialId": "K-OVERLAY-001",
+  "classification": {
+    "highestCheckpoint": "B0",
+    "confidence": "high for the evidence ceiling, low for actual guest progress",
+    "checkpointAdvancedFromParent": false,
+    "basis": "The ordinary unelevated harness captured no guest console, kernel ring, ETW, crash dump, or command marker. The host reported a closed connection during CreateVm. Under the checkpoint contract, unobserved guest entry supports only B0 even though the parent configuration previously proved B3."
+  },
+  "parentArtifact": "K-STORAGE-001",
+  "artifactSha256": "3f5d6708e4a9eaaa230054a1962c584ac3e0a47f28485c1ab87a12c8e51dff3b",
+  "configSha256": "ab0c68a2e96b36a397226f71e45d59a99c59f10ac1019c62bfde4e321a45e3f7",
+  "bundleOutcome": {
+    "overlayEnabled": true,
+    "fsStackSelected": true,
+    "overlayPathObserved": false,
+    "commandDispatchObserved": false,
+    "retainProvisionally": false
+  },
+  "ordinaryEvidence": {
+    "trialStartedUtc": "2026-08-19T17:07:20.0648023Z",
+    "trialFinishedUtc": "2026-08-19T17:07:41.7234632Z",
+    "testExitCode": -1,
+    "testTimedOut": false,
+    "hostFailure": "Wsl/Service/CreateInstance/CreateVm/0x80072746: existing connection forcibly closed by remote host",
+    "networkingWarnings": [
+      "Mirrored networking was reported unsupported and fell back to NAT.",
+      "NAT configuration failed with VM_E_INVALID_STATE and fell back to networkingMode None."
+    ],
+    "guestLogAvailable": false,
+    "kernelDmesgAvailable": false,
+    "crashDumpAvailable": false,
+    "stockConfigRestored": true,
+    "stockBootVerified": true,
+    "stockKernelRelease": "6.18.33.2-microsoft-standard-WSL2"
+  },
+  "interpretation": [
+    "The networking messages do not establish the terminal guest failure. The same minimal lineage intentionally omits Hyper-V networking, and the host reported fallback to no networking.",
+    "This trial neither proves nor disproves that CONFIG_OVERLAY_FS removes the K-STORAGE-001 crash.",
+    "Parent-trial B3 evidence cannot be promoted to evidence that this particular boot reached B3."
+  ],
+  "decision": "Preserve this ordinary trial as inconclusive at B0. Do not add networking, cgroups, seccomp, page reporting, or console features from these host messages. A byte-identical K-OVERLAY diagnostic rerun with WPR/ETW is justified because ordinary evidence cannot classify the post-overlay boundary; it requires separate explicit approval and elevation."
+}

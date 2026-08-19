@@ -4,10 +4,10 @@
 
 ## Immediate
 
-1. Obtain fresh explicit approval and require canonical `safe:true`; do not stop a running distro automatically.
-2. Run `K-OVERLAY-001` with the ordinary unelevated kernel harness.
-3. Preserve trial evidence, append metadata, synchronize SQLite, and classify the highest checkpoint.
-4. Use elevated WPR/ETW diagnostics only if ordinary evidence is insufficient and separately approved.
+1. Preserve and commit the completed `K-OVERLAY-001` ordinary trial as inconclusive at the B0 evidence ceiling.
+2. Obtain separate explicit approval for elevation and a byte-identical `K-OVERLAY-DIAG-001` WPR/ETW rerun.
+3. Require canonical `safe:true`; do not stop a running distro automatically unless that interruption is also approved.
+4. Classify whether overlay removed the prior crash without adding networking or another excluded feature.
 5. Stop additive stock-init discovery if the next stable failure selects an excluded service rather than a retained control-contract primitive.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, page reporting, and extra console support unless the earliest stable failure selects one of them.
