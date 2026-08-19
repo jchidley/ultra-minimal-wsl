@@ -69,7 +69,7 @@ The first source candidate is preserved under `control-plane/` against pinned WS
 - two clean Linux-side builds in distinct output directories are byte-identical, with hashes recorded in `control-plane/candidates/minimal-v1/`;
 - the Windows side has not yet been built or runtime-tested.
 
-Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. No disposable VM has been created: no pinned Windows ISO or generalized VHDX is recorded, and elevated execution has not been separately approved.
+Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. The environment-dependent phase is explicitly deferred because Windows installation media and the Visual Studio toolchain are large inputs. No ISO will be downloaded, no disposable VM will be created, and no Hyper-V elevation will be attempted until that later test is separately selected and approved.
 
 ## Target gap
 

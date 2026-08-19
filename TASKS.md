@@ -5,10 +5,10 @@
 ## Immediate
 
 1. Keep additive stock-init kernel discovery frozen at `K-OVERLAY-DIAG-001`; do not add GNS or networking support.
-2. Record and hash approved Windows installation media, obtain separate elevation approval, and execute the plan-validated disposable Hyper-V VM creation.
-3. Install Windows, establish a stock WSL 2.7.12 recovery baseline, power the VM off, and create `controlled-package-baseline`.
-4. Build the `control-plane/minimal-v1` Windows service/package in the VM; its protocol fixture, host/guest patch, and reproducible Linux build are prepared.
-5. Define the controlled-package runtime record, then prove direct distro command/lifecycle handling and checkpoint recovery before further reduction.
+2. Keep the large Windows environment phase deferred: do not download an ISO, install Visual Studio, create a Hyper-V VM, or request elevation until that later test is separately selected.
+3. Continue source review of `control-plane/minimal-v1`, separating compile-time omissions from runtime-rejected excluded messages.
+4. Add host/guest protocol fixture tests for malformed sizes, excluded flags, direct command relay, exit status, and termination using the pinned ABI.
+5. Prepare—but do not execute—the controlled-package runtime record and recovery assertions needed for the deferred VM test.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.
 
