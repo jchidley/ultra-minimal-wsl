@@ -10,6 +10,7 @@ LOCALIZATION_HEADER=${LOCALIZATION_HEADER:-$ROOT/Localization.h}
 JOBS=${JOBS:-$(nproc)}
 BUILD=${BUILD:-$ROOT/native-build}
 CACHE=${CACHE:-$ROOT/cache}
+OFFLINE=${OFFLINE:-0}
 DEPS=$ROOT/deps
 OUT=$BUILD/out
 OBJ=$BUILD/obj
@@ -23,6 +24,7 @@ wsldeps_sha=893411830c3bbf58744c44da8d6361018bfee41f22923697b85033aebfc94c7b
 gsl_sha=f0e32cb10654fea91ad56bde89170d78cfbf4363ee0b01d8f097de2ba49f6ce9
 json_sha=42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
 localization_sha=374fec04eeff025d2500ff2fcaf61b6f8421debb7d26df3030c24a01feaa8515
+feed=https://pkgs.dev.azure.com/shine-oss/13eb32df-d33f-470f-b930-499535a958b4/_packaging/7925a3a1-b93c-4977-8a97-5b877bf2068b/nuget/v3/flat2
 
 fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null || fail "missing command: $1"; }
@@ -43,16 +45,36 @@ export SOURCE_DATE_EPOCH
 printf '%s  %s\n' "$localization_sha" "$LOCALIZATION_HEADER" | sha256sum -c -
 
 mkdir -p "$CACHE" "$DEPS" "$BUILD"
-require_cached() {
-    local artifact=$1 sha=$2 path=$CACHE/$artifact
-    [[ -f $path ]] || fail "missing cached artifact: $path"
-    printf '%s  %s\n' "$sha" "$path" | sha256sum -c - ||
-        fail "cached artifact failed SHA-256 verification: $path"
+cache_artifact() {
+    local artifact=$1 url=$2 sha=$3 path temporary
+    path=$CACHE/$artifact
+    if [[ -f $path ]] && printf '%s  %s\n' "$sha" "$path" | sha256sum -c - >/dev/null 2>&1; then
+        printf 'cache hit: %s\n' "$artifact"
+        return
+    fi
+    [[ $OFFLINE == 0 ]] || fail "artifact is absent or invalid in offline cache: $path"
+    need curl
+    temporary=$path.partial.$$
+    rm -f "$temporary"
+    printf 'cache miss: downloading %s\n' "$artifact"
+    if ! curl -fL --retry 10 --retry-delay 2 --retry-all-errors -o "$temporary" "$url"; then
+        rm -f "$temporary"
+        fail "artifact download failed: $artifact"
+    fi
+    if ! printf '%s  %s\n' "$sha" "$temporary" | sha256sum -c -; then
+        rm -f "$temporary"
+        fail "downloaded artifact failed SHA-256 verification: $artifact"
+    fi
+    mv -f "$temporary" "$path"
 }
-require_cached "microsoft.wsl.linuxsdk.$linuxsdk_version.nupkg" "$linuxsdk_sha"
-require_cached "microsoft.wsl.dependencies.amd64fre.$wsldeps_version.nupkg" "$wsldeps_sha"
-require_cached gsl-v4.0.0.tar.gz "$gsl_sha"
-require_cached json-v3.12.0.tar.xz "$json_sha"
+cache_artifact "microsoft.wsl.linuxsdk.$linuxsdk_version.nupkg" \
+    "$feed/microsoft.wsl.linuxsdk/$linuxsdk_version/microsoft.wsl.linuxsdk.$linuxsdk_version.nupkg" "$linuxsdk_sha"
+cache_artifact "microsoft.wsl.dependencies.amd64fre.$wsldeps_version.nupkg" \
+    "$feed/microsoft.wsl.dependencies.amd64fre/$wsldeps_version/microsoft.wsl.dependencies.amd64fre.$wsldeps_version.nupkg" "$wsldeps_sha"
+cache_artifact gsl-v4.0.0.tar.gz \
+    https://github.com/microsoft/GSL/archive/refs/tags/v4.0.0.tar.gz "$gsl_sha"
+cache_artifact json-v3.12.0.tar.xz \
+    https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz "$json_sha"
 
 if [[ ! -f $DEPS/.extracted-v1 ]]; then
     rm -rf "$DEPS"

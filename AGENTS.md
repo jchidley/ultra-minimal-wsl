@@ -12,7 +12,7 @@ Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Query `inventory/kconf
 
 ## Local inputs
 
-Ordinary build, extraction, and trial workflows must not download dependencies or artifacts. Consume pinned, hash-verified local inputs; where reusable archives are necessary, use an explicitly configured local cache and fail closed when an entry is missing or corrupt. Populate that cache only as a separate, deliberate operation.
+Ordinary build, extraction, and trial workflows must reuse pinned, hash-verified local inputs rather than repeatedly downloading them. Where reusable archives are necessary, use an explicitly configured local cache: accept only verified cache hits, download and atomically cache a missing or invalid entry, then verify it before use. Provide an offline mode that fails closed instead of accessing the network.
 
 ## Candidate records
 
