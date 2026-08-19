@@ -88,6 +88,8 @@ def main() -> None:
     set_parser = sub.add_parser("set")
     set_parser.add_argument("symbol")
     set_parser.add_argument("assignments", nargs="+", metavar="FIELD=VALUE")
+    trial_parser = sub.add_parser("trial")
+    trial_parser.add_argument("trial_id", nargs="?")
     args = parser.parse_args()
 
     db = sqlite3.connect(Path(args.db))
@@ -128,6 +130,28 @@ def main() -> None:
         db.commit()
         export_annotations(db, Path(args.annotations))
         print(f"Updated CONFIG_{name} and {args.annotations}")
+    elif args.command == "trial":
+        if not db.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='view' AND name='trial_inventory'"
+        ).fetchone():
+            raise SystemExit("Trial inventory is absent; run tools/inventory_records.py")
+        if args.trial_id:
+            cursor = db.execute(
+                "SELECT * FROM trial_inventory WHERE trial_id=?", (args.trial_id,)
+            )
+            row = cursor.fetchone()
+            if not row:
+                raise SystemExit(f"Unknown trial {args.trial_id}")
+            for label, value in zip((item[0] for item in cursor.description), row):
+                if value not in (None, ""):
+                    print(f"{label}: {value}")
+        else:
+            for row in db.execute(
+                """SELECT trial_id,status,parent_trial,config_name,change_group,
+                          boot_level,stock_restore_verified
+                     FROM trial_inventory ORDER BY started_utc"""
+            ):
+                print("\t".join(str(value) for value in row))
     db.close()
 
 

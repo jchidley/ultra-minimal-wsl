@@ -19,6 +19,8 @@ from pathlib import Path
 
 import kconfiglib
 
+from inventory_records import parse_config
+
 # Large driver menus can produce deeply nested OR expressions.
 sys.setrecursionlimit(100_000)
 
@@ -343,12 +345,20 @@ def main() -> None:
                 for target in expression_symbols(condition, defined):
                     add_edge(db, sym.name, target, "range_condition", expression_text(condition), origin)
 
+    symbol_types = {sym.name: TYPE_NAMES.get(sym.type, str(sym.type)) for sym in defined}
     for name, path in configs:
         db.execute("INSERT INTO configs VALUES (?,?)", (name, str(path)))
         kconf.load_config(str(path), replace=True)
         db.executemany(
             "INSERT INTO config_values VALUES (?,?,?)",
             ((name, sym.name, sym.str_value) for sym in defined),
+        )
+        # Kconfig reevaluates compiler-derived symbols in the current environment.
+        # Restore values explicitly recorded in the archived generated config so
+        # snapshots compare the actual tested artifacts.
+        db.executemany(
+            "UPDATE config_values SET value=? WHERE config_name=? AND symbol=?",
+            ((value, name, symbol) for symbol, value in parse_config(path, symbol_types).items()),
         )
 
     for sym in sorted(defined, key=lambda item: item.name):

@@ -1,49 +1,56 @@
 # AGENTS.md
 
+## Objective
+
+Produce the smallest reproducible WSL kernel config that boots the mkroot
+Toybox system, then Alpine. Defer networking, DrvFs, systemd, containers, GUI,
+and unrelated Microsoft control-plane policy.
+
 ## Read first
 
-Current facts and work order are in `STATUS.md` and `TASKS.md`. Trial rules are
-in `MINIMAL-BOOT-PLAN.md`; recovery details are in
-`WSL-DEVELOPMENT-AND-RECOVERY.md` and `recovery-harness/README.md`.
+Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Treat
+`inventory/kconfig-dependencies.sqlite` as the searchable experiment record and
+the CSV manifests under `inventory/` as its durable inputs.
 
-## Non-disruptive commands
+## Record every candidate
 
-Run Windows PowerShell through `windows-env/ps-exec` from Git Bash:
+Before any boot:
+
+1. Add the full config, parent, hash, and trial ID to
+   `inventory/config-snapshots.csv`.
+2. Review explicit and selected symbols with `tools/inventory.py`; update
+   annotations only through `tools/inventory.py set`.
+3. Run `uv run python tools/inventory_records.py` and require SQLite integrity
+   `ok`.
+4. Plan-validate the candidate and obtain explicit user approval.
+
+After a trial, require the harness to append `inventory/trials.csv`; add one
+`inventory/trial-metadata.csv` row, preserve `analysis.json`, and rerun the
+inventory synchronizer. Never rewrite completed ledger rows or trial evidence.
+
+## Safety
+
+- Require explicit approval before `-Execute`, WSL shutdown, `.wslconfig`
+  changes, elevation, or custom-kernel boot.
+- Never write under `C:\Program Files\WSL` or replace its initrd.
+- Keep builds and source worktrees on `LFS-Builder` ext4.
+- Commit configs, metadata, hashes, extracted evidence, and analysis; exclude
+  reproducible binaries and raw ETL/XML.
+- Do not accept new WSL package hashes without an approved stock recovery trial.
+
+## Commands
 
 ```bash
-~/git/agent-skills/skills/windows-env/ps-exec --stdin <<'POWERSHELL'
-$project = 'C:\Users\jackc\git\ultra-minimal-wsl'
-& "$project\tools\Test-WslSafeState.ps1"
-POWERSHELL
-
-~/git/agent-skills/skills/windows-env/ps-exec --stdin <<'POWERSHELL'
-$project = 'C:\Users\jackc\git\ultra-minimal-wsl'
-& "$project\tools\Test-WslKernelTrial.ps1" -ProjectRoot $project
-POWERSHELL
+uv run python tools/inventory.py trial
+uv run python tools/inventory.py show CONFIG_<SYMBOL>
+uv run python tools/inventory_records.py
+uv run python -m unittest tools.test_inventory_records
 ```
 
-The safe-state verifier emits JSON and may intentionally exit 1 when installed
-WSL state differs from the recovery-validated baseline. Diagnose; do not edit
-the baseline merely to make it pass.
+Run Windows scripts only through `windows-env/ps-exec`. Use
+`tools/Test-WslSafeState.ps1` for live state and `tools/Test-WslKernelTrial.ps1`
+for non-mutating trial validation. A timeout does not prove a remote or elevated
+process stopped; verify durable status independently.
 
-## Boundaries
-
-- WSL kernel selection and shutdown affect every WSL 2 distribution.
-- Require explicit user approval before any `-Execute` trial, WSL shutdown,
-  `.wslconfig` change, elevation, or custom-kernel boot.
-- Never write under `C:\Program Files\WSL` or manually replace its initrd.
-- Preserve completed trial directories and ledger rows as immutable evidence.
-- Do not accept new WSL version/package hashes without a successful approved
-  stock recovery validation.
-- Keep builds and source worktrees on `LFS-Builder` ext4, not `/mnt/c`.
-- Keep ignored binaries and raw traces out of Git; commit configs, metadata,
-  hashes, extracted evidence, and analysis.
-
-## Gotchas
-
-- Use `windows-env/wsl-exec` and `windows-env/ps-exec` at shell boundaries;
-  do not reconstruct nested `wsl.exe` or PowerShell command strings.
-- A caller timeout does not prove a destination build or elevated process
-  stopped. Use durable status/log files and verify independently.
-- Paths recorded in prior trial logs and `inventory/trials.csv` are historical
-  evidence and may refer to the former Downloads location; do not rewrite them.
+Historical paths in completed trial records may refer to the former Downloads
+location. Preserve them.

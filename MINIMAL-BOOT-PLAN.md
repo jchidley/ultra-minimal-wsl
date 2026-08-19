@@ -69,7 +69,8 @@ Do not update WSL, Windows, the kernel source, Toybox, Alpine or the compiler in
 
 The experiment uses machine-searchable artifacts under `inventory/`, generated from the exact 6.18 Kconfig tree:
 
-- `kconfig-dependencies.sqlite` — canonical searchable relational graph and config snapshots;
+- `kconfig-dependencies.sqlite` — canonical searchable graph, config snapshots, annotations, and trial inventory;
+- `config-snapshots.csv` — durable config path, parent, hash, and trial manifest;
 - `annotations.csv` — editable checklist and classification data, one row per symbol;
 - `dependencies.csv` — all dependency, select, imply, default, range and prompt-condition edges;
 - `symbols.csv` — symbol type, prompt, help, full dependency expression and source locations;
@@ -78,7 +79,8 @@ The experiment uses machine-searchable artifacts under `inventory/`, generated f
 - `review-queue.csv` — dependency summaries plus checklist/classification columns;
 - `stage1-enabled-review.csv` — smaller working set containing symbols enabled in Stage 1;
 - `summary.json` — generation counts and inputs;
-- `trials.csv` — append-only boot-trial ledger, currently header-only.
+- `trials.csv` — immutable append-only boot-trial ledger;
+- `trial-metadata.csv` — durable supplements for omitted historical ledger fields.
 
 The inventory must be regenerated whenever the kernel source revision, architecture, mkroot config or candidate configs change. `annotations.csv` is imported during regeneration so reviewed classifications survive. The generated database records parser compatibility transformations and source paths.
 
@@ -119,9 +121,10 @@ The inventory must be regenerated whenever the kernel source revision, architect
      rationale="Hyper-V guest core"
    ```
 
-4. Do not manually edit generated CSVs other than `annotations.csv`.
-5. Before a trial, ensure every symbol in its requested fragment has been reviewed, and inspect incoming `selects`/`implies` as well as its dependency expression.
-6. After Kconfig expansion, compare requested versus resulting values and classify newly auto-selected symbols as `TRANSITIVE` or return the fragment for review.
+4. Do not manually edit generated CSVs; treat `annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv` as durable inputs.
+5. Before a trial, add the candidate full config and hash to `config-snapshots.csv`, ensure every requested/selected symbol is reviewed, and inspect incoming `selects`/`implies` plus dependency expressions.
+6. Run `uv run python tools/inventory_records.py`; require SQLite integrity `ok` and a queryable candidate snapshot.
+7. After Kconfig expansion, compare requested versus resulting values and classify newly auto-selected symbols as `TRANSITIVE` or return the fragment for review.
 
 CSV supports spreadsheet review; SQLite supports exact graph queries and joins. The SQLite schema stores `symbols`, `edges`, `configs`, `config_values` and `annotations`, with `dependency_list`, `config_differences` and `review_queue` views.
 
@@ -148,7 +151,7 @@ Documentation status and experimental requirement status are separate columns. F
 
 A feature is not called “required” merely because it appears in Microsoft’s config or in a successful candidate. It becomes proven required only after a controlled ablation fails twice and restoring it passes. Conversely, documented rationale should be recorded before testing so that we do not rediscover an already-known purpose from crash logs.
 
-The append-only ledger is `inventory/trials.csv`. It records trial status/timestamps, source and toolchain, parent/change group, requested and auto-selected symbols, config/image hashes, boot level, Toybox and Alpine results, stable failure signature, Windows/kernel/crash logs, classification and confirmation that the stock kernel was restored. No new trial may begin until the previous row has a terminal status and recovery result.
+The immutable ledger is `inventory/trials.csv`; `inventory/trial-metadata.csv` supplements omitted historical fields without rewriting evidence. Their SQLite `trial_inventory` view records status/timestamps, source and toolchain, parent/change group, requested and auto-selected symbols, config/image hashes, boot level, Toybox and Alpine results, failure evidence, analysis path, classification, and stock restoration. No new trial may begin until the previous row has a terminal status and recovery result and both inputs have been synchronized.
 
 ## Boot checkpoints
 
@@ -175,7 +178,7 @@ Then each WSL trial receives the highest checkpoint reached:
 | `B6-T` | Toybox smoke test passes |
 | `B6-A` | Alpine smoke test passes |
 
-This classification is essential: the previous Stage 3 kernel reached approximately `B4` and then lost `mini_init`, whereas Stage 2 failed much earlier. Those are different missing dependency groups.
+This classification is essential: later exact evidence places the Stage 3-equivalent post-ext4 `mini_init` crash at `B3`, whereas Stage 2 failed much earlier. Those are different missing dependency groups.
 
 ## Minimal smoke tests
 
@@ -289,7 +292,7 @@ Completed evidence:
 
 `K-HVCORE-DIAG-001` reran the byte-identical artifact under Microsoft's pinned WSL ETW profile with transactionally enabled `debugConsole=true`. It proved `B1`: Linux entered, detected Hyper-V, unpacked the stock initramfs, and ran stock `/init`. It did not enumerate VMBus devices, so `B2` was not reached. Missing `/dev/hvc1` and `/dev/console` were observed, followed by the fatal control-plane error `UtilConnectVsock: socket failed 97` (`EAFNOSUPPORT`). Recovery and ETL finalization passed.
 
-The evidence-directed next bundle is the minimal ACPI/platform-enumeration closure plus built-in `VSOCKETS` and `HYPERV_VSOCKETS`. `K-HOSTCHAN-001` is built and plan-validated but not booted. Storage, networking, init-substrate, and the separate virtio/HVC console bundle remain excluded until this host-channel gate is tested with a new explicit decision.
+Approved `K-HOSTCHAN-001` added the minimal ACPI/platform-enumeration closure plus built-in `VSOCKETS` and `HYPERV_VSOCKETS`. It proved VMBus 5.3 enumeration, AF_VSOCK/`hv_sock`, and mini-init host messaging, advancing to `B2`. Exact WSL 2.7.12 source correlation later mapped the terminal exception to `GetLunDeviceName` timing out because Hyper-V storage was absent. The cgroup error was non-terminal, mirrored fallback was caused by absent seccomp, and GNS closure was consequential. No root mount appeared, so `B3` was not assigned. The ACPI/VSOCK bundle is retained provisionally. Approved `K-STORAGE-001` added only `SCSI_LOWLEVEL` plus `HYPERV_STORAGE` and proved `B3`: `storvsc` attached two disks and mounted the system-distro ext4 root. `mini_init` then reproduced Stage 3's exact post-mount segfault and panic. Exact source next calls `UtilMountOverlayFs`, while both failing configs have `OVERLAY_FS=n`. The next non-boot preparation is therefore the narrow `OVERLAY_FS`/selected-`FS_STACK` closure. See `POST-B2-CLOSURE-ANALYSIS.md` and `recovery-harness/trials/K-STORAGE-001/analysis.json`.
 
 ### Phase 1D — Reduced control-plane track
 

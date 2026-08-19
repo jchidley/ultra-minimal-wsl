@@ -2,6 +2,11 @@
 
 Prepared 2026-08-17. The normal Microsoft kernel remains active; no custom kernel is currently configured in `C:\Users\jackc\.wslconfig`.
 
+The current objective is the smallest reproducible WSL kernel config that boots
+the mkroot Toybox system and then Alpine. Networking, DrvFs, systemd,
+containers, GUI integration, and unrelated Microsoft control-plane policy are
+deferred.
+
 ## Source checkouts (WSL ext4)
 
 Inside the dedicated `LFS-Builder` distro:
@@ -160,7 +165,7 @@ The kernel-enabled mkroot baseline has now been built in protected worktrees and
 
 ## Minimal-boot experiment plan and dependency inventory
 
-Rob Landley’s documented minimal-boot derivation is summarized with primary sources in `MKROOT-MINIMAL-BOOT-METHOD.md`. The WSL adaptation plan is in `MINIMAL-BOOT-PLAN.md`, current active/optional work is in `TASKS.md`, supported kernel switching and Microsoft’s development workflow are explained in `WSL-DEVELOPMENT-AND-RECOVERY.md`, the prepared ETL/debug-console gate is documented in `PRE-DISPATCH-DIAGNOSTICS.md`, kernel configuration provenance is recorded in `KERNEL-CONFIG-PROVENANCE.md`, and the control-plane audit is in `WSL-CONTROL-PLANE-AUDIT.md`.
+Rob Landley’s documented minimal-boot derivation is summarized with primary sources in `MKROOT-MINIMAL-BOOT-METHOD.md`. The WSL adaptation plan is in `MINIMAL-BOOT-PLAN.md`, current active/optional work is in `TASKS.md`, supported kernel switching and Microsoft’s development workflow are explained in `WSL-DEVELOPMENT-AND-RECOVERY.md`, the ETL/debug-console workflow is documented in `PRE-DISPATCH-DIAGNOSTICS.md`, the corrected B2-to-B3 diagnosis is in `POST-B2-CLOSURE-ANALYSIS.md`, kernel configuration provenance is recorded in `KERNEL-CONFIG-PROVENANCE.md`, and the control-plane audit is in `WSL-CONTROL-PLANE-AUDIT.md`.
 
 The searchable Kconfig dependency graph and review checklist are under `inventory/`; begin with `inventory/README.md`. It contains SQLite and CSV representations of 18,449 symbols, 126,629 conditional relationships and five config snapshots including mkroot. `inventory/mkroot-stage1-delta.csv` contains the 1,792-symbol lower-to-upper-bound review queue.
 

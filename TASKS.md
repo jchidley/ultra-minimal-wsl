@@ -17,37 +17,52 @@ Completed:
 - `K-HVCORE-001` added the reviewed nine-symbol Hyper-V execution closure but initially had no observable output;
 - `K-HVCORE-DIAG-001` reran that unchanged artifact with ETL/debug-console diagnostics, proved `B1`, and isolated missing VMBus platform enumeration plus fatal VSOCK `EAFNOSUPPORT`;
 - all custom trials restored exact stock state and proved stock Debian startup;
-- the evidence-directed `K-HOSTCHAN-001` candidate is built, hashed, reviewed, and plan-validated but not booted.
+- `K-RECOVERY-002` revalidated WSL 2.7.12.0 and its new packaged initrd, and the canonical safe-state verifier passes;
+- `K-HOSTCHAN-001` proved ACPI-driven VMBus 5.3 enumeration plus AF_VSOCK/`hv_sock`, advancing the sequential checkpoint from `B1` to `B2`;
+- post-trial source/trace correlation corrected the preliminary diagnosis: the terminal exception was WSL 2.7.12 `GetLunDeviceName` timing out because Hyper-V storage was absent; cgroup failure was non-terminal, and mirrored-mode rejection was caused by `SeccompAvailable=0`;
+- `K-STORAGE-001` added only `SCSI_LOWLEVEL` and `HYPERV_STORAGE`, proved `B3` through direct `storvsc` disk and system-distro ext4 evidence, then reproduced Stage 3's exact `mini_init` segfault/panic;
+- exact restoration, stock recovery, WPR/relay cleanup, terminal ledger state, decoded ETL, extracted logs, crash artifacts, analysis, and hashes all passed;
+- the canonical safe-state verifier passes;
+- SQLite records the five reference configs, three evidence-directed candidate configs, and all eight trials; durable config/trial manifests supplement immutable ledger rows and integrity passes.
 
 Not completed:
 
-- the automatic WSL 2.7.12 update changed the packaged initrd after the 2.7.11 recovery gate; the new package state has not been recovery-validated or accepted in `expected-safe-state.json`;
-- `K-HOSTCHAN-001` has not been booted, so VMBus/VSOCK restoration is not yet demonstrated;
+- no candidate has kept `mini_init` alive after the system-distro root mount (`B4`);
+- the narrow overlayfs candidate has not been generated or built;
 - most of the 1,792-symbol delta remains unreviewed;
 - no reduced Microsoft init exists;
 - no custom initrd or WSL package has been deployed.
 
-## Immediate task: revalidate stock state after the WSL 2.7.12 update
+## Immediate task: classify and prepare the post-B3 overlay closure
 
-`K-HVCORE-DIAG-001` reran the unchanged Hyper-V-core artifact under the pinned ETL/debug-console workflow. It advanced the evidence to `B1`: Linux and stock `/init` ran, but no VMBus device enumerated. Missing `/dev/hvc1` and `/dev/console` were observed; the final fatal error was `UtilConnectVsock` errno 97 (`EAFNOSUPPORT`). Recovery and evidence capture passed.
+`POST-B2-CLOSURE-ANALYSIS.md` correlates the immutable `K-HOSTCHAN-001` trace with exact WSL 2.7.12 source commit `68f601b...69ade`:
 
-Completed after diagnosis:
+- `CONFIG_CGROUPS` failure was logged, but stock mini-init ignores the cgroup2 mount result and continued;
+- mirrored networking was rejected because mini-init reported `SeccompAvailable=0`; `CONFIG_NET_NS` was not the observed reason;
+- the terminal guest exception was exact `main.cpp:972`, inside `GetLunDeviceName`, after its 15-second retry opening the Hyper-V SCSI LUN sysfs block path;
+- the subsequent GNS socket closure and host `0x80072746` were consequences of guest termination;
+- `CONFIG_SCSI=y` and `CONFIG_HYPERV_VMBUS=y` are already present, leaving the reviewed explicit closure `CONFIG_SCSI_LOWLEVEL=y` plus `CONFIG_HYPERV_STORAGE=y`.
 
-1. raw ETL, decoded XML, extracted custom/stock guest logs, analysis, and hashes are preserved under `recovery-harness/trials/K-HVCORE-DIAG-001/`;
-2. `CONFIG_ACPI`, `CONFIG_VSOCKETS`, `CONFIG_HYPERV_VSOCKETS`, console symbols, and Kconfig closure were reviewed/classified in the inventory;
-3. `K-HOSTCHAN-001` was built with the minimal controlled ACPI platform-enumeration plus Hyper-V VSOCK bundle;
-4. build hashes and plan-only diagnostic validation passed;
-5. storage, networking, init-substrate, and virtio/HVC console additions remain excluded.
+`K-STORAGE-001` evidence:
+
+- kernel SHA-256 `3d3a4f9cee018590d986912b4379119cf22bb8b6e4aee3c29ad43f5450efa367`;
+- `hv_storvsc` registered, `storvsc_host_t` appeared, two Microsoft Virtual Disks attached, and `EXT4-fs (sda)` mounted read-only;
+- `mini_init` then segfaulted at `0x2e99dc`, followed by `Attempted to kill init` panic;
+- the crash is byte-for-byte equivalent at the fault site to Stage 3;
+- exact source calls `UtilMountOverlayFs` immediately after this ext4 mount, and `CONFIG_OVERLAY_FS=n` in both failing configs;
+- `OVERLAY_FS` selects `FS_STACK`; `EXPORTFS` is already enabled.
 
 Next:
 
-1. obtain explicit approval for a new stock recovery validation under WSL 2.7.12;
-2. require exact `.wslconfig` restoration, packaged kernel/initrd evidence, Toybox success, and stock recovery before updating `expected-safe-state.json`;
-3. only after the canonical safe-state verifier passes, obtain a separate explicit decision before booting `K-HOSTCHAN-001`;
-4. run it through `tools/Invoke-WslDiagnosticKernelTrial.ps1` with raw ETL and `debugConsole=true`;
-5. require VMBus and `hv_sock` evidence before assigning `B2` or retaining the bundle, then classify the next exact failure.
+1. generate a candidate from `K-STORAGE-001` with only `CONFIG_OVERLAY_FS=y` explicitly added;
+2. add its full config, parent, hash, and trial ID to `inventory/config-snapshots.csv`;
+3. review all resulting defaults, especially overlay redirect/xino options, and hold unrelated options disabled where possible;
+4. run `uv run python tools/inventory_records.py` and require SQLite integrity `ok`;
+5. build, hash, archive, and plan-validate without booting;
+6. continue excluding cgroups, networking/seccomp, page reporting, and console support;
+7. obtain new explicit approval before any overlay candidate boot.
 
-Do not manually change the installed initrd. The installed 2.7.12 control plane becomes the new fixed condition only after the recovery gate passes.
+Do not manually change the installed initrd. WSL 2.7.12.0 and initrd `a76ddd9b...6b118` are now the recovery-validated fixed condition.
 
 The harness must never write under `C:\Program Files\WSL`. It eagerly closes ledger reads, retries genuine transient locks, rejects conflicting duplicate trial IDs, and can finalize a completed PASS result from its journal after independently reverifying stock startup.
 
