@@ -16,6 +16,28 @@
     "init_debug_sha256": "47fdd2a0837969741f47b3c5b4a14d926e1a57e8c081edfcd74c7c38e36e2b6b",
     "initrd_sha256": "bfe154b4abaca10da0336e376996488549a264e4b91360f3bfbfbf4394b168f6"
   },
+  "static_next_phase": {
+    "restart_brief": "NEXT-SESSION.md",
+    "preserved_parent": "minimal-v1",
+    "new_candidates": [
+      "minimal-v2-fail-closed",
+      "minimal-v2-stock-ns",
+      "minimal-v2-mount-ns"
+    ],
+    "sequence": [
+      "layer fail-closed mini-init and distro-init dispatch without rewriting minimal-v1",
+      "extend protocol-policy tests and mutation-test the message allowlist",
+      "derive stock-namespace and mount-only variants from the same fail-closed parent",
+      "build each Linux variant twice with OFFLINE=1 and MINIMAL_LINK=1",
+      "record separate patch, build, reproducibility, and size hashes",
+      "synchronize this plan without making it executable"
+    ],
+    "forbidden_claims": [
+      "no B4, B5, or B6 result without controlled-package runtime evidence",
+      "no namespace Kconfig promotion from source inspection alone",
+      "no approval carried from static preparation"
+    ]
+  },
   "missing_before_plan_validation": [
     "approved and hash-recorded Windows installation media",
     "disposable Hyper-V Windows VM",

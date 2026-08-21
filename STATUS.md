@@ -75,6 +75,18 @@ The first source candidate is preserved under `control-plane/` against pinned WS
 
 Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. The environment-dependent phase is explicitly deferred because Windows installation media and the Visual Studio toolchain are large inputs. No ISO will be downloaded, no disposable VM will be created, and no Hyper-V elevation will be attempted until that later test is separately selected and approved.
 
+## Restart point
+
+The next source-only candidate must be layered on preserved `minimal-v1`, not rewrite its recorded patch or hashes:
+
+1. create `minimal-v2-fail-closed`, rejecting every non-contract mini-init and distro-init operation while retaining handshake, one LUN/ext4 launch, initialization, direct process relay, exit status, and termination;
+2. extend protocol-policy tests to prove each removed message family is rejected;
+3. derive two namespace variants from that same parent: current IPC/mount/PID/UTS behavior and mount-namespace-only behavior;
+4. reproducibly build both Linux variants with `MINIMAL_LINK=1`, record hashes and size deltas, and update the non-executable runtime plan;
+5. do not promote namespace Kconfig or claim runtime success without the deferred controlled-package test.
+
+`NEXT-SESSION.md` is the copy/paste restart brief.
+
 ## Target gap
 
 No mkroot-derived candidate has reached Toybox command dispatch under WSL. Additive stock discovery has now reached an excluded service boundary, so the next phase is the reduced host and guest control plane. It must preserve VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing the system distro, GNS, and unrelated stock policy. Neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet.

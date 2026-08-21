@@ -50,8 +50,9 @@ This proves deterministic dead-section elimination, not behavioral necessity. It
 
 ## Next source gates
 
-1. Make every non-contract mini-init message fail closed.
-2. Make distro-init dispatch fail closed for timezone, DrvFs, interop, and management messages.
-3. Decide namespace flags one coherent bundle at a time; do not add all namespace Kconfig merely to preserve stock code.
-4. Keep five-socket wire compatibility until an unmodified `wsl.exe` command succeeds; then test whether the unused interop socket can be removed jointly from host and guest.
-5. Compile the Windows package in the deferred VM before treating the patch as a candidate for boot.
+1. Preserve this patch and its hashes; layer `minimal-v2-fail-closed` rather than rewriting `minimal-v1`.
+2. Make every non-contract mini-init message fail closed.
+3. Make distro-init dispatch fail closed for timezone, DrvFs, interop, and management messages.
+4. From that parent, record `minimal-v2-stock-ns` and `minimal-v2-mount-ns`; do not add all namespace Kconfig merely to preserve stock code.
+5. Keep five-socket wire compatibility until an unmodified `wsl.exe` command succeeds; then test whether the unused interop socket can be removed jointly from host and guest.
+6. Compile the Windows package in the deferred VM before treating either namespace variant as a candidate for boot.

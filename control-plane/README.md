@@ -38,6 +38,18 @@ OFFLINE=1 MINIMAL_LINK=1 EXPECTED_SOURCE_PATCH_SHA256="$patch_sha" \
   /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/build-control-plane-linux.sh
 ```
 
+## Current source-only phase
+
+Preserve the recorded `minimal-v1` patch and hashes. Next:
+
+1. layer `minimal-v2-fail-closed` to allow only contract messages on mini-init and distro-init channels;
+2. extend policy tests and mutation-test the allowlist;
+3. derive `minimal-v2-stock-ns` and `minimal-v2-mount-ns` from the same parent;
+4. produce two byte-identical `OFFLINE=1 MINIMAL_LINK=1` Linux builds per variant;
+5. append candidate records and synchronize the deferred plan without claiming runtime evidence.
+
+The exact restart prompt and verification checklist are in `../NEXT-SESSION.md`.
+
 ## Disposable Hyper-V VM
 
 `tools/New-DisposableWslDevVm.ps1` creates a Generation 2 VM from a Windows ISO or generalized Windows VHDX. It enables Secure Boot, vTPM, dynamic memory, and nested virtualization; disables automatic checkpoints; creates `clean-shell`; and deliberately leaves the VM off. It refuses execution without both elevation and `-Execute`.
@@ -60,6 +72,15 @@ This creates `controlled-package-baseline`. Neither script starts or stops a VM 
 `deferred-runtime-plan.json` is deliberately non-executable. It records missing inputs, safety preconditions, the eventual runtime sequence, acceptance evidence, recovery assertions, and stop conditions without reserving a trial ledger row or carrying approval forward.
 
 ## Remaining gates
+
+### Source-only gates
+
+1. Preserve `minimal-v1`; record layered fail-closed and namespace variants separately.
+2. Prove the dispatch allowlist with protocol-policy and mutation tests.
+3. Produce reproducible minimal-link Linux artifacts for both namespace variants.
+4. Keep the non-executable runtime plan synchronized.
+
+### Deferred environment gates
 
 1. Record and hash approved Windows installation media.
 2. Obtain explicit approval for elevated VM creation.

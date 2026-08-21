@@ -45,7 +45,7 @@ Everything beyond this boundary is an optional integration profile.
 
 ## Current position
 
-The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates have proved Hyper-V entry, VMBus/VSOCK, Hyper-V storage, and successful stock system-distro overlay construction. `K-OVERLAY-DIAG-001` then exposed excluded GNS networking as the next stock blocker, so additive stock-init kernel discovery is frozen. Work now moves to the reduced host and guest control plane. See `STATUS.md` and `TASKS.md`.
+The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates have proved Hyper-V entry, VMBus/VSOCK, Hyper-V storage, and successful stock system-distro overlay construction. `K-OVERLAY-DIAG-001` then exposed excluded GNS networking as the next stock blocker, so additive stock-init kernel discovery is frozen. `minimal-v1` now provides a reproducible first host/guest reduction and strict protocol-policy tests. The immediate source-only phase is a layered fail-closed candidate followed by mount-namespace-only versus stock-namespace variants. Windows media, Visual Studio, Hyper-V VM creation, and runtime testing remain deferred. See `STATUS.md`, `TASKS.md`, and `NEXT-SESSION.md`.
 
 ## Documentation
 
@@ -56,13 +56,15 @@ The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates ha
 - `WSL-CONTROL-PLANE-AUDIT.md` — why stock `/init` is not the final minimum.
 - `MKROOT-MINIMAL-BOOT-METHOD.md` — rationale for the generic lower bound.
 - `inventory/README.md` — Kconfig graph and durable experiment records.
+- `control-plane/README.md` — reduced control-plane artifacts, tests, and deferred runtime gate.
+- `NEXT-SESSION.md` — verified restart brief for the immediate source-only phase.
 - `session-history/README.md` — historical, grep-friendly project-session transcripts.
 
 ## Verify the repository
 
 ```bash
 uv run python tools/inventory_records.py
-uv run python -m unittest tools.test_inventory_records
+uv run python -m unittest tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
 ```
 
 The generated SQLite database must already exist; rebuild instructions are in `inventory/README.md`.

@@ -27,5 +27,5 @@ Static review performed against `inventory/kconfig-dependencies.sqlite` after th
 - The retained Hyper-V/VSOCK/storage additions remain the only evidence-selected WSL kernel bundles.
 - Ext4, SCSI core, procfs, sysfs, devtmpfs, PTYs, signalfd, epoll, and generic namespace support come from the mkroot floor; they are not new WSL tax.
 - The first reduced source candidate exposes a namespace mismatch before runtime: it still requests IPC, PID, and UTS namespaces while all completed reduced kernel candidates disable them.
-- Do not add those namespace symbols now. First prepare source variants that retain only mount namespace, then add back coherent namespace facilities only if the deferred runtime test selects them.
+- Do not add those namespace symbols now. Layer `minimal-v2-fail-closed`, then derive sibling `minimal-v2-stock-ns` and `minimal-v2-mount-ns` variants from that exact parent. Add back coherent namespace facilities only if the deferred runtime test selects them.
 - Networking remains excluded even though `CONFIG_HYPERV_VSOCKETS` has a Kconfig dependency on `CONFIG_NET`; that dependency is transport plumbing, not approval for IP networking, GNS, or DNS.

@@ -59,7 +59,7 @@ A guest-only replacement is insufficient. Immediately after early configuration,
 - distro `/init`: keep the inherited control channel, direct command path, relay, and poweroff behavior while omitting networking, DrvFs, interop, systemd, and Plan 9 setup;
 - shared protocol: preserve existing layouts where practical so unmodified `wsl.exe` remains the client.
 
-This is a source-level candidate contract, not proof that every listed namespace, message field, or socket is necessary. Runtime ablation must establish the final minimum.
+This is a source-level candidate contract, not proof that every listed namespace, message field, or socket is necessary. `control-plane/minimal-v1-audit.md` confirms that the first patch still compiles or dispatches broad stock operations and still requests IPC, mount, PID, and UTS namespaces. The next static gate is therefore a layered fail-closed candidate followed by stock-namespace and mount-only variants. Runtime ablation must establish the final minimum.
 
 ## Runtime stopping gate
 
@@ -72,6 +72,8 @@ This selects host/guest control-plane reduction, not another kernel bundle. Netw
 Build a reduced single-user host and Linux control plane from a source revision matched to the tested package. Keep normal select/start/execute/terminate/shutdown behavior for registered distros, but omit general management and integration services.
 
 The per-distro VHDX remains because it is WSL’s simple container for a native Linux filesystem. Microsoft’s separate system-distro VHD and overlay are excluded.
+
+`minimal-v1` is preserved as the first reproducible reduction. Subsequent work must layer new patches and records rather than rewrite its hashes. `minimal-v2-fail-closed` will retain only the mapped contract messages; namespace variants then isolate whether launch needs more than `CLONE_NEWNS`. Neither source variant selects kernel requirements without runtime evidence.
 
 ## Deployment constraint
 

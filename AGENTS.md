@@ -14,6 +14,10 @@ Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Query `inventory/kconf
 
 Ordinary build, extraction, and trial workflows must reuse pinned, hash-verified local inputs rather than repeatedly downloading them. Where reusable archives are necessary, use an explicitly configured local cache: accept only verified cache hits, download and atomically cache a missing or invalid entry, then verify it before use. Provide an offline mode that fails closed instead of accessing the network.
 
+## Current phase
+
+The Windows ISO, Visual Studio, Hyper-V VM, elevation, and controlled-package runtime phase are deferred. Continue source-only control-plane reduction, protocol tests, reproducible Linux builds, Kconfig review, and non-executable recovery planning. Do not treat `control-plane/deferred-runtime-plan.json` as authorization.
+
 ## Candidate records
 
 Before any boot:
@@ -40,7 +44,7 @@ After a trial, preserve the harness evidence, append metadata, and resynchronize
 uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
-uv run python -m unittest tools.test_inventory_records
+uv run python -m unittest tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
 ```
 
 Run Windows scripts through `windows-env/ps-exec`. Use `tools/Test-WslSafeState.ps1` for live state and `tools/Test-WslKernelTrial.ps1` for non-mutating validation.

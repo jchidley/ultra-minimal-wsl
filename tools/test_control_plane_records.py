@@ -75,6 +75,20 @@ class ControlPlaneRecordTests(unittest.TestCase):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
         self.assertEqual(protocol["source"]["commit"], plan["source"]["base_commit"])
 
+    def test_static_restart_phase_is_named_and_non_destructive(self):
+        plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
+        static = plan["static_next_phase"]
+        self.assertTrue((ROOT / static["restart_brief"]).is_file())
+        self.assertEqual(static["preserved_parent"], "minimal-v1")
+        self.assertEqual(
+            static["new_candidates"],
+            ["minimal-v2-fail-closed", "minimal-v2-stock-ns", "minimal-v2-mount-ns"],
+        )
+        claims = " ".join(static["forbidden_claims"]).lower()
+        self.assertIn("no b4, b5, or b6", claims)
+        self.assertIn("no namespace kconfig promotion", claims)
+        self.assertIn("no approval carried", claims)
+
 
 if __name__ == "__main__":
     unittest.main()
