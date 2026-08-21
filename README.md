@@ -41,7 +41,7 @@ Minimal Viable WSL
         = ultra-minimal-wsl-v1
 ```
 
-Everything beyond this boundary is an optional integration profile.
+Everything beyond this boundary is an optional integration profile. A separate, inactive follow-on project for a practical Rust userspace is chartered in `RUST-MINIMAL-WSL-FOLLOW-ON.md`; it must not change either measured baseline.
 
 ## Current position
 
@@ -60,6 +60,7 @@ The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates ha
 - `control-plane/README.md` — reduced control-plane artifacts, tests, and deferred runtime gate.
 - `build-host/README.md` — pinned `LFS-Builder` role, profile, and provisioning.
 - `NEXT-SESSION.md` — verified restart brief for the post-`minimal-v2` boundary.
+- `RUST-MINIMAL-WSL-FOLLOW-ON.md` — inactive charter for a `wsl.exe`-controllable Rust userspace after Minimal Viable WSL is frozen.
 - `session-history/README.md` — historical, grep-friendly project-session transcripts.
 
 ## Provision `LFS-Builder`

@@ -169,4 +169,4 @@ Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-D
 - Each compatibility addition is attributed and proven necessary.
 - The same reproducibility, cold-start, clean-log, and recovery gates pass.
 
-Optional integration work must use separate additive profiles so these two measured baselines remain intact.
+Optional integration work must use separate additive profiles so these two measured baselines remain intact. The practical Rust-userspace idea is recorded as a separate, inactive follow-on in `RUST-MINIMAL-WSL-FOLLOW-ON.md`; its start gate is a frozen, reproducible Minimal Viable WSL result, and its work must not alter this experiment's candidates or evidence.
