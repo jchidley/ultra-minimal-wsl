@@ -89,7 +89,16 @@ Update `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, `WSL-CONTROL-PLANE-AUDIT
 
 ## Start a genuinely new Pi session
 
-From Git Bash:
+From PowerShell:
+
+```powershell
+Set-Location 'C:\Users\jackc\git\ultra-minimal-wsl'
+pi --name 'minimal-v2 fail-closed reduction' `
+  '@NEXT-SESSION.md' `
+  'Execute this restart brief autonomously. Verify all recorded state before changing files.'
+```
+
+Git Bash alternative:
 
 ```bash
 cd /c/Users/jackc/git/ultra-minimal-wsl

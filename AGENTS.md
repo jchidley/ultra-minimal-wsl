@@ -14,6 +14,10 @@ Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Query `inventory/kconf
 
 Ordinary build, extraction, and trial workflows must reuse pinned, hash-verified local inputs rather than repeatedly downloading them. Where reusable archives are necessary, use an explicitly configured local cache: accept only verified cache hits, download and atomically cache a missing or invalid entry, then verify it before use. Provide an offline mode that fails closed instead of accessing the network.
 
+## Shell and command presentation
+
+Present Windows host and Pi session commands in PowerShell first. Agent-executed Windows scripts still cross the shell boundary through `windows-env/ps-exec`; Linux builds and source work run through `windows-env/wsl-exec` on `LFS-Builder`. Provide Git Bash alternatives only when useful.
+
 ## Current phase
 
 The Windows ISO, Visual Studio, Hyper-V VM, elevation, and controlled-package runtime phase are deferred. Continue source-only control-plane reduction, protocol tests, reproducible Linux builds, Kconfig review, and non-executable recovery planning. Do not treat `control-plane/deferred-runtime-plan.json` as authorization.
