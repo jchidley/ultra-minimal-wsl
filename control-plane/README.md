@@ -11,7 +11,7 @@ SOURCE=/root/src/WSL-2.7.12 \
   /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/extract-control-plane-protocol.sh check
 ```
 
-The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity. Strict framing and policy tests exercise malformed lengths, every excluded configuration field, all process-flag combinations, sampled signed exit statuses, and termination flags:
+The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity. Strict framing and policy tests exercise malformed lengths, every excluded configuration field, all process-flag combinations, sampled signed exit statuses, and termination flags. Mutation evidence is recorded in `protocol/test-evidence.md`:
 
 ```bash
 uv run python -m unittest tools.test_control_plane_protocol
