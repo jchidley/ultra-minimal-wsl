@@ -50,7 +50,7 @@ Continue source-only reduction/Kconfig review from the reproducible `minimal-v2`
 
 - Final relay checks passed: inventory integrity `ok`; 23 build-host/inventory/protocol/record tests; PSScriptAnalyzer 1.25.0; ShellCheck 0.11; build-host and patch manifests; pinned-source protocol fixture; 24-file Markdown link scan; `git diff --check`.
 - Fresh rebuild validation is complete: six serial candidate runs and one two-job fail-closed run exactly matched committed metadata and artifact hashes; verified offline caches were used and no build/Clang process remained afterward.
-- `STATUS.md`, `TASKS.md`, `NEXT-SESSION.md`, `control-plane/kernel-contract-review.md`, `inventory/annotations.csv`, and `tools/build-control-plane-linux.sh` are intentionally modified after clean pushed commit `9c74f6c`; verify `git status`, active Linux processes, and `origin/main` again before editing or committing.
+- The recheck, bounded-job default, retained-path review, and synchronized documentation were committed and pushed after these gates passed. Require a clean `main` matching `origin/main` and no active Linux build process before further work.
 
 ## Manual restart command
 
