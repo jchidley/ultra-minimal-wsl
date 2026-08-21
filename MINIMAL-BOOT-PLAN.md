@@ -1,5 +1,7 @@
 # Minimal Viable WSL plan
 
+This is the canonical contract and experiment-rule reference. For a conceptual explanation of the control plane, gates, evidence types, and end-to-end path, read `PROJECT-MODEL.md`.
+
 ## Target contract
 
 `minimal-viable-wsl-v1` is the mkroot/Toybox generic Linux floor plus only:
@@ -117,8 +119,8 @@ Alpine additionally runs `/bin/busybox true`; Arch and Debian run `/bin/true`. D
 5. **Stock stopping gate:** if an excluded stock service is the earliest stable blocker, preserve that boundary and stop adding kernel support for stock policy.
 6. **Reduce control plane:** remove stock-only host and guest policy, including the Microsoft system distro/overlay and GNS path.
 7. **Fail-closed static gate:** permit only handshake, one registered LUN/ext4 launch, minimal initialization, direct process relay, exit status, and termination; reject every other mini-init and distro-init operation in both implementation and tests.
-8. **Namespace variants:** derive current IPC/mount/PID/UTS and mount-only launch variants from one fail-closed parent; do not select namespace Kconfig from source preference alone.
-9. **Command dispatch:** in the deferred controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
+8. **Namespace variants (source-complete):** preserve the recorded current IPC/mount/PID/UTS and mount-only launch variants derived from one fail-closed parent; do not select namespace Kconfig from source preference alone.
+9. **Command dispatch (deferred):** in the separately approved controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
 10. **Prove minimality:** ablate every provisional WSL bundle and freeze `minimal-viable-wsl-v1`.
 11. **Compatibility:** test Alpine, Arch, and Debian in order; attribute and ablate each addition; freeze `ultra-minimal-wsl-v1`.
 
@@ -134,7 +136,7 @@ The Windows controlled-package phase is deferred until large environment inputs 
 - do not install a controlled package or modify host WSL files;
 - continue only static protocol, source-reduction, reproducible Linux-build, Kconfig, and recovery-plan work.
 
-`control-plane/deferred-runtime-plan.json` is preparation, not an executable trial record. It carries no approval forward. Static work must preserve each recorded candidate rather than rewrite it, regenerate compiler-derived protocol fixtures after ABI changes, run strict policy and mutation tests, and produce two byte-identical offline Linux builds for each variant. Before later execution, replace every missing input with a pinned hash, plan-validate the fixed operation, and obtain fresh explicit approval.
+`control-plane/deferred-runtime-plan.json` is preparation, not an executable trial record. It carries no approval forward. The recorded `minimal-v2` fail-closed parent and namespace siblings have passed strict policy/mutation tests and two byte-identical offline Linux builds each. Preserve those records rather than rewriting them. Any later ABI or source change creates a new candidate and repeats those gates. Before runtime execution, replace every missing input with a pinned hash, plan-validate the fixed operation, and obtain fresh explicit approval.
 
 ## Evidence and safety gates
 

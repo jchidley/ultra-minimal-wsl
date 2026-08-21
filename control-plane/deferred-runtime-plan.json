@@ -1,6 +1,6 @@
 {
-  "schema": 1,
-  "plan_id": "CP-MINIMAL-V1-001",
+  "schema": 2,
+  "plan_id": "CP-MINIMAL-V2-001",
   "status": "deferred-environment-not-provisioned",
   "executable": false,
   "approval_carried_forward": false,
@@ -16,7 +16,42 @@
     "init_debug_sha256": "47fdd2a0837969741f47b3c5b4a14d926e1a57e8c081edfcd74c7c38e36e2b6b",
     "initrd_sha256": "bfe154b4abaca10da0336e376996488549a264e4b91360f3bfbfbf4394b168f6"
   },
+  "source_candidates": {
+    "minimal-v2-fail-closed": {
+      "parent": "minimal-v1",
+      "layer_patch": "control-plane/patches/0002-minimal-v2-fail-closed.patch",
+      "layer_patch_sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0",
+      "complete_source_diff_sha256": "6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759",
+      "init_sha256": "6672f3719bced6857768f1aaa4fa4f6507b6525d9329d84628cdee5b242eb10f",
+      "init_debug_sha256": "5cc545ff33f573f84e8ede9053af1f561cb35f0a8d114b95831a4ffe1af80e76",
+      "initrd_sha256": "62f3553dfef1901bb0d3c9dd54732e4ae801abb1d5cb4ba216736434570c6ba7",
+      "reproducible": true,
+      "runtime_evidence": false
+    },
+    "minimal-v2-stock-ns": {
+      "parent": "minimal-v2-fail-closed",
+      "tree_identical_to_parent": true,
+      "complete_source_diff_sha256": "6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759",
+      "init_sha256": "6672f3719bced6857768f1aaa4fa4f6507b6525d9329d84628cdee5b242eb10f",
+      "init_debug_sha256": "5cc545ff33f573f84e8ede9053af1f561cb35f0a8d114b95831a4ffe1af80e76",
+      "initrd_sha256": "62f3553dfef1901bb0d3c9dd54732e4ae801abb1d5cb4ba216736434570c6ba7",
+      "reproducible": true,
+      "runtime_evidence": false
+    },
+    "minimal-v2-mount-ns": {
+      "parent": "minimal-v2-fail-closed",
+      "layer_patch": "control-plane/patches/0003-minimal-v2-mount-ns.patch",
+      "layer_patch_sha256": "f2bef4d7ebb0915d521cd5b8a4d020e196d3d2d35fefc31b996d336567c7d3b1",
+      "complete_source_diff_sha256": "b3c8cb69ae1a88b648c7dfa021dccaaf108930a337c1cff72e4768de936c4358",
+      "init_sha256": "48ee3f702aea58ff2b2261bf81483e59c6b1cd658ac470f0bfd76cb1eba8c248",
+      "init_debug_sha256": "e240a8a92261cf90a0234caa961cb948ab310abbb0ad9e4adf254e52bd92af8d",
+      "initrd_sha256": "e931e95f096c126da7a747bbfc70e21fbca1948427f8ce64db491e83512ca605",
+      "reproducible": true,
+      "runtime_evidence": false
+    }
+  },
   "static_next_phase": {
+    "status": "completed-source-only",
     "restart_brief": "NEXT-SESSION.md",
     "preserved_parent": "minimal-v1",
     "new_candidates": [
@@ -33,6 +68,7 @@
       "pass pinned PowerShell 5.1 PSScriptAnalyzer and ShellCheck warning-or-higher gates",
       "synchronize this plan without making it executable"
     ],
+    "result": "completed without Windows provisioning or runtime execution",
     "forbidden_claims": [
       "no B4, B5, or B6 result without controlled-package runtime evidence",
       "no namespace Kconfig promotion from source inspection alone",
@@ -46,7 +82,7 @@
     "Windows compiler and SDK inputs",
     "successfully built controlled WSL package",
     "controlled-package-baseline checkpoint",
-    "candidate package hashes and fixed install command",
+    "Windows builds of both minimal-v2 namespace candidate packages with fixed install commands",
     "fresh explicit approval for elevation and runtime execution"
   ],
   "preconditions": [
@@ -57,15 +93,15 @@
     "no host WSL files or configuration are modified"
   ],
   "runtime_sequence": [
-    "restore controlled-package-baseline",
-    "install only the fixed controlled package inside the VM",
+    "for each of minimal-v2-stock-ns and minimal-v2-mount-ns, restore controlled-package-baseline",
+    "install only that candidate's fixed controlled package inside the VM",
     "start one registered Toybox distro",
     "run the B6-T smoke contract through wsl.exe",
     "record stdout, stderr, exit status, host service logs, and guest logs",
-    "terminate the distro through wsl.exe",
+    "exercise clean and forced termination through wsl.exe",
     "shut WSL down inside the VM",
     "verify no utility VM remains",
-    "restore controlled-package-baseline",
+    "restore controlled-package-baseline after each candidate",
     "prove stock WSL command execution"
   ],
   "acceptance": {

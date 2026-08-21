@@ -4,6 +4,8 @@
 set -euo pipefail
 export LC_ALL=C
 
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+PROJECT=${PROJECT:-$(cd -- "$SCRIPT_DIR/.." && pwd)}
 SOURCE=${SOURCE:-/root/src/WSL-2.7.12}
 ROOT=${ROOT:-/root/experiments/minimal-wsl/control-plane-build}
 LOCALIZATION_HEADER=${LOCALIZATION_HEADER:-$ROOT/Localization.h}
@@ -15,6 +17,12 @@ MINIMAL_LINK=${MINIMAL_LINK:-0}
 DEPS=$ROOT/deps
 OUT=$BUILD/out
 OBJ=$BUILD/obj
+
+bash "$PROJECT/tools/bootstrap-lfs-builder.sh" --check
+builder_profile_sha=$(cat \
+    "$PROJECT/build-host/lfs-builder-profile.env" \
+    "$PROJECT/build-host/debian-snapshot.list" \
+    "$PROJECT/build-host/packages.tsv" | sha256sum | cut -d' ' -f1)
 
 base_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
 expected_patch_sha=${EXPECTED_SOURCE_PATCH_SHA256:-}
@@ -31,6 +39,7 @@ fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null || fail "missing command: $1"; }
 for command in git unzip tar clang clang++ llvm-ar llvm-strip llvm-objcopy sha256sum; do need "$command"; done
 [[ $MINIMAL_LINK == 0 || $MINIMAL_LINK == 1 ]] || fail "MINIMAL_LINK must be 0 or 1"
+[[ $JOBS =~ ^[1-9][0-9]*$ ]] || fail "JOBS must be a positive integer"
 source_commit=$(git -C "$SOURCE" rev-parse HEAD)
 [[ -z $(git -C "$SOURCE" status --porcelain) ]] || fail "source worktree is dirty"
 if [[ $source_commit != "$base_commit" ]]; then
@@ -161,7 +170,7 @@ for rel in "${sources[@]}"; do
     objects+=("$object")
     compile_one "$rel" "$object" &
     ((++running))
-    if (( running >= JOBS )); then wait -n; ((--running)); fi
+    if (( running >= JOBS )); then wait -n; running=$((running - 1)); fi
 done
 wait
 
@@ -187,6 +196,7 @@ uv run python "$ROOT/create-initrd-repro.py"
     printf 'source_patch_sha256=%s\n' "$actual_patch_sha"
     printf 'source_date_epoch=%s\n' "$SOURCE_DATE_EPOCH"
     printf 'minimal_link=%s\n' "$MINIMAL_LINK"
+    printf 'builder_profile_sha256=%s\n' "$builder_profile_sha"
     printf 'clang=%s\n' "$(clang --version | head -1)"
     printf 'lld=%s\n' "$(ld.lld --version | head -1)"
     printf 'linuxsdk_sha256=%s\n' "$linuxsdk_sha"

@@ -3,9 +3,10 @@
 set -euo pipefail
 export LC_ALL=C
 
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+PROJECT=${PROJECT:-$(cd -- "$SCRIPT_DIR/.." && pwd)}
 SOURCE=${SOURCE:-/root/src/WSL-2.7.12}
 ROOT=${ROOT:-/root/experiments/minimal-wsl/control-plane-build}
-PROJECT=${PROJECT:-/mnt/c/Users/jackc/git/ultra-minimal-wsl}
 OUTPUT=${OUTPUT:-$PROJECT/control-plane/protocol/wsl-2.7.12.json}
 MODE=${1:-write}
 EXPECTED_COMMIT=68f601bba8eac1df20a0bbd403c6c87c92369ade
@@ -13,6 +14,7 @@ EXPECTED_HEADER_SHA=50ccb4e6aab4d6f422e41c6003717d8eacb926ab657a61fdb9b62f6298bb
 
 fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 [[ $MODE == write || $MODE == check ]] || fail 'usage: extract-control-plane-protocol.sh [write|check]'
+bash "$PROJECT/tools/bootstrap-lfs-builder.sh" --check
 [[ $(git -C "$SOURCE" rev-parse HEAD) == "$EXPECTED_COMMIT" ]] || fail 'source is not pinned WSL 2.7.12'
 [[ -z $(git -C "$SOURCE" status --porcelain) ]] || fail 'source worktree is dirty'
 printf '%s  %s\n' "$EXPECTED_HEADER_SHA" "$SOURCE/src/shared/inc/lxinitshared.h" | sha256sum -c - >/dev/null

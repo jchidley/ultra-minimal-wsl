@@ -1,0 +1,2 @@
+# Immutable Debian package source for LFS-Builder profile 1.
+deb [check-valid-until=no] https://snapshot.debian.org/archive/debian/20260712T000000Z trixie main

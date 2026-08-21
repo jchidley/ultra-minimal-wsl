@@ -1,0 +1,10 @@
+baseline_candidate=minimal-v1
+baseline_init_bytes=2511032
+candidate_init_bytes=2450672
+init_delta_bytes=-60360
+init_delta_percent=-2.4
+baseline_debug_bytes=35787384
+candidate_debug_bytes=35703672
+debug_delta_bytes=-83712
+debug_delta_percent=-0.2
+parent_artifacts_byte_identical=yes

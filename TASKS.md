@@ -6,11 +6,11 @@
 
 1. Keep additive stock-init kernel discovery frozen at `K-OVERLAY-DIAG-001`; do not add GNS or networking support.
 2. Keep the large Windows environment phase deferred: do not download an ISO, install Visual Studio, create a Hyper-V VM, or request elevation until that later test is separately selected.
-3. Preserve `minimal-v1`; create a layered `minimal-v2-fail-closed` patch that rejects all non-contract mini-init and distro-init messages, including management, DrvFs, timezone, interop, import/export, arbitrary mount/detach, and resize.
-4. Extend protocol-policy tests so every rejected message family and flag is covered, then mutation-test the dispatch allowlist.
-5. From the same fail-closed parent, prepare `minimal-v2-stock-ns` and `minimal-v2-mount-ns` source variants for current IPC/mount/PID/UTS versus mount-only launch. Do not add namespace Kconfig without runtime selection.
-6. Rebuild each Linux variant twice with `OFFLINE=1 MINIMAL_LINK=1`; record patch, output, reproducibility, and size hashes without overwriting `minimal-v1` records.
-7. Synchronize `control-plane/deferred-runtime-plan.json` with the new candidate hashes while keeping it non-executable and carrying no approval forward.
+3. Preserve the completed `minimal-v1`, `minimal-v2-fail-closed`, `minimal-v2-stock-ns`, and `minimal-v2-mount-ns` patches/records; do not rewrite their hashes.
+4. Keep the 52-family protocol-policy enumeration and dispatch mutation evidence as mandatory regression gates.
+5. Keep both namespace siblings unselected. Do not add `CONFIG_IPC_NS`, `CONFIG_PID_NS`, or `CONFIG_UTS_NS` without deferred runtime evidence.
+6. Keep all six offline minimal-link build results and candidate metadata immutable; any source/toolchain change starts a new candidate.
+7. Keep `control-plane/deferred-runtime-plan.json` non-executable and carrying no approval. If the environment phase is later selected, first pin Windows media, compiler/SDK, package, checkpoint, and recovery inputs.
 8. Before every commit, require the inventory/control-plane suites, pinned PowerShell 5.1 PSScriptAnalyzer profile, ShellCheck warning-or-higher checks, patch manifests, and documentation links to pass.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.

@@ -1,0 +1,9 @@
+candidate=minimal-v2-fail-closed
+parent_candidate=minimal-v1
+parent_source_commit=f3d502ab4073c24fa31bd3f3ad4f6009a36076fa
+source_commit=6869aac89f3d859de6a707861ed1bd05d8ee087d
+layer_patch=control-plane/patches/0002-minimal-v2-fail-closed.patch
+layer_patch_sha256=47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0
+complete_source_diff_sha256=6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759
+namespace_bundle=ipc,mount,pid,uts
+runtime_evidence=none

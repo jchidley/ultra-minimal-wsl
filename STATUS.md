@@ -1,6 +1,6 @@
 # Project status
 
-Updated 2026-08-19. This file contains current facts only; immutable history is in `inventory/trials.csv` and `recovery-harness/trials/`.
+Updated 2026-08-21. This file contains current facts only; immutable history is in `inventory/trials.csv` and `recovery-harness/trials/`.
 
 ## Safety state
 
@@ -53,40 +53,39 @@ Post-trial recovery independently reported `safe:true`: the exact `.wslconfig` a
 
 Durable inputs are `annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`. Other inventory exports are generated locally.
 
+## Build host
+
+`LFS-Builder` is a dedicated Debian 13 amd64 build host on ext4, not a target distribution. Profile 1 pins its Debian snapshot, exact required package versions, uv/uvx, and ShellCheck 0.11 with verified hashes. Standard control-plane builds and protocol extraction now fail closed unless `tools/bootstrap-lfs-builder.sh --check` passes; build-specific archives retain their separate verified caches.
+
 ## Control-plane preparation
 
 The retained host/guest path is mapped against the recovery baseline’s exact public source, WSL tag `2.7.12` at commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`, in `WSL-CONTROL-PLANE-AUDIT.md`. The map identifies the VSOCK handshake, registered-distro VHDX message, namespace/root transition, inherited distro-init channel, command sockets, stdio/exit relay, and termination messages. The Linux-side init and deterministic initrd build byte-identically in two clean runs from separate working directories; hashes are recorded under `control-plane-build/native-build/`.
 
 Source inspection also proves that a guest-only reduced init is insufficient: the stock host waits for an excluded GNS connection after early configuration and advertises the Microsoft system distro. Reduced-control-plane testing must patch both the Windows service and Linux init inside the disposable VM.
 
-## Reduced control-plane prototype
+## Reduced control-plane candidates
 
-The first source candidate is preserved under `control-plane/` against pinned WSL 2.7.12:
+The source-only reduction is recorded under `control-plane/` against pinned WSL 2.7.12:
 
-- a compiler-extracted protocol fixture pins retained message IDs, constants, structure sizes, and offsets to the shared-header hash;
-- `minimal-v1` patches both `WslCoreVm`/`WslCoreInstance` and Linux `mini_init` to omit or reject the system distro, GNS/networking/DNS, WSLg, DrvFs, interop, OOBE, swap, modules, and memory policy while retaining the registered-distro launch and command/lifecycle channel;
-- the patch applies cleanly and its complete source diff matches the recorded SHA-256;
-- strict protocol tests cover malformed lengths, independently mutated excluded fields, process flags, exit statuses, and termination framing;
-- repository PowerShell scripts pass pinned PSScriptAnalyzer 1.25.0 with Windows PowerShell 5.1 compatibility rules, and tracked shell scripts pass ShellCheck 0.11 at warning severity;
-- the source audit separates removed paths from runtime rejection and identifies the unresolved IPC/PID/UTS namespace mismatch;
-- `MINIMAL_LINK=1` removes unreachable sections, reducing stripped `init` from 2,835,320 to 2,511,032 bytes (11.4%); two clean builds are byte-identical and hashes are recorded in `control-plane/candidates/minimal-v1/`;
-- a static retained-kernel review confirms that no new Kconfig addition follows before namespace ablation;
-- the deferred runtime/recovery plan is recorded but explicitly non-executable;
-- the Windows side has not yet been built or runtime-tested.
+- the preserved `minimal-v1` patch and hashes remain unchanged;
+- the compiler-derived fixture now pins all 52 init/mini-init control message families used by the fail-closed policy tests;
+- layered `minimal-v2-fail-closed` uses one shared policy seam to permit only early/initial configuration, one LUN/ext4 launch, initialization/session/direct-process plumbing, console-only process flags, exit status, and termination;
+- guest configuration prevents `/etc/wsl.conf` or host fields from re-enabling DrvFs, timezone, networking/DNS, interop, systemd/boot commands, Plan 9, GPU, cgroups, or other excluded policy;
+- `minimal-v2-stock-ns` is tree-identical to the fail-closed parent and retains IPC/mount/PID/UTS namespaces; `minimal-v2-mount-ns` differs only by retaining the mount namespace;
+- tests enumerate every retained and rejected family on each inbound channel, malformed lengths, excluded fields and flags, signed exit statuses, and clean/forced termination framing;
+- semantic mutations that added mini-init import and removed distro termination were both caught and reverted;
+- each of the fail-closed parent and two namespace siblings built twice offline in distinct ext4 directories with verified cache hits; `init`, `init.debug`, and `initrd.img` were byte-identical per candidate;
+- fail-closed/stock stripped `init` is 2,450,672 bytes, 60,360 bytes (2.4%) below `minimal-v1`; mount-only has the same size but a distinct expected hash;
+- the deferred runtime/recovery plan carries all candidate hashes but remains non-executable and carries no approval;
+- no Windows component has been compiled and no candidate has been runtime-tested.
 
 Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. The environment-dependent phase is explicitly deferred because Windows installation media and the Visual Studio toolchain are large inputs. No ISO will be downloaded, no disposable VM will be created, and no Hyper-V elevation will be attempted until that later test is separately selected and approved.
 
 ## Restart point
 
-The next source-only candidate must be layered on preserved `minimal-v1`, not rewrite its recorded patch or hashes:
+The planned `minimal-v2` source-only phase is complete. Preserve all four candidate records and keep the Windows environment deferred. The next selected phase is either additional non-runtime Kconfig/source review or, only after separately choosing the large environment work, pinning Windows media/toolchain inputs and plan-validating the controlled-package experiment. Do not provision, elevate, boot, or promote namespace Kconfig without fresh authorization and runtime evidence.
 
-1. create `minimal-v2-fail-closed`, rejecting every non-contract mini-init and distro-init operation while retaining handshake, one LUN/ext4 launch, initialization, direct process relay, exit status, and termination;
-2. extend protocol-policy tests to prove each removed message family is rejected;
-3. derive two namespace variants from that same parent: current IPC/mount/PID/UTS behavior and mount-namespace-only behavior;
-4. reproducibly build both Linux variants with `MINIMAL_LINK=1`, record hashes and size deltas, and update the non-executable runtime plan;
-5. do not promote namespace Kconfig or claim runtime success without the deferred controlled-package test.
-
-`NEXT-SESSION.md` is the copy/paste restart brief.
+`NEXT-SESSION.md` is the copy/paste restart brief for that boundary.
 
 ## Target gap
 

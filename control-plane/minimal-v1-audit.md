@@ -48,11 +48,8 @@ The patch is deliberately coarse and does not yet delete all stock implementatio
 
 This proves deterministic dead-section elimination, not behavioral necessity. It does not replace source deletion or runtime ablation.
 
-## Next source gates
+## Fulfilled follow-on gates
 
-1. Preserve this patch and its hashes; layer `minimal-v2-fail-closed` rather than rewriting `minimal-v1`.
-2. Make every non-contract mini-init message fail closed.
-3. Make distro-init dispatch fail closed for timezone, DrvFs, interop, and management messages.
-4. From that parent, record `minimal-v2-stock-ns` and `minimal-v2-mount-ns`; do not add all namespace Kconfig merely to preserve stock code.
-5. Keep five-socket wire compatibility until an unmodified `wsl.exe` command succeeds; then test whether the unused interop socket can be removed jointly from host and guest.
-6. Compile the Windows package in the deferred VM before treating either namespace variant as a candidate for boot.
+`minimal-v2-fail-closed` was layered without rewriting this patch, and its stock/mount namespace siblings are recorded separately. Mini-init and distro-init now use a shared fail-closed allowlist, excluded process/configuration flags are rejected, semantic dispatch mutations are caught, and each Linux candidate built reproducibly twice. See `minimal-v2-audit.md`.
+
+Five-socket wire compatibility remains provisional until an unmodified `wsl.exe` command succeeds. The Windows package must still compile in the deferred disposable VM before either namespace sibling is eligible for an approved boot.

@@ -1,0 +1,13 @@
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+index 9954f68..7816ecd 100644
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -3235,7 +3235,7 @@ try
+                     ProcessLaunchInitMessage(Message, Buffer, std::move(Channel), std::move(SystemDistroSocketFd), Config);
+                     FATAL_ERROR("Unexpected return from ProcessLaunchInitMessage");
+                 },
+-                (CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));
++                (CLONE_NEWNS | SIGCHLD));
+ 
+             return (ChildPid < 0) ? -1 : 0;
+         }

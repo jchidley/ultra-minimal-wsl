@@ -1,0 +1,9 @@
+candidate=minimal-v2-mount-ns
+parent_candidate=minimal-v2-fail-closed
+parent_source_commit=6869aac89f3d859de6a707861ed1bd05d8ee087d
+source_commit=ef4d67d90fd37b8f34f60cfb66fca9a2f47cb775
+layer_patch=control-plane/patches/0003-minimal-v2-mount-ns.patch
+layer_patch_sha256=f2bef4d7ebb0915d521cd5b8a4d020e196d3d2d35fefc31b996d336567c7d3b1
+complete_source_diff_sha256=b3c8cb69ae1a88b648c7dfa021dccaaf108930a337c1cff72e4768de936c4358
+namespace_bundle=mount
+runtime_evidence=none

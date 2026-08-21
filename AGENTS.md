@@ -8,7 +8,7 @@ Networking, DNS, DrvFs, Windows interop, WSLg, systemd, containers, cgroup polic
 
 ## Read first
 
-Read `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`. Query `inventory/kconfig-dependencies.sqlite`; durable inputs are `inventory/annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`.
+Read `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, and `build-host/README.md`. Query `inventory/kconfig-dependencies.sqlite`; durable inputs are `inventory/annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`.
 
 ## Local inputs
 
@@ -45,6 +45,7 @@ After a trial, preserve the harness evidence, append metadata, and resynchronize
 ## Commands
 
 ```bash
+bash tools/bootstrap-lfs-builder.sh --check  # run inside LFS-Builder
 uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py

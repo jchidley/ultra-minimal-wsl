@@ -13,6 +13,25 @@ _UINT_MAX = (1 << 32) - 1
 _CONSOLE_FLAGS = 0x1 | 0x2 | 0x4
 _INVALID_PORT = _UINT_MAX
 
+_DISPATCH_ALLOWLIST = {
+    "mini_init": frozenset(
+        {
+            "LxMiniInitMessageEarlyConfig",
+            "LxMiniInitMessageInitialConfig",
+            "LxMiniInitMessageLaunchInit",
+        }
+    ),
+    "distro_control": frozenset(
+        {
+            "LxInitMessageCreateSession",
+            "LxInitMessageInitialize",
+            "LxInitMessageTerminateInstance",
+            "LxInitCreateProcess",
+        }
+    ),
+    "session": frozenset({"LxInitMessageCreateProcessUtilityVm"}),
+}
+
 
 class ProtocolError(ValueError):
     """A message is malformed or violates the minimal control-plane policy."""
@@ -72,9 +91,28 @@ def _u8(data: bytes, offset: int) -> int:
     return data[offset]
 
 
+def _cstring(data: bytes, offset: int) -> bytes:
+    _require(0 <= offset < len(data), "string offset is outside the frame")
+    end = data.find(b"\0", offset)
+    _require(end >= 0, "string is not terminated inside the frame")
+    return data[offset:end]
+
+
 def _require(condition: bool, reason: str) -> None:
     if not condition:
         raise ProtocolError(reason)
+
+
+def validate_dispatch(spec: ProtocolSpec, channel: str, message_type: int) -> None:
+    """Reject any request family outside the fail-closed channel allowlist."""
+    try:
+        allowed_names = _DISPATCH_ALLOWLIST[channel]
+    except KeyError as error:
+        raise KeyError(f"unknown channel: {channel}") from error
+
+    allowed_types = {spec.types[name] for name in allowed_names}
+    if message_type not in allowed_types:
+        raise ProtocolError(f"message type {message_type} is excluded on {channel}")
 
 
 def validate_minimal_message(spec: ProtocolSpec, kind: str, data: bytes) -> MessageHeader:
@@ -97,6 +135,7 @@ def validate_minimal_message(spec: ProtocolSpec, kind: str, data: bytes) -> Mess
         for field in ("EnableDebugShell", "EnableDnsTunneling", "EnableSafeMode"):
             _require(_u8(data, o("LX_MINI_INIT_EARLY_CONFIG_MESSAGE", field)) == 0, f"{field} is excluded")
         _require(_u32(data, o("LX_MINI_INIT_EARLY_CONFIG_MESSAGE", "KernelModulesDeviceId")) == _UINT_MAX, "kernel modules disk is excluded")
+        _require(_u32(data, o("LX_MINI_INIT_EARLY_CONFIG_MESSAGE", "DnsTunnelingIpAddress")) == 0, "DNS tunnelling address is excluded")
         return header
 
     if kind == "initial_config":
@@ -117,6 +156,7 @@ def validate_minimal_message(spec: ProtocolSpec, kind: str, data: bytes) -> Mess
         minimum = o("LX_MINI_INIT_MESSAGE", "Buffer")
         header = parse_message(data, expected_type=t["LxMiniInitMessageLaunchInit"], minimum_size=minimum)
         _require(_u32(data, o("LX_MINI_INIT_MESSAGE", "MountDeviceType")) == 1, "registered distro must use a supplied LUN")
+        _require(_cstring(data, _u32(data, o("LX_MINI_INIT_MESSAGE", "FsTypeOffset"))) == b"ext4", "registered distro must use ext4")
         _require(_u32(data, o("LX_MINI_INIT_MESSAGE", "Flags")) == 0, "launch policy flags are excluded")
         return header
 

@@ -47,9 +47,10 @@ A graph edge is conditional evidence, not a flat requirement. Inspect relation t
 
 ## Rebuild
 
-Kconfig parsing must run on Linux with the pinned kernel tree and toolchain. From the project root in `LFS-Builder`:
+Kconfig parsing must run on Linux with the pinned kernel tree and verified build-host profile. From the project root in `LFS-Builder`:
 
 ```bash
+bash tools/bootstrap-lfs-builder.sh --check
 uv run --with kconfiglib==14.1.0 python tools/build-kconfig-inventory.py \
   --srctree /root/src/WSL2-Linux-Kernel \
   --output-dir inventory \

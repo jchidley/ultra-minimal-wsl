@@ -3,7 +3,13 @@ from pathlib import Path
 import struct
 import unittest
 
-from tools.control_plane_protocol import ProtocolError, ProtocolSpec, parse_message, validate_minimal_message
+from tools.control_plane_protocol import (
+    ProtocolError,
+    ProtocolSpec,
+    parse_message,
+    validate_dispatch,
+    validate_minimal_message,
+)
 
 
 FIXTURE = Path(__file__).parents[1] / "control-plane" / "protocol" / "wsl-2.7.12.json"
@@ -38,6 +44,8 @@ class ProtocolFixtureTests(unittest.TestCase):
         else:
             structure, field, type_name = offsets[kind]
             size = s.offset(structure, field) + extra
+            if kind == "launch_init":
+                size += len(b"ext4\0")
             message_type = s.types[type_name]
         data = bytearray(size)
         struct.pack_into("<IIII", data, 0, message_type, size, 7, 1)
@@ -48,6 +56,9 @@ class ProtocolFixtureTests(unittest.TestCase):
             struct.pack_into("<i", data, s.offset("LX_MINI_INIT_EARLY_CONFIG_MESSAGE", "PageReportingOrder"), -1)
         elif kind == "launch_init":
             struct.pack_into("<I", data, s.offset("LX_MINI_INIT_MESSAGE", "MountDeviceType"), 1)
+            fs_offset = s.offset("LX_MINI_INIT_MESSAGE", "Buffer") + extra
+            struct.pack_into("<I", data, s.offset("LX_MINI_INIT_MESSAGE", "FsTypeOffset"), fs_offset)
+            data[fs_offset : fs_offset + len(b"ext4\0")] = b"ext4\0"
         elif kind == "initialize_response":
             struct.pack_into("<I", data, s.offset("LX_INIT_CONFIGURATION_INFORMATION_RESPONSE", "InteropPort"), 0xFFFFFFFF)
         return data
@@ -55,6 +66,35 @@ class ProtocolFixtureTests(unittest.TestCase):
     def assert_rejected(self, kind, data):
         with self.assertRaises(ProtocolError):
             validate_minimal_message(self.spec, kind, bytes(data))
+
+    def test_every_control_message_family_is_allowed_only_on_its_channel(self):
+        expected = {
+            "mini_init": {
+                "LxMiniInitMessageEarlyConfig",
+                "LxMiniInitMessageInitialConfig",
+                "LxMiniInitMessageLaunchInit",
+            },
+            "distro_control": {
+                "LxInitMessageCreateSession",
+                "LxInitMessageInitialize",
+                "LxInitMessageTerminateInstance",
+                "LxInitCreateProcess",
+            },
+            "session": {"LxInitMessageCreateProcessUtilityVm"},
+        }
+        self.assertEqual(len(self.spec.types), 52)
+        for channel, allowed_names in expected.items():
+            for name, message_type in self.spec.types.items():
+                with self.subTest(channel=channel, name=name):
+                    if name in allowed_names:
+                        validate_dispatch(self.spec, channel, message_type)
+                    else:
+                        with self.assertRaises(ProtocolError):
+                            validate_dispatch(self.spec, channel, message_type)
+            for unknown in (-1, max(self.spec.types.values()) + 1, 0xFFFFFFFF):
+                with self.subTest(channel=channel, unknown=unknown):
+                    with self.assertRaises(ProtocolError):
+                        validate_dispatch(self.spec, channel, unknown)
 
     def test_retained_sequence_accepts_minimal_frames(self):
         sequence = (
@@ -109,6 +149,7 @@ class ProtocolFixtureTests(unittest.TestCase):
             "EnableDnsTunneling": 1,
             "EnableSafeMode": 1,
             "KernelModulesDeviceId": 0,
+            "DnsTunnelingIpAddress": 1,
         }
         for field, value in cases.items():
             data = self.frame("early_config")
@@ -145,6 +186,23 @@ class ProtocolFixtureTests(unittest.TestCase):
             struct.pack_into(fmt, data, offset, 1)
             with self.subTest(field=field):
                 self.assert_rejected("initial_config", data)
+
+    def test_launch_requires_one_unflagged_lun_ext4_device(self):
+        s = self.spec
+        cases = {
+            "MountDeviceType": ("<I", 2),
+            "Flags": ("<I", 1),
+        }
+        for field, (fmt, value) in cases.items():
+            data = self.frame("launch_init")
+            struct.pack_into(fmt, data, s.offset("LX_MINI_INIT_MESSAGE", field), value)
+            with self.subTest(field=field):
+                self.assert_rejected("launch_init", data)
+
+        data = self.frame("launch_init")
+        fs_offset = struct.unpack_from("<I", data, s.offset("LX_MINI_INIT_MESSAGE", "FsTypeOffset"))[0]
+        data[fs_offset : fs_offset + len(b"ext4")] = b"xfs\0"
+        self.assert_rejected("launch_init", data)
 
     def test_only_console_process_flags_are_allowed(self):
         s = self.spec

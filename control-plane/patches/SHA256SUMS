@@ -1,1 +1,3 @@
 3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a  0001-minimal-control-plane-v1.patch
+47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0  0002-minimal-v2-fail-closed.patch
+f2bef4d7ebb0915d521cd5b8a4d020e196d3d2d35fefc31b996d336567c7d3b1  0003-minimal-v2-mount-ns.patch

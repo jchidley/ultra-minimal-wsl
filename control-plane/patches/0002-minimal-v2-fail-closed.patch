@@ -1,0 +1,255 @@
+diff --git a/src/linux/init/config.cpp b/src/linux/init/config.cpp
+index 7e621e9..5928eea 100644
+--- a/src/linux/init/config.cpp
++++ b/src/linux/init/config.cpp
+@@ -529,6 +529,23 @@ Return Value:
+ 
+     wsl::linux::WslDistributionConfig Config{CONFIG_FILE};
+ 
++    // The minimal control plane does not permit distro-local configuration to
++    // re-enable excluded host integration or management policy.
++    Config.AutoMount = false;
++    Config.AutoUpdateTimezone = false;
++    Config.BootCommand.reset();
++    Config.BootInit = false;
++    Config.InteropAppendWindowsPath = false;
++    Config.InteropEnabled = false;
++    Config.MountFsTab = false;
++    Config.GenerateHosts = false;
++    Config.GenerateResolvConf = false;
++    Config.HostName.reset();
++    Config.Plan9Enabled = false;
++    Config.AppendGpuLibPath = false;
++    Config.GpuEnabled = false;
++    Config.LinkOsLibs = false;
++
+     if (getenv(LX_WSL2_SYSTEM_DISTRO_SHARE_ENV) != nullptr)
+     {
+         Config.GuiAppsEnabled = true;
+@@ -569,7 +586,7 @@ Return Value:
+     // Initialize cgroups based on what the kernel supports.
+     //
+ 
+-    ConfigInitializeCgroups(Config);
++    // Cgroup policy is outside the minimal direct-command contract.
+ 
+     //
+     // Attempt to register the NT interop binfmt extension.
+@@ -654,6 +671,12 @@ try
+         FATAL_ERROR("Unexpected configuration size {}", Buffer.size());
+     }
+ 
++    if (Message->DrvFsVolumesBitmap != 0 || Message->FeatureFlags != LxInitFeatureNone ||
++        Message->DrvfsMount != LxInitDrvfsMountNone)
++    {
++        FATAL_ERROR("Rejected excluded instance configuration");
++    }
++
+     //
+     // Set the host name and domain name buffers.
+     //
+diff --git a/src/linux/init/init.cpp b/src/linux/init/init.cpp
+index d1734ca..b7363b2 100644
+--- a/src/linux/init/init.cpp
++++ b/src/linux/init/init.cpp
+@@ -46,6 +46,7 @@ Abstract:
+ #include "message.h"
+ #include "configfile.h"
+ #include "CommandLine.h"
++#include "minimal_policy.h"
+ 
+ static_assert(EX_NOUSER == LX_INIT_USER_NOT_FOUND);
+ static_assert(EUSERS == LX_INIT_TTY_LIMIT);
+@@ -1365,6 +1366,12 @@ Return Value:
+ --*/
+ 
+ {
++    if (!wsl::linux::minimal_policy::AreDirectProcessFlagsAllowed(CreateProcess.Common.Flags))
++    {
++        LOG_ERROR("Rejected excluded direct-process flags {:#x}", CreateProcess.Common.Flags);
++        return -1;
++    }
++
+     std::vector<gsl::byte> Buffer;
+     ssize_t BytesRead;
+     ssize_t BytesWritten;
+@@ -2473,6 +2480,11 @@ Return Value:
+                 break;
+             }
+ 
++            if (!wsl::linux::minimal_policy::IsDistroControlRequestAllowed(Header->MessageType))
++            {
++                FATAL_ERROR("Rejected excluded distro-init message {}", Header->MessageType);
++            }
++
+             switch (Header->MessageType)
+             {
+             case LxInitMessageCreateSession:
+@@ -2631,6 +2643,11 @@ Return Value:
+             FATAL_ERROR("Invalid message size {}", Message.size());
+         }
+ 
++        if (!wsl::linux::minimal_policy::IsDistroControlRequestAllowed(Header->MessageType))
++        {
++            FATAL_ERROR("Rejected excluded distro-init message {}", Header->MessageType);
++        }
++
+         switch (Header->MessageType)
+         {
+         case LxInitMessageCreateSession:
+@@ -3075,6 +3092,11 @@ Return Value:
+             _exit(0);
+         }
+ 
++        if (!wsl::linux::minimal_policy::IsSessionRequestAllowed(Message->Header.MessageType))
++        {
++            FATAL_ERROR("Rejected excluded session message {}", Message->Header.MessageType);
++        }
++
+         switch (Message->Header.MessageType)
+         {
+         case LxInitMessageCreateProcessUtilityVm:
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+index 9118030..9954f68 100644
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -63,6 +63,7 @@ Abstract:
+ #include "binfmt.h"
+ #include "address.h"
+ #include "SocketChannel.h"
++#include "minimal_policy.h"
+ 
+ #define BSDTAR_PATH "/usr/bin/bsdtar"
+ #define BINFMT_REGISTER_STRING ":" LX_INIT_BINFMT_NAME ":M::MZ::" LX_INIT_PATH ":FP\n"
+@@ -3191,26 +3192,31 @@ try
+     // Validate the message and handle operations that do not require creating a child process.
+     //
+ 
++    if (!wsl::linux::minimal_policy::IsMiniInitRequestAllowed(Type))
++    {
++        LOG_ERROR("Rejected excluded mini-init message {}", Type);
++        return -1;
++    }
++
+     switch (Type)
+     {
+     case LxMiniInitMessageLaunchInit:
+-    case LxMiniInitMessageImport:
+-    case LxMiniInitMessageImportInplace:
+-    case LxMiniInitMessageExport:
+         try
+         {
+             const auto Message = gslhelpers::try_get_struct<LX_MINI_INIT_MESSAGE>(Buffer);
+             THROW_ERRNO_IF(EINVAL, !Message);
+ 
+-            wsl::shared::SocketChannel Channel{UtilConnectVsock(LX_INIT_UTILITY_VM_INIT_PORT, false), "Init"};
+-            if (Channel.Socket() < 0)
++            const auto* FsType = wsl::shared::string::FromSpan(Buffer, Message->FsTypeOffset);
++            if (Message->MountDeviceType != LxMiniInitMountDeviceTypeLun || strcmp(FsType, "ext4") != 0 ||
++                Message->Flags != LxMiniInitMessageFlagNone)
+             {
++                LOG_ERROR("Rejected non-LUN, non-ext4, or flagged distro launch");
+                 return -1;
+             }
+ 
+-            if (Type != LxMiniInitMessageLaunchInit || Message->Flags != LxMiniInitMessageFlagNone)
++            wsl::shared::SocketChannel Channel{UtilConnectVsock(LX_INIT_UTILITY_VM_INIT_PORT, false), "Init"};
++            if (Channel.Socket() < 0)
+             {
+-                LOG_ERROR("Rejected excluded instance operation or flags");
+                 return -1;
+             }
+ 
+@@ -3218,7 +3224,7 @@ try
+ 
+             auto ChildPid = UtilCreateChildProcess(
+                 "LaunchDistro",
+-                [Type, Message, Buffer, Channel = std::move(Channel), SystemDistroSocketFd = std::move(SystemDistroSocketFd), &Config]() mutable {
++                [Message, Buffer, Channel = std::move(Channel), SystemDistroSocketFd = std::move(SystemDistroSocketFd), &Config]() mutable {
+                     //
+                     // Restore the default signal flags so anything blocked by mini_init doesn't get
+                     // inherited by init and session leaders.
+@@ -3226,15 +3232,8 @@ try
+ 
+                     THROW_LAST_ERROR_IF(UtilRestoreBlockedSignals() < 0);
+ 
+-                    if (Type == LxMiniInitMessageLaunchInit)
+-                    {
+-                        ProcessLaunchInitMessage(Message, Buffer, std::move(Channel), std::move(SystemDistroSocketFd), Config);
+-                        FATAL_ERROR("Unexpected return from ProcessLaunchInitMessage");
+-                    }
+-                    else
+-                    {
+-                        ProcessImportExportMessage(Buffer, std::move(Channel));
+-                    }
++                    ProcessLaunchInitMessage(Message, Buffer, std::move(Channel), std::move(SystemDistroSocketFd), Config);
++                    FATAL_ERROR("Unexpected return from ProcessLaunchInitMessage");
+                 },
+                 (CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));
+ 
+@@ -3279,10 +3278,11 @@ try
+         // The retained channel mounts only the selected registered distro VHDX.
+         //
+ 
+-        if (EarlyConfig->SystemDistroDeviceId != UINT_MAX || EarlyConfig->SwapLun != UINT_MAX ||
++        if (EarlyConfig->SystemDistroDeviceType != LxMiniInitMountDeviceTypeInvalid ||
++            EarlyConfig->SystemDistroDeviceId != UINT_MAX || EarlyConfig->SwapLun != UINT_MAX ||
+             EarlyConfig->KernelModulesDeviceId != UINT_MAX || EarlyConfig->EnableDnsTunneling ||
+-            EarlyConfig->EnableDebugShell || EarlyConfig->EnableSafeMode || EarlyConfig->PageReportingOrder != -1 ||
+-            EarlyConfig->MemoryReclaimMode != LxMiniInitMemoryReclaimModeDisabled)
++            EarlyConfig->DnsTunnelingIpAddress != 0 || EarlyConfig->EnableDebugShell || EarlyConfig->EnableSafeMode ||
++            EarlyConfig->PageReportingOrder != -1 || EarlyConfig->MemoryReclaimMode != LxMiniInitMemoryReclaimModeDisabled)
+         {
+             LOG_ERROR("Rejected excluded early configuration");
+             return -1;
+diff --git a/src/linux/init/minimal_policy.h b/src/linux/init/minimal_policy.h
+new file mode 100644
+index 0000000..2847356
+--- /dev/null
++++ b/src/linux/init/minimal_policy.h
+@@ -0,0 +1,45 @@
++#pragma once
++
++#include "lxinitshared.h"
++
++namespace wsl::linux::minimal_policy
++{
++constexpr bool IsMiniInitRequestAllowed(LX_MESSAGE_TYPE Type)
++{
++    switch (Type)
++    {
++    case LxMiniInitMessageEarlyConfig:
++    case LxMiniInitMessageInitialConfig:
++    case LxMiniInitMessageLaunchInit:
++        return true;
++    default:
++        return false;
++    }
++}
++
++constexpr bool IsDistroControlRequestAllowed(LX_MESSAGE_TYPE Type)
++{
++    switch (Type)
++    {
++    case LxInitMessageCreateSession:
++    case LxInitMessageInitialize:
++    case LxInitMessageTerminateInstance:
++    case LxInitCreateProcess:
++        return true;
++    default:
++        return false;
++    }
++}
++
++constexpr bool IsSessionRequestAllowed(LX_MESSAGE_TYPE Type)
++{
++    return Type == LxInitMessageCreateProcessUtilityVm;
++}
++
++constexpr bool AreDirectProcessFlagsAllowed(int Flags)
++{
++    constexpr auto ConsoleFlags = LxInitCreateProcessFlagsStdInConsole | LxInitCreateProcessFlagsStdOutConsole |
++                                  LxInitCreateProcessFlagsStdErrConsole;
++    return Flags >= 0 && (Flags & ~ConsoleFlags) == 0;
++}
++} // namespace wsl::linux::minimal_policy

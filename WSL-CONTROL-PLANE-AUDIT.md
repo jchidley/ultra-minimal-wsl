@@ -73,7 +73,7 @@ Build a reduced single-user host and Linux control plane from a source revision 
 
 The per-distro VHDX remains because it is WSL’s simple container for a native Linux filesystem. Microsoft’s separate system-distro VHD and overlay are excluded.
 
-`minimal-v1` is preserved as the first reproducible reduction. Subsequent work must layer new patches and records rather than rewrite its hashes. `minimal-v2-fail-closed` will retain only the mapped contract messages; namespace variants then isolate whether launch needs more than `CLONE_NEWNS`. Neither source variant selects kernel requirements without runtime evidence.
+`minimal-v1` remains preserved as the first reproducible reduction. Layered `minimal-v2-fail-closed` now admits only the mapped inbound contract through `control-plane/policy/minimal-v2-policy.h`; its tests enumerate all 52 recorded control-message families on each channel. The stock-namespace sibling is tree-identical to that parent, while the mount-only sibling changes only the coherent clone bundle to `CLONE_NEWNS`. All three Linux trees built byte-identically twice. See `control-plane/minimal-v2-audit.md` and the candidate records. Neither source variant selects kernel requirements or proves runtime behavior.
 
 ## Deployment constraint
 

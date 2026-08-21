@@ -1,6 +1,7 @@
 import hashlib
 import json
 from pathlib import Path
+import re
 import unittest
 
 
@@ -29,6 +30,120 @@ def sums(path):
 
 
 class ControlPlaneRecordTests(unittest.TestCase):
+    def test_fail_closed_patch_embeds_and_uses_the_recorded_policy_seam(self):
+        patch = (CONTROL / "patches/0002-minimal-v2-fail-closed.patch").read_text(encoding="utf-8")
+        marker = "diff --git a/src/linux/init/minimal_policy.h b/src/linux/init/minimal_policy.h"
+        self.assertIn(marker, patch)
+        policy_patch = patch.split(marker, 1)[1]
+        policy_lines = []
+        in_hunk = False
+        for line in policy_patch.splitlines():
+            if line.startswith("diff --git "):
+                break
+            if line.startswith("@@"):
+                in_hunk = True
+                continue
+            if in_hunk and line.startswith("+") and not line.startswith("+++"):
+                policy_lines.append(line[1:])
+        embedded = "\n".join(policy_lines) + "\n"
+        canonical = (CONTROL / "policy/minimal-v2-policy.h").read_text(encoding="utf-8")
+        self.assertEqual(embedded, canonical)
+
+        def cases(function_name):
+            body = canonical.split(f"constexpr bool {function_name}", 1)[1].split("}", 1)[0]
+            return set(re.findall(r"case (Lx[A-Za-z0-9]+):", body))
+
+        self.assertEqual(cases("IsMiniInitRequestAllowed"), {
+            "LxMiniInitMessageEarlyConfig",
+            "LxMiniInitMessageInitialConfig",
+            "LxMiniInitMessageLaunchInit",
+        })
+        self.assertEqual(cases("IsDistroControlRequestAllowed"), {
+            "LxInitMessageCreateSession",
+            "LxInitMessageInitialize",
+            "LxInitMessageTerminateInstance",
+            "LxInitCreateProcess",
+        })
+        self.assertIn("return Type == LxInitMessageCreateProcessUtilityVm;", canonical)
+        self.assertIn("(Flags & ~ConsoleFlags) == 0", canonical)
+
+        for call in (
+            "IsMiniInitRequestAllowed(Type)",
+            "IsDistroControlRequestAllowed(Header->MessageType)",
+            "IsSessionRequestAllowed(Message->Header.MessageType)",
+            "AreDirectProcessFlagsAllowed(CreateProcess.Common.Flags)",
+        ):
+            self.assertIn(call, patch)
+
+    def test_namespace_variant_changes_only_the_coherent_clone_bundle(self):
+        patch = (CONTROL / "patches/0003-minimal-v2-mount-ns.patch").read_text(encoding="utf-8")
+        self.assertEqual(patch.count("diff --git "), 1)
+        self.assertIn("a/src/linux/init/main.cpp b/src/linux/init/main.cpp", patch)
+        removed = {line[1:].strip() for line in patch.splitlines() if line.startswith("-")}
+        added = {line[1:].strip() for line in patch.splitlines() if line.startswith("+")}
+        self.assertIn("(CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));", removed)
+        self.assertIn("(CLONE_NEWNS | SIGCHLD));", added)
+
+    def test_v2_candidate_records_and_patch_manifest_are_synchronized(self):
+        profile_digest = hashlib.sha256()
+        for path in (
+            ROOT / "build-host/lfs-builder-profile.env",
+            ROOT / "build-host/debian-snapshot.list",
+            ROOT / "build-host/packages.tsv",
+        ):
+            profile_digest.update(path.read_bytes())
+        expected_profile = profile_digest.hexdigest()
+
+        expected = {
+            "minimal-v2-fail-closed": {
+                "parent_candidate": "minimal-v1",
+                "diff": "6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759",
+            },
+            "minimal-v2-stock-ns": {
+                "parent_candidate": "minimal-v2-fail-closed",
+                "diff": "6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759",
+            },
+            "minimal-v2-mount-ns": {
+                "parent_candidate": "minimal-v2-fail-closed",
+                "diff": "b3c8cb69ae1a88b648c7dfa021dccaaf108930a337c1cff72e4768de936c4358",
+            },
+        }
+        for name, values in expected.items():
+            directory = CONTROL / "candidates" / name
+            candidate = key_values(directory / "candidate.txt")
+            metadata = key_values(directory / "build-metadata.txt")
+            reproducibility = key_values(directory / "reproducibility.txt")
+            recorded_sums = sums(directory / "SHA256SUMS")
+            source_diff = (directory / "source-diff.sha256").read_text(encoding="utf-8").strip()
+
+            with self.subTest(candidate=name):
+                self.assertEqual(candidate["parent_candidate"], values["parent_candidate"])
+                self.assertEqual(candidate["complete_source_diff_sha256"], values["diff"])
+                self.assertEqual(source_diff, values["diff"])
+                self.assertEqual(metadata["source_patch_sha256"], values["diff"])
+                self.assertEqual(metadata["source_commit"], candidate["source_commit"])
+                if candidate["layer_patch"] != "none":
+                    self.assertEqual(sha256(ROOT / candidate["layer_patch"]), candidate["layer_patch_sha256"])
+                self.assertEqual(metadata["minimal_link"], "1")
+                self.assertEqual(reproducibility["offline"], "1")
+                self.assertEqual(metadata["builder_profile_sha256"], expected_profile)
+                self.assertEqual(metadata["builder_profile_sha256"], reproducibility["builder_profile_sha256"])
+                self.assertEqual(reproducibility["runs"], "2")
+                self.assertEqual(reproducibility["result"], "byte-identical")
+                self.assertEqual(recorded_sums["init"], reproducibility["init_sha256"])
+                self.assertEqual(recorded_sums["init.debug"], reproducibility["init_debug_sha256"])
+                self.assertEqual(recorded_sums["initrd.img"], reproducibility["initrd_sha256"])
+
+        fail_sums = sums(CONTROL / "candidates/minimal-v2-fail-closed/SHA256SUMS")
+        stock_sums = sums(CONTROL / "candidates/minimal-v2-stock-ns/SHA256SUMS")
+        mount_sums = sums(CONTROL / "candidates/minimal-v2-mount-ns/SHA256SUMS")
+        self.assertEqual(fail_sums, stock_sums)
+        self.assertNotEqual(fail_sums["init"], mount_sums["init"])
+
+        manifest = sums(CONTROL / "patches/SHA256SUMS")
+        for patch_name, digest in manifest.items():
+            self.assertEqual(sha256(CONTROL / "patches" / patch_name), digest)
+
     def test_deferred_plan_is_non_executable_and_hash_synchronized(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
         self.assertFalse(plan["executable"])
@@ -52,6 +167,26 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(metadata["source_patch_sha256"], plan["source"]["patch_sha256"])
         self.assertEqual(metadata["minimal_link"], "1")
         self.assertTrue(plan["linux_build"]["minimal_link"])
+
+    def test_plan_v2_candidates_match_durable_records(self):
+        plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
+        self.assertEqual(plan["schema"], 2)
+        self.assertEqual(set(plan["source_candidates"]), {
+            "minimal-v2-fail-closed",
+            "minimal-v2-stock-ns",
+            "minimal-v2-mount-ns",
+        })
+        for name, planned in plan["source_candidates"].items():
+            directory = CONTROL / "candidates" / name
+            candidate = key_values(directory / "candidate.txt")
+            recorded_sums = sums(directory / "SHA256SUMS")
+            with self.subTest(candidate=name):
+                self.assertFalse(planned["runtime_evidence"])
+                self.assertTrue(planned["reproducible"])
+                self.assertEqual(planned["complete_source_diff_sha256"], candidate["complete_source_diff_sha256"])
+                self.assertEqual(planned["init_sha256"], recorded_sums["init"])
+                self.assertEqual(planned["init_debug_sha256"], recorded_sums["init.debug"])
+                self.assertEqual(planned["initrd_sha256"], recorded_sums["initrd.img"])
 
     def test_plan_contains_environment_recovery_and_host_safety_gates(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))

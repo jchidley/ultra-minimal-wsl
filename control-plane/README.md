@@ -11,6 +11,8 @@ SOURCE=/root/src/WSL-2.7.12 \
   /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/extract-control-plane-protocol.sh check
 ```
 
+Protocol extraction and Linux control-plane builds first require the pinned `LFS-Builder` profile in `../build-host/` to pass. New build metadata records that profile's bundle SHA-256.
+
 The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity. Strict framing and policy tests exercise malformed lengths, every excluded configuration field, all process-flag combinations, sampled signed exit statuses, and termination flags. Mutation evidence is recorded in `protocol/test-evidence.md`:
 
 ```bash
@@ -41,17 +43,17 @@ OFFLINE=1 MINIMAL_LINK=1 EXPECTED_SOURCE_PATCH_SHA256="$patch_sha" \
   /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/build-control-plane-linux.sh
 ```
 
-## Current source-only phase
+## Completed `minimal-v2` source-only phase
 
-Preserve the recorded `minimal-v1` patch and hashes. Next:
+The recorded layers preserve `minimal-v1`:
 
-1. layer `minimal-v2-fail-closed` to allow only contract messages on mini-init and distro-init channels;
-2. extend policy tests and mutation-test the allowlist;
-3. derive `minimal-v2-stock-ns` and `minimal-v2-mount-ns` from the same parent;
-4. produce two byte-identical `OFFLINE=1 MINIMAL_LINK=1` Linux builds per variant;
-5. append candidate records and synchronize the deferred plan without claiming runtime evidence.
+1. `patches/0002-minimal-v2-fail-closed.patch` adds the shared policy seam in `policy/minimal-v2-policy.h`, rejects all non-contract channel messages, constrains launch to one unflagged LUN/ext4 device, rejects excluded process/configuration flags, and prevents distro-local policy from re-enabling excluded integration;
+2. the compiler-derived fixture and tests enumerate all 52 recorded message families on every inbound channel; focused add-import and remove-termination allowlist mutations were caught;
+3. `minimal-v2-stock-ns` is tree-identical to the fail-closed parent, while `patches/0003-minimal-v2-mount-ns.patch` changes only IPC/mount/PID/UTS to mount-only launch;
+4. the parent and both siblings each produced byte-identical `init`, `init.debug`, and `initrd.img` in two separate `OFFLINE=1 MINIMAL_LINK=1` builds with verified cache hits;
+5. `candidates/minimal-v2-*` and `minimal-v2-audit.md` record parent, layer, complete-diff, artifact, size, and reproducibility evidence.
 
-The exact restart prompt and verification checklist are in `../NEXT-SESSION.md`.
+The Windows build and runtime phase remains deferred. `deferred-runtime-plan.json` is still non-executable and proves no B4/B5/B6 result. The restart boundary is in `../NEXT-SESSION.md`.
 
 ## Disposable Hyper-V VM
 
@@ -78,9 +80,9 @@ This creates `controlled-package-baseline`. Neither script starts or stops a VM 
 
 ### Source-only gates
 
-1. Preserve `minimal-v1`; record layered fail-closed and namespace variants separately.
-2. Prove the dispatch allowlist with protocol-policy and mutation tests.
-3. Produce reproducible minimal-link Linux artifacts for both namespace variants.
+1. Preserve `minimal-v1` and all three recorded `minimal-v2` candidate directories and patch hashes.
+2. Keep the dispatch enumeration, policy/header synchronization, and semantic mutation gates passing.
+3. Treat any source, ABI, or toolchain change as a new candidate requiring two offline builds.
 4. Keep the non-executable runtime plan synchronized.
 
 ### Deferred environment gates
