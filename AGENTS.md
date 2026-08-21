@@ -49,6 +49,8 @@ uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
+~/git/agent-skills/skills/windows-env/ps-lint --offline --settings .PSScriptAnalyzerSettings.psd1 tools
+git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
 Run Windows scripts through `windows-env/ps-exec`. Use `tools/Test-WslSafeState.ps1` for live state and `tools/Test-WslKernelTrial.ps1` for non-mutating validation.

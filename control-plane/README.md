@@ -14,7 +14,10 @@ SOURCE=/root/src/WSL-2.7.12 \
 The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity. Strict framing and policy tests exercise malformed lengths, every excluded configuration field, all process-flag combinations, sampled signed exit statuses, and termination flags. Mutation evidence is recorded in `protocol/test-evidence.md`:
 
 ```bash
-uv run python -m unittest tools.test_control_plane_protocol
+uv run python -m unittest tools.test_control_plane_protocol tools.test_control_plane_records
+~/git/agent-skills/skills/windows-env/ps-lint \
+  --offline --settings .PSScriptAnalyzerSettings.psd1 tools
+git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
 ## Candidate `minimal-v1`

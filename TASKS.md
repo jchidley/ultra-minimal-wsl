@@ -11,6 +11,7 @@
 5. From the same fail-closed parent, prepare `minimal-v2-stock-ns` and `minimal-v2-mount-ns` source variants for current IPC/mount/PID/UTS versus mount-only launch. Do not add namespace Kconfig without runtime selection.
 6. Rebuild each Linux variant twice with `OFFLINE=1 MINIMAL_LINK=1`; record patch, output, reproducibility, and size hashes without overwriting `minimal-v1` records.
 7. Synchronize `control-plane/deferred-runtime-plan.json` with the new candidate hashes while keeping it non-executable and carrying no approval forward.
+8. Before every commit, require the inventory/control-plane suites, pinned PowerShell 5.1 PSScriptAnalyzer profile, ShellCheck warning-or-higher checks, patch manifests, and documentation links to pass.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.
 

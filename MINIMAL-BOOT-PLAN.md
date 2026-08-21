@@ -141,6 +141,7 @@ The Windows controlled-package phase is deferred until large environment inputs 
 Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-DEVELOPMENT-AND-RECOVERY.md`. In particular:
 
 - synchronize durable records and require SQLite integrity `ok`;
+- require pinned PSScriptAnalyzer/PowerShell 5.1 compatibility checks for repository PowerShell and ShellCheck warning-or-higher checks for tracked shell scripts;
 - plan-validate before execution;
 - obtain fresh explicit approval for any shutdown or boot;
 - use one serial trial because all WSL 2 distros share the kernel;

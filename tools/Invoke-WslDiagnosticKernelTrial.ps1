@@ -41,8 +41,8 @@ $ErrorActionPreference = 'Stop'
 $harness = Join-Path $PSScriptRoot 'Invoke-WslKernelTrial.ps1'
 $stateRoot = Join-Path $ProjectRoot 'recovery-harness'
 $trialDirectory = Join-Path $stateRoot ('trials\' + $TrialId)
-$profile = (Resolve-Path -LiteralPath $WprProfilePath).Path
-$profileHash = (Get-FileHash -LiteralPath $profile -Algorithm SHA256).Hash.ToLowerInvariant()
+$resolvedWprProfile = (Resolve-Path -LiteralPath $WprProfilePath).Path
+$profileHash = (Get-FileHash -LiteralPath $resolvedWprProfile -Algorithm SHA256).Hash.ToLowerInvariant()
 if ($profileHash -ne $ExpectedWprProfileSha256.ToLowerInvariant()) {
     throw "Pinned WPR profile hash mismatch: $profileHash"
 }
@@ -69,7 +69,7 @@ Write-Output ([ordered]@{
     execute = [bool]$Execute
     requiresElevation = [bool]$Execute
     elevationReason = 'WPR starts privileged WSL, kernel, and Hyper-V ETW providers; the underlying kernel harness does not require elevation.'
-    wprProfile = $profile
+    wprProfile = $resolvedWprProfile
     wprProfileSha256 = $profileHash
     wprProfileName = 'WSL'
     etlDestination = (Join-Path $trialDirectory 'windows-wsl.etl')
@@ -106,7 +106,7 @@ $existingRelayIds = @(Get-Process -Name 'wslrelay' -ErrorAction SilentlyContinue
 $newRelayIds = @()
 
 try {
-    $startOutput = & wpr.exe -start ($profile + '!WSL') -filemode 2>&1
+    $startOutput = & wpr.exe -start ($resolvedWprProfile + '!WSL') -filemode 2>&1
     $startCode = $LASTEXITCODE
     [IO.File]::WriteAllLines($startLog, [string[]]@($startOutput), [Text.UTF8Encoding]::new($false))
     if ($startCode -ne 0) {
@@ -145,7 +145,7 @@ finally {
         trialId = $TrialId
         traceStartedUtc = $traceStarted.ToString('o')
         traceStoppedUtc = $traceStopped.ToString('o')
-        wprProfile = $profile
+        wprProfile = $resolvedWprProfile
         wprProfileSha256 = $profileHash
         wprProfileName = 'WSL'
         debugConsoleEnabledForTrial = $true

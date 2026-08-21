@@ -67,6 +67,7 @@ The first source candidate is preserved under `control-plane/` against pinned WS
 - `minimal-v1` patches both `WslCoreVm`/`WslCoreInstance` and Linux `mini_init` to omit or reject the system distro, GNS/networking/DNS, WSLg, DrvFs, interop, OOBE, swap, modules, and memory policy while retaining the registered-distro launch and command/lifecycle channel;
 - the patch applies cleanly and its complete source diff matches the recorded SHA-256;
 - strict protocol tests cover malformed lengths, independently mutated excluded fields, process flags, exit statuses, and termination framing;
+- repository PowerShell scripts pass pinned PSScriptAnalyzer 1.25.0 with Windows PowerShell 5.1 compatibility rules, and tracked shell scripts pass ShellCheck 0.11 at warning severity;
 - the source audit separates removed paths from runtime rejection and identifies the unresolved IPC/PID/UTS namespace mismatch;
 - `MINIMAL_LINK=1` removes unreachable sections, reducing stripped `init` from 2,835,320 to 2,511,032 bytes (11.4%); two clean builds are byte-identical and hashes are recorded in `control-plane/candidates/minimal-v1/`;
 - a static retained-kernel review confirms that no new Kconfig addition follows before namespace ablation;

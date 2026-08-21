@@ -16,10 +16,14 @@ uv run python -m unittest \
   tools.test_inventory_records \
   tools.test_control_plane_protocol \
   tools.test_control_plane_records
+~/git/agent-skills/skills/windows-env/ps-lint \
+  --offline --settings .PSScriptAnalyzerSettings.psd1 tools
+git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
 4. On `LFS-Builder`, verify `/root/src/WSL-2.7.12` is clean at `68f601bba8eac1df20a0bbd403c6c87c92369ade` and run `tools/extract-control-plane-protocol.sh check`.
 5. Verify the `minimal-v1` patch and hashes; do not amend or replace them.
+6. Require `windows-env/ps-lint --offline` to use PSScriptAnalyzer 1.25.0 from the package pinned as SHA-256 `14e634c828eb98efb9f40b2918ba90f139ed5eccdf663a2a747736d996995d60`; require ShellCheck 0.11 or newer at warning severity.
 
 ## Safety boundary
 
@@ -84,6 +88,8 @@ Update `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, `WSL-CONTROL-PLANE-AUDIT
 - Mutation evidence records at least two caught semantic mutations.
 - Each Linux candidate is byte-identical across two clean output directories.
 - No durable kernel annotation is promoted without runtime evidence.
+- PSScriptAnalyzer 1.25.0 reports no findings under the PowerShell 5.1 project profile.
+- ShellCheck reports no warning-or-higher findings for tracked shell scripts.
 - Markdown links and `git diff --check` pass.
 - Commit and push only after the working tree is clean and `main` matches `origin/main`.
 

@@ -21,7 +21,8 @@ Removing `kernel=` and shutting WSL down restores selection of the packaged kern
 4. Preserve `.wslconfig` byte-for-byte.
 5. Verify candidate config, image, metadata, and hashes.
 6. Synchronize inventory records and require SQLite integrity `ok`.
-7. Run `tools/Test-WslKernelTrial.ps1` and harness plan mode.
+7. Require the pinned PowerShell 5.1 PSScriptAnalyzer project profile and ShellCheck warning-or-higher checks to pass.
+8. Run `tools/Test-WslKernelTrial.ps1` and harness plan mode.
 
 No approval is implied by a prepared candidate or plan validation.
 

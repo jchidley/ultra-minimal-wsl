@@ -80,7 +80,7 @@ if ($SelfTest) {
     $sample = [Text.Encoding]::Unicode.GetBytes("Debian`r`n")
     $decoded = ConvertFrom-NativeBytes $sample
     Add-Check 'decode-utf16-native-output' ($decoded -eq "Debian`r`n" -and -not $decoded.Contains("`0")) $decoded "Debian`r`n"
-    Add-Check 'hash-missing-is-null' ((Get-Sha256OrNull (Join-Path ([IO.Path]::GetTempPath()) ([Guid]::NewGuid()))) -eq $null) $null $null
+    Add-Check 'hash-missing-is-null' ($null -eq (Get-Sha256OrNull (Join-Path ([IO.Path]::GetTempPath()) ([Guid]::NewGuid())))) $null $null
 }
 else {
     $kernelPath = Join-Path $WslRoot 'tools\kernel'

@@ -30,6 +30,7 @@
       "derive stock-namespace and mount-only variants from the same fail-closed parent",
       "build each Linux variant twice with OFFLINE=1 and MINIMAL_LINK=1",
       "record separate patch, build, reproducibility, and size hashes",
+      "pass pinned PowerShell 5.1 PSScriptAnalyzer and ShellCheck warning-or-higher gates",
       "synchronize this plan without making it executable"
     ],
     "forbidden_claims": [

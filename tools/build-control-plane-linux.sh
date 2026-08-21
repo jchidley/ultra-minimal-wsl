@@ -108,14 +108,14 @@ common=(
     -target x86_64-unknown-linux-musl -D_GNU_SOURCE=1 -D_LARGEFILE64_SOURCE
     -DWSL_PACKAGE_VERSION='"2.7.12.0"' -DWSL_PACKAGE_VERSION_MAJOR=2
     -DWSL_PACKAGE_VERSION_MINOR=7 -DWSL_PACKAGE_VERSION_REVISION=12 -D_AMD64_
-    -ffile-prefix-map="$SOURCE"=/usr/src/wsl -ffile-prefix-map="$BUILD"=/usr/src/build/candidate
-    -ffile-prefix-map="$ROOT"=/usr/src/build
+    "-ffile-prefix-map=${SOURCE}=/usr/src/wsl" "-ffile-prefix-map=${BUILD}=/usr/src/build/candidate"
+    "-ffile-prefix-map=${ROOT}=/usr/src/build"
     -fdebug-compilation-dir=/usr/src/build -g -O2 -DNDEBUG
 )
 link_options=()
 if [[ $MINIMAL_LINK == 1 ]]; then
     common+=(-ffunction-sections -fdata-sections)
-    link_options+=(-Wl,--gc-sections)
+    link_options+=("-Wl,--gc-sections")
 fi
 
 sources=(
