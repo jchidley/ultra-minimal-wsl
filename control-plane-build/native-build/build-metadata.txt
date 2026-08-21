@@ -2,6 +2,7 @@ source_base_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
 source_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
 source_patch_sha256=none
 source_date_epoch=1786988799
+minimal_link=0
 clang=Debian clang version 19.1.7 (3+b1)
 lld=Debian LLD 19.1.7 (compatible with GNU linkers)
 linuxsdk_sha256=942d36f760446853b29c97f2ee689819bb9305d959342d21df537c1d6981491e

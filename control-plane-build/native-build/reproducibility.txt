@@ -1,5 +1,6 @@
 source_tag=2.7.12
 source_commit=68f601bba8eac1df20a0bbd403c6c87c92369ade
+minimal_link=0
 runs=2
 separate_build_directories=yes
 result=byte-identical

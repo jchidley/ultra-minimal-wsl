@@ -122,6 +122,18 @@ Alpine additionally runs `/bin/busybox true`; Arch and Debian run `/bin/true`. D
 
 If a failure does not select a narrow subsystem, delta-debug coherent feature groups between the candidate and Stage 1. Never bisect arbitrary individual symbols across dependency boundaries.
 
+## Deferred controlled-package environment
+
+The Windows controlled-package phase is deferred until large environment inputs are practical. Until separately selected:
+
+- do not download Windows installation media or Visual Studio;
+- do not create or start the Hyper-V development VM;
+- do not request elevation;
+- do not install a controlled package or modify host WSL files;
+- continue only static protocol, source-reduction, reproducible Linux-build, Kconfig, and recovery-plan work.
+
+`control-plane/deferred-runtime-plan.json` is preparation, not an executable trial record. It carries no approval forward. Before later execution, replace every missing input with a pinned hash, plan-validate the fixed operation, and obtain fresh explicit approval.
+
 ## Evidence and safety gates
 
 Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-DEVELOPMENT-AND-RECOVERY.md`. In particular:

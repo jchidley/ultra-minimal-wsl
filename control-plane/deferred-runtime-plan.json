@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "plan_id": "CP-MINIMAL-V1-001",
+  "status": "deferred-environment-not-provisioned",
+  "executable": false,
+  "approval_carried_forward": false,
+  "source": {
+    "wsl_tag": "2.7.12",
+    "base_commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "patch": "control-plane/patches/0001-minimal-control-plane-v1.patch",
+    "patch_sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"
+  },
+  "linux_build": {
+    "minimal_link": true,
+    "init_sha256": "c8985207676965b42e246d61cd46d4c2702fe9732aca095c2a5b3a7d0a8afc44",
+    "init_debug_sha256": "47fdd2a0837969741f47b3c5b4a14d926e1a57e8c081edfcd74c7c38e36e2b6b",
+    "initrd_sha256": "bfe154b4abaca10da0336e376996488549a264e4b91360f3bfbfbf4394b168f6"
+  },
+  "missing_before_plan_validation": [
+    "approved and hash-recorded Windows installation media",
+    "disposable Hyper-V Windows VM",
+    "stock WSL 2.7.12 guest baseline",
+    "Windows compiler and SDK inputs",
+    "successfully built controlled WSL package",
+    "controlled-package-baseline checkpoint",
+    "candidate package hashes and fixed install command",
+    "fresh explicit approval for elevation and runtime execution"
+  ],
+  "preconditions": [
+    "VM is Off before baseline checkpoint or restore",
+    "clean-shell and controlled-package-baseline checkpoints are independently enumerated",
+    "stock wsl.exe command execution succeeds before package replacement",
+    "candidate package and recovery artifacts match recorded hashes",
+    "no host WSL files or configuration are modified"
+  ],
+  "runtime_sequence": [
+    "restore controlled-package-baseline",
+    "install only the fixed controlled package inside the VM",
+    "start one registered Toybox distro",
+    "run the B6-T smoke contract through wsl.exe",
+    "record stdout, stderr, exit status, host service logs, and guest logs",
+    "terminate the distro through wsl.exe",
+    "shut WSL down inside the VM",
+    "verify no utility VM remains",
+    "restore controlled-package-baseline",
+    "prove stock WSL command execution"
+  ],
+  "acceptance": {
+    "B4": "primary and distro control channels remain alive without GNS or a system distro",
+    "B5": "wsl.exe dispatches a command and relays stdout, stderr, and exit status",
+    "B6-T": "Toybox smoke contract prints toybox-ok",
+    "termination": "normal and forced instance termination complete within recorded bounds",
+    "recovery": "checkpoint restore returns to the exact stock package and command execution passes"
+  },
+  "stop_conditions": [
+    "any operation targets the physical host instead of the disposable VM",
+    "a required hash differs",
+    "the recovery checkpoint is absent",
+    "the candidate requests networking, DNS, DrvFs, WSLg, systemd, cgroups, or interop",
+    "a timeout occurs without independent proof that the process or VM stopped"
+  ]
+}

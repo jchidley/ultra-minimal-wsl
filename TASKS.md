@@ -6,9 +6,9 @@
 
 1. Keep additive stock-init kernel discovery frozen at `K-OVERLAY-DIAG-001`; do not add GNS or networking support.
 2. Keep the large Windows environment phase deferred: do not download an ISO, install Visual Studio, create a Hyper-V VM, or request elevation until that later test is separately selected.
-3. Continue source review of `control-plane/minimal-v1`, separating compile-time omissions from runtime-rejected excluded messages.
-4. Add host/guest protocol fixture tests for malformed sizes, excluded flags, direct command relay, exit status, and termination using the pinned ABI.
-5. Prepare—but do not execute—the controlled-package runtime record and recovery assertions needed for the deferred VM test.
+3. Make the remaining broad mini-init and distro-init message cases fail closed for management, DrvFs, timezone, interop, and other excluded policy.
+4. Prepare coherent source variants for mount-namespace-only launch versus the current IPC/mount/PID/UTS bundle; do not add namespace Kconfig without runtime selection.
+5. Keep protocol fixtures, minimal-link hashes, and `control-plane/deferred-runtime-plan.json` synchronized as source reduction continues; the plan remains non-executable.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.
 
@@ -38,7 +38,7 @@ Before Arch or Debian trials, extend the durable harness/inventory result fields
 
 ## Parallel non-disruptive work
 
-- Continue reviewing the mkroot-to-Stage-1 Kconfig delta by coherent feature group.
+- Continue reviewing the mkroot-to-Stage-1 Kconfig delta by coherent feature group; use `control-plane/kernel-contract-review.md` as the retained-path starting point.
 - Keep stock-init requirements separate from final control-plane requirements.
 - Keep generated inventory exports out of Git; commit only durable manifests and annotations.
 

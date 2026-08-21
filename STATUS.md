@@ -66,7 +66,11 @@ The first source candidate is preserved under `control-plane/` against pinned WS
 - a compiler-extracted protocol fixture pins retained message IDs, constants, structure sizes, and offsets to the shared-header hash;
 - `minimal-v1` patches both `WslCoreVm`/`WslCoreInstance` and Linux `mini_init` to omit or reject the system distro, GNS/networking/DNS, WSLg, DrvFs, interop, OOBE, swap, modules, and memory policy while retaining the registered-distro launch and command/lifecycle channel;
 - the patch applies cleanly and its complete source diff matches the recorded SHA-256;
-- two clean Linux-side builds in distinct output directories are byte-identical, with hashes recorded in `control-plane/candidates/minimal-v1/`;
+- strict protocol tests cover malformed lengths, independently mutated excluded fields, process flags, exit statuses, and termination framing;
+- the source audit separates removed paths from runtime rejection and identifies the unresolved IPC/PID/UTS namespace mismatch;
+- `MINIMAL_LINK=1` removes unreachable sections, reducing stripped `init` from 2,835,320 to 2,511,032 bytes (11.4%); two clean builds are byte-identical and hashes are recorded in `control-plane/candidates/minimal-v1/`;
+- a static retained-kernel review confirms that no new Kconfig addition follows before namespace ablation;
+- the deferred runtime/recovery plan is recorded but explicitly non-executable;
 - the Windows side has not yet been built or runtime-tested.
 
 Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. The environment-dependent phase is explicitly deferred because Windows installation media and the Visual Studio toolchain are large inputs. No ISO will be downloaded, no disposable VM will be created, and no Hyper-V elevation will be attempted until that later test is separately selected and approved.

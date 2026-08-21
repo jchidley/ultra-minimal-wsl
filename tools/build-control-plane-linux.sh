@@ -11,6 +11,7 @@ JOBS=${JOBS:-$(nproc)}
 BUILD=${BUILD:-$ROOT/native-build}
 CACHE=${CACHE:-$ROOT/cache}
 OFFLINE=${OFFLINE:-0}
+MINIMAL_LINK=${MINIMAL_LINK:-0}
 DEPS=$ROOT/deps
 OUT=$BUILD/out
 OBJ=$BUILD/obj
@@ -29,6 +30,7 @@ feed=https://pkgs.dev.azure.com/shine-oss/13eb32df-d33f-470f-b930-499535a958b4/_
 fail() { printf 'error: %s\n' "$*" >&2; exit 1; }
 need() { command -v "$1" >/dev/null || fail "missing command: $1"; }
 for command in git unzip tar clang clang++ llvm-ar llvm-strip llvm-objcopy sha256sum; do need "$command"; done
+[[ $MINIMAL_LINK == 0 || $MINIMAL_LINK == 1 ]] || fail "MINIMAL_LINK must be 0 or 1"
 source_commit=$(git -C "$SOURCE" rev-parse HEAD)
 [[ -z $(git -C "$SOURCE" status --porcelain) ]] || fail "source worktree is dirty"
 if [[ $source_commit != "$base_commit" ]]; then
@@ -110,6 +112,11 @@ common=(
     -ffile-prefix-map="$ROOT"=/usr/src/build
     -fdebug-compilation-dir=/usr/src/build -g -O2 -DNDEBUG
 )
+link_options=()
+if [[ $MINIMAL_LINK == 1 ]]; then
+    common+=(-ffunction-sections -fdata-sections)
+    link_options+=(-Wl,--gc-sections)
+fi
 
 sources=(
     src/shared/configfile/configfile.cpp
@@ -162,7 +169,7 @@ clang++ -o "$OUT/init.debug" "$sdk/lib/crti.o" "$sdk/lib/crt1.o" \
     "${objects[@]}" "$sdk/lib/crtn.o" -target x86_64-unknown-linux-musl \
     --gcc-toolchain="$sdk" -B"$sdk" -isysroot "$sdk" -nostartfiles \
     --no-standard-libraries -fuse-ld=lld -L"$sdk/lib" -L"$sdk/lib/linux" \
-    -lclang_rt.builtins-x86_64 -l:libc.a -static -lunwind -lc++abi -lc++
+    "${link_options[@]}" -lclang_rt.builtins-x86_64 -l:libc.a -static -lunwind -lc++abi -lc++
 llvm-strip "$OUT/init.debug" -o "$OUT/init"
 llvm-objcopy --add-gnu-debuglink="$OUT/init.debug" "$OUT/init"
 
@@ -179,6 +186,7 @@ uv run python "$ROOT/create-initrd-repro.py"
     printf 'source_commit=%s\n' "$source_commit"
     printf 'source_patch_sha256=%s\n' "$actual_patch_sha"
     printf 'source_date_epoch=%s\n' "$SOURCE_DATE_EPOCH"
+    printf 'minimal_link=%s\n' "$MINIMAL_LINK"
     printf 'clang=%s\n' "$(clang --version | head -1)"
     printf 'lld=%s\n' "$(ld.lld --version | head -1)"
     printf 'linuxsdk_sha256=%s\n' "$linuxsdk_sha"

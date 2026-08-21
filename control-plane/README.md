@@ -11,7 +11,11 @@ SOURCE=/root/src/WSL-2.7.12 \
   /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/extract-control-plane-protocol.sh check
 ```
 
-The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity.
+The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity. Strict framing and policy tests exercise malformed lengths, every excluded configuration field, all process-flag combinations, sampled signed exit statuses, and termination flags:
+
+```bash
+uv run python -m unittest tools.test_control_plane_protocol
+```
 
 ## Candidate `minimal-v1`
 
@@ -22,7 +26,7 @@ The fixture retains handshake, instance creation, initialization, command creati
 - distro host path: sends a zero-feature direct-command configuration and clears DrvFs, elevation, interop, and OOBE process flags;
 - retained: primary and notification VSOCK channels, one registered distro VHDX/ext4 launch, distro-init channel, command sockets, stdio, exit status, and termination code.
 
-The Linux side compiles reproducibly. `candidates/minimal-v1/` records the complete source-diff hash, build inputs, output hashes, and two-clean-build comparison. The Windows service side still requires a controlled Windows build and runtime test in the disposable VM.
+The Linux side compiles reproducibly. `candidates/minimal-v1/` records the complete source-diff hash, build inputs, output hashes, size comparison, and two-clean-build comparison. `minimal-v1-audit.md` distinguishes removed, rejected, ABI-retained, and still-reachable stock paths. `kernel-contract-review.md` records the corresponding static Kconfig review without promoting unproved requirements. The Windows service side still requires a controlled Windows build and runtime test in the disposable VM.
 
 To build a clean applied worktree offline, calculate the source diff hash after applying the patch and pass it explicitly:
 
@@ -30,7 +34,7 @@ To build a clean applied worktree offline, calculate the source diff hash after 
 base=68f601bba8eac1df20a0bbd403c6c87c92369ade
 patch_sha=$(git diff --binary "$base" | sha256sum | cut -d' ' -f1)
 SOURCE=$PWD BUILD=/root/experiments/minimal-wsl/control-plane-build/minimal-v1 \
-OFFLINE=1 EXPECTED_SOURCE_PATCH_SHA256="$patch_sha" \
+OFFLINE=1 MINIMAL_LINK=1 EXPECTED_SOURCE_PATCH_SHA256="$patch_sha" \
   /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/build-control-plane-linux.sh
 ```
 
@@ -52,6 +56,8 @@ After separate explicit approval, launch the reviewed fixed invocation through `
 ```
 
 This creates `controlled-package-baseline`. Neither script starts or stops a VM automatically. Machine state is recorded outside Git under `%LOCALAPPDATA%\ultra-minimal-wsl\hyper-v-vm.json`.
+
+`deferred-runtime-plan.json` is deliberately non-executable. It records missing inputs, safety preconditions, the eventual runtime sequence, acceptance evidence, recovery assertions, and stop conditions without reserving a trial ledger row or carrying approval forward.
 
 ## Remaining gates
 
