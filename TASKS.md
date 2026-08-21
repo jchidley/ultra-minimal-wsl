@@ -6,12 +6,12 @@
 
 1. Keep additive stock-init kernel discovery frozen at `K-OVERLAY-DIAG-001`; do not add GNS or networking support.
 2. Keep the large Windows environment phase deferred: do not download an ISO, install Visual Studio, create a Hyper-V VM, or request elevation until that later test is separately selected.
-3. Preserve the completed `minimal-v1`, `minimal-v2-fail-closed`, `minimal-v2-stock-ns`, and `minimal-v2-mount-ns` patches/records; do not rewrite their hashes.
-4. Keep the 52-family protocol-policy enumeration and dispatch mutation evidence as mandatory regression gates.
-5. Keep both namespace siblings unselected. Do not add `CONFIG_IPC_NS`, `CONFIG_PID_NS`, or `CONFIG_UTS_NS` without deferred runtime evidence.
-6. Keep all six offline minimal-link build results and candidate metadata immutable; any source/toolchain change starts a new candidate.
+3. Preserve the completed post-profile recheck: all six fresh `JOBS=1` builds matched the committed candidate artifacts and metadata; a fresh `JOBS=2` fail-closed build also matched. Keep two jobs as the proven default on the 8 GiB builder and do not treat higher fan-out as validated.
+4. Preserve `minimal-v1`, `minimal-v2-fail-closed`, `minimal-v2-stock-ns`, and `minimal-v2-mount-ns` patches/records; keep the 52-family policy enumeration and dispatch mutations as regression gates.
+5. Continue source-only control-plane reduction/Kconfig review without selecting a namespace sibling. Do not add `CONFIG_IPC_NS`, `CONFIG_PID_NS`, or `CONFIG_UTS_NS` without deferred runtime evidence.
+6. Treat any candidate source, ABI, or toolchain change as a new candidate requiring two distinct offline builds and preserved old/new evidence.
 7. Keep `control-plane/deferred-runtime-plan.json` non-executable and carrying no approval. If the environment phase is later selected, first pin Windows media, compiler/SDK, package, checkpoint, and recovery inputs.
-8. Before every commit, require the inventory/control-plane suites, pinned PowerShell 5.1 PSScriptAnalyzer profile, ShellCheck warning-or-higher checks, patch manifests, and documentation links to pass.
+8. Before every commit, require the build-host, inventory/control-plane suites, pinned PowerShell 5.1 PSScriptAnalyzer profile, ShellCheck warning-or-higher checks, patch manifests, and documentation links to pass.
 
 Continue excluding cgroups, networking/seccomp, Hyper-V networking, PTP, `CONFIG_PROC_CHILDREN`, page reporting, and extra console support. The latest errors occurred in excluded networking or shutdown cleanup and do not select those features.
 

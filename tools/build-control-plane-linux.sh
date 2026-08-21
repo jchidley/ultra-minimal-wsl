@@ -9,7 +9,9 @@ PROJECT=${PROJECT:-$(cd -- "$SCRIPT_DIR/.." && pwd)}
 SOURCE=${SOURCE:-/root/src/WSL-2.7.12}
 ROOT=${ROOT:-/root/experiments/minimal-wsl/control-plane-build}
 LOCALIZATION_HEADER=${LOCALIZATION_HEADER:-$ROOT/Localization.h}
-JOBS=${JOBS:-$(nproc)}
+# Higher fan-out repeatedly failed during Clang object finalization on the
+# pinned 8 GiB builder. Two jobs is the independently proven safe default.
+JOBS=${JOBS:-2}
 BUILD=${BUILD:-$ROOT/native-build}
 CACHE=${CACHE:-$ROOT/cache}
 OFFLINE=${OFFLINE:-0}

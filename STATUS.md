@@ -48,7 +48,7 @@ Post-trial recovery independently reported `safe:true`: the exact `.wslconfig` a
 
 - 9 config snapshots;
 - 10 completed trials;
-- 113 reviewed annotations;
+- 125 reviewed annotations;
 - SQLite integrity `ok` at the last synchronization.
 
 Durable inputs are `annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`. Other inventory exports are generated locally.
@@ -74,19 +74,23 @@ The source-only reduction is recorded under `control-plane/` against pinned WSL 
 - `minimal-v2-stock-ns` is tree-identical to the fail-closed parent and retains IPC/mount/PID/UTS namespaces; `minimal-v2-mount-ns` differs only by retaining the mount namespace;
 - tests enumerate every retained and rejected family on each inbound channel, malformed lengths, excluded fields and flags, signed exit statuses, and clean/forced termination framing;
 - semantic mutations that added mini-init import and removed distro termination were both caught and reverted;
-- each of the fail-closed parent and two namespace siblings built twice offline in distinct ext4 directories with verified cache hits; `init`, `init.debug`, and `initrd.img` were byte-identical per candidate;
+- each fail-closed/namespace candidate built twice offline in distinct ext4 directories with verified cache hits and byte-identical `init`, `init.debug`, and `initrd.img`; a later independent six-build recheck reproduced every artifact and metadata hash;
 - fail-closed/stock stripped `init` is 2,450,672 bytes, 60,360 bytes (2.4%) below `minimal-v1`; mount-only has the same size but a distinct expected hash;
 - the deferred runtime/recovery plan carries all candidate hashes but remains non-executable and carries no approval;
 - no Windows component has been compiled and no candidate has been runtime-tested.
 
 Hyper-V VM creation and baseline-checkpoint scripts are plan-validated. The environment-dependent phase is explicitly deferred because Windows installation media and the Visual Studio toolchain are large inputs. No ISO will be downloaded, no disposable VM will be created, and no Hyper-V elevation will be attempted until that later test is separately selected and approved.
 
+## Reproducibility recheck
+
+After the pinned build-host profile was finalized, builds with higher Clang fan-out repeatedly failed during object finalization with `unable to rename temporary ... .o.tmp ... No such file or directory`. The ext4 filesystem was healthy, space was ample, a trivial compile succeeded, and no persistent OOM or I/O evidence was available after restart. All six required candidate rechecks subsequently completed in separate ext4 directories at `JOBS=1`; their source/profile metadata and all artifact hashes exactly match the durable records. A fresh `JOBS=2` offline fail-closed build also completed with verified cache hits and matching hashes. The build script now defaults to that proven bound rather than host `nproc`; higher explicit fan-out remains unverified on this 8 GiB builder.
+
 ## Restart point
 
-The planned `minimal-v2` source-only phase is complete. Preserve all four candidate records and keep the Windows environment deferred. The next selected phase is either additional non-runtime Kconfig/source review or, only after separately choosing the large environment work, pinning Windows media/toolchain inputs and plan-validating the controlled-package experiment. Do not provision, elevate, boot, or promote namespace Kconfig without fresh authorization and runtime evidence.
+The `minimal-v2` source, durable records, and independent reproducibility recheck are complete. The retained-path Kconfig review now classifies nine mkroot-supplied facilities as `BASE` and leaves IPC/PID/UTS namespace options reviewed but unresolved. Continue source-only control-plane reduction or the next coherent Kconfig group while keeping both namespace siblings unselected. Keep the Windows environment deferred; do not provision, elevate, boot, or promote namespace Kconfig without fresh authorization and runtime evidence.
 
 `NEXT-SESSION.md` is the copy/paste restart brief for that boundary.
 
 ## Target gap
 
-No mkroot-derived candidate has reached Toybox command dispatch under WSL. Additive stock discovery has now reached an excluded service boundary, so the next phase is the reduced host and guest control plane. It must preserve VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while removing the system distro, GNS, and unrelated stock policy. Neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet.
+No mkroot-derived candidate has reached Toybox command dispatch under WSL. Additive stock discovery stopped at an excluded service boundary, and the source-only reduced host/guest candidates now preserve VSOCK, distro VHDX mounting, root transition, command relay, termination, and recovery while rejecting the system distro, GNS, and unrelated stock policy. The remaining gap is deferred Windows compilation and controlled runtime proof of B4/B5/B6-T, including namespace selection and later minimality ablation. Neither `minimal-viable-wsl-v1` nor the Alpine/Arch/Debian compatibility profile exists yet.
