@@ -59,7 +59,7 @@ A guest-only replacement is insufficient. Immediately after early configuration,
 - distro `/init`: keep the inherited control channel, direct command path, relay, and poweroff behavior while omitting networking, DrvFs, interop, systemd, and Plan 9 setup;
 - shared protocol: preserve existing layouts where practical so unmodified `wsl.exe` remains the client.
 
-This is a source-level candidate contract, not proof that every listed namespace, message field, or socket is necessary. `control-plane/minimal-v1-audit.md` confirms that the first patch still compiles or dispatches broad stock operations and still requests IPC, mount, PID, and UTS namespaces. The next static gate is therefore a layered fail-closed candidate followed by stock-namespace and mount-only variants. Runtime ablation must establish the final minimum.
+This is a source-level candidate contract, not proof that every listed namespace, message field, or socket is necessary. The candidate lineage progressively narrows broad stock behavior into a fail-closed parent and coherent namespace siblings while preserving every earlier generation. Current identities and source-only results belong in `control-plane/README.md` and the candidate audits. Controlled runtime comparison and later kernel ablation must establish the final minimum.
 
 ## Runtime stopping gate
 
@@ -73,7 +73,7 @@ Build a reduced single-user host and Linux control plane from a source revision 
 
 The per-distro VHDX remains because it is WSL’s simple container for a native Linux filesystem. Microsoft’s separate system-distro VHD and overlay are excluded.
 
-`minimal-v1` remains preserved as the first reproducible reduction. Layered `minimal-v2-fail-closed` now admits only the mapped inbound contract through `control-plane/policy/minimal-v2-policy.h`; its tests enumerate all 52 recorded control-message families on each channel. The stock-namespace sibling is tree-identical to that parent, while the mount-only sibling changes only the coherent clone bundle to `CLONE_NEWNS`. All three Linux trees built byte-identically twice. See `control-plane/minimal-v2-audit.md` and the candidate records. Neither source variant selects kernel requirements or proves runtime behavior.
+The selected design is implemented as preserved, layered candidates: a broad reduction, a fail-closed protocol-policy parent, any narrowly justified excluded-policy removal layer, and coherent namespace siblings. See `control-plane/README.md`, the versioned candidate audits, and candidate records for current identities and build evidence. No source variant selects kernel requirements or proves runtime behavior.
 
 ## Deployment constraint
 

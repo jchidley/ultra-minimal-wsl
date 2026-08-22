@@ -10,6 +10,14 @@ Networking, DNS, DrvFs, Windows interop, WSLg, systemd, containers, cgroup polic
 
 Read `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, and `build-host/README.md`. Query `inventory/kconfig-dependencies.sqlite`; durable inputs are `inventory/annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`.
 
+## Documentation and relay ownership
+
+- `STATUS.md` owns verified current facts; `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns durable strategy and acceptance criteria.
+- Exact preparation inputs, commands, hashes, failures, and execution blockers belong in `control-plane/deferred-runtime-plan.json`; immutable trial evidence belongs in the inventory and trial directories.
+- Keep `README.md` and `PROJECT-MODEL.md` explanatory. Do not copy transient blockers, hashes, or task detail into them.
+- `NEXT-SESSION.md` is an executable restart brief for one bounded objective, derived from the canonical files above. Keep it concise; do not turn it into another status ledger or work queue.
+- Before relaying, update only canonical documents whose facts or tasks changed, validate them, and ensure the session name matches the bounded objective in `NEXT-SESSION.md`.
+
 ## Local inputs
 
 Ordinary build, extraction, and trial workflows must reuse pinned, hash-verified local inputs rather than repeatedly downloading them. Where reusable archives are necessary, use an explicitly configured local cache: accept only verified cache hits, download and atomically cache a missing or invalid entry, then verify it before use. Provide an offline mode that fails closed instead of accessing the network.
@@ -20,7 +28,7 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-The Windows ISO, Visual Studio, Hyper-V VM, elevation, and controlled-package runtime phase are deferred. Continue source-only control-plane reduction, protocol tests, reproducible Linux builds, Kconfig review, and non-executable recovery planning. Do not treat `control-plane/deferred-runtime-plan.json` as authorization.
+Preparation-only acquisition of the pinned Windows media, Visual Studio/compiler layout, WSL source, and controlled-build dependencies is authorized when artifacts are saved in the reusable local cache and hash-verified. Hyper-V VM creation/operation, elevation, controlled-package installation, WSL shutdown, `.wslconfig` changes, custom boot, and runtime execution remain deferred and unauthorized. Continue non-executable recovery planning; do not treat `control-plane/deferred-runtime-plan.json` as authorization.
 
 ## Candidate records
 
@@ -49,7 +57,7 @@ bash tools/bootstrap-lfs-builder.sh --check  # run inside LFS-Builder
 uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
-uv run python -m unittest tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
+uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
 ~/git/agent-skills/skills/windows-env/ps-lint --offline --settings .PSScriptAnalyzerSettings.psd1 tools
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```

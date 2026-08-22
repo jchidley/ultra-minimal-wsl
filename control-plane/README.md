@@ -1,6 +1,6 @@
 # Reduced control-plane development
 
-This directory contains the first source-level candidate for the host and guest path described in `WSL-CONTROL-PLANE-AUDIT.md`. It is a buildable prototype, not runtime proof of Minimal Viable WSL.
+This directory contains the layered source-level candidates for the host and guest path described in `WSL-CONTROL-PLANE-AUDIT.md`. They are buildable prototypes, not runtime proof of Minimal Viable WSL.
 
 ## Pinned protocol fixture
 
@@ -53,7 +53,13 @@ The recorded layers preserve `minimal-v1`:
 4. the parent and both siblings each produced byte-identical `init`, `init.debug`, and `initrd.img` in two separate `OFFLINE=1 MINIMAL_LINK=1` builds with verified cache hits;
 5. `candidates/minimal-v2-*` and `minimal-v2-audit.md` record parent, layer, complete-diff, artifact, size, and reproducibility evidence.
 
-The Windows build and runtime phase remains deferred. `deferred-runtime-plan.json` is still non-executable and proves no B4/B5/B6 result. The restart boundary is in `../NEXT-SESSION.md`.
+All `minimal-v2` records remain preserved as historical parents.
+
+## Completed `minimal-v3` source-only readiness phase
+
+`patches/0004-minimal-v3-no-interop.patch` layers on `minimal-v2-fail-closed` and removes only mini-init's unconditional `binfmt_misc` mount and `WSLInterop` registration hard-fail. Focused record tests require both operations and their local definitions to be removed without changing distro-init policy or protocol dispatch. `minimal-v3-stock-ns` is tree-identical to the new fail-closed parent; `patches/0005-minimal-v3-mount-ns.patch` changes only the coherent namespace bundle to mount-only.
+
+All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. The Windows build and runtime phase remains deferred. `deferred-runtime-plan.json` is synchronized to v3 but remains non-executable and proves no B4/B5/B6 result. The restart boundary is in `../NEXT-SESSION.md`.
 
 ## Disposable Hyper-V VM
 
@@ -78,19 +84,18 @@ This creates `controlled-package-baseline`. Neither script starts or stops a VM 
 
 ## Remaining gates
 
-### Source-only gates
+### Completed source-only runtime-readiness gates
 
-1. Preserve `minimal-v1` and all three recorded `minimal-v2` candidate directories and patch hashes.
-2. Keep the dispatch enumeration, policy/header synchronization, and semantic mutation gates passing.
-3. Treat any source, ABI, or toolchain change as a new candidate requiring two offline builds.
-4. Keep the non-executable runtime plan synchronized.
+The v3 interop-removal layer, focused regression coverage, replacement candidates, two distinct offline builds per candidate, durable hashes, and non-executable plan synchronization are complete. Preserve all v1/v2/v3 evidence; any later source or ABI change creates a new layer and repeats these gates.
 
-### Deferred environment gates
+### Controlled environment gates
 
-1. Record and hash approved Windows installation media.
-2. Obtain explicit approval for elevated VM creation.
-3. Install Windows in the VM and establish a stock WSL 2.7.12 recovery baseline.
-4. Build the patched Windows service/package inside the VM.
-5. Create `controlled-package-baseline` while the VM is off.
-6. Define a runtime trial record before booting the controlled package.
-7. Prove B4, B5, B6-T, termination, and checkpoint recovery before further reduction.
+1. Resolve the current compiler-layout acquisition blocker recorded in `STATUS.md` and `TASKS.md`; exact product, catalog, licensing, command, and failure evidence belongs only in `deferred-runtime-plan.json`.
+2. Complete and hash the separate reusable offline compiler layout against the pinned source prerequisites without installing it.
+3. Pin the package build procedure and outputs without installing the layout.
+4. Obtain explicit approval for elevated VM creation.
+5. Install Windows in the VM and establish a stock WSL 2.7.12 recovery baseline.
+6. Build the patched Windows service/package inside the VM.
+7. Create `controlled-package-baseline` while the VM is off.
+8. Define a runtime trial record before booting the controlled package.
+9. Prove B4, B5, B6-T, termination, and checkpoint recovery before further reduction.

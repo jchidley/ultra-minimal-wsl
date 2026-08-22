@@ -45,7 +45,7 @@ Everything beyond this boundary is an optional integration profile. A separate, 
 
 ## Current position
 
-The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates have proved Hyper-V entry, VMBus/VSOCK, Hyper-V storage, and successful stock system-distro overlay construction. `K-OVERLAY-DIAG-001` then exposed excluded GNS networking as the next stock blocker, so additive stock-init kernel discovery is frozen. The preserved `minimal-v1` reduction now has a layered fail-closed parent plus stock-namespace and mount-only siblings. All three `minimal-v2` Linux candidates build reproducibly, and protocol tests enumerate every recorded control-message family. Windows compilation, Hyper-V VM creation, runtime testing, and namespace selection remain deferred. See `STATUS.md`, `TASKS.md`, and `NEXT-SESSION.md`.
+The generic Toybox baseline passes `G4`, and guarded WSL discovery has reached the `B3` storage boundary. Reduced control-plane candidates are source-ready but have not yet proved command dispatch at runtime. The project is preparing pinned Windows build inputs before any separately approved controlled-package trial. See `STATUS.md` for verified current facts, `TASKS.md` for the active queue, and `NEXT-SESSION.md` for the bounded restart procedure.
 
 ## Documentation
 
@@ -59,7 +59,7 @@ The untouched mkroot kernel passes its Toybox QEMU smoke test. WSL candidates ha
 - `inventory/README.md` — Kconfig graph and durable experiment records.
 - `control-plane/README.md` — reduced control-plane artifacts, tests, and deferred runtime gate.
 - `build-host/README.md` — pinned `LFS-Builder` role, profile, and provisioning.
-- `NEXT-SESSION.md` — verified restart brief for the post-`minimal-v2` boundary.
+- `NEXT-SESSION.md` — executable restart brief for the current bounded objective.
 - `RUST-MINIMAL-WSL-FOLLOW-ON.md` — inactive charter for a `wsl.exe`-controllable Rust userspace after Minimal Viable WSL is frozen.
 - `session-history/README.md` — historical, grep-friendly project-session transcripts.
 

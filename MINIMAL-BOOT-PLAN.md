@@ -119,24 +119,34 @@ Alpine additionally runs `/bin/busybox true`; Arch and Debian run `/bin/true`. D
 5. **Stock stopping gate:** if an excluded stock service is the earliest stable blocker, preserve that boundary and stop adding kernel support for stock policy.
 6. **Reduce control plane:** remove stock-only host and guest policy, including the Microsoft system distro/overlay and GNS path.
 7. **Fail-closed static gate:** permit only handshake, one registered LUN/ext4 launch, minimal initialization, direct process relay, exit status, and termination; reject every other mini-init and distro-init operation in both implementation and tests.
-8. **Namespace variants (source-complete):** preserve the recorded current IPC/mount/PID/UTS and mount-only launch variants derived from one fail-closed parent; do not select namespace Kconfig from source preference alone.
-9. **Command dispatch (deferred):** in the separately approved controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
+8. **Namespace variants:** derive coherent IPC/mount/PID/UTS and mount-only launch variants from one fail-closed parent; preserve both and do not select namespace Kconfig from source preference alone.
+9. **Command dispatch:** in a separately approved controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
 10. **Prove minimality:** ablate every provisional WSL bundle and freeze `minimal-viable-wsl-v1`.
 11. **Compatibility:** test Alpine, Arch, and Debian in order; attribute and ablate each addition; freeze `ultra-minimal-wsl-v1`.
 
 If a failure does not select a narrow subsystem, delta-debug coherent feature groups between the candidate and Stage 1. Never bisect arbitrary individual symbols across dependency boundaries.
 
-## Deferred controlled-package environment
+## Source-only readiness strategy
 
-The Windows controlled-package phase is deferred until large environment inputs are practical. Until separately selected:
+Reduced host/guest candidates must be source-ready before attempting `B4`, `B5`, and `B6-T` in a separately approved controlled-package environment. Static Kconfig review supports a concrete retained-path question; it is not a substitute for runtime proof or an unbounded serial prerequisite.
 
-- do not download Windows installation media or Visual Studio;
-- do not create or start the Hyper-V development VM;
-- do not request elevation;
-- do not install a controlled package or modify host WSL files;
-- continue only static protocol, source-reduction, reproducible Linux-build, Kconfig, and recovery-plan work.
+Before runtime, eliminate reachable hard-fail paths for excluded policy rather than adding their kernel facilities. Any source change creates a new layered candidate: preserve its parents, keep policy/protocol/mutation gates passing, and require two distinct offline builds of every affected candidate with durable source, profile, artifact, and reproducibility hashes.
 
-`control-plane/deferred-runtime-plan.json` is preparation, not an executable trial record. It carries no approval forward. The recorded `minimal-v2` fail-closed parent and namespace siblings have passed strict policy/mutation tests and two byte-identical offline Linux builds each. Preserve those records rather than rewriting them. Any later ABI or source change creates a new candidate and repeats those gates. Before runtime execution, replace every missing input with a pinned hash, plan-validate the fixed operation, and obtain fresh explicit approval.
+For a selected Kconfig review, query both relationship directions, inspect retained source reachability, and distinguish baseline support from Stage-1 additions. Record classifications only through `tools/inventory.py set` and require synchronized inventory integrity. Static review may classify excluded or baseline facilities, but it must not promote runtime requirements or select a namespace sibling. `TASKS.md` alone owns the current bounded work; detailed findings belong in `control-plane/kernel-contract-review.md`.
+
+## Controlled-package environment
+
+The command path under test spans the Windows service and Linux init components, so Linux-only artifacts cannot establish `B4`, `B5`, or `B6-T`. The pinned Windows compiler layout is experimental infrastructure used to produce a reproducible controlled package; it is not a target-system requirement and its acquisition proves no runtime gate.
+
+Preparation must acquire Windows media, compiler/SDK inputs, pinned source, and dependencies into a reusable hash-verified cache with fail-closed offline reuse. Preparation does not authorize installation or execution. Before provisioning or runtime:
+
+- reconcile the compiler layout with the pinned source's documented prerequisites;
+- pin the package build procedure, outputs, install commands, and recovery inputs;
+- do not create or operate the Hyper-V development VM, request elevation, install a controlled package, or modify host WSL state without the applicable fresh explicit approval.
+
+`control-plane/deferred-runtime-plan.json` is preparation, not an executable trial record, and carries no approval forward. Current candidate identities and readiness belong to `STATUS.md` and the control-plane evidence records, not this plan. Preserve every candidate generation rather than rewriting it; any ABI or source change creates a new candidate and repeats the source-policy, mutation, and two-build reproducibility gates. Before runtime execution, replace every missing input with a pinned hash, plan-validate the fixed operation, and obtain fresh explicit approval.
+
+Keep the proof order explicit: compiler acquisition enables reproducible compilation; compilation enables guarded runtime comparison; runtime establishes viability; namespace comparison and kernel ablation establish minimality. Do not treat completion of an earlier stage as evidence for a later one.
 
 ## Evidence and safety gates
 

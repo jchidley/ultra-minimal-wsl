@@ -71,7 +71,7 @@ If finalization is interrupted, use the harness recovery path. Never hand-edit a
 
 `.wslconfig` has no custom-initrd setting. Do not replace the installed initrd. Build and deploy reduced-control-plane changes as a controlled WSL package inside a disposable Hyper-V Windows VM with a checkpoint.
 
-That environment-dependent phase is currently deferred. Until separately selected, do not download Windows media or Visual Studio, create/start the VM, request elevation, or execute `control-plane/deferred-runtime-plan.json`. Source-only work may create layered fail-closed and namespace variants, but it must not claim B4/B5/B6 or promote namespace Kconfig without controlled runtime evidence.
+Preparation and a populated `control-plane/deferred-runtime-plan.json` never authorize installing inputs, creating or operating the VM, requesting elevation, or running a controlled package. Consult `AGENTS.md`, `STATUS.md`, and `TASKS.md` for the currently authorized phase. Source-only work may create layered fail-closed and namespace variants, but it must not claim B4/B5/B6 or promote namespace Kconfig without controlled runtime evidence.
 
 ## References
 

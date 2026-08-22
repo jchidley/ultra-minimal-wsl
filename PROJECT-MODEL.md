@@ -121,27 +121,35 @@ Networking is outside the target contract. Adding more networking support would 
 
 That was the reason to pivot from **adding kernel facilities for stock `/init`** to **removing stock-only host and guest policy**.
 
-## The candidate series
+## How candidates are layered
 
-The control-plane candidates are deliberately layered:
+Control-plane candidates form an immutable lineage rather than rewriting earlier experiments:
 
 ```text
-pinned WSL 2.7.12 source
+pinned WSL source
     ↓
-minimal-v1
-    first broad host/guest reduction
+broad host/guest reduction
     ↓
-minimal-v2-fail-closed
-    explicit contract-only dispatch and configuration policy
-    ├── minimal-v2-stock-ns
-    │      IPC + mount + PID + UTS namespaces
-    └── minimal-v2-mount-ns
-           mount namespace only
+fail-closed contract-only parent
+    ↓
+small layers removing reachable hard-fails for excluded policy
+    ├── coherent stock-like namespace sibling
+    └── mount-only namespace sibling
 ```
 
-The namespace siblings share the exact fail-closed parent. This makes their eventual runtime comparison meaningful: the coherent namespace bundle is the only source difference.
+The namespace siblings must share the same parent so their coherent namespace bundle is the only source difference. Neither is preferred merely because it is smaller or resembles stock behavior; runtime evidence must select one. Current candidate identities, hashes, and build results belong in `STATUS.md`, `control-plane/README.md`, and the candidate audit records.
 
-Neither sibling is preferred merely because it is smaller or resembles stock behavior. Runtime evidence must select one.
+## Why Windows compiler preparation is on the critical path
+
+Reproducible Linux builds can prove candidate source policy and artifact identity, but the retained command path crosses both Windows and Linux components. A Linux-only build cannot prove that an ordinary, unmodified `wsl.exe` can communicate with the reduced service, launch a distro process, relay its result, and terminate it.
+
+A pinned offline Windows compiler layout is therefore experimental infrastructure, not part of Minimal Viable WSL. It makes the controlled package reproducible and allows the patched host and guest pieces to be tested together in a disposable environment without silently changing toolchains or risking the physical host. Compiler acquisition by itself proves no `B` gate.
+
+The remaining proof has three distinct stages:
+
+1. **Enable the experiment:** acquire and verify the pinned compiler inputs, then define the exact offline build and recovery procedure.
+2. **Prove viability:** compile the controlled package and establish `B4`, `B5`, `B6-T`, relay, lifecycle, and recovery behavior.
+3. **Prove minimality:** compare namespace siblings and ablate provisional kernel bundles, retaining a facility only when controlled removal fails and restoration succeeds.
 
 ## Path to Minimal Viable WSL
 
@@ -151,9 +159,9 @@ Preserve the layered patches, protocol fixture, policy tests, mutation evidence,
 
 ### 2. Build in an isolated Windows environment
 
-The patched Windows service cannot be validated by the Linux-only build. A later, separately approved phase must create a disposable Windows VM, establish a known-good stock WSL baseline, install pinned Windows build tools, build the controlled packages, and create a verified recovery checkpoint.
+After preparation has pinned the compiler inputs and exact build procedure, a separately approved phase must create a disposable Windows VM, establish a known-good stock WSL baseline, install the verified build tools, build the controlled packages, and create a verified recovery checkpoint.
 
-The physical host’s WSL package is not the test surface.
+The physical host’s WSL package is not the test surface. Preparation and compilation do not establish a runtime gate; they create the controlled artifacts needed for the comparisons below.
 
 ### 3. Establish `B4`
 
