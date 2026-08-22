@@ -75,16 +75,34 @@ class ControlPlaneRecordTests(unittest.TestCase):
         ):
             self.assertIn(call, patch)
 
-    def test_namespace_variant_changes_only_the_coherent_clone_bundle(self):
-        patch = (CONTROL / "patches/0003-minimal-v2-mount-ns.patch").read_text(encoding="utf-8")
+    def test_no_interop_layer_removes_the_mini_init_hard_fail_only(self):
+        patch = (CONTROL / "patches/0004-minimal-v3-no-interop.patch").read_text(encoding="utf-8")
         self.assertEqual(patch.count("diff --git "), 1)
         self.assertIn("a/src/linux/init/main.cpp b/src/linux/init/main.cpp", patch)
         removed = {line[1:].strip() for line in patch.splitlines() if line.startswith("-")}
         added = {line[1:].strip() for line in patch.splitlines() if line.startswith("+")}
-        self.assertIn("(CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));", removed)
-        self.assertIn("(CLONE_NEWNS | SIGCHLD));", added)
+        for excluded in (
+            '#include "binfmt.h"',
+            '#define BINFMT_PATH PROCFS_PATH "/sys/fs/binfmt_misc"',
+            'if (UtilMount(nullptr, BINFMT_PATH, "binfmt_misc", MS_RELATIME, nullptr) < 0)',
+            'if (WriteToFile(BINFMT_PATH "/register", BINFMT_REGISTER_STRING) < 0)',
+        ):
+            self.assertIn(excluded, removed)
+            self.assertNotIn(excluded, added)
+        self.assertNotIn("a/src/linux/init/config.cpp b/src/linux/init/config.cpp", patch)
 
-    def test_v2_candidate_records_and_patch_manifest_are_synchronized(self):
+    def test_namespace_variants_change_only_the_coherent_clone_bundle(self):
+        for name in ("0003-minimal-v2-mount-ns.patch", "0005-minimal-v3-mount-ns.patch"):
+            patch = (CONTROL / "patches" / name).read_text(encoding="utf-8")
+            with self.subTest(patch=name):
+                self.assertEqual(patch.count("diff --git "), 1)
+                self.assertIn("a/src/linux/init/main.cpp b/src/linux/init/main.cpp", patch)
+                removed = {line[1:].strip() for line in patch.splitlines() if line.startswith("-")}
+                added = {line[1:].strip() for line in patch.splitlines() if line.startswith("+")}
+                self.assertIn("(CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));", removed)
+                self.assertIn("(CLONE_NEWNS | SIGCHLD));", added)
+
+    def test_candidate_records_and_patch_manifest_are_synchronized(self):
         profile_digest = hashlib.sha256()
         for path in (
             ROOT / "build-host/lfs-builder-profile.env",
@@ -106,6 +124,18 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v2-mount-ns": {
                 "parent_candidate": "minimal-v2-fail-closed",
                 "diff": "b3c8cb69ae1a88b648c7dfa021dccaaf108930a337c1cff72e4768de936c4358",
+            },
+            "minimal-v3-fail-closed": {
+                "parent_candidate": "minimal-v2-fail-closed",
+                "diff": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+            },
+            "minimal-v3-stock-ns": {
+                "parent_candidate": "minimal-v3-fail-closed",
+                "diff": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+            },
+            "minimal-v3-mount-ns": {
+                "parent_candidate": "minimal-v3-fail-closed",
+                "diff": "5c36be2fce4bf497d1c480f7fac570089f9ba906b236b6fa9503f5820166058c",
             },
         }
         for name, values in expected.items():
@@ -140,6 +170,12 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(fail_sums, stock_sums)
         self.assertNotEqual(fail_sums["init"], mount_sums["init"])
 
+        fail_sums = sums(CONTROL / "candidates/minimal-v3-fail-closed/SHA256SUMS")
+        stock_sums = sums(CONTROL / "candidates/minimal-v3-stock-ns/SHA256SUMS")
+        mount_sums = sums(CONTROL / "candidates/minimal-v3-mount-ns/SHA256SUMS")
+        self.assertEqual(fail_sums, stock_sums)
+        self.assertNotEqual(fail_sums["init"], mount_sums["init"])
+
         manifest = sums(CONTROL / "patches/SHA256SUMS")
         for patch_name, digest in manifest.items():
             self.assertEqual(sha256(CONTROL / "patches" / patch_name), digest)
@@ -168,13 +204,13 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(metadata["minimal_link"], "1")
         self.assertTrue(plan["linux_build"]["minimal_link"])
 
-    def test_plan_v2_candidates_match_durable_records(self):
+    def test_plan_candidates_match_durable_records(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
-        self.assertEqual(plan["schema"], 2)
+        self.assertEqual(plan["schema"], 3)
         self.assertEqual(set(plan["source_candidates"]), {
-            "minimal-v2-fail-closed",
-            "minimal-v2-stock-ns",
-            "minimal-v2-mount-ns",
+            "minimal-v3-fail-closed",
+            "minimal-v3-stock-ns",
+            "minimal-v3-mount-ns",
         })
         for name, planned in plan["source_candidates"].items():
             directory = CONTROL / "candidates" / name
@@ -190,8 +226,17 @@ class ControlPlaneRecordTests(unittest.TestCase):
 
     def test_plan_contains_environment_recovery_and_host_safety_gates(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
+        preparation = plan["input_preparation"]
+        self.assertTrue(preparation["windows_media"]["verified"])
+        self.assertEqual(preparation["windows_media"]["status"], "verified")
+        self.assertEqual(
+            preparation["visual_studio_layout"]["status"],
+            "payload-verified-prerequisite-selection-incomplete",
+        )
+        self.assertTrue(preparation["visual_studio_layout"]["unresolved_prerequisites"])
+
         missing = " ".join(plan["missing_before_plan_validation"]).lower()
-        self.assertIn("windows installation media", missing)
+        self.assertNotIn("windows installation media", missing)
         self.assertIn("compiler", missing)
         self.assertIn("checkpoint", missing)
         self.assertIn("approval", missing)
@@ -214,10 +259,10 @@ class ControlPlaneRecordTests(unittest.TestCase):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
         static = plan["static_next_phase"]
         self.assertTrue((ROOT / static["restart_brief"]).is_file())
-        self.assertEqual(static["preserved_parent"], "minimal-v1")
+        self.assertEqual(static["preserved_parent"], "minimal-v2-fail-closed")
         self.assertEqual(
             static["new_candidates"],
-            ["minimal-v2-fail-closed", "minimal-v2-stock-ns", "minimal-v2-mount-ns"],
+            ["minimal-v3-fail-closed", "minimal-v3-stock-ns", "minimal-v3-mount-ns"],
         )
         claims = " ".join(static["forbidden_claims"]).lower()
         self.assertIn("no b4, b5, or b6", claims)

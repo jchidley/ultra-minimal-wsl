@@ -26,3 +26,12 @@ Each `minimal-v2` dispatch mutation was applied independently to the validator a
 | Process flag allowlist | remove the unknown-flag mask | exhaustive 0–63 flag test | CAUGHT (prior `minimal-v1` evidence) |
 
 The two `minimal-v2` dispatch mutations are semantic allowlist changes rather than syntax or crash mutations. Both were reverted.
+
+The `minimal-v3` patch-record seam was also mutation-tested independently in a disposable clean clone; neither mutation touched the project working tree.
+
+| Stable contract seam | Mutation | Catching test | Result |
+|---|---|---|---|
+| Mini-init interop removal | change the recorded `binfmt_misc` mount deletion into an addition, reintroducing the hard-fail operation | `test_no_interop_layer_removes_the_mini_init_hard_fail_only` | CAUGHT |
+| Mount-only namespace sibling | replace the added `CLONE_NEWNS` bundle with the stock IPC/mount/PID/UTS bundle | `test_namespace_variants_change_only_the_coherent_clone_bundle` | CAUGHT |
+
+Both v3 mutants were reverted, the temporary mutation branch was finished, and the disposable clone was removed before the full verification run.

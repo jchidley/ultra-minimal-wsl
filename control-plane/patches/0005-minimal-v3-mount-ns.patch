@@ -1,0 +1,24 @@
+From f149988635e3fe9ecbcb0577899e82d7e61464e4 Mon Sep 17 00:00:00 2001
+From: root <root@black.localdomain>
+Date: Sat, 22 Aug 2026 03:45:19 +0100
+Subject: [PATCH] Use only mount namespace after interop removal
+
+---
+ src/linux/init/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+index 5cab180..7d0e3c9 100644
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -3213,7 +3213,7 @@ try
+                     ProcessLaunchInitMessage(Message, Buffer, std::move(Channel), std::move(SystemDistroSocketFd), Config);
+                     FATAL_ERROR("Unexpected return from ProcessLaunchInitMessage");
+                 },
+-                (CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));
++                (CLONE_NEWNS | SIGCHLD));
+ 
+             return (ChildPid < 0) ? -1 : 0;
+         }
+-- 
+2.47.3

@@ -1,3 +1,5 @@
 3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a  0001-minimal-control-plane-v1.patch
 47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0  0002-minimal-v2-fail-closed.patch
 f2bef4d7ebb0915d521cd5b8a4d020e196d3d2d35fefc31b996d336567c7d3b1  0003-minimal-v2-mount-ns.patch
+e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981  0004-minimal-v3-no-interop.patch
+7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515  0005-minimal-v3-mount-ns.patch

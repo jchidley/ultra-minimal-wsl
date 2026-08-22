@@ -18,7 +18,7 @@ The source uses the small policy seam recorded in `policy/minimal-v2-policy.h`. 
 
 The launch must be one supplied LUN, use `ext4`, and carry no launch flags. Early and initial configuration reject system distro, swap, modules, DNS, networking, memory policy, GUI/GPU, and related fields. Instance initialization rejects DrvFs volumes, feature flags, and DrvFs mount modes. Direct-process messages permit only the three console bits; elevation, interop, OOBE, and unknown bits are rejected.
 
-Distro-local `/etc/wsl.conf` can no longer re-enable automount/fstab, timezone updates, boot commands/systemd, Windows-path interop, hosts/resolver generation, Plan 9, GPU libraries, or cgroup initialization on this path. Broad stock functions remain in source where deletion is not yet required, but the inbound dispatch and configuration gates fail closed and minimal linking removes newly unreachable sections.
+Distro-local `/etc/wsl.conf` can no longer re-enable automount/fstab, timezone updates, boot commands/systemd, Windows-path interop, hosts/resolver generation, Plan 9, GPU libraries, or cgroup initialization on this path. Broad stock functions remain in source where deletion is not yet required, but the inbound dispatch and configuration gates fail closed and minimal linking removes newly unreachable sections. This preserved v2 generation still has one excluded utility-VM path reachable: mini-init's retained early initialization unconditionally mounts `binfmt_misc` and registers `WSLInterop`, returning failure on error. Replacement `minimal-v3` removes it rather than selecting `CONFIG_BINFMT_MISC`; see `minimal-v3-audit.md`. The historical gap does not change v2's static Kconfig conclusions.
 
 ## Namespace siblings
 

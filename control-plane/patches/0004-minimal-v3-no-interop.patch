@@ -1,0 +1,56 @@
+From bb1d95680a63103b5bb6a9509d22ae3e57aa0cf0 Mon Sep 17 00:00:00 2001
+From: root <root@black.localdomain>
+Date: Sat, 22 Aug 2026 03:44:50 +0100
+Subject: [PATCH] Remove mini-init Windows interop registration
+
+---
+ src/linux/init/main.cpp | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+index 9954f68..5cab180 100644
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -60,14 +60,11 @@ Abstract:
+ #include "seccomp_defs.h"
+ #include "mountutilcpp.h"
+ #include "message.h"
+-#include "binfmt.h"
+ #include "address.h"
+ #include "SocketChannel.h"
+ #include "minimal_policy.h"
+ 
+ #define BSDTAR_PATH "/usr/bin/bsdtar"
+-#define BINFMT_REGISTER_STRING ":" LX_INIT_BINFMT_NAME ":M::MZ::" LX_INIT_PATH ":FP\n"
+-#define BINFMT_PATH PROCFS_PATH "/sys/fs/binfmt_misc"
+ #define CHRONY_CONF_PATH ETC_PATH "/chrony.conf"
+ #define CHRONYD_PATH "/sbin/chronyd"
+ #define CROSS_DISTRO_SHARE_PATH "/mnt/wsl"
+@@ -1551,25 +1548,6 @@ Return Value:
+         return -1;
+     }
+ 
+-    //
+-    // Mount the binfmt_misc filesystem.
+-    //
+-
+-    if (UtilMount(nullptr, BINFMT_PATH, "binfmt_misc", MS_RELATIME, nullptr) < 0)
+-    {
+-        return -1;
+-    }
+-
+-    //
+-    // Register the Windows interop interpreter using the 'F' flag which makes
+-    // it available in other mount namespaces and chroot environments.
+-    //
+-
+-    if (WriteToFile(BINFMT_PATH "/register", BINFMT_REGISTER_STRING) < 0)
+-    {
+-        return -1;
+-    }
+-
+     return 0;
+ }
+ 
+-- 
+2.47.3

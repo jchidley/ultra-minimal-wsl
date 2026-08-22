@@ -1,6 +1,6 @@
 {
-  "schema": 2,
-  "plan_id": "CP-MINIMAL-V2-001",
+  "schema": 3,
+  "plan_id": "CP-MINIMAL-V3-001",
   "status": "deferred-environment-not-provisioned",
   "executable": false,
   "approval_carried_forward": false,
@@ -10,6 +10,208 @@
     "patch": "control-plane/patches/0001-minimal-control-plane-v1.patch",
     "patch_sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"
   },
+  "input_preparation": {
+    "status": "authorized-cache-acquisition-community-layout-blocked-local-channel",
+    "cache_root": "%LOCALAPPDATA%\\ultra-minimal-wsl",
+    "reusable_cache_policy": "download atomically, verify SHA-256, retain verified artifacts, and fail closed on offline reuse",
+    "windows_media": {
+      "filename": "Win11_25H2_English_x64_v2.iso",
+      "source_page": "https://www.microsoft.com/en-us/software-download/windows11",
+      "status": "verified",
+      "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\windows-media\\Win11_25H2_English_x64_v2.iso",
+      "expected_bytes": 8471603200,
+      "sha256": "768984706b909479417b2368438909440f2967ff05c6a9195ed2667254e465e3",
+      "verified": true
+    },
+    "visual_studio_bootstrapper": {
+      "source": "https://aka.ms/vs/17/release/vs_BuildTools.exe",
+      "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\visual-studio\\vs_BuildTools.exe",
+      "sha256": "2aeac090a9cfb2c56474aa9a6c5817ad8cfb879539e0ed1aecec33de9fc2dc4f",
+      "verified": true
+    },
+    "visual_studio_community": {
+      "status": "catalog-and-license-audit-passed-layout-acquisition-blocked",
+      "product_id": "Microsoft.VisualStudio.Product.Community",
+      "bootstrapper_source": "https://aka.ms/vs/17/release/vs_Community.exe",
+      "bootstrapper_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\visual-studio\\vs_Community.exe",
+      "bootstrapper_sha256": "9a3322a2b1b8c632fc5fc105c52990c71158f9ca8feb73690dc2e1317a7f41b9",
+      "bootstrapper_authenticode": {
+        "status": "Valid",
+        "signer": "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+        "thumbprint": "AB172913A2960A224809EE8A0C371CD47A079B72"
+      },
+      "pinned_channel_manifest": {
+        "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-layout\\ChannelManifest.json",
+        "sha256": "4c81e902fb7fe2acea779b828e6dc548fe0bbb693df50eda0224263c16686bdd"
+      },
+      "pinned_catalog": {
+        "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-layout\\Catalog.json",
+        "sha256": "3891c3018a07338b3880cbb28088bb22ef7762eb9206523655b2e3972b9d527e",
+        "community_x64_version": "17.14.37614.0",
+        "community_x64_dependency_closure_ids": 6146
+      },
+      "license_applicability": {
+        "terms_url": "https://go.microsoft.com/fwlink/?LinkId=2179811",
+        "terms_document_url": "https://visualstudio.microsoft.com/wp-content/uploads/2021/11/Visual-Studio-2022-Community-License-EN.docx",
+        "terms_document_sha256": "41a207b10c8ab91d0d2f10a854715f73dca54509581692d2fe179aa3ffcb8540",
+        "finding": "Community terms permit organization users to develop and test applications released under OSI-approved open-source licenses; this repository declares Apache-2.0 and MIT, both OSI-approved. No organizational exception was assumed."
+      },
+      "audited_requested_ids": [
+        "Microsoft.VisualStudio.Workload.NativeDesktop",
+        "Microsoft.VisualStudio.Workload.Universal",
+        "Microsoft.VisualStudio.Workload.ManagedDesktop",
+        "Microsoft.VisualStudio.Component.Windows11SDK.26100",
+        "Microsoft.VisualStudio.Component.VC.Llvm.Clang",
+        "Microsoft.VisualStudio.Component.VC.CMake.Project",
+        "Microsoft.VisualStudio.Component.VC.ATL",
+        "Microsoft.VisualStudio.Component.VC.ATL.ARM64",
+        "Microsoft.VisualStudio.Component.VC.ATL.Spectre",
+        "Microsoft.VisualStudio.Component.VC.ATL.ARM64.Spectre",
+        "Microsoft.VisualStudio.Component.VC.Tools.ARM64",
+        "Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64.Spectre",
+        "Microsoft.VisualStudio.Component.VC.14.44.17.14.ARM64.Spectre",
+        "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.CSharp",
+        "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.Cpp"
+      ],
+      "catalog_applicability": "All 15 audited IDs are reachable from the x64 Community product dependency closure in the pinned catalog; applicability was not inferred from global catalog membership.",
+      "attempts": [
+        {
+          "channel_argument": "file:///C:/Users/jackc/AppData/Local/ultra-minimal-wsl/vs-layout/ChannelManifest.json",
+          "stage_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout.staging",
+          "result": "Visual Studio Setup exited with code 87 before payload acquisition",
+          "stage_file_count": 2,
+          "bootstrapper_log": "%TEMP%\\dd_bootstrapper_20260823000608.log"
+        },
+        {
+          "channel_argument": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-layout\\ChannelManifest.json",
+          "stage_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout.staging2",
+          "result": "Visual Studio Setup 4.9.50.62957 reported: Error: Invalid parameter \"--channelUri\"",
+          "stage_file_count": 2,
+          "bootstrapper_log": "%TEMP%\\dd_bootstrapper_20260823001332.log"
+        }
+      ],
+      "blocker": "The Community bootstrapper forwards --channelUri to the current Visual Studio Setup layout tool, which rejects that parameter. The pinned local channel therefore cannot be bound through the audited layout invocation; following the live channel or guessing another mechanism is forbidden.",
+      "layout_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout",
+      "layout_created": false
+    },
+    "visual_studio_layout": {
+      "status": "payload-verified-prerequisite-selection-incomplete",
+      "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-layout",
+      "file_count": 689,
+      "bytes": 4877786646,
+      "catalog_sha256": "3891c3018a07338b3880cbb28088bb22ef7762eb9206523655b2e3972b9d527e",
+      "channel_manifest_sha256": "4c81e902fb7fe2acea779b828e6dc548fe0bbb693df50eda0224263c16686bdd",
+      "selected_components": [
+        "Microsoft.VisualStudio.Workload.VCTools",
+        "Microsoft.VisualStudio.Component.Windows11SDK.26100",
+        "Microsoft.VisualStudio.Component.VC.Llvm.Clang",
+        "Microsoft.VisualStudio.Component.VC.CMake.Project",
+        "Microsoft.VisualStudio.Component.VC.ATL"
+      ],
+      "include_recommended": true,
+      "prerequisite_source": "WSL 2.7.12 doc/docs/dev-loop.md at commit 68f601bba8eac1df20a0bbd403c6c87c92369ade",
+      "unresolved_prerequisites": [
+        "Universal Windows platform support for v143 build tools (X64 and ARM64)",
+        "MSVC v143 C++ ARM64 latest and Spectre tools (X64 and ARM64)",
+        ".NET desktop development",
+        ".NET WinUI app development tools"
+      ],
+      "prerequisite_audit": {
+        "source_member": "microsoft-WSL-68f601b/doc/docs/dev-loop.md",
+        "source_archive_sha256": "2b0d80f6d3b81d3baa03de895195beea60a7859c6d60fca73d71fa85720749c3",
+        "catalog_sha256": "3891c3018a07338b3880cbb28088bb22ef7762eb9206523655b2e3972b9d527e",
+        "response_sha256": "d94ab5e5437ea09863fd077e01ef64d8e7a8ea7e0ed7fc57733e072f849be7fb",
+        "product_id": "Microsoft.VisualStudio.Product.BuildTools",
+        "response_direct_selection": [
+          "Microsoft.VisualStudio.Component.VC.ATL;includeRecommended",
+          "Microsoft.VisualStudio.Component.VC.CMake.Project;includeRecommended",
+          "Microsoft.VisualStudio.Component.VC.Llvm.Clang;includeRecommended",
+          "Microsoft.VisualStudio.Component.Windows11SDK.26100;includeRecommended",
+          "Microsoft.VisualStudio.Workload.VCTools;includeRecommended"
+        ],
+        "mappings": [
+          {
+            "requirement": "CMake >= 3.25",
+            "ids": ["Microsoft.VisualStudio.Component.VC.CMake.Project"],
+            "applicability": "selected direct component; catalog dependency Microsoft.VisualStudio.VC.CMake",
+            "payload_evidence": "cached payload contains CMake 3.31 paths"
+          },
+          {
+            "requirement": "MSBuild",
+            "ids": ["Microsoft.VisualStudio.Workload.MSBuildTools", "Microsoft.Component.MSBuild"],
+            "applicability": "Microsoft.VisualStudio.Workload.MSBuildTools is required by the BuildTools product",
+            "payload_evidence": "cached layout contains Microsoft.VisualStudio.VC.MSBuild.v170.X64 and its v143 payload"
+          },
+          {
+            "requirement": "Windows SDK 26100",
+            "ids": ["Microsoft.VisualStudio.Component.Windows11SDK.26100"],
+            "applicability": "selected direct component and BuildTools product dependency",
+            "payload_evidence": "cached Win11SDK_10.0.26100 version 10.0.26100.15 payload"
+          },
+          {
+            "requirement": "Universal Windows platform support for v143 build tools (X64 and ARM64)",
+            "ids": ["Microsoft.VisualStudio.Workload.UniversalBuildTools", "Microsoft.VisualStudio.ComponentGroup.UWP.VC.BuildTools"],
+            "applicability": "both are BuildTools product dependencies; the group resolves UWP.VC.ARM64, VC.Tools.x86.x64, and v143 UWP MSBuild payloads",
+            "payload_evidence": "catalog advertises the exact BuildTools dependency graph; not selected by the current Response.json"
+          },
+          {
+            "requirement": "MSVC v143 C++ ARM64 build tools (Latest + Spectre) (X64 and ARM64)",
+            "ids": ["Microsoft.VisualStudio.Component.VC.Tools.x86.x64", "Microsoft.VisualStudio.Component.VC.Tools.ARM64", "Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64.Spectre", "Microsoft.VisualStudio.Component.VC.14.44.17.14.ARM64.Spectre"],
+            "applicability": "all four are direct optional dependencies of the BuildTools product; VC.Tools.x86.x64 is recommended by VCTools",
+            "payload_evidence": "catalog component IDs are present, but the current Response.json selects none of the missing ARM64/Spectre entries"
+          },
+          {
+            "requirement": "C++ core features",
+            "ids": ["Microsoft.VisualStudio.Component.VC.CoreBuildTools"],
+            "applicability": "required dependency of Microsoft.VisualStudio.Workload.VCTools for BuildTools",
+            "payload_evidence": "resolved by the selected VCTools workload"
+          },
+          {
+            "requirement": "C++ ATL for latest v143 tools (X64 and ARM64)",
+            "ids": ["Microsoft.VisualStudio.Component.VC.ATL", "Microsoft.VisualStudio.Component.VC.ATL.ARM64", "Microsoft.VisualStudio.Component.VC.ATL.Spectre", "Microsoft.VisualStudio.Component.VC.ATL.ARM64.Spectre"],
+            "applicability": "all four are direct optional dependencies of the BuildTools product; only VC.ATL is selected",
+            "payload_evidence": "current layout contains x64 ATL payloads only"
+          },
+          {
+            "requirement": "C++ Clang compiler for Windows",
+            "ids": ["Microsoft.VisualStudio.Component.VC.Llvm.Clang"],
+            "applicability": "selected direct component; catalog resolves the native desktop Clang group",
+            "payload_evidence": "cached Microsoft.VisualStudio.VC.Llvm.Clang payload"
+          },
+          {
+            "requirement": ".NET desktop development",
+            "ids": ["Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools"],
+            "applicability": "optional dependency explicitly advertised by the BuildTools product",
+            "payload_evidence": "catalog dependency graph is present, but the current Response.json does not select it"
+          }
+        ],
+        "product_blocker": {
+          "requirement": ".NET WinUI app development tools",
+          "catalog_ids": ["Microsoft.VisualStudio.Component.WindowsAppSdkSupport.CSharp", "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.Cpp", "Microsoft.VisualStudio.ComponentGroup.WindowsAppSDK.Cs", "Microsoft.VisualStudio.ComponentGroup.WindowsAppSDK.Cpp"],
+          "build_tools_product_dependency": false,
+          "evidence": "The catalog contains these IDs, but Microsoft.VisualStudio.Product.BuildTools does not advertise either WindowsAppSdkSupport component, the WindowsAppSDK groups, or a WinUI workload. The component dependency graph instead requires Microsoft.VisualStudio.Component.ManagedDesktop.Core and Microsoft.VisualStudio.Community.ProductArch.TargetedExtra; the full Visual Studio product family advertises the corresponding managed/Universal workloads, while Build Tools exposes only their build-tools variants.",
+          "resolution": "Build Tools cannot satisfy the documented prerequisite set; a supported full Visual Studio product layout is required. Product selection and acquisition order are owned by TASKS.md; do not guess a Build Tools add ID or mark the current layout complete."
+        },
+        "audit_result": "blocked-buildtools-no-proven-winui-support"
+      }
+    },
+    "wsl_source": {
+      "tag": "2.7.12",
+      "commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+      "source": "https://api.github.com/repos/microsoft/WSL/tarball/68f601bba8eac1df20a0bbd403c6c87c92369ade",
+      "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz",
+      "sha256": "2b0d80f6d3b81d3baa03de895195beea60a7859c6d60fca73d71fa85720749c3",
+      "verified": true
+    },
+    "nuget_dependencies": {
+      "source": "https://pkgs.dev.azure.com/shine-oss/wsl/_packaging/WslDependencies/nuget/v3/index.json",
+      "packages_config": "packages.config at WSL 2.7.12",
+      "manifest_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\nuget\\SHA256SUMS",
+      "manifest_sha256": "448306912ff85326dcfe4f0aa95346638708e41b3f47b330a5cd8e8efefece1c",
+      "package_count": 27,
+      "verified": true
+    }
+  },
   "linux_build": {
     "minimal_link": true,
     "init_sha256": "c8985207676965b42e246d61cd46d4c2702fe9732aca095c2a5b3a7d0a8afc44",
@@ -17,35 +219,35 @@
     "initrd_sha256": "bfe154b4abaca10da0336e376996488549a264e4b91360f3bfbfbf4394b168f6"
   },
   "source_candidates": {
-    "minimal-v2-fail-closed": {
-      "parent": "minimal-v1",
-      "layer_patch": "control-plane/patches/0002-minimal-v2-fail-closed.patch",
-      "layer_patch_sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0",
-      "complete_source_diff_sha256": "6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759",
-      "init_sha256": "6672f3719bced6857768f1aaa4fa4f6507b6525d9329d84628cdee5b242eb10f",
-      "init_debug_sha256": "5cc545ff33f573f84e8ede9053af1f561cb35f0a8d114b95831a4ffe1af80e76",
-      "initrd_sha256": "62f3553dfef1901bb0d3c9dd54732e4ae801abb1d5cb4ba216736434570c6ba7",
+    "minimal-v3-fail-closed": {
+      "parent": "minimal-v2-fail-closed",
+      "layer_patch": "control-plane/patches/0004-minimal-v3-no-interop.patch",
+      "layer_patch_sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981",
+      "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+      "init_sha256": "99828be3e706c29e26eaaf7ca6e423d897dd334ab88a4e4410a70a5d2d1726aa",
+      "init_debug_sha256": "3a14ebe773f20ea4a9d63b7f82d2c24054abfeb333f676314019bb06ae59faf3",
+      "initrd_sha256": "a7e3f9f14ede0ecf626da9a74b71fc156b4550496908001a1cfbd1c54eda6989",
       "reproducible": true,
       "runtime_evidence": false
     },
-    "minimal-v2-stock-ns": {
-      "parent": "minimal-v2-fail-closed",
+    "minimal-v3-stock-ns": {
+      "parent": "minimal-v3-fail-closed",
       "tree_identical_to_parent": true,
-      "complete_source_diff_sha256": "6cb9e58956fc492230665acfe8791aa180dd62a0120070062ed5396e8e349759",
-      "init_sha256": "6672f3719bced6857768f1aaa4fa4f6507b6525d9329d84628cdee5b242eb10f",
-      "init_debug_sha256": "5cc545ff33f573f84e8ede9053af1f561cb35f0a8d114b95831a4ffe1af80e76",
-      "initrd_sha256": "62f3553dfef1901bb0d3c9dd54732e4ae801abb1d5cb4ba216736434570c6ba7",
+      "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+      "init_sha256": "99828be3e706c29e26eaaf7ca6e423d897dd334ab88a4e4410a70a5d2d1726aa",
+      "init_debug_sha256": "3a14ebe773f20ea4a9d63b7f82d2c24054abfeb333f676314019bb06ae59faf3",
+      "initrd_sha256": "a7e3f9f14ede0ecf626da9a74b71fc156b4550496908001a1cfbd1c54eda6989",
       "reproducible": true,
       "runtime_evidence": false
     },
-    "minimal-v2-mount-ns": {
-      "parent": "minimal-v2-fail-closed",
-      "layer_patch": "control-plane/patches/0003-minimal-v2-mount-ns.patch",
-      "layer_patch_sha256": "f2bef4d7ebb0915d521cd5b8a4d020e196d3d2d35fefc31b996d336567c7d3b1",
-      "complete_source_diff_sha256": "b3c8cb69ae1a88b648c7dfa021dccaaf108930a337c1cff72e4768de936c4358",
-      "init_sha256": "48ee3f702aea58ff2b2261bf81483e59c6b1cd658ac470f0bfd76cb1eba8c248",
-      "init_debug_sha256": "e240a8a92261cf90a0234caa961cb948ab310abbb0ad9e4adf254e52bd92af8d",
-      "initrd_sha256": "e931e95f096c126da7a747bbfc70e21fbca1948427f8ce64db491e83512ca605",
+    "minimal-v3-mount-ns": {
+      "parent": "minimal-v3-fail-closed",
+      "layer_patch": "control-plane/patches/0005-minimal-v3-mount-ns.patch",
+      "layer_patch_sha256": "7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515",
+      "complete_source_diff_sha256": "5c36be2fce4bf497d1c480f7fac570089f9ba906b236b6fa9503f5820166058c",
+      "init_sha256": "f9acda771051b7aecafcb0d39dc232d1953c741b0e28cef4f26d1b453574abad",
+      "init_debug_sha256": "8e9d85e66c71c1f53df0942dad3edcd8755d879f2a5c5c201d1ef1f65e862fe5",
+      "initrd_sha256": "d6260c83155713c6c3cfa9e92f9fcba3d65cad8937ffa1d265cc32da78368f2c",
       "reproducible": true,
       "runtime_evidence": false
     }
@@ -53,16 +255,17 @@
   "static_next_phase": {
     "status": "completed-source-only",
     "restart_brief": "NEXT-SESSION.md",
-    "preserved_parent": "minimal-v1",
+    "preserved_parent": "minimal-v2-fail-closed",
     "new_candidates": [
-      "minimal-v2-fail-closed",
-      "minimal-v2-stock-ns",
-      "minimal-v2-mount-ns"
+      "minimal-v3-fail-closed",
+      "minimal-v3-stock-ns",
+      "minimal-v3-mount-ns"
     ],
     "sequence": [
-      "layer fail-closed mini-init and distro-init dispatch without rewriting minimal-v1",
-      "extend protocol-policy tests and mutation-test the message allowlist",
-      "derive stock-namespace and mount-only variants from the same fail-closed parent",
+      "classify CONFIG_ANON_VMA_NAME without changing a candidate config",
+      "remove the retained mini-init binfmt_misc mount and WSLInterop registration hard-fail as a new layer",
+      "retain fail-closed protocol and policy behavior with focused source regression coverage",
+      "derive stock-namespace and mount-only variants from the replacement fail-closed parent",
       "build each Linux variant twice with OFFLINE=1 and MINIMAL_LINK=1",
       "record separate patch, build, reproducibility, and size hashes",
       "pass pinned PowerShell 5.1 PSScriptAnalyzer and ShellCheck warning-or-higher gates",
@@ -76,13 +279,12 @@
     ]
   },
   "missing_before_plan_validation": [
-    "approved and hash-recorded Windows installation media",
+    "complete hash-verified Visual Studio compiler offline layout matching pinned WSL build prerequisites",
     "disposable Hyper-V Windows VM",
     "stock WSL 2.7.12 guest baseline",
-    "Windows compiler and SDK inputs",
     "successfully built controlled WSL package",
     "controlled-package-baseline checkpoint",
-    "Windows builds of both minimal-v2 namespace candidate packages with fixed install commands",
+    "Windows builds of both minimal-v3 namespace candidate packages with fixed install commands",
     "fresh explicit approval for elevation and runtime execution"
   ],
   "preconditions": [
@@ -93,7 +295,7 @@
     "no host WSL files or configuration are modified"
   ],
   "runtime_sequence": [
-    "for each of minimal-v2-stock-ns and minimal-v2-mount-ns, restore controlled-package-baseline",
+    "for each of minimal-v3-stock-ns and minimal-v3-mount-ns, restore controlled-package-baseline",
     "install only that candidate's fixed controlled package inside the VM",
     "start one registered Toybox distro",
     "run the B6-T smoke contract through wsl.exe",
