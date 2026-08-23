@@ -274,7 +274,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("verified Off", capability["recovery_requirement"])
 
         selection = plan["recovery_install_contract"]["guest_control_selection"]
-        self.assertEqual(selection["status"], "powershell-direct-selected-pending-account-bootstrap")
+        self.assertEqual(selection["status"], "powershell-direct-proven-account-provisioned")
         self.assertEqual(selection["mechanism"], "PowerShell Direct")
         self.assertFalse(selection["executable"])
         self.assertFalse(selection["approval_carried_forward"])
@@ -291,7 +291,17 @@ class ControlPlaneRecordTests(unittest.TestCase):
                 "password_recorded_in_repository", "scope", "reuse", "disposition",
             },
         )
-        self.assertIn("cannot authenticate", selection["bootstrap_requirement"])
+        provisioning = selection["account_provisioning"]
+        self.assertEqual(provisioning["status"], "completed-and-independently-verified")
+        self.assertIn("authenticated", provisioning["result"])
+        self.assertTrue(provisioning["clean_shutdown_requested"])
+        self.assertEqual(provisioning["operation_final_vm_state"], "Off")
+        self.assertEqual(provisioning["independent_final_vm_state"], "Off")
+        self.assertEqual(provisioning["independent_attached_vm_disks"], 0)
+        discovery = provisioning["bootstrap_discovery"]
+        self.assertEqual(discovery["autologon_registry_password"], "absent after the one-time autologon was consumed")
+        self.assertIn("failed to unload", discovery["initial_cleanup_failure"])
+        self.assertIn("detached", discovery["recovery_result"])
 
         missing = " ".join(plan["missing_before_controlled_execution"]).lower()
         self.assertNotIn("windows installation media", missing)
@@ -359,7 +369,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertNotIn("exact fail-closed offline", missing)
         self.assertNotIn("pinned offline stock wsl", missing)
         self.assertIn("powershell direct", missing)
-        self.assertIn("account-bootstrap", missing)
+        self.assertIn("stock-baseline", missing)
+        self.assertNotIn("account-bootstrap", missing)
         self.assertIn("compiler", missing)
         self.assertIn("checkpoint", missing)
         self.assertIn("approval", missing)

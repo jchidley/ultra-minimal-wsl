@@ -671,10 +671,10 @@
         "recovery_requirement": "After interruption or timeout, independently query durable VM state; do not infer that a remote, console, or elevated operation stopped. Refuse checkpoint or recovery continuation until the VM is verified Off.",
         "result": "Guest Service Interface is insufficient alone. Manual VMConnect and credential-backed PowerShell Direct remain viable but unselected and require separately fixed mechanics, recovery review, and fresh approval."
       },
-      "decision_required": "Resolved after this attempt: the controller selected PowerShell Direct with a dedicated disposable VM-only account. Bootstrap and execution remain separately reviewable and unauthorized."
+      "decision_required": "Resolved after this attempt: the controller selected PowerShell Direct with a dedicated disposable VM-only account; subsequent evidence proves account provisioning and administrator authentication."
     },
     "guest_control_selection": {
-      "status": "powershell-direct-selected-pending-account-bootstrap",
+      "status": "powershell-direct-proven-account-provisioned",
       "mechanism": "PowerShell Direct",
       "selected_by": "controller",
       "rationale": "The VM and credential are disposable. PowerShell Direct provides deterministic command execution, output, and exit evidence without requiring the credential to have value outside this VM.",
@@ -688,10 +688,29 @@
         "reuse": "forbidden outside this disposable VM",
         "disposition": "The controller supplies the generated password when the approved operation executes; destroy it with the VM."
       },
-      "bootstrap_requirement": "The selected account does not yet exist in the guest, so it cannot authenticate the first PowerShell Direct session. Commission one fixed account-provisioning method as part of the stock-baseline approval artifact; do not assume PowerShell Direct can bootstrap itself.",
+      "account_provisioning": {
+        "status": "completed-and-independently-verified",
+        "bootstrap_identity": "The original disposable Builder administrator identity was verified from processed Windows setup evidence; its temporary credential was recovered only from the historical parent session and was not added to Git.",
+        "result": "The selected account was created enabled, added to Administrators, authenticated through a new PowerShell Direct session, and verified as an administrator.",
+        "clean_shutdown_requested": true,
+        "operation_final_vm_state": "Off",
+        "independent_final_vm_state": "Off",
+        "independent_attached_vm_disks": 0,
+        "bootstrap_discovery": {
+          "result": "Processed Windows setup evidence proved OOBE completed successfully and created the disposable Builder administrator account; the selected account was not yet present.",
+          "autologon_registry_password": "absent after the one-time autologon was consumed",
+          "initial_cleanup_failure": "The first read-only registry inspection emitted its result but failed to unload the offline SOFTWARE hive, leaving the VHD attached.",
+          "recovery_result": "A dedicated cleanup unloaded the SOFTWARE hive and detached the VHD; a separate query verified both probe hives absent and the disk detached before account provisioning continued.",
+          "inspection_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\inspect-guest-bootstrap-20260823.log",
+          "cleanup_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\cleanup-guest-bootstrap-inspection-20260823-r2.log",
+          "setup_manifest": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\guest-setup-evidence-20260823\\manifest.json"
+        },
+        "operation_evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\provision-powershell-direct-account-20260823.log",
+        "final_state_evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\verify-account-provisioning-final-state-20260823.log",
+        "inspection_evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\guest-setup-evidence-20260823\\manifest.json"
+      },
       "approval_artifact_must_fix": [
-        "account provisioning method",
-        "elevated host command and in-memory PSCredential construction",
+        "elevated host command and local PSCredential construction",
         "stock MSI hash verification, installation, exit-code capture, and post-checks",
         "evidence destinations that exclude the plaintext password",
         "timeout and interruption handling",
@@ -709,7 +728,7 @@
   },
   "missing_before_controlled_execution": [
     "verified Community compiler layout staged to and installed offline in the disposable Hyper-V Windows VM",
-    "plan-validated and freshly approved PowerShell Direct account-bootstrap and stock-baseline artifact",
+    "plan-validated and freshly approved PowerShell Direct stock-baseline artifact",
     "stock WSL 2.7.12 guest baseline",
     "successfully built controlled WSL package",
     "controlled-package-baseline checkpoint",
