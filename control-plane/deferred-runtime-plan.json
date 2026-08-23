@@ -1,7 +1,7 @@
 {
   "schema": 3,
   "plan_id": "CP-MINIMAL-V3-001",
-  "status": "deferred-environment-not-provisioned",
+  "status": "deferred-environment-partially-provisioned-stock-package-cached",
   "executable": false,
   "approval_carried_forward": false,
   "source": {
@@ -11,7 +11,7 @@
     "patch_sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"
   },
   "input_preparation": {
-    "status": "authorized-cache-acquisition-community-layout-blocked-local-channel",
+    "status": "authorized-core-input-cache-complete-stock-package-cached-build-procedure-pinned",
     "cache_root": "%LOCALAPPDATA%\\ultra-minimal-wsl",
     "reusable_cache_policy": "download atomically, verify SHA-256, retain verified artifacts, and fail closed on offline reuse",
     "windows_media": {
@@ -30,7 +30,7 @@
       "verified": true
     },
     "visual_studio_community": {
-      "status": "catalog-and-license-audit-passed-layout-acquisition-blocked",
+      "status": "catalog-and-license-audit-passed-layout-verified",
       "product_id": "Microsoft.VisualStudio.Product.Community",
       "bootstrapper_source": "https://aka.ms/vs/17/release/vs_Community.exe",
       "bootstrapper_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\visual-studio\\vs_Community.exe",
@@ -90,9 +90,137 @@
           "bootstrapper_log": "%TEMP%\\dd_bootstrapper_20260823001332.log"
         }
       ],
-      "blocker": "The Community bootstrapper forwards --channelUri to the current Visual Studio Setup layout tool, which rejects that parameter. The pinned local channel therefore cannot be bound through the audited layout invocation; following the live channel or guessing another mechanism is forbidden.",
+      "rejected_channel_forwarding_path": "The Community bootstrapper forwards --channelUri to the current Visual Studio Setup layout tool, which rejects that parameter. Microsoft documents --channelUri and --installChannelUri for install/update behavior, not layout creation. The completed layout instead uses the cached fixed-version signed bootstrapper with exact catalog/channel identity gates; any identity mismatch is a hard stop.",
+      "supported_acquisition_method": {
+        "status": "fixed-version-bootstrapper-layout-with-identity-gate",
+        "official_evidence": [
+          "https://learn.microsoft.com/en-us/visualstudio/install/use-command-line-parameters-to-install-visual-studio?view=vs-2022",
+          "https://learn.microsoft.com/en-us/visualstudio/install/create-a-network-installation-of-visual-studio?view=vs-2022",
+          "https://learn.microsoft.com/en-us/visualstudio/releases/2022/release-history"
+        ],
+        "finding": "Microsoft documents --layout as the bootstrapper operation for creating or updating an offline install cache, and documents fixed-version bootstrappers through Visual Studio release history. The same documentation states that --channelUri, --installChannelUri, and --installCatalogUri are install parameters or update settings and are ignored for other commands. The cached Community bootstrapper is therefore used without --channelUri; its Authenticode identity, product version, resulting channel manifest, catalog, product ID, and required dependency closure must all match the recorded pins.",
+        "bootstrapper_product_version": "17.14.37614.0",
+        "bootstrapper_version_field": "FileVersion (ProductVersion is the generic string Visual Studio 2022)",
+        "bootstrapper_sha256": "9a3322a2b1b8c632fc5fc105c52990c71158f9ca8feb73690dc2e1317a7f41b9",
+        "command_shape": [
+          "vs_Community.exe",
+          "--layout",
+          "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout.staging3",
+          "--add",
+          "Microsoft.VisualStudio.Workload.NativeDesktop",
+          "--add",
+          "Microsoft.VisualStudio.Workload.Universal",
+          "--add",
+          "Microsoft.VisualStudio.Workload.ManagedDesktop",
+          "--add",
+          "Microsoft.VisualStudio.Component.Windows11SDK.26100",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.Llvm.Clang",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.CMake.Project",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.ATL",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.ATL.ARM64",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.ATL.Spectre",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.ATL.ARM64.Spectre",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.Tools.ARM64",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64.Spectre",
+          "--add",
+          "Microsoft.VisualStudio.Component.VC.14.44.17.14.ARM64.Spectre",
+          "--add",
+          "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.CSharp",
+          "--add",
+          "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.Cpp",
+          "--includeRecommended",
+          "--lang",
+          "en-US",
+          "--wait"
+        ],
+        "pinned_input_binding": "Use only the existing hash-verified cached Community bootstrapper; accept the resulting layout only when signed Setup verification reports success and ChannelManifest.json, Catalog.json, Community product version, product ID, and all 15 requested IDs match the recorded pins and closure.",
+        "staging_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout.staging3",
+        "expected_behavior": "Create or update only the new staging offline layout; do not install Visual Studio, modify an installed instance, request elevation, or target the existing Build Tools layout.",
+        "stop_conditions": [
+          "bootstrapper hash, Authenticode signer, or product version differs",
+          "Setup follows a live channel or downloads an unpinned catalog",
+          "resulting channel, catalog, product ID, product version, or dependency closure differs from the recorded pins",
+          "any requested ID is rejected or unresolved",
+          "Setup attempts installation, elevation, modification of an installed instance, or writes outside staging and temporary download locations",
+          "timeout occurs without independent proof that every launched process stopped"
+        ],
+        "attempts": [
+          {
+            "state_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition3",
+            "bootstrapper_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition3\\evidence\\dd_bootstrapper_20260823030504.log",
+            "setup_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition3\\evidence\\dd_setup_20260823030610.log",
+            "started_utc": "2026-08-23T03:05:03Z",
+            "stopped_utc": "2026-08-23T05:18:00Z",
+            "process_ids": [26812, 22984],
+            "result": "stalled after verified package completion; no log or staging growth for more than 25 minutes; acquisition processes force-stopped and independently verified absent",
+            "stage_file_count": 1365,
+            "stage_bytes": 8808775495,
+            "channel_manifest_sha256": "4c81e902fb7fe2acea779b828e6dc548fe0bbb693df50eda0224263c16686bdd",
+            "catalog_sha256": "3891c3018a07338b3880cbb28088bb22ef7762eb9206523655b2e3972b9d527e",
+            "identity_result": "channel and catalog match recorded pins; payload layout incomplete",
+            "processes_stopped": true
+          },
+          {
+            "state_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition4",
+            "bootstrapper_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition4\\evidence\\dd_bootstrapper_20260823053638.log",
+            "setup_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition4\\evidence\\dd_setup_20260823053827.log",
+            "started_utc": "2026-08-23T05:36:37Z",
+            "completed_utc": "2026-08-23T05:39:41Z",
+            "process_ids": [35996, 35940],
+            "result": "resumed UpdateLayout completed; the separate Community layout was complete and acquisition processes were independently stopped",
+            "stage_file_count": 1366,
+            "stage_bytes": 11033210482,
+            "channel_manifest_sha256": "4c81e902fb7fe2acea779b828e6dc548fe0bbb693df50eda0224263c16686bdd",
+            "catalog_sha256": "3891c3018a07338b3880cbb28088bb22ef7762eb9206523655b2e3972b9d527e",
+            "identity_result": "channel and catalog match recorded pins",
+            "processes_stopped": true
+          }
+        ],
+        "official_verification": {
+          "command_shape": [
+            "vs_Community.exe",
+            "--layout",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout",
+            "--verify",
+            "--wait"
+          ],
+          "staging_result": "Verification completed. No problem was found",
+          "staging_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition4\\evidence\\dd_setup_20260823054816.log",
+          "final_result": "Verification completed. No problem was found",
+          "final_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition4\\evidence\\dd_setup_20260823055245.log",
+          "verified_utc": "2026-08-23T05:53:27Z",
+          "processes_stopped": true
+        },
+        "verified_layout_identity": {
+          "channel_manifest_id": "VisualStudio.17.Release/17.14.39+37614.0.-august.2026-",
+          "catalog_manifest_id": "VisualStudio/17.14.39+37614.0.-august.2026-",
+          "build_version": "17.14.37614.0",
+          "product_id": "Microsoft.VisualStudio.Product.Community",
+          "product_arch": "x64",
+          "channel_id": "VisualStudio.17.Release",
+          "dependency_closure_ids": 6146,
+          "requested_ids_resolved": true,
+          "install_manifests": "Response.json points installChannelUri and installCatalogUri to the local ChannelManifest.json and Catalog.json; no live channel was used for this acquisition"
+        },
+        "external_manifest": {
+          "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout.SHA256SUMS",
+          "sha256": "8bd31e90c71055f523f7d17e3789019f8cae4cf48ce14c027dd7480e78c7a08d",
+          "file_count": 1366,
+          "bytes": 11033210482,
+          "path_format": "UTF-8 sha256sum lines sorted by slash-separated path relative to layout root"
+        },
+        "acquisition_result": "complete-verified-community-layout"
+      },
       "layout_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-layout",
-      "layout_created": false
+      "layout_created": true
     },
     "visual_studio_layout": {
       "status": "payload-verified-prerequisite-selection-incomplete",
@@ -209,8 +337,109 @@
       "manifest_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\nuget\\SHA256SUMS",
       "manifest_sha256": "448306912ff85326dcfe4f0aa95346638708e41b3f47b330a5cd8e8efefece1c",
       "package_count": 27,
-      "verified": true
+      "verified": true,
+      "nuget_executable": {
+        "source": "https://dist.nuget.org/win-x86-commandline/v5.10.0/nuget.exe",
+        "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\nuget\\nuget.exe",
+        "sha256": "852b71cc8c8c2d40d09ea49d321ff56fd2397b9d6ea9f96e532530307bbbafd3",
+        "verified": true
+      },
+      "controlled_manifest_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\nuget\\CONTROLLED-SHA256SUMS",
+      "controlled_manifest_sha256": "f4641032e9114251a5468b76bb466aa2ce2657546bb5c943ef654a282d4b455b",
+      "controlled_manifest_entries": 28,
+      "controlled_manifest_format": "UTF-8 SHA-256 lines sorted by relative slash-separated path; nuget.exe and *.nupkg",
+      "offline_source_directory": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\nuget"
+    },
+    "stock_wsl_package": {
+      "status": "verified-cached-non-executable",
+      "package_type": "Microsoft WSL x64 MSI",
+      "release": {
+        "provider": "Microsoft GitHub repository",
+        "repository": "https://github.com/microsoft/WSL",
+        "release_api": "https://api.github.com/repos/microsoft/WSL/releases/tags/2.7.12",
+        "release_page": "https://github.com/microsoft/WSL/releases/tag/2.7.12",
+        "tag": "2.7.12",
+        "name": "2.7.12",
+        "published_at": "2026-08-18T21:12:01Z",
+        "draft": false,
+        "prerelease": false
+      },
+      "asset": {
+        "id": 519890230,
+        "name": "wsl.2.7.12.0.x64.msi",
+        "url": "https://github.com/microsoft/WSL/releases/download/2.7.12/wsl.2.7.12.0.x64.msi",
+        "updated_at": "2026-08-18T19:41:09Z",
+        "declared_digest": "sha256:a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+        "declared_bytes": 258998272
+      },
+      "cache": {
+        "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi",
+        "bytes": 258998272,
+        "sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+        "verified": true,
+        "acquisition": "Downloaded to a same-directory temporary file, verified against the authoritative GitHub asset digest and size, then atomically renamed; no existing cache hit was accepted.",
+        "offline_reuse": "Require this exact path, byte count, and SHA-256; fail closed on mismatch or absence."
+      },
+      "signature": {
+        "status": "Valid",
+        "signer": "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+        "thumbprint": "AB172913A2960A224809EE8A0C371CD47A079B72",
+        "scope": "MSI Authenticode signature"
+      },
+      "msi_identity": {
+        "product_name": "Windows Subsystem for Linux",
+        "manufacturer": "Microsoft Corporation",
+        "product_version": "2.7.12.0",
+        "product_code": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}",
+        "upgrade_code": "{6D5B792B-1EDC-4DE9-8EAD-201B820F8E82}",
+        "product_language": "1033",
+        "summary_template": "x64;1033",
+        "architecture": "x64"
+      },
+      "nested_payload": {
+        "method": "MSI embedded Binary.msixpackage plus five embedded CAB streams; inspected by extracting only to disposable temporary directories, without msiexec, installation, registration, launch, or system-location writes.",
+        "msix_path": "Binary.msixpackage",
+        "msix_bytes": 3796909,
+        "msix_sha256": "fd10d3e12efd9f26c51beec99e2e427462706d8cc0a2f87aa1b8113b0652a0a6",
+        "msix_identity": {
+          "name": "MicrosoftCorporationII.WindowsSubsystemForLinux",
+          "publisher": "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+          "version": "2.7.12.0",
+          "processor_architecture": "x64"
+        },
+        "cabinet_count": 5,
+        "cabinet_names": ["cab1.cab", "cab2.cab", "cab3.cab", "cab4.cab", "cab5.cab"],
+        "extracted_file_count": 640,
+        "msix_exposed_files": [
+          {"path": "wsl.exe", "bytes": 4291936, "sha256": "9708903a1e0646d68a2007d62384030e831558b475484e83dff3f32e6e99623a"}
+        ]
+      },
+      "recovery_comparison": {
+        "source": "recovery-harness/expected-safe-state.json",
+        "kernel": {"cabinet": "cab3.cab", "path": "kernel", "bytes": 17334784, "sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861", "matches_expected": true},
+        "initrd": {"cabinet": "cab3.cab", "path": "initrd.img", "bytes": 2836768, "sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118", "matches_expected": true}
+      },
+      "authoritative_identity_result": "Release tag, immutable asset ID and URL, internal MSI ProductVersion, x64 template, nested MSIX version/architecture, Microsoft signature, and recovery kernel/initrd hashes all match the pinned WSL 2.7.12.0 contract."
     }
+  },
+  "cmake_fetchcontent": {
+    "cache_root": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\cmake-fetchcontent",
+    "offline_only": true,
+    "archives": [
+      {
+        "relative_path": "GSL-4.0.0.tar.gz",
+        "source": "https://github.com/microsoft/GSL/archive/refs/tags/v4.0.0.tar.gz",
+        "sha256": "f0e32cb10654fea91ad56bde89170d78cfbf4363ee0b01d8f097de2ba49f6ce9",
+        "bytes": 55846
+      },
+      {
+        "relative_path": "nlohmann-json-3.12.0.tar.xz",
+        "source": "https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz",
+        "sha256": "42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa",
+        "bytes": 114576
+      }
+    ],
+    "source_evidence": "CMakeLists.txt FetchContent declarations at pinned WSL commit"
   },
   "linux_build": {
     "minimal_link": true,
@@ -278,9 +507,181 @@
       "no approval carried from static preparation"
     ]
   },
-  "missing_before_plan_validation": [
-    "complete hash-verified Visual Studio compiler offline layout matching pinned WSL build prerequisites",
-    "disposable Hyper-V Windows VM",
+  "controlled_package_build": {
+    "status": "prepared-source-backed-non-executable",
+    "executable": false,
+    "approval_required_before": ["compilation", "package installation", "elevation", "VM operation", "WSL shutdown", "custom boot", "runtime trial"],
+    "source": {
+      "archive_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz",
+      "archive_sha256": "2b0d80f6d3b81d3baa03de895195beea60a7859c6d60fca73d71fa85720749c3",
+      "tag": "2.7.12",
+      "commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+      "candidate_patches": {
+        "minimal-v3-stock-ns": [
+          {"path": "control-plane/patches/0001-minimal-control-plane-v1.patch", "sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"},
+          {"path": "control-plane/patches/0002-minimal-v2-fail-closed.patch", "sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0"},
+          {"path": "control-plane/patches/0004-minimal-v3-no-interop.patch", "sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981"}
+        ],
+        "minimal-v3-mount-ns": [
+          {"path": "control-plane/patches/0001-minimal-control-plane-v1.patch", "sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"},
+          {"path": "control-plane/patches/0002-minimal-v2-fail-closed.patch", "sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0"},
+          {"path": "control-plane/patches/0004-minimal-v3-no-interop.patch", "sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981"},
+          {"path": "control-plane/patches/0005-minimal-v3-mount-ns.patch", "sha256": "7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515"}
+        ]
+      }
+    },
+    "clean_directories": {
+      "vm_input_root": "C:\\controlled-inputs\\ultra-minimal-wsl",
+      "source_roots": {"minimal-v3-stock-ns": "C:\\controlled-package\\source\\minimal-v3-stock-ns", "minimal-v3-mount-ns": "C:\\controlled-package\\source\\minimal-v3-mount-ns"},
+      "build_roots": {"minimal-v3-stock-ns": "C:\\controlled-package\\build\\minimal-v3-stock-ns", "minimal-v3-mount-ns": "C:\\controlled-package\\build\\minimal-v3-mount-ns"},
+      "procedure_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline",
+      "rule": "refuse reuse of any existing source, build, or output directory"
+    },
+    "inputs": {
+      "visual_studio": {
+        "layout_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\vs-community-layout",
+        "layout_manifest": "vs-community-layout.SHA256SUMS",
+        "layout_manifest_sha256": "8bd31e90c71055f523f7d17e3789019f8cae4cf48ce14c027dd7480e78c7a08d",
+        "file_count": 1366,
+        "bytes": 11033210482,
+        "product_id": "Microsoft.VisualStudio.Product.Community",
+        "product_version": "17.14.37614.0",
+        "generator": "Visual Studio 17 2022",
+        "sdk": "10.0.26100.0",
+        "identity_gate": "ChannelManifest.json, Catalog.json, Response.json, product ID/version, x64 architecture, and all 15 requested IDs must match"
+      },
+      "nuget": {
+        "module_overlay": "control-plane/controlled-package-offline/FindNUGET.cmake",
+        "module_overlay_sha256": "732c3d30303f4a34c5a7a1473551f18645f6123e88a26155d088625573f938fb",
+        "cache_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\nuget",
+        "local_source_only": true,
+        "nuget_exe_sha256": "852b71cc8c8c2d40d09ea49d321ff56fd2397b9d6ea9f96e532530307bbbafd3",
+        "controlled_manifest_sha256": "f4641032e9114251a5468b76bb466aa2ce2657546bb5c943ef654a282d4b455b",
+        "restore_arguments": ["restore", "packages.config", "-SolutionDirectory", "<build>", "-ConfigFile", "<build>\\_deps\\controlled-nuget.config", "-NoCache", "-NonInteractive", "-DisableParallelProcessing"],
+        "network_policy": "The overlay copies only verified nuget.exe, writes a config with one cleared local folder source, and fails if the executable is absent. No source URL, fallback source, user config, or package cache is accepted."
+      },
+      "fetchcontent": {
+        "cache_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\cmake-fetchcontent",
+        "archives": ["GSL-4.0.0.tar.gz", "nlohmann-json-3.12.0.tar.xz"],
+        "source_dirs": ["C:\\controlled-package\\deps\\GSL-4.0.0", "C:\\controlled-package\\deps\\nlohmann-json-3.12.0"],
+        "cmake_bindings": ["-DFETCHCONTENT_SOURCE_DIR_GSL=<GSL source>", "-DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=<nlohmann/json source>"],
+        "network_policy": "Both source directories must be extracted from the two hash-verified local archives; a missing or mismatched archive stops configure."
+      }
+    },
+    "toolchain": {
+      "platform": "x64",
+      "configuration": "Release",
+      "cmake_minimum": "3.25",
+      "windows_sdk": "10.0.26100.0",
+      "package_version": "2.7.12.0",
+      "nuget_package_version": "2.7.12",
+      "wsl_build_settings": false,
+      "official_build": false,
+      "skip_package_signing": true,
+      "signing_choice": "Unsigned controlled MSI/MSIX artifacts; no ESRP or development certificate is accepted. Later trial installs only the MSI.",
+      "parallelism": 2,
+      "parallelism_argument": "/m:2"
+    },
+    "commands": {
+      "preflight": "Verify staged inputs against manifests, refuse existing directories, verify Community identity, and verify CMake, MSBuild, SDK 10.0.26100.0, and the Visual Studio 17 2022 generator.",
+      "source_prepare": [
+        "tar.exe --force-local -xzf C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz -C <fresh source parent>",
+        "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0001-minimal-control-plane-v1.patch",
+        "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0002-minimal-v2-fail-closed.patch",
+        "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0004-minimal-v3-no-interop.patch",
+        "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0005-minimal-v3-mount-ns.patch  # mount-ns only"
+      ],
+      "configure": "cmake -S <candidate source> -B <candidate build> -G \"Visual Studio 17 2022\" -A x64 -DCMAKE_SYSTEM_VERSION=10.0.26100.0 -DCMAKE_BUILD_TYPE=Release -DPACKAGE_VERSION=2.7.12.0 -DWSL_NUGET_PACKAGE_VERSION=2.7.12 -DWSL_BUILD_WSL_SETTINGS=FALSE -DOFFICIAL_BUILD=FALSE -DSKIP_PACKAGE_SIGNING=TRUE -DCONTROLLED_NUGET_CACHE=C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\nuget \"-DCMAKE_MODULE_PATH=<procedure root>;<candidate source>\\cmake\" -DFETCHCONTENT_SOURCE_DIR_GSL=<GSL source> -DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=<nlohmann/json source>",
+      "candidate_commands": {
+        "minimal-v3-stock-ns": {
+          "configure": "cmake -S C:\\controlled-package\\source\\minimal-v3-stock-ns -B C:\\controlled-package\\build\\minimal-v3-stock-ns -G \"Visual Studio 17 2022\" -A x64 -DCMAKE_SYSTEM_VERSION=10.0.26100.0 -DCMAKE_BUILD_TYPE=Release -DPACKAGE_VERSION=2.7.12.0 -DWSL_NUGET_PACKAGE_VERSION=2.7.12 -DWSL_BUILD_WSL_SETTINGS=FALSE -DOFFICIAL_BUILD=FALSE -DSKIP_PACKAGE_SIGNING=TRUE -DCONTROLLED_NUGET_CACHE=C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\nuget \"-DCMAKE_MODULE_PATH=C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline;C:\\controlled-package\\source\\minimal-v3-stock-ns\\cmake\" -DFETCHCONTENT_SOURCE_DIR_GSL=C:\\controlled-package\\deps\\GSL-4.0.0 -DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=C:\\controlled-package\\deps\\nlohmann-json-3.12.0",
+          "build": "cmake --build C:\\controlled-package\\build\\minimal-v3-stock-ns --config Release --target msipackage -- /m:2"
+        },
+        "minimal-v3-mount-ns": {
+          "configure": "cmake -S C:\\controlled-package\\source\\minimal-v3-mount-ns -B C:\\controlled-package\\build\\minimal-v3-mount-ns -G \"Visual Studio 17 2022\" -A x64 -DCMAKE_SYSTEM_VERSION=10.0.26100.0 -DCMAKE_BUILD_TYPE=Release -DPACKAGE_VERSION=2.7.12.0 -DWSL_NUGET_PACKAGE_VERSION=2.7.12 -DWSL_BUILD_WSL_SETTINGS=FALSE -DOFFICIAL_BUILD=FALSE -DSKIP_PACKAGE_SIGNING=TRUE -DCONTROLLED_NUGET_CACHE=C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\nuget \"-DCMAKE_MODULE_PATH=C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline;C:\\controlled-package\\source\\minimal-v3-mount-ns\\cmake\" -DFETCHCONTENT_SOURCE_DIR_GSL=C:\\controlled-package\\deps\\GSL-4.0.0 -DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=C:\\controlled-package\\deps\\nlohmann-json-3.12.0",
+          "build": "cmake --build C:\\controlled-package\\build\\minimal-v3-mount-ns --config Release --target msipackage -- /m:2"
+        }
+      },
+      "restore": "The configure command must select control-plane/controlled-package-offline/FindNUGET.cmake; its exact restore arguments are recorded under inputs.nuget.restore_arguments.",
+      "compile_and_package": "cmake --build <candidate build> --config Release --target msipackage -- /m:2",
+      "verification": "Generate controlled-output-SHA256SUMS with UTF-8 SHA-256 lines sorted by slash-separated path relative to the build root; include only the closed expected output set and verify no output is outside the build root."
+    },
+    "expected_outputs": {
+      "msi": "bin/x64/Release/wsl.msi",
+      "dependent_files": ["bin/x64/Release/wsl.exe", "bin/x64/Release/wslg.exe", "bin/x64/Release/wslhost.exe", "bin/x64/Release/wslrelay.exe", "bin/x64/Release/wslservice.exe", "bin/x64/Release/wslserviceproxystub.dll", "bin/x64/Release/wslinstall.dll", "bin/x64/Release/wsldeps.dll", "bin/x64/Release/WSLDVCPlugin.dll", "bin/x64/Release/gluepackage.msix", "bin/x64/Release/init", "bin/x64/Release/initrd.img"],
+      "manifest": "<candidate build>/controlled-output-SHA256SUMS",
+      "closed_set": true
+    },
+    "stop_conditions": ["any input or output hash differs", "CMake attempts HTTPS or NuGet reports a non-local source", "the offline module is not selected", "a package is missing or restored from a global cache", "any configure/restore/compile/package command fails", "an output is missing, extra, outside the build root, or absent from the manifest", "the operation would require elevation, installation, shutdown, custom boot, or runtime"],
+    "execution_boundary": "Preparation and plan validation only. Compilation and installation are unauthorized until this record is validated and fresh explicit approval is obtained."
+  },
+  "recovery_install_contract": {
+    "status": "pinned-non-executable",
+    "vm": {"name": "ultra-minimal-wsl-dev", "media": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\windows-media\\Win11_25H2_English_x64_v2.iso", "media_sha256": "768984706b909479417b2368438909440f2967ff05c6a9195ed2667254e465e3", "clean_shell_checkpoint": "clean-shell", "controlled_baseline_checkpoint": "controlled-package-baseline", "required_vm_state_for_checkpoint": "Off", "provenance": "New-DisposableWslDevVm.ps1 with Generation 2, Secure Boot MicrosoftWindows, vTPM, dynamic memory 2-8 GiB, four processors, automatic checkpoints disabled, and VM left Off"},
+    "stock_baseline": {"required_version": "2.7.12.0", "command_checks": ["wsl.exe --version", "wsl.exe --status", "wsl.exe --list --quiet"], "expected_safe_state": "recovery-harness/expected-safe-state.json", "wsl_config_sha256": "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577", "packaged_kernel_sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861", "packaged_initrd_sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118", "stock_package": {"cache_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi", "vm_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi", "sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145", "install_command": "msiexec.exe /i C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi /qn /norestart /L*v C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\stock-install.log", "pre_checks": ["Require fresh explicit approval, canonical safe:true, and VM Off before staging or installing.", "Copy only the verified cache artifact into vm_path and verify its recorded SHA-256 inside the disposable VM.", "Do not target the physical host or modify host WSL files/configuration."], "post_checks": ["wsl.exe --version reports WSL 2.7.12.0.", "wsl.exe --status and wsl.exe --list --quiet complete successfully.", "Compare packaged kernel, initrd, and wslconfig hashes with expected-safe-state.json."], "executed": false}, "recovery_input": "The VM-off controlled-package-baseline snapshot is the exact stock-package recovery input; restore it rather than downloading or reconstructing a stock MSI, then recheck all hashes and wsl.exe output."},
+    "baseline_creation": ["After separately approved Windows installation from the verified ISO, establish stock WSL 2.7.12.0, run the stock command checks, and enumerate clean-shell and controlled-package-baseline with the VM Off.", "Checkpoint-DisposableWslDevVm.ps1 refuses a running VM and never stops it automatically; record checkpoint ID and creation time in the external state file."],
+    "baseline_attempt": {
+      "status": "blocked-before-stock-install",
+      "authorization": "Session approval was received for the stock baseline/checkpoint and compiler boundary; no approval is carried forward.",
+      "vm": "ultra-minimal-wsl-dev",
+      "before_state": "Off",
+      "active_disk": "C:\\Hyper-V\\ultra-minimal-wsl\\ultra-minimal-wsl-dev\\Virtual Hard Disks\\ultra-minimal-wsl-dev_B2C4D6A1-E8DB-45B8-B76E-A76DA7CC69C0.avhdx",
+      "windows_volume": "F:",
+      "staged_package_path": "F:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi",
+      "staged_package_bytes": 258998272,
+      "staged_package_sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+      "staging_result": "copied-to-active-differencing-disk-and-verified",
+      "guest_boot": {"started": true, "state": "Running", "heartbeat": "OK"},
+      "guest_control": {
+        "guest_service_interface": {"enabled": false, "status": "OK"},
+        "powershell_direct": "blocked: Invoke-Command -VMName requires a Credential; no approved guest credential is recorded",
+        "available_path": "No approved non-console guest execution path"
+      },
+      "stock_install_executed": false,
+      "controlled_baseline_checkpoint_created": false,
+      "final_state": "Off",
+      "evidence": [
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\inspect-vm-storage-20260823\\inspect-vm-storage-20260823.log",
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\inspect-active-vhd-20260823\\inspect-active-vhd-20260823.log",
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\stage-stock-package-20260823\\stage-stock-package-20260823.log",
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\probe-vm-guest-20260823\\probe-vm-guest-20260823.log",
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\stop-vm-after-blocker-20260823\\stop-vm-after-blocker-20260823.log"
+      ],
+      "guest_control_capability_evidence": {
+        "status": "authoritative-comparison-complete-no-selection",
+        "verified_utc": "2026-08-23T14:25:33Z",
+        "manual_vmconnect": {
+          "capability": "Interactive guest console that can start, shut down, install, and interact with the guest operating system; a human can enter the recorded msiexec command.",
+          "limitation": "The human login, command entry, result capture, and shutdown verification are not a deterministic host-command channel.",
+          "source": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/virtual-machine-connection"
+        },
+        "powershell_direct": {
+          "capability": "Runs commands or scripts in a running Windows guest from the Hyper-V host and can execute the recorded msiexec command.",
+          "requirements": "Hyper-V administrator host access and an explicit valid guest credential; the credential must not be discovered, embedded, logged, or persisted by this project.",
+          "source": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/powershell-direct"
+        },
+        "guest_service_interface": {
+          "capability": "Copies files between host and running guest through Copy-VMFile without a network connection.",
+          "limitation": "It is not an arbitrary guest command-execution channel and cannot execute the recorded msiexec command by itself; the recorded service is disabled.",
+          "sources": [
+            "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/integration-services",
+            "https://learn.microsoft.com/en-us/powershell/module/hyper-v/copy-vmfile"
+          ]
+        },
+        "recovery_requirement": "After interruption or timeout, independently query durable VM state; do not infer that a remote, console, or elevated operation stopped. Refuse checkpoint or recovery continuation until the VM is verified Off.",
+        "result": "Guest Service Interface is insufficient alone. Manual VMConnect and credential-backed PowerShell Direct remain viable but unselected and require separately fixed mechanics, recovery review, and fresh approval."
+      },
+      "decision_required": "Choose and separately approve either manual VMConnect or credential-backed PowerShell Direct, with one exact reviewed operation, before any stock MSI installation or checkpoint operation."
+    },
+    "candidate_install_commands": {"minimal-v3-stock-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\install.log", "minimal-v3-mount-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\install.log"},
+    "restore_command": "Restore-VMSnapshot -VMName ultra-minimal-wsl-dev -Name controlled-package-baseline -Confirm:$false",
+    "post_trial_restore": ["VM must be Off before restore; refuse to stop it automatically.", "Restore controlled-package-baseline, rerun stock wsl.exe checks, and compare all expected-safe-state hashes.", "After the final candidate, restore controlled-package-baseline and prove stock wsl.exe command execution before releasing the VM."],
+    "forbidden_now": ["VM creation", "VM start/stop", "elevation", "package installation", "WSL shutdown", ".wslconfig changes", "custom boot", "-Execute", "runtime proof"],
+    "execution_boundary": "This contract pins later operations but authorizes none of them."
+  },
+  "missing_before_controlled_execution": [
+    "verified Community compiler layout staged to and installed offline in the disposable Hyper-V Windows VM",
+    "approved guest-control path for stock MSI installation inside the disposable VM",
     "stock WSL 2.7.12 guest baseline",
     "successfully built controlled WSL package",
     "controlled-package-baseline checkpoint",

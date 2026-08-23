@@ -227,15 +227,53 @@ class ControlPlaneRecordTests(unittest.TestCase):
     def test_plan_contains_environment_recovery_and_host_safety_gates(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
         preparation = plan["input_preparation"]
+        self.assertEqual(
+            preparation["status"],
+            "authorized-core-input-cache-complete-stock-package-cached-build-procedure-pinned",
+        )
         self.assertTrue(preparation["windows_media"]["verified"])
         self.assertEqual(preparation["windows_media"]["status"], "verified")
         self.assertEqual(
             preparation["visual_studio_layout"]["status"],
             "payload-verified-prerequisite-selection-incomplete",
         )
+        self.assertEqual(
+            preparation["visual_studio_community"]["status"],
+            "catalog-and-license-audit-passed-layout-verified",
+        )
         self.assertTrue(preparation["visual_studio_layout"]["unresolved_prerequisites"])
 
-        missing = " ".join(plan["missing_before_plan_validation"]).lower()
+        stock = preparation["stock_wsl_package"]
+        self.assertEqual(stock["status"], "verified-cached-non-executable")
+        self.assertEqual(stock["release"]["tag"], "2.7.12")
+        self.assertEqual(stock["asset"]["id"], 519890230)
+        self.assertEqual(stock["asset"]["declared_bytes"], stock["cache"]["bytes"])
+        self.assertEqual(stock["asset"]["declared_digest"], "sha256:" + stock["cache"]["sha256"])
+        self.assertTrue(stock["cache"]["verified"])
+        self.assertEqual(stock["signature"]["status"], "Valid")
+        self.assertEqual(stock["msi_identity"]["product_version"], "2.7.12.0")
+        self.assertEqual(stock["msi_identity"]["architecture"], "x64")
+        self.assertEqual(stock["nested_payload"]["msix_identity"]["version"], "2.7.12.0")
+        self.assertEqual(stock["nested_payload"]["msix_identity"]["processor_architecture"], "x64")
+        self.assertTrue(stock["recovery_comparison"]["kernel"]["matches_expected"])
+        self.assertTrue(stock["recovery_comparison"]["initrd"]["matches_expected"])
+
+        attempt = plan["recovery_install_contract"]["baseline_attempt"]
+        self.assertEqual(attempt["status"], "blocked-before-stock-install")
+        self.assertFalse(attempt["guest_control"]["guest_service_interface"]["enabled"])
+        self.assertIn("Credential", attempt["guest_control"]["powershell_direct"])
+        self.assertFalse(attempt["stock_install_executed"])
+        self.assertFalse(attempt["controlled_baseline_checkpoint_created"])
+        self.assertEqual(attempt["final_state"], "Off")
+        capability = attempt["guest_control_capability_evidence"]
+        self.assertEqual(capability["status"], "authoritative-comparison-complete-no-selection")
+        self.assertIn("unselected", capability["result"])
+        self.assertIn("insufficient alone", capability["result"])
+        self.assertIn("credential", capability["powershell_direct"]["requirements"].lower())
+        self.assertIn("not an arbitrary", capability["guest_service_interface"]["limitation"].lower())
+        self.assertIn("verified Off", capability["recovery_requirement"])
+
+        missing = " ".join(plan["missing_before_controlled_execution"]).lower()
         self.assertNotIn("windows installation media", missing)
         self.assertIn("compiler", missing)
         self.assertIn("checkpoint", missing)
@@ -249,6 +287,65 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("physical host", stops)
         self.assertIn("required hash differs", stops)
         self.assertIn("timeout", stops)
+
+    def test_controlled_package_build_record_is_complete_and_fail_closed(self):
+        plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
+        build = plan["controlled_package_build"]
+        self.assertFalse(build["executable"])
+        self.assertEqual(build["status"], "prepared-source-backed-non-executable")
+        self.assertEqual(build["source"]["commit"], plan["source"]["base_commit"])
+        self.assertEqual(
+            [item["sha256"] for item in build["source"]["candidate_patches"]["minimal-v3-stock-ns"]],
+            [
+                "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a",
+                "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0",
+                "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981",
+            ],
+        )
+        self.assertEqual(len(build["source"]["candidate_patches"]["minimal-v3-mount-ns"]), 4)
+        self.assertEqual(build["inputs"]["nuget"]["module_overlay"], "control-plane/controlled-package-offline/FindNUGET.cmake")
+        self.assertEqual(
+            sha256(ROOT / build["inputs"]["nuget"]["module_overlay"]),
+            build["inputs"]["nuget"]["module_overlay_sha256"],
+        )
+        self.assertTrue(build["inputs"]["nuget"]["local_source_only"])
+        self.assertIn("-ConfigFile", build["inputs"]["nuget"]["restore_arguments"])
+        self.assertIn("-NoCache", build["inputs"]["nuget"]["restore_arguments"])
+        self.assertIn("CMAKE_MODULE_PATH", build["commands"]["configure"])
+        self.assertEqual(set(build["commands"]["candidate_commands"]), {"minimal-v3-stock-ns", "minimal-v3-mount-ns"})
+        for candidate_command in build["commands"]["candidate_commands"].values():
+            self.assertIn("Visual Studio 17 2022", candidate_command["configure"])
+            self.assertIn("x64", candidate_command["configure"])
+            self.assertIn("CMAKE_MODULE_PATH", candidate_command["configure"])
+            self.assertIn("msipackage", candidate_command["build"])
+            self.assertIn("/m:2", candidate_command["build"])
+        self.assertEqual(build["toolchain"]["platform"], "x64")
+        self.assertEqual(build["toolchain"]["configuration"], "Release")
+        self.assertEqual(build["toolchain"]["windows_sdk"], "10.0.26100.0")
+        self.assertEqual(build["toolchain"]["package_version"], "2.7.12.0")
+        self.assertTrue(build["expected_outputs"]["closed_set"])
+        self.assertIn("bin/x64/Release/wsl.msi", [build["expected_outputs"]["msi"]])
+        self.assertEqual(set(plan["recovery_install_contract"]["candidate_install_commands"]), {
+            "minimal-v3-stock-ns",
+            "minimal-v3-mount-ns",
+        })
+        self.assertIn("controlled-package-baseline", plan["recovery_install_contract"]["restore_command"])
+        stock_install = plan["recovery_install_contract"]["stock_baseline"]["stock_package"]
+        self.assertFalse(stock_install["executed"])
+        self.assertIn("msiexec.exe /i", stock_install["install_command"])
+        self.assertIn("2.7.12.0.x64.msi", stock_install["install_command"])
+        self.assertIn("fresh explicit approval", " ".join(stock_install["pre_checks"]).lower())
+        missing = " ".join(plan["missing_before_controlled_execution"]).lower()
+        self.assertNotIn("exact fail-closed offline", missing)
+        self.assertNotIn("pinned offline stock wsl", missing)
+        self.assertIn("guest-control", missing)
+        self.assertIn("compiler", missing)
+        self.assertIn("checkpoint", missing)
+        self.assertIn("approval", missing)
+        stops = " ".join(build["stop_conditions"]).lower()
+        self.assertIn("https", stops)
+        self.assertIn("non-local", stops)
+        self.assertIn("hash", stops)
 
     def test_protocol_and_source_share_the_same_base_commit(self):
         protocol = json.loads((CONTROL / "protocol/wsl-2.7.12.json").read_text(encoding="utf-8"))

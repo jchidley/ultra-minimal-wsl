@@ -59,7 +59,7 @@ All `minimal-v2` records remain preserved as historical parents.
 
 `patches/0004-minimal-v3-no-interop.patch` layers on `minimal-v2-fail-closed` and removes only mini-init's unconditional `binfmt_misc` mount and `WSLInterop` registration hard-fail. Focused record tests require both operations and their local definitions to be removed without changing distro-init policy or protocol dispatch. `minimal-v3-stock-ns` is tree-identical to the new fail-closed parent; `patches/0005-minimal-v3-mount-ns.patch` changes only the coherent namespace bundle to mount-only.
 
-All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. The Windows build and runtime phase remains deferred. `deferred-runtime-plan.json` is synchronized to v3 but remains non-executable and proves no B4/B5/B6 result. The restart boundary is in `../NEXT-SESSION.md`.
+All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. The Windows build and runtime phase remains deferred. The source-backed offline package procedure and recovery contract are recorded in `deferred-runtime-plan.json`, which remains non-executable and proves no B4/B5/B6 result. The restart boundary is in `../NEXT-SESSION.md`.
 
 ## Disposable Hyper-V VM
 
@@ -82,20 +82,8 @@ This creates `controlled-package-baseline`. Neither script starts or stops a VM 
 
 `deferred-runtime-plan.json` is deliberately non-executable. It records missing inputs, safety preconditions, the eventual runtime sequence, acceptance evidence, recovery assertions, and stop conditions without reserving a trial ledger row or carrying approval forward.
 
-## Remaining gates
+## Evidence boundary
 
-### Completed source-only runtime-readiness gates
+The v3 records establish source-policy and Linux-artifact reproducibility only; they do not establish controlled Windows compilation or any runtime gate. Preserve each generation: a later source or ABI change creates a new layer and repeats the policy, mutation, and reproducibility gates.
 
-The v3 interop-removal layer, focused regression coverage, replacement candidates, two distinct offline builds per candidate, durable hashes, and non-executable plan synchronization are complete. Preserve all v1/v2/v3 evidence; any later source or ABI change creates a new layer and repeats these gates.
-
-### Controlled environment gates
-
-1. Resolve the current compiler-layout acquisition blocker recorded in `STATUS.md` and `TASKS.md`; exact product, catalog, licensing, command, and failure evidence belongs only in `deferred-runtime-plan.json`.
-2. Complete and hash the separate reusable offline compiler layout against the pinned source prerequisites without installing it.
-3. Pin the package build procedure and outputs without installing the layout.
-4. Obtain explicit approval for elevated VM creation.
-5. Install Windows in the VM and establish a stock WSL 2.7.12 recovery baseline.
-6. Build the patched Windows service/package inside the VM.
-7. Create `controlled-package-baseline` while the VM is off.
-8. Define a runtime trial record before booting the controlled package.
-9. Prove B4, B5, B6-T, termination, and checkpoint recovery before further reduction.
+`STATUS.md` owns the present boundary, `TASKS.md` the immediate queue, and `MINIMAL-BOOT-PLAN.md` the proof order and approval rules. Exact compiler, source, candidate, build-procedure, checkpoint, and recovery evidence belongs in `deferred-runtime-plan.json`; that evidence never carries execution approval.

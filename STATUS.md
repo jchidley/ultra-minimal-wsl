@@ -1,14 +1,15 @@
 # Project status
 
-Updated 2026-08-22. This file contains verified present facts and the achieved boundary. Immutable trial history is in `inventory/trials.csv` and `recovery-harness/trials/`; detailed source/build evidence is under `control-plane/`.
+This file contains verified present facts and the achieved boundary. Immutable trial history is in `inventory/trials.csv` and `recovery-harness/trials/`; detailed source/build evidence is under `control-plane/`.
 
 ## Safety state
 
 - Microsoft’s packaged kernel remains the recovery kernel; no reduced init or custom WSL package has been deployed.
-- No project file has been written beneath `C:\Program Files\WSL`.
-- The validated baseline is WSL 2.7.12.0 with the packaged kernel and initrd unchanged; exact recovery hashes belong to `recovery-harness/expected-safe-state.json`.
+- No project file has been written beneath `C:\Program Files\WSL`, and host WSL state was not changed.
+- The approved disposable VM `ultra-minimal-wsl-dev` is Off after applying Windows offline. Its verified stock WSL package was staged into the active differencing disk, but the stock baseline was not established because Guest Service Interface is disabled and PowerShell Direct requires an unrecorded guest credential.
+- The validated host baseline remains WSL 2.7.12.0 with the packaged kernel and initrd unchanged; exact recovery hashes belong to `recovery-harness/expected-safe-state.json`.
 - Live distro/process state is intentionally not recorded here. Re-query it with `tools/Test-WslSafeState.ps1`; never stop a running distro automatically.
-- Custom boot, WSL shutdown, `.wslconfig` changes, `-Execute`, elevation, or runtime trials require canonical `safe:true`, plan validation, and fresh explicit approval.
+- Custom boot, WSL shutdown, `.wslconfig` changes, candidate installation, or runtime trials require canonical `safe:true`, plan validation, and fresh explicit approval.
 
 ## Achieved boundary
 
@@ -37,6 +38,6 @@ Updated 2026-08-22. This file contains verified present facts and the achieved b
 
 The source-only runtime-readiness queue is complete: the known excluded interop hard-fail is removed, replacement candidates are recorded and reproducible, and the non-executable runtime plan is synchronized to them. Do not select another Kconfig group merely to continue static review.
 
-The controlled Windows build/runtime phase remains deferred. Preparation-only acquisition is explicitly authorized. The reusable local cache contains verified Windows media, pinned WSL source and NuGet inputs, plus a payload-valid but prerequisite-incomplete Visual Studio Build Tools layout; no installer has run. The pinned source prerequisite audit proves that Build Tools does not advertise the required .NET WinUI support. Community applicability and all 15 requested component IDs passed the pinned catalog/license audit, and its signed bootstrapper is cached, but the separate layout is blocked: Visual Studio Setup 4.9.50.62957 rejects the forwarded `--channelUri` needed to bind the pinned local manifest. No Community payload layout was created, and the live channel must not be followed. Exact evidence and logs belong to `control-plane/deferred-runtime-plan.json`; Professional must not be silently substituted. No VM, elevation, package installation, host WSL change, or runtime execution is authorized. The next acceptance gap remains controlled-package compilation and reproducible proof of B4/B5/B6-T, termination, recovery, and namespace necessity. Minimal Viable WSL must then pass minimality and cold-start gates before Alpine, Arch, and Debian compatibility work can produce `ultra-minimal-wsl-v1`.
+The controlled Windows build/runtime phase remains deferred. The verified Windows media, pinned WSL source, NuGet packages, NuGet 5.10.0, pinned FetchContent archives, complete verified Community offline layout, and exact Microsoft WSL 2.7.12.0 x64 stock MSI are cached; the older Build Tools layout remains prerequisite-incomplete and is not the compiler input. The approved disposable VM contains offline-applied Windows and remains Off. The verified stock package was staged into its active differencing disk, but stock WSL installation and the controlled baseline checkpoint were not established because Guest Service Interface is disabled and PowerShell Direct requires an unrecorded guest credential. Do not enable a new guest-control channel, automate console interaction, install the MSI, or create the checkpoint until that path is separately decided and approved. Do not install inbox/latest WSL, use an unpinned package, or synthesize a stock package. The fail-closed offline package-build, output, install, checkpoint, and stock-recovery procedure remains source-backed and recorded in `control-plane/deferred-runtime-plan.json`; no candidate was compiled or installed, and no host WSL state or runtime was changed. Minimal Viable WSL must then pass minimality and cold-start gates before Alpine, Arch, and Debian compatibility work can produce `ultra-minimal-wsl-v1`.
 
 `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns the durable strategy and acceptance criteria; `NEXT-SESSION.md` is the restart entry point.
