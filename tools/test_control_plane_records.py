@@ -273,6 +273,26 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("not an arbitrary", capability["guest_service_interface"]["limitation"].lower())
         self.assertIn("verified Off", capability["recovery_requirement"])
 
+        selection = plan["recovery_install_contract"]["guest_control_selection"]
+        self.assertEqual(selection["status"], "powershell-direct-selected-pending-account-bootstrap")
+        self.assertEqual(selection["mechanism"], "PowerShell Direct")
+        self.assertFalse(selection["executable"])
+        self.assertFalse(selection["approval_carried_forward"])
+        account = selection["account"]
+        self.assertEqual(account["username_length"], 12)
+        self.assertEqual(len(account["username"]), account["username_length"])
+        self.assertEqual(account["password_length"], 12)
+        self.assertTrue(account["password_generated"])
+        self.assertFalse(account["password_recorded_in_repository"])
+        self.assertEqual(
+            set(account),
+            {
+                "username", "username_length", "password_length", "password_generated",
+                "password_recorded_in_repository", "scope", "reuse", "disposition",
+            },
+        )
+        self.assertIn("cannot authenticate", selection["bootstrap_requirement"])
+
         missing = " ".join(plan["missing_before_controlled_execution"]).lower()
         self.assertNotIn("windows installation media", missing)
         self.assertIn("compiler", missing)
@@ -338,7 +358,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
         missing = " ".join(plan["missing_before_controlled_execution"]).lower()
         self.assertNotIn("exact fail-closed offline", missing)
         self.assertNotIn("pinned offline stock wsl", missing)
-        self.assertIn("guest-control", missing)
+        self.assertIn("powershell direct", missing)
+        self.assertIn("account-bootstrap", missing)
         self.assertIn("compiler", missing)
         self.assertIn("checkpoint", missing)
         self.assertIn("approval", missing)

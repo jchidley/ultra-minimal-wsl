@@ -671,7 +671,35 @@
         "recovery_requirement": "After interruption or timeout, independently query durable VM state; do not infer that a remote, console, or elevated operation stopped. Refuse checkpoint or recovery continuation until the VM is verified Off.",
         "result": "Guest Service Interface is insufficient alone. Manual VMConnect and credential-backed PowerShell Direct remain viable but unselected and require separately fixed mechanics, recovery review, and fresh approval."
       },
-      "decision_required": "Choose and separately approve either manual VMConnect or credential-backed PowerShell Direct, with one exact reviewed operation, before any stock MSI installation or checkpoint operation."
+      "decision_required": "Resolved after this attempt: the controller selected PowerShell Direct with a dedicated disposable VM-only account. Bootstrap and execution remain separately reviewable and unauthorized."
+    },
+    "guest_control_selection": {
+      "status": "powershell-direct-selected-pending-account-bootstrap",
+      "mechanism": "PowerShell Direct",
+      "selected_by": "controller",
+      "rationale": "The VM and credential are disposable. PowerShell Direct provides deterministic command execution, output, and exit evidence without requiring the credential to have value outside this VM.",
+      "account": {
+        "username": "4cl8y955frge",
+        "username_length": 12,
+        "password_length": 12,
+        "password_generated": true,
+        "password_recorded_in_repository": false,
+        "scope": "dedicated local administrator account for ultra-minimal-wsl-dev only",
+        "reuse": "forbidden outside this disposable VM",
+        "disposition": "The controller supplies the generated password when the approved operation executes; destroy it with the VM."
+      },
+      "bootstrap_requirement": "The selected account does not yet exist in the guest, so it cannot authenticate the first PowerShell Direct session. Commission one fixed account-provisioning method as part of the stock-baseline approval artifact; do not assume PowerShell Direct can bootstrap itself.",
+      "approval_artifact_must_fix": [
+        "account provisioning method",
+        "elevated host command and in-memory PSCredential construction",
+        "stock MSI hash verification, installation, exit-code capture, and post-checks",
+        "evidence destinations that exclude the plaintext password",
+        "timeout and interruption handling",
+        "clean guest shutdown and independent VM-Off verification",
+        "controlled-package-baseline checkpoint creation and recovery"
+      ],
+      "executable": false,
+      "approval_carried_forward": false
     },
     "candidate_install_commands": {"minimal-v3-stock-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\install.log", "minimal-v3-mount-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\install.log"},
     "restore_command": "Restore-VMSnapshot -VMName ultra-minimal-wsl-dev -Name controlled-package-baseline -Confirm:$false",
@@ -681,7 +709,7 @@
   },
   "missing_before_controlled_execution": [
     "verified Community compiler layout staged to and installed offline in the disposable Hyper-V Windows VM",
-    "approved guest-control path for stock MSI installation inside the disposable VM",
+    "plan-validated and freshly approved PowerShell Direct account-bootstrap and stock-baseline artifact",
     "stock WSL 2.7.12 guest baseline",
     "successfully built controlled WSL package",
     "controlled-package-baseline checkpoint",
