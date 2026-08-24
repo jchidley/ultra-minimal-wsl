@@ -92,7 +92,7 @@ uv run python -m unittest tools.test_build_host_profile tools.test_inventory_rec
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
-The PowerShell check uses pinned PSScriptAnalyzer 1.25.0 under Windows PowerShell 5.1 from the verified `windows-env` cache. The generated SQLite database must already exist; rebuild instructions are in `inventory/README.md`.
+The PowerShell check uses pinned PSScriptAnalyzer 1.25.0 under PowerShell 7 from the verified `windows-env` cache. The generated SQLite database must already exist; rebuild instructions are in `inventory/README.md`.
 
 No kernel trial is authorized by this README. A trial changes the global WSL kernel, shuts down every WSL 2 distro, and must use the guarded recovery harness with fresh explicit approval.
 

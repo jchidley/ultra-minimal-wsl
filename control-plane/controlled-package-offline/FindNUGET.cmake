@@ -45,7 +45,7 @@ function(parse_nuget_packages_versions)
     set(CMD "$packages=@{}; (Select-Xml -path '${CMAKE_SOURCE_DIR}/packages.config' /packages).Node.ChildNodes | Where-Object { $_.name -ne '#whitespace'} | % {$packages.add($_.id, $_.Attributes['version'].Value) }; $packages | ConvertTo-Json | Write-Host")
 
     execute_process(
-        COMMAND powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -Command "${CMD}"
+        COMMAND pwsh.exe -NoLogo -NoProfile -NonInteractive -Command "${CMD}"
         OUTPUT_VARIABLE output
         COMMAND_ERROR_IS_FATAL ANY)
 
