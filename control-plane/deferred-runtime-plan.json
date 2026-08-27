@@ -159,7 +159,10 @@
             "setup_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition3\\evidence\\dd_setup_20260823030610.log",
             "started_utc": "2026-08-23T03:05:03Z",
             "stopped_utc": "2026-08-23T05:18:00Z",
-            "process_ids": [26812, 22984],
+            "process_ids": [
+              26812,
+              22984
+            ],
             "result": "stalled after verified package completion; no log or staging growth for more than 25 minutes; acquisition processes force-stopped and independently verified absent",
             "stage_file_count": 1365,
             "stage_bytes": 8808775495,
@@ -174,7 +177,10 @@
             "setup_log": "%LOCALAPPDATA%\\ultra-minimal-wsl\\vs-community-acquisition4\\evidence\\dd_setup_20260823053827.log",
             "started_utc": "2026-08-23T05:36:37Z",
             "completed_utc": "2026-08-23T05:39:41Z",
-            "process_ids": [35996, 35940],
+            "process_ids": [
+              35996,
+              35940
+            ],
             "result": "resumed UpdateLayout completed; the separate Community layout was complete and acquisition processes were independently stopped",
             "stage_file_count": 1366,
             "stage_bytes": 11033210482,
@@ -260,62 +266,93 @@
         "mappings": [
           {
             "requirement": "CMake >= 3.25",
-            "ids": ["Microsoft.VisualStudio.Component.VC.CMake.Project"],
+            "ids": [
+              "Microsoft.VisualStudio.Component.VC.CMake.Project"
+            ],
             "applicability": "selected direct component; catalog dependency Microsoft.VisualStudio.VC.CMake",
             "payload_evidence": "cached payload contains CMake 3.31 paths"
           },
           {
             "requirement": "MSBuild",
-            "ids": ["Microsoft.VisualStudio.Workload.MSBuildTools", "Microsoft.Component.MSBuild"],
+            "ids": [
+              "Microsoft.VisualStudio.Workload.MSBuildTools",
+              "Microsoft.Component.MSBuild"
+            ],
             "applicability": "Microsoft.VisualStudio.Workload.MSBuildTools is required by the BuildTools product",
             "payload_evidence": "cached layout contains Microsoft.VisualStudio.VC.MSBuild.v170.X64 and its v143 payload"
           },
           {
             "requirement": "Windows SDK 26100",
-            "ids": ["Microsoft.VisualStudio.Component.Windows11SDK.26100"],
+            "ids": [
+              "Microsoft.VisualStudio.Component.Windows11SDK.26100"
+            ],
             "applicability": "selected direct component and BuildTools product dependency",
             "payload_evidence": "cached Win11SDK_10.0.26100 version 10.0.26100.15 payload"
           },
           {
             "requirement": "Universal Windows platform support for v143 build tools (X64 and ARM64)",
-            "ids": ["Microsoft.VisualStudio.Workload.UniversalBuildTools", "Microsoft.VisualStudio.ComponentGroup.UWP.VC.BuildTools"],
+            "ids": [
+              "Microsoft.VisualStudio.Workload.UniversalBuildTools",
+              "Microsoft.VisualStudio.ComponentGroup.UWP.VC.BuildTools"
+            ],
             "applicability": "both are BuildTools product dependencies; the group resolves UWP.VC.ARM64, VC.Tools.x86.x64, and v143 UWP MSBuild payloads",
             "payload_evidence": "catalog advertises the exact BuildTools dependency graph; not selected by the current Response.json"
           },
           {
             "requirement": "MSVC v143 C++ ARM64 build tools (Latest + Spectre) (X64 and ARM64)",
-            "ids": ["Microsoft.VisualStudio.Component.VC.Tools.x86.x64", "Microsoft.VisualStudio.Component.VC.Tools.ARM64", "Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64.Spectre", "Microsoft.VisualStudio.Component.VC.14.44.17.14.ARM64.Spectre"],
+            "ids": [
+              "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+              "Microsoft.VisualStudio.Component.VC.Tools.ARM64",
+              "Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64.Spectre",
+              "Microsoft.VisualStudio.Component.VC.14.44.17.14.ARM64.Spectre"
+            ],
             "applicability": "all four are direct optional dependencies of the BuildTools product; VC.Tools.x86.x64 is recommended by VCTools",
             "payload_evidence": "catalog component IDs are present, but the current Response.json selects none of the missing ARM64/Spectre entries"
           },
           {
             "requirement": "C++ core features",
-            "ids": ["Microsoft.VisualStudio.Component.VC.CoreBuildTools"],
+            "ids": [
+              "Microsoft.VisualStudio.Component.VC.CoreBuildTools"
+            ],
             "applicability": "required dependency of Microsoft.VisualStudio.Workload.VCTools for BuildTools",
             "payload_evidence": "resolved by the selected VCTools workload"
           },
           {
             "requirement": "C++ ATL for latest v143 tools (X64 and ARM64)",
-            "ids": ["Microsoft.VisualStudio.Component.VC.ATL", "Microsoft.VisualStudio.Component.VC.ATL.ARM64", "Microsoft.VisualStudio.Component.VC.ATL.Spectre", "Microsoft.VisualStudio.Component.VC.ATL.ARM64.Spectre"],
+            "ids": [
+              "Microsoft.VisualStudio.Component.VC.ATL",
+              "Microsoft.VisualStudio.Component.VC.ATL.ARM64",
+              "Microsoft.VisualStudio.Component.VC.ATL.Spectre",
+              "Microsoft.VisualStudio.Component.VC.ATL.ARM64.Spectre"
+            ],
             "applicability": "all four are direct optional dependencies of the BuildTools product; only VC.ATL is selected",
             "payload_evidence": "current layout contains x64 ATL payloads only"
           },
           {
             "requirement": "C++ Clang compiler for Windows",
-            "ids": ["Microsoft.VisualStudio.Component.VC.Llvm.Clang"],
+            "ids": [
+              "Microsoft.VisualStudio.Component.VC.Llvm.Clang"
+            ],
             "applicability": "selected direct component; catalog resolves the native desktop Clang group",
             "payload_evidence": "cached Microsoft.VisualStudio.VC.Llvm.Clang payload"
           },
           {
             "requirement": ".NET desktop development",
-            "ids": ["Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools"],
+            "ids": [
+              "Microsoft.VisualStudio.Workload.ManagedDesktopBuildTools"
+            ],
             "applicability": "optional dependency explicitly advertised by the BuildTools product",
             "payload_evidence": "catalog dependency graph is present, but the current Response.json does not select it"
           }
         ],
         "product_blocker": {
           "requirement": ".NET WinUI app development tools",
-          "catalog_ids": ["Microsoft.VisualStudio.Component.WindowsAppSdkSupport.CSharp", "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.Cpp", "Microsoft.VisualStudio.ComponentGroup.WindowsAppSDK.Cs", "Microsoft.VisualStudio.ComponentGroup.WindowsAppSDK.Cpp"],
+          "catalog_ids": [
+            "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.CSharp",
+            "Microsoft.VisualStudio.Component.WindowsAppSdkSupport.Cpp",
+            "Microsoft.VisualStudio.ComponentGroup.WindowsAppSDK.Cs",
+            "Microsoft.VisualStudio.ComponentGroup.WindowsAppSDK.Cpp"
+          ],
           "build_tools_product_dependency": false,
           "evidence": "The catalog contains these IDs, but Microsoft.VisualStudio.Product.BuildTools does not advertise either WindowsAppSdkSupport component, the WindowsAppSDK groups, or a WinUI workload. The component dependency graph instead requires Microsoft.VisualStudio.Component.ManagedDesktop.Core and Microsoft.VisualStudio.Community.ProductArch.TargetedExtra; the full Visual Studio product family advertises the corresponding managed/Universal workloads, while Build Tools exposes only their build-tools variants.",
           "resolution": "Build Tools cannot satisfy the documented prerequisite set; a supported full Visual Studio product layout is required. Product selection and acquisition order are owned by TASKS.md; do not guess a Build Tools add ID or mark the current layout complete."
@@ -408,16 +445,38 @@
           "processor_architecture": "x64"
         },
         "cabinet_count": 5,
-        "cabinet_names": ["cab1.cab", "cab2.cab", "cab3.cab", "cab4.cab", "cab5.cab"],
+        "cabinet_names": [
+          "cab1.cab",
+          "cab2.cab",
+          "cab3.cab",
+          "cab4.cab",
+          "cab5.cab"
+        ],
         "extracted_file_count": 640,
         "msix_exposed_files": [
-          {"path": "wsl.exe", "bytes": 4291936, "sha256": "9708903a1e0646d68a2007d62384030e831558b475484e83dff3f32e6e99623a"}
+          {
+            "path": "wsl.exe",
+            "bytes": 4291936,
+            "sha256": "9708903a1e0646d68a2007d62384030e831558b475484e83dff3f32e6e99623a"
+          }
         ]
       },
       "recovery_comparison": {
         "source": "recovery-harness/expected-safe-state.json",
-        "kernel": {"cabinet": "cab3.cab", "path": "kernel", "bytes": 17334784, "sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861", "matches_expected": true},
-        "initrd": {"cabinet": "cab3.cab", "path": "initrd.img", "bytes": 2836768, "sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118", "matches_expected": true}
+        "kernel": {
+          "cabinet": "cab3.cab",
+          "path": "kernel",
+          "bytes": 17334784,
+          "sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861",
+          "matches_expected": true
+        },
+        "initrd": {
+          "cabinet": "cab3.cab",
+          "path": "initrd.img",
+          "bytes": 2836768,
+          "sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118",
+          "matches_expected": true
+        }
       },
       "authoritative_identity_result": "Release tag, immutable asset ID and URL, internal MSI ProductVersion, x64 template, nested MSIX version/architecture, Microsoft signature, and recovery kernel/initrd hashes all match the pinned WSL 2.7.12.0 contract."
     }
@@ -510,7 +569,15 @@
   "controlled_package_build": {
     "status": "prepared-source-backed-non-executable",
     "executable": false,
-    "approval_required_before": ["compilation", "package installation", "elevation", "VM operation", "WSL shutdown", "custom boot", "runtime trial"],
+    "approval_required_before": [
+      "compilation",
+      "package installation",
+      "elevation",
+      "VM operation",
+      "WSL shutdown",
+      "custom boot",
+      "runtime trial"
+    ],
     "source": {
       "archive_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz",
       "archive_sha256": "2b0d80f6d3b81d3baa03de895195beea60a7859c6d60fca73d71fa85720749c3",
@@ -518,22 +585,49 @@
       "commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
       "candidate_patches": {
         "minimal-v3-stock-ns": [
-          {"path": "control-plane/patches/0001-minimal-control-plane-v1.patch", "sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"},
-          {"path": "control-plane/patches/0002-minimal-v2-fail-closed.patch", "sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0"},
-          {"path": "control-plane/patches/0004-minimal-v3-no-interop.patch", "sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981"}
+          {
+            "path": "control-plane/patches/0001-minimal-control-plane-v1.patch",
+            "sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"
+          },
+          {
+            "path": "control-plane/patches/0002-minimal-v2-fail-closed.patch",
+            "sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0"
+          },
+          {
+            "path": "control-plane/patches/0004-minimal-v3-no-interop.patch",
+            "sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981"
+          }
         ],
         "minimal-v3-mount-ns": [
-          {"path": "control-plane/patches/0001-minimal-control-plane-v1.patch", "sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"},
-          {"path": "control-plane/patches/0002-minimal-v2-fail-closed.patch", "sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0"},
-          {"path": "control-plane/patches/0004-minimal-v3-no-interop.patch", "sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981"},
-          {"path": "control-plane/patches/0005-minimal-v3-mount-ns.patch", "sha256": "7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515"}
+          {
+            "path": "control-plane/patches/0001-minimal-control-plane-v1.patch",
+            "sha256": "3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a"
+          },
+          {
+            "path": "control-plane/patches/0002-minimal-v2-fail-closed.patch",
+            "sha256": "47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0"
+          },
+          {
+            "path": "control-plane/patches/0004-minimal-v3-no-interop.patch",
+            "sha256": "e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981"
+          },
+          {
+            "path": "control-plane/patches/0005-minimal-v3-mount-ns.patch",
+            "sha256": "7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515"
+          }
         ]
       }
     },
     "clean_directories": {
       "vm_input_root": "C:\\controlled-inputs\\ultra-minimal-wsl",
-      "source_roots": {"minimal-v3-stock-ns": "C:\\controlled-package\\source\\minimal-v3-stock-ns", "minimal-v3-mount-ns": "C:\\controlled-package\\source\\minimal-v3-mount-ns"},
-      "build_roots": {"minimal-v3-stock-ns": "C:\\controlled-package\\build\\minimal-v3-stock-ns", "minimal-v3-mount-ns": "C:\\controlled-package\\build\\minimal-v3-mount-ns"},
+      "source_roots": {
+        "minimal-v3-stock-ns": "C:\\controlled-package\\source\\minimal-v3-stock-ns",
+        "minimal-v3-mount-ns": "C:\\controlled-package\\source\\minimal-v3-mount-ns"
+      },
+      "build_roots": {
+        "minimal-v3-stock-ns": "C:\\controlled-package\\build\\minimal-v3-stock-ns",
+        "minimal-v3-mount-ns": "C:\\controlled-package\\build\\minimal-v3-mount-ns"
+      },
       "procedure_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline",
       "rule": "refuse reuse of any existing source, build, or output directory"
     },
@@ -552,19 +646,38 @@
       },
       "nuget": {
         "module_overlay": "control-plane/controlled-package-offline/FindNUGET.cmake",
-        "module_overlay_sha256": "732c3d30303f4a34c5a7a1473551f18645f6123e88a26155d088625573f938fb",
+        "module_overlay_sha256": "eb0b3cb4a6915a5c7221ca18a052afd5bfdd2d44dbaad40101f54bf9ccb92989",
         "cache_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\nuget",
         "local_source_only": true,
         "nuget_exe_sha256": "852b71cc8c8c2d40d09ea49d321ff56fd2397b9d6ea9f96e532530307bbbafd3",
         "controlled_manifest_sha256": "f4641032e9114251a5468b76bb466aa2ce2657546bb5c943ef654a282d4b455b",
-        "restore_arguments": ["restore", "packages.config", "-SolutionDirectory", "<build>", "-ConfigFile", "<build>\\_deps\\controlled-nuget.config", "-NoCache", "-NonInteractive", "-DisableParallelProcessing"],
+        "restore_arguments": [
+          "restore",
+          "packages.config",
+          "-SolutionDirectory",
+          "<build>",
+          "-ConfigFile",
+          "<build>\\_deps\\controlled-nuget.config",
+          "-NoCache",
+          "-NonInteractive",
+          "-DisableParallelProcessing"
+        ],
         "network_policy": "The overlay copies only verified nuget.exe, writes a config with one cleared local folder source, and fails if the executable is absent. No source URL, fallback source, user config, or package cache is accepted."
       },
       "fetchcontent": {
         "cache_root": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\cmake-fetchcontent",
-        "archives": ["GSL-4.0.0.tar.gz", "nlohmann-json-3.12.0.tar.xz"],
-        "source_dirs": ["C:\\controlled-package\\deps\\GSL-4.0.0", "C:\\controlled-package\\deps\\nlohmann-json-3.12.0"],
-        "cmake_bindings": ["-DFETCHCONTENT_SOURCE_DIR_GSL=<GSL source>", "-DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=<nlohmann/json source>"],
+        "archives": [
+          "GSL-4.0.0.tar.gz",
+          "nlohmann-json-3.12.0.tar.xz"
+        ],
+        "source_dirs": [
+          "C:\\controlled-package\\deps\\GSL-4.0.0",
+          "C:\\controlled-package\\deps\\nlohmann-json-3.12.0"
+        ],
+        "cmake_bindings": [
+          "-DFETCHCONTENT_SOURCE_DIR_GSL=<GSL source>",
+          "-DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=<nlohmann/json source>"
+        ],
         "network_policy": "Both source directories must be extracted from the two hash-verified local archives; a missing or mismatched archive stops configure."
       }
     },
@@ -608,18 +721,79 @@
     },
     "expected_outputs": {
       "msi": "bin/x64/Release/wsl.msi",
-      "dependent_files": ["bin/x64/Release/wsl.exe", "bin/x64/Release/wslg.exe", "bin/x64/Release/wslhost.exe", "bin/x64/Release/wslrelay.exe", "bin/x64/Release/wslservice.exe", "bin/x64/Release/wslserviceproxystub.dll", "bin/x64/Release/wslinstall.dll", "bin/x64/Release/wsldeps.dll", "bin/x64/Release/WSLDVCPlugin.dll", "bin/x64/Release/gluepackage.msix", "bin/x64/Release/init", "bin/x64/Release/initrd.img"],
+      "dependent_files": [
+        "bin/x64/Release/wsl.exe",
+        "bin/x64/Release/wslg.exe",
+        "bin/x64/Release/wslhost.exe",
+        "bin/x64/Release/wslrelay.exe",
+        "bin/x64/Release/wslservice.exe",
+        "bin/x64/Release/wslserviceproxystub.dll",
+        "bin/x64/Release/wslinstall.dll",
+        "bin/x64/Release/wsldeps.dll",
+        "bin/x64/Release/WSLDVCPlugin.dll",
+        "bin/x64/Release/gluepackage.msix",
+        "bin/x64/Release/init",
+        "bin/x64/Release/initrd.img"
+      ],
       "manifest": "<candidate build>/controlled-output-SHA256SUMS",
       "closed_set": true
     },
-    "stop_conditions": ["any input or output hash differs", "CMake attempts HTTPS or NuGet reports a non-local source", "the offline module is not selected", "a package is missing or restored from a global cache", "any configure/restore/compile/package command fails", "an output is missing, extra, outside the build root, or absent from the manifest", "the operation would require elevation, installation, shutdown, custom boot, or runtime"],
+    "stop_conditions": [
+      "any input or output hash differs",
+      "CMake attempts HTTPS or NuGet reports a non-local source",
+      "the offline module is not selected",
+      "a package is missing or restored from a global cache",
+      "any configure/restore/compile/package command fails",
+      "an output is missing, extra, outside the build root, or absent from the manifest",
+      "the operation would require elevation, installation, shutdown, custom boot, or runtime"
+    ],
     "execution_boundary": "Preparation and plan validation only. Compilation and installation are unauthorized until this record is validated and fresh explicit approval is obtained."
   },
   "recovery_install_contract": {
     "status": "pinned-non-executable",
-    "vm": {"name": "ultra-minimal-wsl-dev", "media": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\windows-media\\Win11_25H2_English_x64_v2.iso", "media_sha256": "768984706b909479417b2368438909440f2967ff05c6a9195ed2667254e465e3", "clean_shell_checkpoint": "clean-shell", "controlled_baseline_checkpoint": "controlled-package-baseline", "required_vm_state_for_checkpoint": "Off", "provenance": "New-DisposableWslDevVm.ps1 with Generation 2, Secure Boot MicrosoftWindows, vTPM, dynamic memory 2-8 GiB, four processors, automatic checkpoints disabled, and VM left Off"},
-    "stock_baseline": {"required_version": "2.7.12.0", "command_checks": ["wsl.exe --version", "wsl.exe --status", "wsl.exe --list --quiet"], "expected_safe_state": "recovery-harness/expected-safe-state.json", "wsl_config_sha256": "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577", "packaged_kernel_sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861", "packaged_initrd_sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118", "stock_package": {"cache_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi", "vm_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi", "sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145", "install_command": "msiexec.exe /i C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi /qn /norestart /L*v C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\stock-install.log", "pre_checks": ["Require fresh explicit approval, canonical safe:true, and VM Off before staging or installing.", "Copy only the verified cache artifact into vm_path and verify its recorded SHA-256 inside the disposable VM.", "Do not target the physical host or modify host WSL files/configuration."], "post_checks": ["wsl.exe --version reports WSL 2.7.12.0.", "wsl.exe --status and wsl.exe --list --quiet complete successfully.", "Compare packaged kernel, initrd, and wslconfig hashes with expected-safe-state.json."], "executed": false}, "recovery_input": "The VM-off controlled-package-baseline snapshot is the exact stock-package recovery input; restore it rather than downloading or reconstructing a stock MSI, then recheck all hashes and wsl.exe output."},
-    "baseline_creation": ["After separately approved Windows installation from the verified ISO, establish stock WSL 2.7.12.0, run the stock command checks, and enumerate clean-shell and controlled-package-baseline with the VM Off.", "Checkpoint-DisposableWslDevVm.ps1 refuses a running VM and never stops it automatically; record checkpoint ID and creation time in the external state file."],
+    "vm": {
+      "name": "ultra-minimal-wsl-dev",
+      "media": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\windows-media\\Win11_25H2_English_x64_v2.iso",
+      "media_sha256": "768984706b909479417b2368438909440f2967ff05c6a9195ed2667254e465e3",
+      "clean_shell_checkpoint": "clean-shell",
+      "controlled_baseline_checkpoint": "controlled-package-baseline",
+      "required_vm_state_for_checkpoint": "Off",
+      "provenance": "New-DisposableWslDevVm.ps1 with Generation 2, Secure Boot MicrosoftWindows, vTPM, dynamic memory 2-8 GiB, four processors, automatic checkpoints disabled, and VM left Off"
+    },
+    "stock_baseline": {
+      "required_version": "2.7.12.0",
+      "command_checks": [
+        "wsl.exe --version",
+        "wsl.exe --status",
+        "wsl.exe --list --quiet"
+      ],
+      "expected_safe_state": "recovery-harness/expected-safe-state.json",
+      "wsl_config_sha256": "6539e72bf44774aefcf1aaff6f9673e59e9b091bcdb575f16ed879f272982577",
+      "packaged_kernel_sha256": "d540850bfbf1beba3ded6b2965b9d0249b23fbcb3e90e7dc0845ac7ad86bc861",
+      "packaged_initrd_sha256": "a76ddd9b8bad0771c100a32a715cfc15d8553464f4deffcb516454610cd6b118",
+      "stock_package": {
+        "cache_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi",
+        "vm_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi",
+        "sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+        "install_command": "msiexec.exe /i C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\wsl.2.7.12.0.x64.msi /qn /norestart /L*v C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\stock-wsl\\stock-install.log",
+        "pre_checks": [
+          "Require fresh explicit approval, canonical safe:true, and VM Off before staging or installing.",
+          "Copy only the verified cache artifact into vm_path and verify its recorded SHA-256 inside the disposable VM.",
+          "Do not target the physical host or modify host WSL files/configuration."
+        ],
+        "post_checks": [
+          "wsl.exe --version reports WSL 2.7.12.0.",
+          "wsl.exe --status and wsl.exe --list --quiet complete successfully.",
+          "Compare packaged kernel, initrd, and wslconfig hashes with expected-safe-state.json."
+        ],
+        "executed": false
+      },
+      "recovery_input": "The VM-off controlled-package-baseline snapshot is the exact stock-package recovery input; restore it rather than downloading or reconstructing a stock MSI, then recheck all hashes and wsl.exe output."
+    },
+    "baseline_creation": [
+      "After separately approved Windows installation from the verified ISO, establish stock WSL 2.7.12.0, run the stock command checks, and enumerate clean-shell and controlled-package-baseline with the VM Off.",
+      "Checkpoint-DisposableWslDevVm.ps1 refuses a running VM and never stops it automatically; record checkpoint ID and creation time in the external state file."
+    ],
     "baseline_attempt": {
       "status": "blocked-before-stock-install",
       "authorization": "Session approval was received for the stock baseline/checkpoint and compiler boundary; no approval is carried forward.",
@@ -631,9 +805,16 @@
       "staged_package_bytes": 258998272,
       "staged_package_sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
       "staging_result": "copied-to-active-differencing-disk-and-verified",
-      "guest_boot": {"started": true, "state": "Running", "heartbeat": "OK"},
+      "guest_boot": {
+        "started": true,
+        "state": "Running",
+        "heartbeat": "OK"
+      },
       "guest_control": {
-        "guest_service_interface": {"enabled": false, "status": "OK"},
+        "guest_service_interface": {
+          "enabled": false,
+          "status": "OK"
+        },
         "powershell_direct": "blocked: Invoke-Command -VMName requires a Credential; no approved guest credential is recorded",
         "available_path": "No approved non-console guest execution path"
       },
@@ -720,15 +901,270 @@
       "executable": false,
       "approval_carried_forward": false
     },
-    "candidate_install_commands": {"minimal-v3-stock-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\install.log", "minimal-v3-mount-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\install.log"},
+    "candidate_install_commands": {
+      "minimal-v3-stock-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-stock-ns\\install.log",
+      "minimal-v3-mount-ns": "msiexec.exe /i C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\wsl.msi /qn /norestart /L*v C:\\controlled-package-artifacts\\minimal-v3-mount-ns\\install.log"
+    },
     "restore_command": "Restore-VMSnapshot -VMName ultra-minimal-wsl-dev -Name controlled-package-baseline -Confirm:$false",
-    "post_trial_restore": ["VM must be Off before restore; refuse to stop it automatically.", "Restore controlled-package-baseline, rerun stock wsl.exe checks, and compare all expected-safe-state hashes.", "After the final candidate, restore controlled-package-baseline and prove stock wsl.exe command execution before releasing the VM."],
-    "forbidden_now": ["VM creation", "VM start/stop", "elevation", "package installation", "WSL shutdown", ".wslconfig changes", "custom boot", "-Execute", "runtime proof"],
-    "execution_boundary": "This contract pins later operations but authorizes none of them."
+    "post_trial_restore": [
+      "VM must be Off before restore; refuse to stop it automatically.",
+      "Restore controlled-package-baseline, rerun stock wsl.exe checks, and compare all expected-safe-state hashes.",
+      "After the final candidate, restore controlled-package-baseline and prove stock wsl.exe command execution before releasing the VM."
+    ],
+    "forbidden_now": [
+      "VM creation",
+      "VM start/stop",
+      "elevation",
+      "package installation",
+      "WSL shutdown",
+      ".wslconfig changes",
+      "custom boot",
+      "-Execute",
+      "runtime proof"
+    ],
+    "execution_boundary": "This contract pins later operations but authorizes none of them.",
+    "stock_baseline_approval_packet": {
+      "status": "runtime-blocked-powershell-direct-unavailable",
+      "safe": true,
+      "executable": false,
+      "approval_carried_forward": false,
+      "artifact": "tools/Install-StockWslBaseline.ps1",
+      "required_clean_shell_checkpoint": "clean-shell",
+      "artifact_sha256": "682e55bd55ce695fb13e91b10bcd075362931c6e1c7655add8b75b4bcc796478",
+      "exact_command": "& .\\tools\\Install-StockWslBaseline.ps1 -Execute -GuestCredential (Get-Credential -UserName '4cl8y955frge' -Message 'Enter the disposable VM account password')",
+      "shell": "PowerShell 5.1, already elevated; command is run from repository root.",
+      "credential_contract": "Get-Credential receives the fixed VM-only account locally; the password is never an argument, serialized, logged, or written to Git/evidence.",
+      "preconditions": [
+        "Fresh explicit approval and plan validation for this unchanged artifact, hash, and command.",
+        "VM ultra-minimal-wsl-dev exists and is Off; no host-attached VM disk; clean-shell exists; controlled-package-baseline does not exist.",
+        "The staged MSI exists inside the guest at the fixed path with the recorded size and SHA-256.",
+        "No operation targets the physical host WSL installation or host WSL configuration."
+      ],
+      "side_effects_later_only": [
+        "Start ultra-minimal-wsl-dev and run PowerShell Direct using the supplied local credential.",
+        "Install only wsl.2.7.12.0.x64.msi in the guest and write its installer log/evidence.",
+        "Run the three stock wsl.exe checks, compare packaged kernel/initrd hashes, require the isolated guest .wslconfig to remain absent, shut down cleanly, and create controlled-package-baseline only after independent Off verification."
+      ],
+      "evidence": [
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\stock-baseline\\stock-baseline-guest.json",
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\stock-baseline\\checkpoint.json",
+        "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\stock-baseline\\final-state.json"
+      ],
+      "cleanup_and_recovery": [
+        "Before VM start, enumerates the fixed clean-shell checkpoint and fails closed if it is absent; never overwrites it.",
+        "finally removes the PowerShell Direct session and requests guest/VM shutdown after any start.",
+        "Independently verifies VM Off and absence of host-attached VM disks; a timeout or failed Off verification fails and creates no checkpoint.",
+        "Checkpoint-DisposableWslDevVm.ps1 refuses a running VM and refuses to overwrite an existing checkpoint."
+      ],
+      "stop_conditions": [
+        "wrong VM/account/path, non-Off initial state, attached VM disk, missing clean-shell checkpoint, existing checkpoint, missing/bad MSI, or any hash mismatch",
+        "credential mismatch, network/download attempt, unsupported MSI exit code, failed wsl.exe check, failed packaged hash comparison, or timeout",
+        "inability to independently prove VM Off; do not improvise a force-off or checkpoint."
+      ],
+      "exclusions": [
+        "No execution, installation, elevation request, VM operation, checkpoint, host WSL change, download, inbox/latest WSL, compiler/build, .wslconfig change, candidate/runtime trial, or plaintext password in Git/evidence now.",
+        "No MSI exit code other than 0 is accepted because the repository has no pinned evidence authorizing another code."
+      ],
+      "open_blocker": "Accepted MSI exit-code evidence is not pinned beyond the conservative success code 0; the artifact rejects all other codes rather than guessing.",
+      "authoritative_runtime_evidence": {
+        "powershell_direct": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/manage/manage-windows-virtual-machines-with-powershell-direct",
+        "new_pssession": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/new-pssession?view=powershell-5.1",
+        "stop_vm": "https://learn.microsoft.com/en-us/powershell/module/hyper-v/stop-vm?view=windowsserver2025-ps",
+        "finding": "Microsoft documents the exact remote-session-ended error when PowerShell is not yet available because the guest has not finished booting; New-PSSession -VMName with explicit Credential is the supported persistent form. Stop-VM without Force or TurnOff shuts down through the guest operating system. Attempt five proved that bounded retries did not recover this guest. Microsoft troubleshooting says the guest vmicvmsession service may need inspection or restart through VMConnect when the session service is hung; do not retry installation before that guest-control diagnosis is fixed and approved."
+      },
+      "review_result": {
+        "status": "PASS",
+        "finding": "The artifact uses a non-colliding Get-TargetVm wrapper with an explicitly module-qualified Hyper-V\\Get-VM call, uses documented graceful Stop-VM syntax, retries the documented explicit-credential PowerShell Direct session form every five seconds for at most ten minutes while the guest finishes booting, enumerates clean-shell before VM start, queries only recorded VM hard-disk paths with Get-DiskImage -ImagePath, requires the isolated guest .wslconfig to remain absent, and refuses to overwrite controlled-package-baseline. The PowerShell 5.1 credential command supplies the mandatory Message parameter.",
+        "consequence": "The artifact was plan-validated and executed in approved attempt five, but PowerShell Direct remained unavailable for the full ten-minute bounded window. Its cleanup could not prove Off within five minutes; a separately reviewed ordinary Stop-VM recovery then succeeded and proved Off/no attached disk/only clean-shell. No guest session or MSI installation occurred. Further stock-baseline attempts are blocked on a separately reviewed guest vmicvmsession diagnosis rather than another timing retry.",
+        "artifact_unchanged": false,
+        "artifact_repaired": true,
+        "plan_validated": true,
+        "approval_present": false,
+        "executed": true
+      },
+      "attempts": [
+        {
+          "id": "stock-baseline-20260824",
+          "result": "blocked-before-start-vm-and-safely-terminated",
+          "artifact_sha256": "9d1b7e132a4ff1eaee63a064371ec8c09733b43784e9d28076b4f9b7181f57e8",
+          "failure": "The case-insensitive Get-Vm wrapper recursively called itself through its internal Get-VM spelling before the VM query. The same review also found a latent Get-DiskImage call without mandatory -ImagePath.",
+          "vm_started": false,
+          "stock_install_executed": false,
+          "controlled_baseline_checkpoint_created": false,
+          "final_vm_state": "Off",
+          "final_attached_vm_disks": 0,
+          "final_checkpoints": [
+            "clean-shell"
+          ],
+          "evidence": [
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stock-baseline-20260824.status.json",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stop-blocked-stock-baseline-r2-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-final-20260824.log"
+          ]
+        },
+        {
+          "id": "stock-baseline-r2-20260824",
+          "result": "blocked-before-vm-query-and-safely-terminated",
+          "artifact_sha256": "af8fd80a20b95e4ab54fb3827ee5c59c7b970033aebb381c619ed8f5a5e5e6ae",
+          "failure": "The case-insensitive Get-Vm wrapper recursively called itself through its internal Get-VM spelling.",
+          "vm_started": false,
+          "stock_install_executed": false,
+          "controlled_baseline_checkpoint_created": false,
+          "final_vm_state": "Off",
+          "final_attached_vm_disks": 0,
+          "final_checkpoints": [
+            "clean-shell"
+          ],
+          "evidence": [
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stock-baseline-r2-20260824.status.json",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stop-blocked-stock-baseline-r2-attempt-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-r2-running-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\diagnose-stock-baseline-preflight-20260824.log"
+          ]
+        },
+        {
+          "id": "stock-baseline-r3-20260824",
+          "result": "guest-stage-failed-cleanup-recovered-no-install",
+          "artifact_sha256": "d83ec424d07188ae41c05b182f52131721d4065843d287b892e721260021a361",
+          "failure": "The VM started, but the guest-stage error was masked when both cleanup paths used unsupported Stop-VM -Shutdown syntax.",
+          "vm_started": true,
+          "stock_install_executed": false,
+          "controlled_baseline_checkpoint_created": false,
+          "final_vm_state": "Off",
+          "final_attached_vm_disks": 0,
+          "final_checkpoints": [
+            "clean-shell"
+          ],
+          "offline_findings": {
+            "install_log_exists": false,
+            "installed_kernel_exists": false,
+            "installed_initrd_exists": false,
+            "guest_wslconfig_exists": false
+          },
+          "evidence": [
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stock-baseline-r3-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-r3-final-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\recover-stock-baseline-r3-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-r3-offline-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-post-offline-final-20260824.log"
+          ]
+        },
+        {
+          "id": "stock-baseline-r4-20260824",
+          "result": "powershell-direct-not-ready-cleanly-recovered-no-install",
+          "artifact_sha256": "ca024d407d98d196d684b48058e8753e28b8c21c5b792cd6ba89fb3e7a2cd21c",
+          "failure": "The VM reached Hyper-V Running, but immediate New-PSSession failed with the documented remote-session-ended error before guest PowerShell was ready.",
+          "vm_started": true,
+          "stock_install_executed": false,
+          "controlled_baseline_checkpoint_created": false,
+          "final_vm_state": "Off",
+          "final_attached_vm_disks": 0,
+          "final_checkpoints": [
+            "clean-shell"
+          ],
+          "evidence": [
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stock-baseline-r4-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\stock-baseline\\final-state.json",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-r4-final-20260824.log"
+          ]
+        },
+        {
+          "id": "stock-baseline-r5-20260824",
+          "result": "powershell-direct-unavailable-recovery-required-no-install",
+          "artifact_sha256": "682e55bd55ce695fb13e91b10bcd075362931c6e1c7655add8b75b4bcc796478",
+          "failure": "Explicit-credential New-PSSession remained unavailable for ten minutes with the documented remote-session-ended error. In-artifact graceful shutdown did not prove Off within five minutes; separate ordinary Stop-VM recovery succeeded.",
+          "vm_started": true,
+          "guest_session_established": false,
+          "stock_install_executed": false,
+          "controlled_baseline_checkpoint_created": false,
+          "final_vm_state": "Off",
+          "final_attached_vm_disks": 0,
+          "final_checkpoints": [
+            "clean-shell"
+          ],
+          "evidence": [
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\stock-baseline-r5-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\inspect-stock-baseline-r5-final-r2-20260824.log",
+            "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\recover-stock-baseline-r5-20260824.log"
+          ]
+        }
+      ]
+    },
+    "powershell_direct_diagnostic_packet": {
+    "status": "blocked-manual-vmconnect-diagnostic-required",
+    "safe": true,
+    "executable": false,
+    "approval_carried_forward": false,
+    "authoritative_sources": [
+      {
+        "url": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/powershell-direct",
+        "finding": "Microsoft identifies vmicvmsession as the guest service used by PowerShell Direct and prescribes signing in through VMConnect and running Restart-Service -Name vmicvmsession when the service is hung or unavailable."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/integration-services",
+        "finding": "Get-VMIntegrationService exposes the host-side integration-service configuration and health/status view; that host observation does not inspect or prove the guest vmicvmsession service is usable."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/virtual-machine-connection",
+        "finding": "VMConnect provides the interactive guest console required for the documented guest-side service inspection/restart when PowerShell Direct cannot create a session."
+      },
+      {
+        "url": "https://learn.microsoft.com/en-us/powershell/module/hyper-v/stop-vm?view=windowsserver2025-ps",
+        "finding": "Stop-VM without Force or TurnOff requests graceful guest operating-system shutdown; final Off and disk-detachment state must still be independently verified."
+      }
+    ],
+    "scope": {
+      "vm": "ultra-minimal-wsl-dev",
+      "initial_state": "Off",
+      "final_state": "Off",
+      "required_existing_checkpoint": "clean-shell",
+      "required_absent_checkpoint": "controlled-package-baseline",
+      "required_host_attached_vm_disks": 0,
+      "network_dependency": false,
+      "installing": false
+    },
+    "preconditions": [
+      "Fresh explicit approval and plan validation for this diagnostic only; no approval carries forward from attempt five.",
+      "The fixed VM exists and is independently verified Off before any start; clean-shell exists and controlled-package-baseline does not exist.",
+      "The fixed VM has no host-attached disk, and the disposable VM-only account identity is used without recording or exposing its password.",
+      "No MSI, WSL, compiler, checkpoint, host WSL, VHD, registry, network, or custom-boot operation is in scope."
+    ],
+    "proposed_procedure": [
+      "Before any start, host-observe and record the fixed VM state, checkpoint names, hard-disk paths, attached-disk count, and Get-VMIntegrationService output; do not treat Enabled or Status=OK there as proof of guest service usability.",
+      "Represent the later start and cleanup as one separately reviewable manual packet or artifact with a finally/equivalent cleanup path; start only the fixed VM after approval, then open VMConnect to that VM.",
+      "At the guest console, a human records the guest service identity and runs Get-Service -Name vmicvmsession before repair. If the service is present, the human runs the Microsoft-documented Restart-Service -Name vmicvmsession, then records Get-Service again; if it is absent or restart fails, stop without inventing repair mechanics.",
+      "After a bounded guest boot/service wait of ten minutes maximum, test only the approved explicit-credential New-PSSession -VMName form from the host at five-second intervals for at most ten minutes. Record success/failure, the exact error category, and no guest command output beyond the diagnostic observations.",
+      "In all outcomes, remove any session, request graceful shutdown with ordinary Stop-VM (without Force or TurnOff), and independently verify Off, zero host-attached disks, clean-shell present, and controlled-package-baseline absent. A timeout does not substitute for these checks."
+    ],
+    "expected_observations": [
+      "Host integration-service Enabled/Status and guest Get-Service Status/StartType are recorded as separate observations.",
+      "Guest console observation identifies whether vmicvmsession is Running, Stopped, Disabled, or absent before and after the documented restart attempt.",
+      "PowerShell Direct either establishes a session after the guest service repair or remains unavailable with the captured bounded error; neither result authorizes stock installation.",
+      "Final evidence independently proves VM Off, zero attached VM disks, only clean-shell, and no controlled-package-baseline."
+    ],
+    "cleanup_and_recovery": [
+      "The finally/equivalent path removes any PowerShell Direct session and requests graceful shutdown after any start.",
+      "A separate host-side verification must prove Off and zero attached disks before the packet is considered complete; do not force-off, create/restore a checkpoint, or continue after failed proof.",
+      "If cleanup cannot prove the required state, preserve the failure evidence and stop for separately reviewed recovery; do not infer safety from timeout or console state."
+    ],
+    "stop_conditions": [
+      "wrong VM, non-Off initial state, attached disk, missing clean-shell, existing controlled-package-baseline, wrong account, or any unexpected checkpoint",
+      "network access, MSI/WSL/compiler/install operation, VHD mount, offline registry edit, credential discovery or logging, or any host WSL mutation",
+      "vmicvmsession absent, guest console unavailable, restart fails, PowerShell Direct remains unavailable after the bounded retry, or any observation cannot be captured",
+      "graceful shutdown, independent Off proof, zero-disk proof, or required checkpoint state cannot be established; do not improvise force-off or repair"
+    ],
+    "explicit_exclusions": [
+      "This is a design record only: it is not an executable artifact, carries no approval, and performs no VM operation in this session.",
+      "VMConnect is a manual guest-console boundary, not deterministic host command execution; host integration-service health alone is not guest vmicvmsession inspection.",
+      "No stock MSI installation, checkpoint creation, candidate build/install, service reconfiguration beyond the documented restart, offline VHD/registry repair, or claim that guest control is restored without a successful session test."
+    ],
+    "unresolved_boundary": "The guest-side inspection and restart must be performed through VMConnect by a human unless a separately reviewed host-side automation mechanism is commissioned. A later host-side wrapper may guarantee fixed scope, bounded waits, graceful cleanup, and independent Off/no-disk proof, but it must not claim deterministic guest execution or bypass the console boundary."
+    }
   },
   "missing_before_controlled_execution": [
     "verified Community compiler layout staged to and installed offline in the disposable Hyper-V Windows VM",
-    "plan-validated and freshly approved PowerShell Direct stock-baseline artifact",
+    "source-backed non-installing vmicvmsession diagnostic design and separately reviewed, plan-validated, freshly approved diagnostic packet",
+    "reviewed, plan-validated, and freshly approved unchanged PowerShell Direct stock-baseline packet after guest control is restored",
     "stock WSL 2.7.12 guest baseline",
     "successfully built controlled WSL package",
     "controlled-package-baseline checkpoint",
