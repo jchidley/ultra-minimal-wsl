@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import re
 import unittest
+import xml.etree.ElementTree as ET
 
 
 ROOT = Path(__file__).parents[1]
@@ -274,7 +275,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("verified Off", capability["recovery_requirement"])
 
         selection = plan["recovery_install_contract"]["guest_control_selection"]
-        self.assertEqual(selection["status"], "powershell-direct-proven-account-provisioned")
+        self.assertEqual(selection["status"], "powershell-direct-proven-account-provisioned-credential-unavailable")
         self.assertEqual(selection["mechanism"], "PowerShell Direct")
         self.assertFalse(selection["executable"])
         self.assertFalse(selection["approval_carried_forward"])
@@ -284,6 +285,9 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(account["password_length"], 12)
         self.assertTrue(account["password_generated"])
         self.assertFalse(account["password_recorded_in_repository"])
+        self.assertIn("unavailable", account["disposition"])
+        self.assertIn("Do not discover", account["disposition"])
+        self.assertIn("prompt", account["disposition"])
         self.assertEqual(
             set(account),
             {
@@ -361,13 +365,15 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("Checkpoint-DisposableWslDevVm.ps1", source)
         self.assertIn("Remove-PSSession", source)
 
-    def test_powershell_direct_diagnostic_design_is_non_executable(self):
+    def test_powershell_direct_diagnostic_design_is_retained_but_blocked(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
         packet = plan["recovery_install_contract"]["powershell_direct_diagnostic_packet"]
         self.assertTrue(packet["safe"])
         self.assertFalse(packet["executable"])
         self.assertFalse(packet["approval_carried_forward"])
-        self.assertEqual(packet["status"], "blocked-manual-vmconnect-diagnostic-required")
+        self.assertEqual(packet["status"], "blocked-disposable-credential-unavailable")
+        self.assertIn("non-executable tombstone", packet["credential_policy"])
+        self.assertIn("manual VMConnect login", packet["credential_policy"])
         scope = packet["scope"]
         self.assertEqual(scope["vm"], "ultra-minimal-wsl-dev")
         self.assertEqual(scope["initial_state"], "Off")
@@ -397,6 +403,113 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("human", boundary)
         self.assertIn("host-side", boundary)
         self.assertIn("must not claim deterministic guest execution", boundary)
+
+    def test_powershell_direct_diagnostic_packet_is_retired_and_non_executable(self):
+        artifact = ROOT / "tools/Diagnose-PowerShellDirect.ps1"
+        self.assertEqual(sha256(artifact), "fc34f1c8253d4233d08fd1450ba31041cb11f1a7ffe70ea6ef8f1c967a2f22f3")
+        source = artifact.read_text(encoding="utf-8")
+        self.assertIn("executable = $false", source)
+        self.assertIn("approvalCarriedForward = $false", source)
+        self.assertIn("status = 'blocked-disposable-credential-unavailable'", source)
+        self.assertIn("prompting or manual VMConnect login is not acceptable", source)
+        self.assertIn("discard/rebuild rather than request human guest credentials", source)
+        self.assertIn("This diagnostic artifact is retired and non-executable", source)
+        self.assertNotIn("Get-Credential", source)
+        self.assertNotIn("Start-VM", source)
+        self.assertNotIn("Stop-VM", source)
+        self.assertNotIn("New-PSSession", source)
+        self.assertNotIn("Get-VM", source)
+        self.assertNotIn("wsl.exe", source.lower())
+
+    def test_zero_touch_vm_rebuild_packet_is_lifecycle_bound_and_fail_closed(self):
+        plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
+        packet = plan["recovery_install_contract"]["zero_touch_vm_rebuild_packet"]
+        artifact = ROOT / packet["artifact"]
+        self.assertTrue(packet["safe"])
+        self.assertFalse(packet["executable"])
+        self.assertFalse(packet["approval_carried_forward"])
+        self.assertTrue(packet["destructive"])
+        self.assertFalse(packet["review_result"]["approval_present"])
+        self.assertTrue(packet["review_result"]["plan_validated"])
+        self.assertEqual(packet["artifact_sha256"], sha256(artifact))
+        self.assertEqual(packet["status"], "failed-r7-insufficient-host-memory")
+        self.assertEqual(packet["fixed_old_vm"]["id"], "dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6")
+        self.assertEqual(packet["fixed_old_vm"]["required_checkpoint_set"], ["clean-shell"])
+        self.assertFalse(packet["replacement"]["network_adapter"])
+        self.assertEqual(packet["replacement"]["staging_name"], "ultra-minimal-wsl-dev-rebuild-r7")
+        self.assertEqual(packet["replacement"]["startup_memory_bytes"], 4 * 1024**3)
+        self.assertEqual(packet["replacement"]["minimum_memory_bytes"], 2 * 1024**3)
+        self.assertEqual(packet["replacement"]["maximum_memory_bytes"], 8 * 1024**3)
+        self.assertEqual(packet["replacement"]["required_host_free_bytes"], 5 * 1024**3)
+        self.assertTrue(packet["replacement"]["requires_wsl_utility_vm_off"])
+        self.assertEqual(len(packet["attempts"]), 7)
+        self.assertEqual(packet["attempts"][0]["credential_created"], False)
+        self.assertEqual(packet["attempts"][0]["staging_root_created"], False)
+        self.assertEqual(packet["attempts"][1]["failure_phase"], "media-mount-and-image-selection")
+        self.assertEqual(packet["attempts"][1]["exception_type"], "System.Management.Automation.PropertyNotFoundException")
+        self.assertIn("optional detailed properties", packet["attempts"][2]["failure_source_line"])
+        self.assertEqual(packet["attempts"][3]["result"], "uac-cancelled-before-elevated-process-start")
+        self.assertEqual(packet["attempts"][4]["failure_phase"], "staging-vm-create")
+        self.assertIn("default network adapter", packet["attempts"][4]["failure_source_line"])
+        self.assertEqual(packet["attempts"][5]["failure_phase"], "automatic-guest-control-validation")
+        self.assertIn("6144 MB", packet["attempts"][5]["failure_source_line"])
+        self.assertEqual(packet["attempts"][6]["failure_phase"], "automatic-guest-control-validation")
+        self.assertIn("4096 MB", packet["attempts"][6]["failure_source_line"])
+        urls = {item["url"] for item in packet["authoritative_sources"]}
+        self.assertIn("https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/automate-oobe", urls)
+        self.assertIn("https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/powershell-direct", urls)
+        self.assertIn("https://learn.microsoft.com/en-us/powershell/module/dism/get-windowsimage?view=windowsserver2025-ps", urls)
+        lifecycle = packet["credential_lifecycle"]
+        self.assertTrue(lifecycle["password_generated_automatically"])
+        self.assertFalse(lifecycle["human_prompt"])
+        self.assertFalse(lifecycle["shown_to_human"])
+        self.assertIn("DPAPI", lifecycle["protection"])
+        self.assertIn("Delete the credential", lifecycle["deletion"])
+
+        source = artifact.read_text(encoding="utf-8")
+        self.assertIn("$ExpectedOldVmId = 'dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6'", source)
+        self.assertIn("$StagingVmName = 'ultra-minimal-wsl-dev-rebuild-r7'", source)
+        self.assertIn("$EvidenceRoot = \"$env:LOCALAPPDATA\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r7\"", source)
+        self.assertIn("$StartupMemory = 4GB", source)
+        self.assertIn("$RequiredHostFreeBytes = $StartupMemory + 1GB", source)
+        self.assertIn("WSL utility VM is running", source)
+        self.assertIn("Remove-VMNetworkAdapter", source)
+        self.assertNotIn("$selected[0].Architecture", source)
+        self.assertNotIn("$selected[0].Version", source)
+        self.assertNotIn("SkipMachineOOBE", source)
+        self.assertNotIn("SkipUserOOBE", source)
+        self.assertIn("<AutoLogon>", source)
+        self.assertIn("<Domain>WSL-LAB</Domain>", source)
+        self.assertIn("<LogonCount>1</LogonCount>", source)
+        self.assertIn("AutoLogonCount /t REG_DWORD /d 0 /f", source)
+        unattend = source.split('@"', 1)[1].split('"@', 1)[0].strip()
+        ET.fromstring(unattend)
+        self.assertIn("function Save-FailureEvidence", source)
+        failure_writer = source.split("function Save-FailureEvidence", 1)[1].split("function Set-CurrentUserOnlyAcl", 1)[0]
+        self.assertIn("exceptionType", failure_writer)
+        self.assertIn("hresult", failure_writer)
+        self.assertIn("scriptLine", failure_writer)
+        self.assertNotIn("Exception.Message", failure_writer)
+        self.assertIn("$passwordPlain = New-RandomPassword", source)
+        self.assertIn("Export-Clixml -LiteralPath $tempCredential", source)
+        self.assertIn("Set-CurrentUserOnlyAcl $tempCredential", source)
+        self.assertIn("New-PSSession -VMName $StagingVmName -Credential $credential", source)
+        self.assertIn("Get-Service -Name vmicvmsession", source)
+        self.assertIn("Copy-Item -LiteralPath $StockMsiPath", source)
+        self.assertIn("Checkpoint-VM -VM $stagingVm -SnapshotName $CheckpointName", source)
+        self.assertIn("Rename-VM -VM $oldVm -NewName $RetiredVmName", source)
+        self.assertIn("Rename-VM -Name $RetiredVmName -NewName $VmName", source)
+        self.assertIn("Remove-Item -LiteralPath $CredentialPath,$CredentialMetadataPath", source)
+        self.assertNotIn("Get-Credential", source)
+        self.assertNotIn("Read-Host", source)
+        self.assertNotIn("vmconnect.exe", source.lower())
+        self.assertNotIn("-SwitchName", source)
+        self.assertNotIn("Add-VMNetworkAdapter", source)
+        self.assertNotIn("Stop-VM -Name $StagingVmName -Force", source)
+        self.assertNotIn("Stop-VM -Name $StagingVmName -TurnOff", source)
+        self.assertLess(source.index("New-VM -Name $StagingVmName"), source.index("Rename-VM -VM $oldVm"))
+        self.assertLess(source.index("New-PSSession -VMName $StagingVmName"), source.index("Rename-VM -VM $oldVm"))
+        self.assertLess(source.index("Checkpoint-VM -VM $stagingVm"), source.index("Rename-VM -VM $oldVm"))
 
     def test_controlled_package_build_record_is_complete_and_fail_closed(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))

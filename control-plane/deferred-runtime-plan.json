@@ -855,7 +855,7 @@
       "decision_required": "Resolved after this attempt: the controller selected PowerShell Direct with a dedicated disposable VM-only account; subsequent evidence proves account provisioning and administrator authentication."
     },
     "guest_control_selection": {
-      "status": "powershell-direct-proven-account-provisioned",
+      "status": "powershell-direct-proven-account-provisioned-credential-unavailable",
       "mechanism": "PowerShell Direct",
       "selected_by": "controller",
       "rationale": "The VM and credential are disposable. PowerShell Direct provides deterministic command execution, output, and exit evidence without requiring the credential to have value outside this VM.",
@@ -867,7 +867,7 @@
         "password_recorded_in_repository": false,
         "scope": "dedicated local administrator account for ultra-minimal-wsl-dev only",
         "reuse": "forbidden outside this disposable VM",
-        "disposition": "The controller supplies the generated password when the approved operation executes; destroy it with the VM."
+        "disposition": "The generated password is unavailable to the controller and was never persisted. Do not discover, recover, guess, or prompt for it again; guest control now requires separately reviewed disposable-VM reprovisioning or rebuild."
       },
       "account_provisioning": {
         "status": "completed-and-independently-verified",
@@ -1091,8 +1091,14 @@
       ]
     },
     "powershell_direct_diagnostic_packet": {
-    "status": "blocked-manual-vmconnect-diagnostic-required",
+    "status": "blocked-disposable-credential-unavailable",
     "safe": true,
+    "artifact": "tools/Diagnose-PowerShellDirect.ps1",
+    "artifact_sha256": "fc34f1c8253d4233d08fd1450ba31041cb11f1a7ffe70ea6ef8f1c967a2f22f3",
+    "exact_command": "& .\\tools\\Diagnose-PowerShellDirect.ps1",
+    "credential_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\credentials\\ultra-minimal-wsl-dev.credential.clixml",
+    "credential_status": "absent-original-random-password-unavailable",
+    "credential_policy": "The active artifact is a non-executable tombstone. Do not prompt again, inspect historical sessions for the secret, bypass guest authentication, use manual VMConnect login, or attempt to repair this disposable VM.",
     "executable": false,
     "approval_carried_forward": false,
     "authoritative_sources": [
@@ -1158,12 +1164,228 @@
       "VMConnect is a manual guest-console boundary, not deterministic host command execution; host integration-service health alone is not guest vmicvmsession inspection.",
       "No stock MSI installation, checkpoint creation, candidate build/install, service reconfiguration beyond the documented restart, offline VHD/registry repair, or claim that guest control is restored without a successful session test."
     ],
-    "unresolved_boundary": "The guest-side inspection and restart must be performed through VMConnect by a human unless a separately reviewed host-side automation mechanism is commissioned. A later host-side wrapper may guarantee fixed scope, bounded waits, graceful cleanup, and independent Off/no-disk proof, but it must not claim deterministic guest execution or bypass the console boundary."
+    "unresolved_boundary": "The guest-side inspection and restart must be performed through VMConnect by a human unless a separately reviewed host-side automation mechanism is commissioned. A later host-side wrapper may guarantee fixed scope, bounded waits, graceful cleanup, and independent Off/no-disk proof, but it must not claim deterministic guest execution or bypass the console boundary.",
+    "review_result": {
+      "status": "BLOCKED",
+      "plan_validated": false,
+      "approval_present": false,
+      "finding": "The original approved packet failed before credential validation, VM query, or VM start because the credential prompt was cancelled. The controller then confirmed the random disposable password is unknown. A DPAPI-import revision and one-time enrollment helper were prepared and statically tested, but enrollment cannot create a valid credential without the unavailable password.",
+      "consequence": "Do not execute either diagnostic revision or prompt for the password again. The next controller decision is whether to plan a clean disposable-VM reprovision or rebuild that generates and DPAPI-captures a new VM-only credential without exposing it."
+    },
+    "attempts": [
+      {
+        "id": "powershell-direct-diagnostic-r1-20260827",
+        "result": "credential-cancelled-before-preflight-no-vm-query",
+        "artifact_sha256": "b23e404f2892efe10c32a6d3af333ba328d74057ba665104eb81e136e4df37c9",
+        "vm_queried": false,
+        "vm_started": false,
+        "credential_file_created": false,
+        "evidence_path_created": false,
+        "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\elevation\\powershell-direct-diagnostic-r1-launch.json",
+        "evidence_sha256": "36de401bc0d535b7987690a9b5df33c5ed8f04ca89833296861b17b66c0bb0e5"
+      },
+      {
+        "id": "credential-enrollment-r1-20260827",
+        "result": "windows-powershell-module-path-failure-before-prompt",
+        "credential_file_created": false,
+        "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\credential-enrollment-r1.json",
+        "evidence_sha256": "2f13c54da58ed33f28eb19a777fdd642b37ad2e641b84df686d1cc7474c3ee69"
+      },
+      {
+        "id": "credential-enrollment-r2-20260827",
+        "result": "invisible-powershell7-prompt-process-terminated-no-input",
+        "credential_file_created": false,
+        "evidence": "Controller observation plus verified absent credential path; no durable result file was created."
+      },
+      {
+        "id": "credential-enrollment-r3-20260827",
+        "result": "cancelled-original-random-password-unknown",
+        "credential_file_created": false,
+        "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\credential-enrollment-r3.json",
+        "evidence_sha256": "11e6f2981418a1c784ea4b17a0e14c5271bad67141995da3d129799610ef7ae6"
+      }
+    ]
+    },
+    "zero_touch_vm_rebuild_packet": {
+      "status": "failed-r7-insufficient-host-memory",
+      "safe": true,
+      "executable": false,
+      "approval_carried_forward": false,
+      "destructive": true,
+      "artifact": "tools/Rebuild-DisposableWslDevVm.ps1",
+      "artifact_sha256": "df7588599cfe1300cee86feeecc06706003f02de43e8e4ebc47c6e6b8d3e02d8",
+      "exact_command": "& .\\tools\\Rebuild-DisposableWslDevVm.ps1 -Execute",
+      "fixed_old_vm": {
+        "name": "ultra-minimal-wsl-dev",
+        "id": "dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6",
+        "required_state": "Off",
+        "required_checkpoint_set": ["clean-shell"],
+        "required_path": "C:\\Hyper-V\\ultra-minimal-wsl\\ultra-minimal-wsl-dev",
+        "required_host_mounted_disks": 0
+      },
+      "replacement": {
+        "staging_name": "ultra-minimal-wsl-dev-rebuild-r7",
+        "staging_root": "C:\\Hyper-V\\ultra-minimal-wsl-rebuild-r7",
+        "startup_memory_bytes": 4294967296,
+        "minimum_memory_bytes": 2147483648,
+        "maximum_memory_bytes": 8589934592,
+        "required_host_free_bytes": 5368709120,
+        "requires_wsl_utility_vm_off": true,
+        "network_adapter": false,
+        "windows_media_sha256": "768984706b909479417b2368438909440f2967ff05c6a9195ed2667254e465e3",
+        "windows_image_name": "Windows 11 Pro",
+        "stock_msi_sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+        "expected_final_state": "Off",
+        "expected_checkpoint_set": ["clean-shell"]
+      },
+      "authoritative_sources": [
+        {
+          "url": "https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/automate-oobe",
+          "finding": "Microsoft supports fully automated OOBE through explicit International-Core, UserAccounts, documented OOBE visibility, and ProtectYourPC settings, and explicitly warns not to use SkipMachineOOBE."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon",
+          "finding": "AutoLogon can create the required initial profile without human input, and Windows Setup deletes AutoLogon credentials from the answer file after setup completes."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon-logoncount",
+          "finding": "The documented exactly-once workaround is LogonCount 1 plus a FirstLogonCommands command setting AutoLogonCount to 0."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon-domain",
+          "finding": "AutoLogon Domain identifies the domain to which Windows logs on; the packet binds the local account to its fixed WSL-LAB computer name."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/powershell-direct",
+          "finding": "PowerShell Direct requires a running local guest with at least one configured user profile and explicit valid guest credentials; it does not require guest networking."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/powershell/module/dism/get-windowsimage?view=windowsserver2025-ps",
+          "finding": "Get-WindowsImage without Index returns basic image information; Index or Name is required for detailed information, so the packet records only the selected basic ImageIndex and ImageName."
+        },
+        {
+          "url": "https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/capture-and-apply-windows-system-and-recovery-partitions?view=windows-11",
+          "finding": "Microsoft documents applying a WIM to a prepared Windows partition and using BCDBoot to configure the EFI system partition."
+        }
+      ],
+      "credential_lifecycle": {
+        "username": "WslLabAdmin",
+        "password_generated_automatically": true,
+        "human_prompt": false,
+        "shown_to_human": false,
+        "storage": "%LOCALAPPDATA%\\ultra-minimal-wsl\\credentials\\ultra-minimal-wsl-dev.credential.clixml",
+        "protection": "DPAPI current-user encryption with non-inherited current-user-only ACL",
+        "pairing": "Metadata binds the credential to the replacement VM ID; both are one lifecycle unit.",
+        "deletion": "Delete the credential and metadata whenever the VM is destroyed. If either is missing or invalid, discard/rebuild the pair rather than prompting or recovering."
+      },
+      "procedure": [
+        "Verify the exact old VM ID, Off state, clean-shell-only checkpoint set, path, and zero host-mounted disks before any replacement work.",
+        "Build and boot a separate no-network staging VM from the hash-verified ISO while leaving the old VM untouched.",
+        "Generate the guest credential in automation, DPAPI-encrypt it before first boot, and never display or request it.",
+        "Use documented explicit OOBE settings, UserAccounts, and exactly one AutoLogon to create the required user profile without SkipMachineOOBE, SkipUserOOBE, a prompt, or VMConnect; disable autologon on first logon with Microsoft's documented AutoLogonCount workaround.",
+        "Require automatic PowerShell Direct, administrator membership, running vmicvmsession, removal of sensitive unattend files, and hash-verified staging of the stock MSI.",
+        "Gracefully stop the staging VM, prove Off/no host-mounted disk, and create clean-shell before promotion.",
+        "Commit the VM-paired credential, transactionally rename the old and staging VMs, validate the promoted replacement, then delete only the exact retired VM and its fixed directory."
+      ],
+      "rollback_and_recovery": [
+        "Any failure before promotion leaves the old VM untouched; gracefully stop and discard the staging VM/credential pair when Off is proved.",
+        "A failed promotion validation renames the staging VM back and restores the old VM name before cleanup.",
+        "Never use Stop-VM Force or TurnOff. If graceful Off proof fails, preserve the staging VM and its DPAPI credential for separately reviewed recovery.",
+        "If interruption occurs, do not rerun automatically; inspect the fixed old, staging, retired, credential, and evidence identities before recovery."
+      ],
+      "attempts": [
+        {
+          "id": "zero-touch-rebuild-r1-20260827",
+          "artifact_sha256": "a33e6f52f55839b0da36dec9788cf2a96ef483236218f02bf9583dc81d3727b6",
+          "result": "failed-after-old-vm-preflight-before-credential-export",
+          "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r1\\old-vm-preflight.json",
+          "old_vm_preflight": "Off, clean-shell only, and zero host-mounted disks",
+          "credential_created": false,
+          "staging_root_created": false,
+          "consequence": "Preserve r1 evidence. The repaired r2 artifact uses distinct staging and evidence identities and records only failure phase, exception type, and HRESULT; it never records credential material."
+        },
+        {
+          "id": "zero-touch-rebuild-r2-20260827",
+          "artifact_sha256": "a38770325dfebea688ac02973629e3986e847b2a44a23778080bec9e04773bff",
+          "result": "failed-after-old-vm-preflight-during-media-mount-and-image-selection",
+          "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r2\\failure.json",
+          "old_vm_preflight": "Off, clean-shell only, and zero host-mounted disks",
+          "credential_created": false,
+          "staging_root_created": false,
+          "failure_phase": "media-mount-and-image-selection",
+          "exception_type": "System.Management.Automation.PropertyNotFoundException",
+          "consequence": "Preserve r2 evidence. The repaired r3 artifact uses distinct staging and evidence identities and adds only a fixed-source-line label to sanitized failure evidence; it never records exception text, evaluated values, or credential material."
+        },
+        {
+          "id": "zero-touch-rebuild-r3-20260827",
+          "artifact_sha256": "f7220aa5fdd148a89a5802436413ef3d5fe0b4d8a1f2058d379b75c897b4fab0",
+          "result": "failed-after-old-vm-preflight-during-media-mount-and-image-selection",
+          "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r3\\failure.json",
+          "old_vm_preflight": "Off, clean-shell only, and zero host-mounted disks",
+          "credential_created": false,
+          "staging_root_created": false,
+          "failure_phase": "media-mount-and-image-selection",
+          "exception_type": "System.Management.Automation.PropertyNotFoundException",
+          "failure_source_line": "windows-image evidence serialization accessed optional detailed properties on a basic Get-WindowsImage result",
+          "consequence": "Preserve r3 evidence. The r4 artifact removed one optional property access but was not executed because UAC was cancelled. The source-backed r5 artifact removes all optional detailed-property reads and uses distinct staging and evidence identities."
+        },
+        {
+          "id": "zero-touch-rebuild-r4-20260827",
+          "artifact_sha256": "a2719e78975d43697cebf3dbe1a3cc267b40d648b5a0c3101b6f9e166ec066f4",
+          "result": "uac-cancelled-before-elevated-process-start",
+          "vm_queried": false,
+          "credential_created": false,
+          "staging_root_created": false,
+          "evidence_path_created": false
+        },
+        {
+          "id": "zero-touch-rebuild-r5-20260828",
+          "artifact_sha256": "48708b0684a4c742aa45639bdb12c597238cb93f0dbe9c2f3a526089bdaef73b",
+          "result": "failed-after-old-vm-preflight-during-staging-vm-create",
+          "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r5\\failure.json",
+          "old_vm_preflight": "Off, clean-shell only, and zero host-mounted disks",
+          "credential_created": false,
+          "staging_root_created": false,
+          "failure_phase": "staging-vm-create",
+          "failure_source_line": "New-VM created a default network adapter; the r6 artifact removes every staging-VM adapter before its no-network assertion and uses distinct staging and evidence identities.",
+          "consequence": "Preserve r5 evidence. Do not retry automatically; r6 requires fresh review, plan validation, and exact-hash approval."
+        },
+        {
+          "id": "zero-touch-rebuild-r6-20260828",
+          "artifact_sha256": "c27e06b4c2aed435288257c7d976b0643084695927c84bdcd40acbd00ed4d7d9",
+          "result": "failed-after-old-vm-preflight-during-automatic-guest-control-validation",
+          "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r6\\failure.json",
+          "old_vm_preflight": "Off, clean-shell only, and zero host-mounted disks",
+          "credential_created": false,
+          "staging_root_created": false,
+          "failure_phase": "automatic-guest-control-validation",
+          "failure_source_line": "Start-VM could not allocate the fixed 6144 MB startup memory (0x800705AA).",
+          "consequence": "Preserve r6 evidence. The staging root and lifecycle credential are absent after cleanup; do not retry automatically. Reassess the fixed VM memory contract before preparing another uniquely identified packet."
+        },
+        {
+          "id": "zero-touch-rebuild-r7-20260828",
+          "artifact_sha256": "df7588599cfe1300cee86feeecc06706003f02de43e8e4ebc47c6e6b8d3e02d8",
+          "result": "failed-after-old-vm-preflight-during-automatic-guest-control-validation",
+          "evidence": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r7\\failure.json",
+          "old_vm_preflight": "Off, clean-shell only, and zero host-mounted disks",
+          "credential_created": false,
+          "staging_root_created": false,
+          "failure_phase": "automatic-guest-control-validation",
+          "failure_source_line": "Start-VM could not initialize 4096 MB startup memory (0x8007000E) despite the WSL utility VM being off and the 5 GiB free-memory precondition passing.",
+          "consequence": "Preserve r7 evidence. The staging root and lifecycle credential are absent after cleanup; do not retry automatically. Free-memory measurement alone does not prove Hyper-V allocatable capacity."
+        }
+      ],
+      "review_result": {
+        "status": "PASS",
+        "plan_validated": true,
+        "approval_present": false,
+        "finding": "Static review, focused tests, and Microsoft deployment documentation bind zero human guest-credential prompts, no VMConnect repair, no network adapter, documented OOBE settings without SkipMachineOOBE or SkipUserOOBE, exactly one automatic logon to create PowerShell Direct's required profile, DPAPI lifecycle pairing, exact old-VM identity, build-before-delete ordering, graceful cleanup, transactional promotion rollback, and final Off/no-disk/clean-shell proof. Runtime Windows unattended behavior remains fail-closed because the old VM is untouched until the replacement passes."
+      }
     }
   },
   "missing_before_controlled_execution": [
-    "verified Community compiler layout staged to and installed offline in the disposable Hyper-V Windows VM",
-    "source-backed non-installing vmicvmsession diagnostic design and separately reviewed, plan-validated, freshly approved diagnostic packet",
+    "reviewed, plan-validated, freshly approved zero-touch disposable-VM rebuild with VM-lifetime DPAPI credential",
+    "verified Community compiler layout staged to and installed offline in the replacement disposable Hyper-V Windows VM",
     "reviewed, plan-validated, and freshly approved unchanged PowerShell Direct stock-baseline packet after guest control is restored",
     "stock WSL 2.7.12 guest baseline",
     "successfully built controlled WSL package",

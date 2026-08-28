@@ -58,7 +58,7 @@ uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
-~/git/agent-skills/skills/windows-env/ps-lint --offline --settings .PSScriptAnalyzerSettings.psd1 tools
+& ~/git/agent-skills/skills/windows-env/Invoke-PsLint.ps1 -Offline -Settings .PSScriptAnalyzerSettings.psd1 -Path tools
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
