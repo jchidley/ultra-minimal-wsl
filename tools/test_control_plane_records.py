@@ -425,6 +425,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))
         packet = plan["recovery_install_contract"]["zero_touch_vm_rebuild_packet"]
         artifact = ROOT / packet["artifact"]
+        launcher = ROOT / packet["launch_artifact"]
         self.assertTrue(packet["safe"])
         self.assertFalse(packet["executable"])
         self.assertFalse(packet["approval_carried_forward"])
@@ -432,11 +433,14 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertFalse(packet["review_result"]["approval_present"])
         self.assertTrue(packet["review_result"]["plan_validated"])
         self.assertEqual(packet["artifact_sha256"], sha256(artifact))
-        self.assertEqual(packet["status"], "failed-r7-insufficient-host-memory")
+        self.assertEqual(packet["launch_artifact_sha256"], sha256(launcher))
+        self.assertIn("Invoke-PsElevate.ps1 Launch -Confirmed", packet["exact_command"])
+        self.assertIn("-Id zero-touch-rebuild-r8", packet["exact_command"])
+        self.assertEqual(packet["status"], "prepared-r8-post-reboot-capacity-retry")
         self.assertEqual(packet["fixed_old_vm"]["id"], "dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6")
         self.assertEqual(packet["fixed_old_vm"]["required_checkpoint_set"], ["clean-shell"])
         self.assertFalse(packet["replacement"]["network_adapter"])
-        self.assertEqual(packet["replacement"]["staging_name"], "ultra-minimal-wsl-dev-rebuild-r7")
+        self.assertEqual(packet["replacement"]["staging_name"], "ultra-minimal-wsl-dev-rebuild-r8")
         self.assertEqual(packet["replacement"]["startup_memory_bytes"], 4 * 1024**3)
         self.assertEqual(packet["replacement"]["minimum_memory_bytes"], 2 * 1024**3)
         self.assertEqual(packet["replacement"]["maximum_memory_bytes"], 8 * 1024**3)
@@ -468,8 +472,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
 
         source = artifact.read_text(encoding="utf-8")
         self.assertIn("$ExpectedOldVmId = 'dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6'", source)
-        self.assertIn("$StagingVmName = 'ultra-minimal-wsl-dev-rebuild-r7'", source)
-        self.assertIn("$EvidenceRoot = \"$env:LOCALAPPDATA\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r7\"", source)
+        self.assertIn("$StagingVmName = 'ultra-minimal-wsl-dev-rebuild-r8'", source)
+        self.assertIn("$EvidenceRoot = \"$env:LOCALAPPDATA\\ultra-minimal-wsl\\approval-state\\zero-touch-rebuild-r8\"", source)
         self.assertIn("$StartupMemory = 4GB", source)
         self.assertIn("$RequiredHostFreeBytes = $StartupMemory + 1GB", source)
         self.assertIn("WSL utility VM is running", source)
@@ -510,6 +514,13 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertLess(source.index("New-VM -Name $StagingVmName"), source.index("Rename-VM -VM $oldVm"))
         self.assertLess(source.index("New-PSSession -VMName $StagingVmName"), source.index("Rename-VM -VM $oldVm"))
         self.assertLess(source.index("Checkpoint-VM -VM $stagingVm"), source.index("Rename-VM -VM $oldVm"))
+
+        launcher_source = launcher.read_text(encoding="utf-8")
+        self.assertIn(packet["artifact_sha256"], launcher_source)
+        self.assertIn("Rebuild-DisposableWslDevVm.ps1", launcher_source)
+        self.assertIn("& $target -Execute", launcher_source)
+        self.assertNotIn("Get-Credential", launcher_source)
+        self.assertNotIn("Start-Process", launcher_source)
 
     def test_controlled_package_build_record_is_complete_and_fail_closed(self):
         plan = json.loads((CONTROL / "deferred-runtime-plan.json").read_text(encoding="utf-8"))

@@ -9,11 +9,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $VmName = 'ultra-minimal-wsl-dev'
-$StagingVmName = 'ultra-minimal-wsl-dev-rebuild-r7'
-$RetiredVmName = 'ultra-minimal-wsl-dev-retired-r7'
+$StagingVmName = 'ultra-minimal-wsl-dev-rebuild-r8'
+$RetiredVmName = 'ultra-minimal-wsl-dev-retired-r8'
 $ExpectedOldVmId = 'dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6'
 $ExpectedOldVmRoot = 'C:\Hyper-V\ultra-minimal-wsl\ultra-minimal-wsl-dev'
-$StagingRoot = 'C:\Hyper-V\ultra-minimal-wsl-rebuild-r7'
+$StagingRoot = 'C:\Hyper-V\ultra-minimal-wsl-rebuild-r8'
 $StagingVmRoot = Join-Path $StagingRoot $StagingVmName
 $StagingVhdPath = Join-Path $StagingVmRoot 'Virtual Hard Disks\ultra-minimal-wsl-dev.vhdx'
 $WindowsMedia = "$env:LOCALAPPDATA\ultra-minimal-wsl\controlled-inputs\windows-media\Win11_25H2_English_x64_v2.iso"
@@ -23,7 +23,7 @@ $GuestUsername = 'WslLabAdmin'
 $CredentialPath = "$env:LOCALAPPDATA\ultra-minimal-wsl\credentials\ultra-minimal-wsl-dev.credential.clixml"
 $CredentialMetadataPath = "$env:LOCALAPPDATA\ultra-minimal-wsl\credentials\ultra-minimal-wsl-dev.credential.json"
 $StatePath = "$env:LOCALAPPDATA\ultra-minimal-wsl\hyper-v-vm.json"
-$EvidenceRoot = "$env:LOCALAPPDATA\ultra-minimal-wsl\approval-state\zero-touch-rebuild-r7"
+$EvidenceRoot = "$env:LOCALAPPDATA\ultra-minimal-wsl\approval-state\zero-touch-rebuild-r8"
 $StockMsiPath = "$env:LOCALAPPDATA\ultra-minimal-wsl\controlled-inputs\stock-wsl\wsl.2.7.12.0.x64.msi"
 $ExpectedStockMsiSha256 = 'a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145'
 $ExpectedStockMsiBytes = 258998272

@@ -1207,14 +1207,16 @@
     ]
     },
     "zero_touch_vm_rebuild_packet": {
-      "status": "failed-r7-insufficient-host-memory",
+      "status": "prepared-r8-post-reboot-capacity-retry",
       "safe": true,
       "executable": false,
       "approval_carried_forward": false,
       "destructive": true,
       "artifact": "tools/Rebuild-DisposableWslDevVm.ps1",
-      "artifact_sha256": "df7588599cfe1300cee86feeecc06706003f02de43e8e4ebc47c6e6b8d3e02d8",
-      "exact_command": "& .\\tools\\Rebuild-DisposableWslDevVm.ps1 -Execute",
+      "artifact_sha256": "a66161b738d0c0a5364470773326c4af69aaf9e77cfb3e2d3c2b12150f9c8dce",
+      "launch_artifact": "tools/Invoke-ZeroTouchRebuildR8.ps1",
+      "launch_artifact_sha256": "dfa1112fc87a5fd8757fb72182557d60475ed0b4bc163b365420ff5a7ac4c8b2",
+      "exact_command": "& ~\\git\\agent-skills\\skills\\windows-env\\Invoke-PsElevate.ps1 Launch -Confirmed -Script .\\tools\\Invoke-ZeroTouchRebuildR8.ps1 -StateDirectory \"$env:LOCALAPPDATA\\ultra-minimal-wsl\\approval-state\\elevation\" -Id zero-touch-rebuild-r8",
       "fixed_old_vm": {
         "name": "ultra-minimal-wsl-dev",
         "id": "dd4b6df9-4fab-4f1b-b565-ba4e481ad6a6",
@@ -1224,8 +1226,8 @@
         "required_host_mounted_disks": 0
       },
       "replacement": {
-        "staging_name": "ultra-minimal-wsl-dev-rebuild-r7",
-        "staging_root": "C:\\Hyper-V\\ultra-minimal-wsl-rebuild-r7",
+        "staging_name": "ultra-minimal-wsl-dev-rebuild-r8",
+        "staging_root": "C:\\Hyper-V\\ultra-minimal-wsl-rebuild-r8",
         "startup_memory_bytes": 4294967296,
         "minimum_memory_bytes": 2147483648,
         "maximum_memory_bytes": 8589934592,
@@ -1375,11 +1377,24 @@
           "consequence": "Preserve r7 evidence. The staging root and lifecycle credential are absent after cleanup; do not retry automatically. Free-memory measurement alone does not prove Hyper-V allocatable capacity."
         }
       ],
+      "post_reboot_capacity_observation": {
+        "observed_utc": "2026-08-28T15:26:53Z",
+        "last_boot_local": "2026-08-28T16:24:33+01:00",
+        "total_visible_gib": 15.45,
+        "free_physical_gib": 9.14,
+        "available_mib": 9278,
+        "commit_limit_bytes": 31087529984,
+        "committed_bytes": 8320499712,
+        "pagefile_allocated_mib": 13824,
+        "wsl_observation": "A transient vmmemWSL process was observed on the first post-reboot query; the immediate follow-up reported every registered distro Stopped and only the normal wslservice.exe. The r8 preflight still fails closed if vmmemWSL is present.",
+        "hyper_v_query": "Unelevated Get-VM and Get-VMHost were denied; no VM operation occurred and allocatable capacity remains unproved until the approved fail-closed attempt.",
+        "r7_replay_state": "r7 evidence exists; its staging root and lifecycle credential remain absent. r7 must not be replayed."
+      },
       "review_result": {
         "status": "PASS",
         "plan_validated": true,
         "approval_present": false,
-        "finding": "Static review, focused tests, and Microsoft deployment documentation bind zero human guest-credential prompts, no VMConnect repair, no network adapter, documented OOBE settings without SkipMachineOOBE or SkipUserOOBE, exactly one automatic logon to create PowerShell Direct's required profile, DPAPI lifecycle pairing, exact old-VM identity, build-before-delete ordering, graceful cleanup, transactional promotion rollback, and final Off/no-disk/clean-shell proof. Runtime Windows unattended behavior remains fail-closed because the old VM is untouched until the replacement passes."
+        "finding": "The r8 artifact differs from the reviewed r7 artifact only in its staging, retired-VM, staging-root, and evidence identities. It retains the fixed 4096 MiB startup-memory contract and all zero-human-credential, no-VMConnect, no-network, documented OOBE, DPAPI lifecycle, exact old-VM identity, build-before-delete, graceful-cleanup, transactional-rollback, and final Off/no-disk/clean-shell gates. Post-reboot observations show substantially more ordinary free and commit capacity, but do not prove Hyper-V allocatable capacity; execution remains the fail-closed test and requires fresh approval of the exact r8 hash."
       }
     }
   },
