@@ -1207,7 +1207,7 @@
     ]
     },
     "zero_touch_vm_rebuild_packet": {
-      "status": "prepared-r8-post-reboot-capacity-retry",
+      "status": "completed-r8-zero-touch-rebuild",
       "safe": true,
       "executable": false,
       "approval_carried_forward": false,
@@ -1375,6 +1375,28 @@
           "failure_phase": "automatic-guest-control-validation",
           "failure_source_line": "Start-VM could not initialize 4096 MB startup memory (0x8007000E) despite the WSL utility VM being off and the 5 GiB free-memory precondition passing.",
           "consequence": "Preserve r7 evidence. The staging root and lifecycle credential are absent after cleanup; do not retry automatically. Free-memory measurement alone does not prove Hyper-V allocatable capacity."
+        },
+        {
+          "id": "zero-touch-rebuild-r8-20260828",
+          "artifact_sha256": "a66161b738d0c0a5364470773326c4af69aaf9e77cfb3e2d3c2b12150f9c8dce",
+          "launch_artifact_sha256": "dfa1112fc87a5fd8757fb72182557d60475ed0b4bc163b365420ff5a7ac4c8b2",
+          "result": "replacement-completed-launcher-reported-false-failure",
+          "old_vm_preflight_sha256": "c3f2c2d462bd55962eaed575a7fed60c1f8ab8b35040f5a25e948d5d09f66a45",
+          "guest_preflight_sha256": "bb03f091ddcb6d5779bf443a31bf5c6fb78201dbec928763b751e379d1ebe84b",
+          "staged_stock_msi_sha256": "60eb6d4a9e823b52e52aecf7573e7fb5d781a1999be78fe34b36ecf79ce4a244",
+          "final_state_sha256": "6fe180ccca7ba0f94bce75997f065b77455ec80eafb81a2a2a3d4c207c98cccd",
+          "replacement_vm_id": "dcbf722c-0702-444e-9496-04a4623c3198",
+          "checkpoint_id": "d8e78309-3627-4239-a71b-b9c641ac95d8",
+          "final_state": "Off",
+          "checkpoint_set": ["clean-shell"],
+          "host_mounted_vm_disks": 0,
+          "credential_paired": true,
+          "powershell_direct_proved": true,
+          "stock_msi_staged": true,
+          "old_vm_deleted": true,
+          "launcher_exit_code": 1,
+          "launcher_log_sha256": "0de67d17859b6d072dfef953d56839b11590d54d32c5b456e149d9d2f73a099c",
+          "launcher_reporting_defect": "After the child completed and wrote final-state.json, the strict-mode launcher read unset LASTEXITCODE and returned 1. This is a reporting defect, not a VM-operation failure; do not retry r8."
         }
       ],
       "post_reboot_capacity_observation": {
@@ -1393,13 +1415,12 @@
       "review_result": {
         "status": "PASS",
         "plan_validated": true,
-        "approval_present": false,
-        "finding": "The r8 artifact differs from the reviewed r7 artifact only in its staging, retired-VM, staging-root, and evidence identities. It retains the fixed 4096 MiB startup-memory contract and all zero-human-credential, no-VMConnect, no-network, documented OOBE, DPAPI lifecycle, exact old-VM identity, build-before-delete, graceful-cleanup, transactional-rollback, and final Off/no-disk/clean-shell gates. Post-reboot observations show substantially more ordinary free and commit capacity, but do not prove Hyper-V allocatable capacity; execution remains the fail-closed test and requires fresh approval of the exact r8 hash."
+        "approval_present": true,
+        "finding": "Fresh approval bound the exact r8 artifact and launcher hashes. R8 proved Hyper-V could allocate and boot the 4096 MiB replacement after reboot, created the configured profile, established automatic PowerShell Direct with the DPAPI-paired credential, verified vmicvmsession and administrator state, removed sensitive unattend files, staged and hash-verified the stock MSI, created clean-shell with the VM Off, transactionally promoted the replacement, deleted the old VM, and recorded final Off/zero-disk evidence. The launcher then returned a false exit 1 by reading unset LASTEXITCODE under StrictMode after successful child completion; preserve that reporting defect and never retry r8."
       }
     }
   },
   "missing_before_controlled_execution": [
-    "reviewed, plan-validated, freshly approved zero-touch disposable-VM rebuild with VM-lifetime DPAPI credential",
     "verified Community compiler layout staged to and installed offline in the replacement disposable Hyper-V Windows VM",
     "reviewed, plan-validated, and freshly approved unchanged PowerShell Direct stock-baseline packet after guest control is restored",
     "stock WSL 2.7.12 guest baseline",
