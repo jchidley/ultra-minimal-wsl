@@ -97,6 +97,16 @@ A symbol is not “required” merely because Microsoft enables it or because it
 
 Extend the durable trial schema before using the Arch or Debian result fields.
 
+## Candidate comparison and instrumentation
+
+The experiment target is the WSL Linux configuration, not its outer fixture. Fixture start, command transport, package placement, evidence extraction, and rollback are prerequisites only. Failure before the first probe `wsl.exe` process is infrastructure failure and creates no candidate result. Do not vary the probe or develop generalized fixture tooling in response.
+
+Every candidate uses `tools/Invoke-WslCandidateProbe.ps1` with identical inputs and rules. It runs separate bounded `wsl.exe --version`, `--status`, `--list --quiet`, and exact Toybox smoke processes, then shuts WSL down. The interval captures exact package/candidate/rootfs/probe hashes; arguments, timestamps, stdout, stderr, exit, and timeout for every process; WSL WPR/ETW, relevant event delta, debug-console evidence where applicable, and new crash artifacts; an evidence manifest; and independent stock recovery proof.
+
+Missing hashes, interval bounds, process results, trace evidence, manifest, or recovery prevents a positive classification. Reuse `inventory/trials.csv`, `inventory/trial-metadata.csv`, and `recovery-harness/trials/<TRIAL_ID>/`; append one immutable terminal row only after evidence and recovery complete. Infrastructure attempts get no separate experiment ledger.
+
+The comparison order is stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`, all with the exact registered Toybox rootfs. Only runtime comparison may select the namespace variant and resume kernel ablation.
+
 ## Smoke-test contract
 
 Each distro must execute through `wsl.exe` and verify only:
@@ -138,13 +148,9 @@ For a selected Kconfig review, query both relationship directions, inspect retai
 
 The command path under test spans the Windows service and Linux init components, so Linux-only artifacts cannot establish `B4`, `B5`, or `B6-T`. The pinned Windows compiler layout is experimental infrastructure used to produce a reproducible controlled package; it is not a target-system requirement and its acquisition proves no runtime gate.
 
-Preparation must acquire Windows media, compiler/SDK inputs, pinned source, and dependencies into a reusable hash-verified cache with fail-closed offline reuse. Preparation does not authorize installation or execution. Before provisioning or runtime:
+Preparation must keep Windows media, compiler/SDK inputs, pinned source, dependencies, stock package, candidate outputs, rootfs, and instrumentation in a reusable hash-verified cache with fail-closed offline reuse. Preparation does not authorize installation or execution.
 
-- reconcile the compiler layout with the pinned source's documented prerequisites;
-- pin the package build procedure, outputs, install commands, and recovery inputs;
-- do not create or operate the Hyper-V development VM, request elevation, install a controlled package, or modify host WSL state without the applicable fresh explicit approval.
-
-`control-plane/deferred-runtime-plan.json` is preparation, not an executable trial record, and carries no approval forward. Current candidate identities and readiness belong to `STATUS.md` and the control-plane evidence records, not this plan. Preserve every candidate generation rather than rewriting it; any ABI or source change creates a new candidate and repeats the source-policy, mutation, and two-build reproducibility gates. Before runtime execution, replace every missing input with a pinned hash, plan-validate the fixed operation, and obtain fresh explicit approval.
+`control-plane/deferred-runtime-plan.json` records these inputs, the reproducible build procedure, candidate identities, and the fixed trial contract. It is not an executable trial record and carries no approval forward. Preserve every candidate generation rather than rewriting it; any ABI or source change creates a new candidate and repeats the source-policy, mutation, and two-build reproducibility gates. Before runtime execution, require complete hashes, plan-validate the exact candidate operation and recovery path, and obtain fresh explicit approval.
 
 Keep the proof order explicit: compiler acquisition enables reproducible compilation; compilation enables guarded runtime comparison; runtime establishes viability; namespace comparison and kernel ablation establish minimality. Do not treat completion of an earlier stage as evidence for a later one.
 

@@ -1,17 +1,10 @@
-# WSL kernel trial and recovery runbook
+# WSL candidate trial and recovery runbook
 
 A custom WSL kernel is global to every WSL 2 distro. Use the guarded harness; never switch kernels manually during an experiment.
 
 ## Supported kernel override
 
-Microsoft’s packaged kernel remains at `C:\Program Files\WSL\tools\kernel`. The supported override points `.wslconfig` at a separate image:
-
-```ini
-[wsl2]
-kernel=C:/path/to/candidate/kernel
-```
-
-Removing `kernel=` and shutting WSL down restores selection of the packaged kernel. An empty value is not a fallback.
+Microsoft's packaged kernel remains at `C:\Program Files\WSL\tools\kernel`. The supported `.wslconfig` override points to a separate candidate image. Removing `kernel=` and shutting WSL down restores the packaged kernel; an empty value is not a fallback.
 
 ## Before any trial
 
@@ -19,63 +12,64 @@ Removing `kernel=` and shutting WSL down restores selection of the packaged kern
 2. Require `tools/Test-WslSafeState.ps1` to report `safe:true`.
 3. Record WSL version and packaged kernel/initrd hashes.
 4. Preserve `.wslconfig` byte-for-byte.
-5. Verify candidate config, image, metadata, and hashes.
+5. Verify candidate config, image/package, rootfs, metadata, and hashes.
 6. Synchronize inventory records and require SQLite integrity `ok`.
-7. Require the pinned PowerShell 5.1 PSScriptAnalyzer project profile and ShellCheck warning-or-higher checks to pass.
-8. Run `tools/Test-WslKernelTrial.ps1` and harness plan mode.
+7. Pass the repository PowerShell, ShellCheck, record, and plan validations.
+8. Reserve a unique evidence directory, but append no terminal ledger row yet.
 
-No approval is implied by a prepared candidate or plan validation.
+A prepared candidate or valid plan implies no execution approval.
 
-## Ordinary trial
+## Kernel-only trial
 
 `tools/Invoke-WslKernelTrial.ps1` journals before changing `.wslconfig`, enforces serial execution and timeouts, restores the exact original file in `finally`, verifies packaged hashes, and boots a recovery distro before finalizing the ledger.
 
-Run it unelevated. Its execute path requires both the explicit custom-kernel guard and `-Execute`. It has no write path beneath `C:\Program Files\WSL`.
+Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cannot classify a pre-dispatch failure. Its elevated WPR path requires separate approval. Interpret only evidence inside the recorded interval.
 
-After completion, independently run `tools/Test-WslSafeState.ps1`. A timeout does not prove a process, VM, or elevated child stopped.
+## Controlled-package candidate trial
 
-## Diagnostic trial
+The experiment begins when the fixed probe starts its first `wsl.exe` process, not when an outer fixture starts.
 
-Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cannot classify a pre-dispatch failure. It adds Microsoft’s WPR profile, exact trace timing, and transactional `debugConsole=true` around the same recovery harness.
+1. Establish the recorded stock baseline using any already-reviewed fixture procedure.
+2. Install exactly one hash-verified candidate.
+3. Run `tools/Invoke-WslCandidateProbe.ps1` once with the fixed Toybox rootfs and candidate manifest.
+4. Extract the complete evidence directory.
+5. Restore the exact stock baseline and independently prove recovery.
+6. Analyze the earliest supported B-gate.
+7. Append one immutable terminal trial row only after evidence and recovery are complete.
 
-Diagnostic execution requires separate approval and elevation because WPR enables privileged ETW providers. Transport a reviewed fixed PowerShell script through `windows-env/ps-elevate`; do not rely on an agent-side timeout to stop it.
+Outer fixture start, command transport, and rollback are prerequisites. If any fails, record infrastructure failure outside the candidate ledger and do not alter the probe or classify the candidate. Do not develop infrastructure diagnostics as part of the minimisation loop.
 
-Interpret only evidence inside the recorded interval:
+## Evidence required
 
-| Evidence | Highest supported conclusion |
-|---|---|
-| host loader/compute failure | guest entry not established |
-| early kernel `GuestLog` | `B1` |
-| VMBus/VSOCK enumeration | `B2` |
-| Hyper-V disk plus ext4 mount | `B3` |
-| stable host/control messaging | `B4` candidate |
-| command output marker | `B5` or the applicable `B6-*` |
+Every candidate interval records:
 
-Absence is meaningful only when the relevant provider was active and trace start/stop succeeded.
+- exact WSL package, candidate, rootfs, and instrumentation hashes;
+- separate arguments, start/end times, stdout, stderr, exit code, and timeout for each `wsl.exe` process;
+- WSL ETW/WPR, relevant event delta, debug-console evidence where applicable, and new crash files;
+- exact Toybox smoke output;
+- WSL shutdown result;
+- a hash manifest for all evidence;
+- independent proof that the stock baseline was restored.
+
+Reuse `inventory/trials.csv`, `inventory/trial-metadata.csv`, and `recovery-harness/trials/<TRIAL_ID>/`. Detailed package identity and B0–B6-T reasoning belong in the trial's `analysis.json`.
 
 ## Recovery invariants
 
-Every trial must leave:
+Every terminal candidate trial must leave:
 
 - the original `.wslconfig` restored exactly;
-- no custom kernel selected;
-- packaged kernel/initrd hashes verified;
-- stock Debian command execution proven;
+- no custom kernel or candidate package selected;
+- packaged kernel/initrd and stock package hashes verified;
+- stock command execution proven;
 - a terminal immutable ledger row;
 - no active journal, WPR session, or diagnostic relay;
-- analysis and hashes preserved under `recovery-harness/trials/<TRIAL_ID>/`.
+- analysis and hashes preserved under the trial evidence root.
 
-If finalization is interrupted, use the harness recovery path. Never hand-edit a completed ledger row.
-
-## Initrd and control-plane work
-
-`.wslconfig` has no custom-initrd setting. Do not replace the installed initrd. Build and deploy reduced-control-plane changes as a controlled WSL package inside a disposable Hyper-V Windows VM with a checkpoint.
-
-Preparation and a populated `control-plane/deferred-runtime-plan.json` never authorize installing inputs, creating or operating the VM, requesting elevation, or running a controlled package. Consult `AGENTS.md`, `STATUS.md`, and `TASKS.md` for the currently authorized phase. Source-only work may create layered fail-closed and namespace variants, but it must not claim B4/B5/B6 or promote namespace Kconfig without controlled runtime evidence.
+A timeout does not prove a process or elevated child stopped. Verify durable state independently. If finalization is interrupted, use the existing harness recovery path; never hand-edit a completed ledger row.
 
 ## References
 
 - WSL advanced settings: <https://learn.microsoft.com/windows/wsl/wsl-config>
 - WSL development loop: <https://wsl.dev/dev-loop/>
 - WSL diagnostics: <https://wsl.dev/debugging/>
-- WSL architecture: <https://wsl.dev/technical-documentation/boot-process/>
+- WSL boot process: <https://wsl.dev/technical-documentation/boot-process/>

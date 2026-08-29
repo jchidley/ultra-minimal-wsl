@@ -157,11 +157,11 @@ The remaining proof has three distinct stages:
 
 Preserve the layered patches, protocol fixture, policy tests, mutation evidence, candidate hashes, and reproducible Linux artifacts. Any source, ABI, or toolchain change becomes a new candidate.
 
-### 2. Build in an isolated Windows environment
+### 2. Produce and test controlled candidates
 
-After preparation has pinned the compiler inputs and exact build procedure, a separately approved phase must create a disposable Windows VM, establish a known-good stock WSL baseline, install the verified build tools, build the controlled packages, and create a verified recovery checkpoint.
+Use the pinned compiler inputs and exact offline build procedure to produce the two controlled packages. Test them from the same known-good stock WSL baseline in an isolated Windows fixture, using the fixed Toybox probe and recovery contract.
 
-The physical host’s WSL package is not the test surface. Preparation and compilation do not establish a runtime gate; they create the controlled artifacts needed for the comparisons below.
+The fixture is not project architecture and its control mechanism is not a gate. Preparation and compilation establish no runtime result; only evidence captured from the fixed candidate interval can establish a `B` gate.
 
 ### 3. Establish `B4`
 

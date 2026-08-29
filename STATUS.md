@@ -1,43 +1,45 @@
 # Project status
 
-This file contains verified present facts and the achieved boundary. Immutable trial history is in `inventory/trials.csv` and `recovery-harness/trials/`; detailed source/build evidence is under `control-plane/`.
+This file contains verified present facts and the achieved boundary. `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns the experiment contract. Completed trial evidence is immutable in `inventory/trials.csv`, `inventory/trial-metadata.csv`, and `recovery-harness/trials/`.
 
 ## Safety state
 
-- Microsoft’s packaged kernel remains the recovery kernel; no reduced init or custom WSL package has been deployed.
-- No project file has been written beneath `C:\Program Files\WSL`, and host WSL state was not changed.
-- The zero-touch r8 replacement is now the approved disposable VM `ultra-minimal-wsl-dev` (ID `dcbf722c-0702-444e-9496-04a4623c3198`). Its reviewed artifact proved automatic PowerShell Direct, a running guest `vmicvmsession`, the lifecycle-bound DPAPI credential, removal of sensitive unattend files, and exact staging of the stock WSL 2.7.12 MSI. It transactionally deleted the old VM only after validation, created only `clean-shell`, and recorded the replacement Off with zero host-mounted disks. Independent filesystem observation found the old VM root and retired identity absent and the replacement root and credential present. The detached launcher misleadingly returned exit 1 after successful completion because StrictMode read unset `$LASTEXITCODE`; preserve this reporting defect and do not retry r8. The stock MSI remains uninstalled and `controlled-package-baseline` does not exist.
-- The validated host baseline remains WSL 2.7.12.0 with the packaged kernel and initrd unchanged; exact recovery hashes belong to `recovery-harness/expected-safe-state.json`.
-- Live distro/process state is intentionally not recorded here. Re-query it with `tools/Test-WslSafeState.ps1`; never stop a running distro automatically.
-- Custom boot, WSL shutdown, `.wslconfig` changes, candidate installation, or runtime trials require canonical `safe:true`, plan validation, and fresh explicit approval.
+- Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
+- No reduced control-plane package or new candidate kernel has been deployed by the current work.
+- The last reviewed disposable-fixture evidence reported the Windows VM Off, exact `clean-shell` restored, and zero host-attached disks. Live state is not asserted here.
+- Any WSL shutdown, custom boot, package installation, fixture operation, or runtime trial still requires plan validation and fresh explicit approval.
 
-## Achieved boundary
+## Proven boundary
 
-- The mkroot/Toybox baseline passes `G4` under QEMU.
+- The mkroot/Toybox lower bound passes `G4` under QEMU.
 - WSL trials proved kernel/init entry (`B1`), VMBus and Hyper-V VSOCK (`B2`), and Hyper-V storage plus ext4 mount (`B3`).
-- `K-OVERLAY-DIAG-001` proved stock system-distro overlay construction and then stopped at the excluded GNS networking service. Additive stock-init kernel discovery is frozen there; B4 is not proved.
-- Every completed custom trial restored the exact stock configuration and proved stock Debian startup. Trial details and recovery evidence remain in the immutable ledgers and trial directories.
+- `K-OVERLAY-DIAG-001` reached stock system-distro overlay construction and stopped at excluded GNS networking policy. This is the reason additive stock-init discovery stopped; it is not a requirement to add networking.
+- Every completed custom-kernel trial restored the exact stock configuration and proved stock Debian startup.
 
-## Inventory and build host
+## Candidate state
 
-- Inventory contains 9 config snapshots, 10 completed trials, and 174 reviewed annotations; synchronization integrity is `ok`.
-- Durable inputs are `inventory/annotations.csv`, `inventory/config-snapshots.csv`, `inventory/trials.csv`, and `inventory/trial-metadata.csv`.
-- `LFS-Builder` profile 1 is the pinned Debian 13 amd64 ext4 build environment; its exact bundle identity belongs to `build-host/SHA256SUMS`.
-- Two build jobs are the proven default on the 8 GiB builder; higher fan-out remains unverified.
+- The retained source base is WSL 2.7.12 commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`.
+- `minimal-v3-fail-closed` removes the known excluded interop hard-fail while retaining only the minimal command-control policy.
+- `minimal-v3-stock-ns` and `minimal-v3-mount-ns` are reproducible siblings that differ only in the coherent namespace bundle. Neither is selected.
+- All three v3 Linux artifacts built byte-identically twice offline in separate ext4 directories.
+- No v3 candidate has runtime evidence for `B4`, `B5`, or `B6-T`; no namespace or Kconfig requirement may be promoted from static preference.
 
-## Reduced control-plane boundary
+## Active experiment boundary
 
-- The retained host/guest contract is pinned to WSL 2.7.12 commit `68f601bba8eac1df20a0bbd403c6c87c92369ade` and mapped in `WSL-CONTROL-PLANE-AUDIT.md`.
-- Preserved `minimal-v1` and all `minimal-v2` records remain unchanged. Replacement `minimal-v3-fail-closed`, stock-namespace, and mount-only records add only the mini-init interop-removal layer and coherent namespace variant; all three built byte-identically twice offline in distinct ext4 directories.
-- Focused regression coverage requires the new layer to remove mini-init's unconditional `binfmt_misc` mount and `WSLInterop` registration without changing protocol policy. The retained protocol, policy, record, and mutation behavior still passes.
-- These candidates prove source policy and Linux artifact identity only. No Windows component has been compiled and no candidate has reached B4, B5, or B6-T.
-- Both namespace siblings remain unselected. Static source preference does not select `CONFIG_IPC_NS`, `CONFIG_PID_NS`, or `CONFIG_UTS_NS`.
-- `CONFIG_ANON_VMA_NAME` is reviewed `DEFERRED`: pinned and reduced source has no anonymous-map naming or maps/smaps consumer, and neither relay, lifecycle, nor the smoke contract selects it.
+The project is no longer developing general Hyper-V, PowerShell Direct, checkpoint-race, baseline-installer, or VM-rebuild tooling. Those attempts are historical infrastructure work, not project milestones.
 
-## Current boundary and milestone gap
+The only active runtime path is candidate comparison:
 
-The source-only runtime-readiness queue is complete: the known excluded interop hard-fail is removed, replacement candidates are recorded and reproducible, and the non-executable runtime plan is synchronized to them. Do not select another Kconfig group merely to continue static review.
+1. calibrate the fixed probe against stock WSL 2.7.12 and the exact Toybox rootfs;
+2. test `minimal-v3-stock-ns` with the same probe;
+3. restore the same baseline and test `minimal-v3-mount-ns`;
+4. classify the earliest supported B-gate from captured evidence;
+5. use the comparison to select the next configuration change.
 
-The controlled Windows build/runtime phase remains deferred. The verified Windows media, pinned WSL source, NuGet packages, NuGet 5.10.0, pinned FetchContent archives, complete verified Community offline layout, and exact Microsoft WSL 2.7.12.0 x64 stock MSI are cached; the older Build Tools layout remains prerequisite-incomplete and is not the compiler input. The approved disposable VM contains offline-applied Windows and remains Off. The verified stock package was staged into its active differencing disk, but stock WSL installation and the controlled baseline checkpoint were not established. The controller selected PowerShell Direct with a unique disposable VM-only account; its random 12-character user ID is recorded in the non-executable plan, while its random 12-character password is excluded from Git. Account provisioning and PowerShell Direct administrator authentication are now proved. A fixed non-executable PowerShell Direct stock-MSI verification/install/checkpoint packet is now plan-validated at `tools/Install-StockWslBaseline.ps1`; its corrected SHA-256 and PowerShell 5.1 credential command are bound in `control-plane/deferred-runtime-plan.json`. Review confirms the artifact uses a non-recursive module-qualified VM query, enumerates `clean-shell` before VM start, queries only recorded VM hard-disk paths, uses documented graceful shutdown syntax, retries explicit-credential PowerShell Direct readiness every five seconds for at most ten minutes, requires the isolated guest `.wslconfig` to remain absent, and fails closed if a disk is attached or the checkpoint is absent. The artifact was executed in approved attempt five but did not establish a guest session. The artifact refuses all MSI exit codes except conservative success code 0 because no repository-pinned evidence authorizes another code. The approved diagnostic launch stopped before credential validation, VM query, or VM start when the operator rejected an inappropriate guest-password prompt; subsequent enrollment attempts created no credential and established that the original random password is unavailable. Human guest-credential prompts and manual VMConnect repair are now rejected for disposable testing, and `tools/Diagnose-PowerShellDirect.ps1` is a tested non-executable tombstone. Zero-touch rebuild attempts r1-r3 all stopped after independently proving the old VM Off with only `clean-shell` and zero host-mounted disks, before creating any retained credential or staging root; r4 was cancelled at UAC before its elevated process started. Web review then found that the prior packet used Microsoft-discouraged `SkipMachineOOBE` and did not establish PowerShell Direct's documented configured-profile prerequisite. Approved r5 execution reached staging-VM creation only after proving the old VM Off with only `clean-shell` and zero host-mounted disks. It failed closed because `New-VM` created a default network adapter; its finally block removed the staging root and no lifecycle credential or final-state evidence remains. Preserve the immutable r5 evidence. The repaired source-backed r6 packet removed every staging adapter before asserting the no-network contract and used distinct staging and evidence identities. Approved r6 execution then failed closed at `Start-VM` because Hyper-V could not allocate its fixed 6144 MiB startup memory (`0x800705AA`); post-failure filesystem inspection found no staging root, lifecycle credential, credential metadata, or final-state evidence. Preserve the immutable r6 evidence. Approved r7 execution verified WSL's utility VM was off and its 5 GiB host-free-memory precondition before staging, but Hyper-V still could not initialize 4096 MiB startup memory (`0x8007000E`). Post-failure inspection found no staging root, lifecycle credential, credential metadata, or final-state evidence. Preserve the immutable r7 evidence; free-memory measurement alone does not prove Hyper-V allocatable capacity. After the operator rebooted, read-only observation found 9.14 GiB free physical memory, 9,278 MiB available, and 26% commit use. A transient `vmmemWSL` was initially visible, but an immediate follow-up reported every registered distro Stopped; no VM was operated. The uniquely identified r8 artifact retained r7's 4096 MiB contract and fail-closed policy with only staging/evidence identities changed. Fresh exact-hash approval was executed once. R8 established the replacement VM, automatic guest control, paired credential, staged stock MSI, and final Off/zero-disk/`clean-shell` evidence; its launcher alone reported a false failure after completion. Do not retry r8. The next separately approved operation is establishment of the stock WSL baseline and `controlled-package-baseline` checkpoint. Do not install inbox/latest WSL, use an unpinned package, or synthesize a stock package. The fail-closed offline package-build, output, install, checkpoint, and stock-recovery procedure remains source-backed and recorded in `control-plane/deferred-runtime-plan.json`; no candidate was compiled or installed, and no host WSL state or runtime was changed. Minimal Viable WSL must then pass minimality and cold-start gates before Alpine, Arch, and Debian compatibility work can produce `ultra-minimal-wsl-v1`.
+`tools/Invoke-WslCandidateProbe.ps1` is the retained guest-local measurement tool. It records exact candidate/rootfs hashes, bounded `wsl.exe` process results, WSL ETW/events/crashes, shutdown, and an evidence hash manifest. Fixture start, package placement, rollback, and evidence extraction are prerequisites around the experiment, not objects being minimized and not separate acceptance ledgers.
 
-`TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns the durable strategy and acceptance criteria; `NEXT-SESSION.md` is the restart entry point.
+The pinned source, build dependencies, stock package, candidate identities, and non-executable trial contract are recorded in `control-plane/deferred-runtime-plan.json`. The exact stock calibration and independent stock-recovery probe are repository-validated and stopped at the fresh-approval boundary. That record carries no approval and authorizes no execution.
+
+## Inventory
+
+The durable inventory contains 9 config snapshots, 10 completed trials, and 174 reviewed annotations; synchronization integrity was last verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.

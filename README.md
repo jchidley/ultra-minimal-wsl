@@ -45,7 +45,7 @@ Everything beyond this boundary is an optional integration profile. A separate, 
 
 ## Current position
 
-The generic Toybox baseline passes `G4`, and guarded WSL discovery has reached the `B3` storage boundary. Reduced control-plane candidates are source-ready but have not yet proved command dispatch at runtime. The project is preparing pinned Windows build inputs before any separately approved controlled-package trial. See `STATUS.md` for verified current facts, `TASKS.md` for the active queue, and `NEXT-SESSION.md` for the bounded restart procedure.
+The generic Toybox baseline passes `G4`, and guarded WSL discovery has reached the `B3` storage boundary. Reduced control-plane candidates are source-ready but have not yet proved command dispatch at runtime. The active work is one fixed comparison: stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`, all using the same Toybox probe and evidence contract. See `STATUS.md` for verified current facts and `TASKS.md` for the active queue.
 
 ## Documentation
 
@@ -59,7 +59,6 @@ The generic Toybox baseline passes `G4`, and guarded WSL discovery has reached t
 - `inventory/README.md` — Kconfig graph and durable experiment records.
 - `control-plane/README.md` — reduced control-plane artifacts, tests, and deferred runtime gate.
 - `build-host/README.md` — pinned `LFS-Builder` role, profile, and provisioning.
-- `NEXT-SESSION.md` — executable restart brief for the current bounded objective.
 - `RUST-MINIMAL-WSL-FOLLOW-ON.md` — inactive charter for a `wsl.exe`-controllable Rust userspace after Minimal Viable WSL is frozen.
 - `session-history/README.md` — historical, grep-friendly project-session transcripts.
 

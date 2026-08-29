@@ -59,31 +59,16 @@ All `minimal-v2` records remain preserved as historical parents.
 
 `patches/0004-minimal-v3-no-interop.patch` layers on `minimal-v2-fail-closed` and removes only mini-init's unconditional `binfmt_misc` mount and `WSLInterop` registration hard-fail. Focused record tests require both operations and their local definitions to be removed without changing distro-init policy or protocol dispatch. `minimal-v3-stock-ns` is tree-identical to the new fail-closed parent; `patches/0005-minimal-v3-mount-ns.patch` changes only the coherent namespace bundle to mount-only.
 
-All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. The Windows build and runtime phase remains deferred. The source-backed offline package procedure and recovery contract are recorded in `deferred-runtime-plan.json`, which remains non-executable and proves no B4/B5/B6 result. The restart boundary is in `../NEXT-SESSION.md`.
+All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. The Windows build and runtime phase remains deferred. The source-backed offline package procedure and candidate trial contract are recorded in `deferred-runtime-plan.json`, which remains non-executable and proves no B4/B5/B6 result.
 
-## Disposable Hyper-V VM
+## Runtime comparison boundary
 
-`tools/New-DisposableWslDevVm.ps1` creates a Generation 2 VM from a Windows ISO or generalized Windows VHDX. It enables Secure Boot, vTPM, dynamic memory, and nested virtualization; disables automatic checkpoints; creates `clean-shell`; and deliberately leaves the VM off. It refuses execution without both elevation and `-Execute`.
+`deferred-runtime-plan.json` is deliberately non-executable. It records pinned inputs, reproducible build mechanics, candidate identities, the fixed Toybox probe, evidence requirements, recovery assertions, and stop conditions without reserving a trial row or carrying approval forward.
 
-Plan without changing Hyper-V:
-
-```powershell
-.\tools\New-DisposableWslDevVm.ps1 -WindowsMedia C:\path\to\pinned-windows.iso
-```
-
-After separate explicit approval, launch the reviewed fixed invocation through `windows-env/ps-elevate`. For ISO media, install Windows and establish the stock WSL/package-build baseline before replacing any package. When the VM is off, plan and then explicitly execute:
-
-```powershell
-.\tools\Checkpoint-DisposableWslDevVm.ps1
-.\tools\Checkpoint-DisposableWslDevVm.ps1 -Execute
-```
-
-This creates `controlled-package-baseline`. Neither script starts or stops a VM automatically. Machine state is recorded outside Git under `%LOCALAPPDATA%\ultra-minimal-wsl\hyper-v-vm.json`.
-
-`deferred-runtime-plan.json` is deliberately non-executable. It records missing inputs, safety preconditions, the eventual runtime sequence, acceptance evidence, recovery assertions, and stop conditions without reserving a trial ledger row or carrying approval forward.
+The project does not own a general VM-control stack. A disposable Windows fixture may isolate package trials, but fixture start, transport, installation, extraction, and rollback are outer preconditions. Candidate measurement starts with the first `wsl.exe` process in `tools/Invoke-WslCandidateProbe.ps1`. A fixture failure creates no B-gate result and must not trigger more fixture automation work.
 
 ## Evidence boundary
 
 The v3 records establish source-policy and Linux-artifact reproducibility only; they do not establish controlled Windows compilation or any runtime gate. Preserve each generation: a later source or ABI change creates a new layer and repeats the policy, mutation, and reproducibility gates.
 
-`STATUS.md` owns the present boundary, `TASKS.md` the immediate queue, and `MINIMAL-BOOT-PLAN.md` the proof order and approval rules. Exact compiler, source, candidate, build-procedure, checkpoint, and recovery evidence belongs in `deferred-runtime-plan.json`; that evidence never carries execution approval.
+`STATUS.md` owns the present boundary, `TASKS.md` the immediate queue, and `MINIMAL-BOOT-PLAN.md` the proof order and approval rules. Exact compiler, source, candidate, build-procedure, probe, and recovery inputs belong in `deferred-runtime-plan.json`; that evidence never carries execution approval.

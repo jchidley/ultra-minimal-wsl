@@ -1,28 +1,32 @@
 # Work queue
 
-`STATUS.md` owns current facts; `MINIMAL-BOOT-PLAN.md` owns strategy and acceptance criteria. This file contains incomplete work only.
+`STATUS.md` owns verified current facts. `MINIMAL-BOOT-PLAN.md` owns strategy and acceptance criteria. This file contains incomplete work only.
 
 ## Active action
 
-R8 completed the zero-touch replacement after reboot and proved automatic PowerShell Direct, the lifecycle-bound DPAPI credential, safe unattended cleanup, exact stock-MSI staging, transactional old-VM deletion, and final Off/zero-disk/`clean-shell` state. Its detached launcher returned a false exit 1 only after successful completion because StrictMode read unset `$LASTEXITCODE`; preserve the evidence and do not retry r8. Review the unchanged stock-baseline installation artifact against the new replacement VM identity and credential metadata, prepare any strictly necessary identity-binding update as a new exact-hash packet, and stop for fresh approval.
+Obtain fresh explicit approval for the exact stock calibration and independent stock-recovery probe recorded in `control-plane/deferred-runtime-plan.json`. Until then, do not operate the fixture, elevate, run either `-Execute` command, or shut WSL down.
 
-## Following boundary
+## Comparison queue
 
-After fresh exact-hash approval, establish stock WSL 2.7.12 inside the replacement VM, verify the stock command and recovery hashes, leave the VM Off, and create `controlled-package-baseline`. Compiler installation/build, candidate installation, and runtime proof remain later fixed boundaries; the acceptance path remains owned by `MINIMAL-BOOT-PLAN.md`.
+1. stock WSL 2.7.12 calibration with `toybox-minimal-wsl-rootfs.tar.gz`;
+2. `minimal-v3-stock-ns`;
+3. `minimal-v3-mount-ns`;
+4. evidence-selected namespace decision;
+5. one evidence-selected kernel/configuration change or minimality ablation.
+
+Every comparison uses the identical Toybox smoke command, timeouts, instrumentation, rootfs, classification rules, and recovery proof.
 
 ## Blocked
 
-- Controlled compilation is blocked until the staged stock package, stock baseline, and controlled checkpoint are completed under one approved PowerShell Direct artifact.
-- Do not retry r8 or operate any retired identity; use only the replacement VM ID and its paired DPAPI credential.
-- Do not execute stock installation until the existing packet is reconciled to the replacement identity, plan-validated, and freshly approved; the conservative MSI exit-code policy remains in force.
-- Namespace selection and Kconfig promotion remain blocked on controlled runtime evidence.
-- No additional Kconfig group or speculative source reduction is queued; serial static review must not substitute for the B4/B5/B6-T milestone gap.
+- Runtime classification is blocked until the repository-validated fixed stock calibration is freshly approved and executed with complete recovery evidence.
+- Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
+- Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
+- No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
 
-## Immediate constraints
+## Constraints
 
-- Keep the replacement disposable VM Off until the stock-baseline packet is freshly approved; do not alter host WSL state or run stock/candidate installation or runtime.
-- Never prompt for, display, recover, or ask the operator to know the disposable guest credential. Import only the VM-paired DPAPI credential; discard/rebuild the VM/credential pair if either side is lost.
-- Reuse only the recorded stock MSI cache hit with its release identity, size, SHA-256, signature, and recovery assertions; fail closed on mismatch or absence.
-- Keep builds and source worktrees on `LFS-Builder` ext4 with pinned, hash-verified offline caches.
-- Preserve every completed trial and all `minimal-v1`, `minimal-v2`, and `minimal-v3` candidate evidence; the replacement records do not rewrite their parents.
-- Keep both namespace siblings unselected until controlled runtime comparison proves necessity.
+- Do not retry or extend historical VM-rebuild, baseline-installer, command-diagnostic, PowerShell Direct, or checkpoint-race work.
+- A fixture start/transport/recovery failure is infrastructure failure and creates no candidate result.
+- Preserve completed candidate and trial evidence; never rewrite terminal ledger rows.
+- Keep Linux builds on `LFS-Builder` ext4 and use only pinned, hash-verified offline inputs.
+- Do not operate WSL, install a package, change `.wslconfig`, shut WSL down, or operate the fixture without the required fresh explicit approval.

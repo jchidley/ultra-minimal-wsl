@@ -4,6 +4,8 @@
 
 Build `minimal-viable-wsl-v1` from the mkroot/Toybox floor plus only proven Hyper-V entry, VSOCK, registered-distro VHDX mount, root transition, `wsl.exe` command relay, termination, and recovery requirements. Then add only requirements proved by Alpine, Arch, and Debian to produce `ultra-minimal-wsl-v1`.
 
+The experiment target is the WSL Linux configuration. Outer Windows/VM transport is a prerequisite only; do not turn fixture automation, remoting, or checkpoint mechanics into project milestones.
+
 Networking, DNS, DrvFs, Windows interop, WSLg, systemd, containers, cgroup policy, USB, general disk management, and cross-distro integration are out of scope.
 
 ## Read first
@@ -15,8 +17,8 @@ Read `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, and `build-host/README.md`
 - `STATUS.md` owns verified current facts; `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns durable strategy and acceptance criteria.
 - Exact preparation inputs, commands, hashes, failures, and execution blockers belong in `control-plane/deferred-runtime-plan.json`; immutable trial evidence belongs in the inventory and trial directories.
 - Keep `README.md` and `PROJECT-MODEL.md` explanatory. Do not copy transient blockers, hashes, or task detail into them.
-- `NEXT-SESSION.md` is an executable restart brief for one bounded objective, derived from the canonical files above. Keep it concise; do not turn it into another status ledger or work queue.
-- Before relaying, update only canonical documents whose facts or tasks changed, validate them, and ensure the session name matches the bounded objective in `NEXT-SESSION.md`.
+- `NEXT-SESSION.md` is Relay-owned generated output, not canonical truth. Use it only when it agrees with `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`; reconcile it through `/relay`, not ordinary edits.
+- Before relaying, update only canonical documents whose facts or tasks changed, validate them, and ensure the generated session name matches the bounded objective.
 
 ## Local inputs
 
@@ -28,7 +30,7 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-Preparation-only acquisition of the pinned Windows media, Visual Studio/compiler layout, WSL source, and controlled-build dependencies is authorized when artifacts are saved in the reusable local cache and hash-verified. Hyper-V VM creation/operation, elevation, controlled-package installation, WSL shutdown, `.wslconfig` changes, custom boot, and runtime execution remain deferred and unauthorized. Continue non-executable recovery planning; do not treat `control-plane/deferred-runtime-plan.json` as authorization.
+Repository-only preparation of the fixed comparison—stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`—is authorized. Keep the probe, inputs, timeouts, evidence schema, and recovery requirements identical across candidates. Compilation, fixture operation, elevation, package installation, WSL shutdown, `.wslconfig` changes, custom boot, and runtime execution remain deferred and unauthorized. `control-plane/deferred-runtime-plan.json` carries no approval.
 
 ## Candidate records
 
