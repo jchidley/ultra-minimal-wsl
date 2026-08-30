@@ -47,6 +47,17 @@
       "signer_thumbprint": "AB172913A2960A224809EE8A0C371CD47A079B72",
       "verified": true
     },
+    "visual_studio_code_signing_pca": {
+      "name": "Microsoft Windows Code Signing PCA 2024",
+      "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\visual-studio-certificates\\Microsoft Windows Code Signing PCA 2024.crt",
+      "source": "https://www.microsoft.com/pkiops/certs/Microsoft%20Windows%20Code%20Signing%20PCA%202024.crt",
+      "bytes": 1729,
+      "sha256": "fe229efc927f6d77b738896752a21803a59736baa17bf5be9a50c72e219cbcd2",
+      "thumbprint": "D30F05F637E605239C0070D1EA9860D434AC2A94",
+      "subject": "CN=Microsoft Windows Code Signing PCA 2024, O=Microsoft Corporation, C=US",
+      "issuer": "CN=Microsoft Root Certificate Authority 2010, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "verified": true
+    },
     "wsl_source": {
       "tag": "2.7.12",
       "commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
@@ -144,7 +155,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v3-stock-ns-build-blocked-visual-studio-exit-5003",
+    "status": "minimal-v3-stock-ns-build-blocked-attempt-003-r4-log-extraction-cancelled",
     "executable": false,
     "approval_carried_forward": false,
     "active_build": {
@@ -201,6 +212,23 @@
       "checkpoint": "clean-shell",
       "final_state_evidence_sha256": "f3113d52a6795a084d5874da22f7902fa328615272cc3f2a9bd0635457ed86d4",
       "next_action": "Under the standing disposable-fixture authorization, inspect the retained Visual Studio installer log, change only the exact offline installation invocation or prerequisite selected by that evidence, compile and extract hashes if installation succeeds, and return the fixture Off."
+    },
+    "build_attempt_003": {
+      "disposition": "infrastructure-build-failure-no-candidate-result",
+      "candidate_package_created": false,
+      "visual_studio_exit_5003_cause": "Missing Microsoft Windows Code Signing PCA 2024 in the offline fixture intermediate certificate store",
+      "visual_studio_installed": true,
+      "procedure_corrections_committed": [
+        "remove unsupported GNU --force-local from Windows tar.exe invocations",
+        "mark new patched files intent-to-add before generating the complete source diff"
+      ],
+      "latest_retry": "attempt-003-r4",
+      "latest_retry_exit_code": 1,
+      "latest_retry_log_retained_in_fixture": true,
+      "latest_retry_log_extracted": false,
+      "extraction_blocker": "The operator explicitly cancelled the UAC prompt for the bounded log-extraction operation.",
+      "fixture_shutdown_guard_completed": true,
+      "next_action": "After operator consent to elevation, extract the retained r4 build log and continue only with the narrow correction selected by it."
     },
     "powershell_build_prerequisite": {
       "name": "PowerShell 7 fixture runtime",
@@ -384,7 +412,7 @@
       "an output is missing, extra, outside the build root, or absent from the manifest",
       "the operation would affect the physical host or a shared WSL instance"
     ],
-    "execution_boundary": "All pinned payload inputs are staged and the required PowerShell runtime is installed; the revised procedure record must be restaged and hash-verified. Visual Studio installation stopped with exit 5003. Evidence inspection, the narrow installation correction selected by that evidence, and compilation through output hashing are standing-authorized inside the disposable fixture. Candidate package installation and runtime must wait for produced hashes and separate plan validation."
+    "execution_boundary": "All pinned payload inputs are staged; PowerShell and Visual Studio are installed; the revised procedure record must be restaged and hash-verified. Attempt-003-r4 failed during the build and its retained log has not been extracted because the UAC prompt was cancelled. Further bounded work is standing-authorized inside the disposable fixture, but do not bypass operator cancellation; resume only when UAC consent is given. Candidate package installation and runtime must wait for produced hashes and separate plan validation."
   },
   "candidate_trial_contract": {
     "status": "stock-calibration-complete-next-candidate-deferred",
