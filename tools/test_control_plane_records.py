@@ -339,13 +339,26 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertTrue(v4["runtime_attempt_003"]["ledger_finalized"])
         self.assertEqual(v4["remaining_before_runtime"], [])
         mount_build = load_plan()["controlled_package_build"]["following_build"]
-        self.assertFalse(mount_build["completed"])
+        self.assertTrue(mount_build["completed"])
         self.assertEqual(mount_build["candidate"], "minimal-v4-mount-ns")
         self.assertEqual(sha256(ROOT / mount_build["script"]), mount_build["script_sha256"])
         self.assertEqual(
             mount_build["complete_source_diff_sha256"],
             load_plan()["source_candidates"]["minimal-v4-mount-ns"]["complete_source_diff_sha256"],
         )
+        self.assertEqual(mount_build["build_attempt_003"]["package_sha256"], mount_build["package_sha256"])
+        self.assertEqual(mount_build["build_attempt_003"]["fixture_final_state"], "Off")
+        mount = contract["minimal_v4_mount_ns"]
+        self.assertFalse(mount["executable"])
+        self.assertEqual(mount["status"], "runner-validation-elevation-blocked")
+        self.assertEqual(mount["reserved_trial_id"], "CP-MINIMAL-V4-MOUNT-NS-001")
+        self.assertEqual(sha256(ROOT / mount["candidate_manifest_path"]), mount["candidate_manifest_sha256"])
+        self.assertEqual(sha256(ROOT / mount["runner_path"]), mount["runner_sha256"])
+        self.assertEqual(mount["package_sha256"], mount_build["package_sha256"])
+        self.assertEqual(mount["runner_local_validation"]["failure_paths_tested"], 13)
+        self.assertEqual(mount["runner_validation_attempt_001"]["elevation_state"], "launching")
+        self.assertEqual(mount["runner_validation_attempt_002"]["elevation_state"], "launching")
+        self.assertEqual(len(mount["remaining_before_runtime"]), 2)
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])
