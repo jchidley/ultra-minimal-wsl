@@ -30,7 +30,7 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-Stock WSL 2.7.12 calibration passed `B6-T` with independent recovery in `CP-STOCK-2.7.12-003`. The next bounded objective is the non-runtime `minimal-v3-stock-ns` Windows package build prepared in `control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1`. Keep the accepted probe, rootfs, timeouts, instrumentation, evidence schema, classification rules, and recovery requirements unchanged.
+Stock WSL 2.7.12 calibration passed `B6-T` with independent recovery in `CP-STOCK-2.7.12-003`. The next bounded objective remains the non-runtime `minimal-v3-stock-ns` Windows package build in `control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1`. Its first approved attempt stopped before staging or installation because the fixture lacks the script's required PowerShell 7 runtime and no pinned PowerShell 7 input is recorded. Pin that prerequisite before seeking fresh build approval. Keep the accepted probe, rootfs, timeouts, instrumentation, evidence schema, classification rules, and recovery requirements unchanged.
 
 Input placement, toolchain installation, compilation, fixture operation, elevation, and fixture shutdown remain unauthorized until freshly approved. Any build approval ends after output hashing and extraction: installing the produced package and running `CP-MINIMAL-V3-STOCK-NS-001` require complete produced hashes, separate plan validation, and later fresh approval. `control-plane/deferred-runtime-plan.json` carries no approval.
 

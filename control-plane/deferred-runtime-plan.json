@@ -122,7 +122,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v3-stock-ns-build-prepared-awaiting-fresh-approval",
+    "status": "minimal-v3-stock-ns-build-blocked-missing-pinned-powershell-7",
     "executable": false,
     "approval_carried_forward": false,
     "active_build": {
@@ -142,9 +142,39 @@
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-build-result.json",
       "runtime_boundary": "This approval packet ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe remain unauthorized until the produced hashes are recorded and separately plan-validated.",
-      "approval_boundary": "Input placement, Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require one fresh bundled approval."
+      "approval_boundary": "The consumed attempt-001 approval carried no retry authority. PowerShell 7 input acquisition or installation, input placement, Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require a newly validated plan and fresh bundled approval."
+    },
+    "build_attempt_001": {
+      "disposition": "infrastructure-failure-no-candidate-result",
+      "approval_consumed": true,
+      "candidate_package_created": false,
+      "host_inputs_verified": true,
+      "host_preflight_sha256": "a6e860cd09667bfc1d5497e28b624497384e445a602155d59020169c15d1d632",
+      "failure_log_sha256": "7898fad398bfcfddd0dbbf447e1f80a2d489a03afaa17690dc360e417d40293f",
+      "reason": "Guest preflight could not resolve pwsh.exe. Build-MinimalV3StockNs.ps1 requires PowerShell 7.0, but the disposable fixture has no PowerShell 7 runtime and this plan records no pinned offline PowerShell 7 input.",
+      "staging_started": false,
+      "visual_studio_installed": false,
+      "build_directories_created": false,
+      "fixture_final_state": "Off",
+      "checkpoint": "clean-shell",
+      "final_state_evidence_sha256": "f3113d52a6795a084d5874da22f7902fa328615272cc3f2a9bd0635457ed86d4",
+      "next_action": "Acquire and hash-verify one explicit offline PowerShell 7 fixture input, record its version, source, installation command, and identity checks, revalidate the complete build packet, and obtain fresh approval. Do not weaken the script version gate or substitute an unrecorded host runtime."
+    },
+    "missing_build_prerequisite": {
+      "name": "PowerShell 7 fixture runtime",
+      "required_by": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1 #Requires -Version 7.0",
+      "status": "not-pinned-not-authorized",
+      "required_records": [
+        "offline installer or archive path",
+        "source and exact version",
+        "bytes and SHA-256",
+        "signature or release identity",
+        "silent installation command and accepted exit codes",
+        "post-install pwsh.exe version and file identity checks"
+      ]
     },
     "approval_required_before": [
+      "PowerShell 7 fixture installation",
       "compilation",
       "package installation",
       "elevation",
@@ -322,7 +352,7 @@
       "an output is missing, extra, outside the build root, or absent from the manifest",
       "the operation would require elevation, installation, shutdown, custom boot, or runtime"
     ],
-    "execution_boundary": "The minimal-v3-stock-ns build script and toolchain command are repository-validated but non-executable. Fresh approval may authorize only toolchain installation and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
+    "execution_boundary": "The minimal-v3-stock-ns build remains non-executable because its required PowerShell 7 fixture runtime is not pinned. After that input and its exact installation checks are recorded and validated, fresh approval may authorize only prerequisite/toolchain installation and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
   },
   "candidate_trial_contract": {
     "status": "stock-calibration-complete-next-candidate-deferred",

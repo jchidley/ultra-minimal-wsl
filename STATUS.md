@@ -7,7 +7,7 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
 - No reduced control-plane package or new candidate kernel has been deployed by the current work.
 - The accepted stock calibration and independent recovery returned the disposable Windows VM to Off with no probe, trace, or shutdown failure. The retained `clean-shell` checkpoint was not restored or changed. Live state is not asserted here.
-- Any WSL shutdown, custom boot, package installation, fixture operation, or runtime trial still requires plan validation and fresh explicit approval.
+- Any WSL shutdown, custom boot, package installation, fixture operation, or runtime trial still requires plan validation and fresh explicit approval. The approved non-runtime build attempt is consumed; it returned the fixture Off before input staging or installation.
 
 ## Proven boundary
 
@@ -44,7 +44,7 @@ Approved baseline attempt `CP-STOCK-2.7.12-002` installed the pinned stock MSI a
 
 Approved `CP-STOCK-2.7.12-003` enabled both optional features, completed a controlled reboot, imported the pinned Toybox rootfs, and calibrated the fixed probe against stock WSL 2.7.12. The candidate and independent recovery intervals both passed management checks, printed `toybox-ok`, reached `B6-T`, captured complete trace/event/process evidence, verified 19-file manifests, and shut WSL down cleanly. The immutable evidence and terminal ledger row are preserved under `recovery-harness/trials/CP-STOCK-2.7.12-003/`.
 
-Stock calibration approval is consumed and does not carry forward. `minimal-v3-stock-ns` remains uncompiled and untested. Its fail-closed offline Windows package build is now repository-validated through source-diff and output-manifest hashing, but remains non-executable. A build approval can cover only input placement, toolchain installation, compilation, output hashing, evidence extraction, and fixture shutdown; installation and runtime require produced hashes and later fresh approval.
+Stock calibration approval is consumed and does not carry forward. `minimal-v3-stock-ns` remains uncompiled and untested. Its first approved non-runtime build attempt verified every recorded host input, then stopped during guest preflight because the fixture has no `pwsh.exe`; no input was staged, no toolchain was installed, and no build directory or package was created. The fixture returned Off with the retained `clean-shell` checkpoint unchanged. Because `Build-MinimalV3StockNs.ps1` requires PowerShell 7 and no pinned PowerShell 7 fixture input exists in the recorded plan, the build is blocked until that prerequisite is pinned, hash-verified, plan-validated, and freshly approved. Installation and runtime remain unauthorized.
 
 ## Inventory
 
