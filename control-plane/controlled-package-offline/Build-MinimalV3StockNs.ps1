@@ -122,17 +122,22 @@ if ($LASTEXITCODE -ne 0) { throw 'Failed to generate the complete source diff.' 
 [IO.File]::WriteAllText($diffPath, (($diffOutput -join "`n") + "`n"), [Text.UTF8Encoding]::new($false))
 Assert-Hash $diffPath $ExpectedCompleteDiffSha256
 
+$cmakeNugetRoot = $NugetRoot.Replace('\', '/')
+$cmakeProcedureRoot = $ProcedureRoot.Replace('\', '/')
+$cmakeSourceRoot = $SourceRoot.Replace('\', '/')
+$cmakeGslRoot = $GslRoot.Replace('\', '/')
+$cmakeJsonRoot = $JsonRoot.Replace('\', '/')
 $configure = @(
     '-S', $SourceRoot, '-B', $BuildRoot,
     '-G', 'Visual Studio 17 2022', '-A', 'x64',
     '-DCMAKE_SYSTEM_VERSION=10.0.26100.0', '-DCMAKE_BUILD_TYPE=Release',
     '-DPACKAGE_VERSION=2.7.12.0', '-DWSL_NUGET_PACKAGE_VERSION=2.7.12',
     '-DWSL_BUILD_WSL_SETTINGS=FALSE', '-DOFFICIAL_BUILD=FALSE', '-DSKIP_PACKAGE_SIGNING=TRUE',
-    "-DCONTROLLED_NUGET_CACHE=$NugetRoot",
-    "-DCMAKE_MODULE_PATH=$ProcedureRoot;$SourceRoot\cmake",
+    "-DCONTROLLED_NUGET_CACHE=$cmakeNugetRoot",
+    "-DCMAKE_MODULE_PATH=$cmakeProcedureRoot;$cmakeSourceRoot/cmake",
     '-DFETCHCONTENT_FULLY_DISCONNECTED=ON',
-    "-DFETCHCONTENT_SOURCE_DIR_GSL=$GslRoot",
-    "-DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=$JsonRoot"
+    "-DFETCHCONTENT_SOURCE_DIR_GSL=$cmakeGslRoot",
+    "-DFETCHCONTENT_SOURCE_DIR_NLOHMANNJSON=$cmakeJsonRoot"
 )
 Invoke-Native $Cmake $configure
 Invoke-Native $Cmake @('--build', $BuildRoot, '--config', 'Release', '--target', 'msipackage', '--', '/m:2')
