@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V4-STOCK-NS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1249,
+  "recoveryTraceRows": 4962,
+  "candidateGuestLogRecords": 92,
+  "recoveryGuestLogRecords": 146,
+  "candidateEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "NET: Registered PF_VSOCK protocol family",
+    "hv_vmbus: registering driver hv_storvsc",
+    "LxMiniInitMessageLaunchInit selected DeviceId 1 and ext4",
+    "EXT4-fs (sdb) mounted the Toybox filesystem read-write",
+    "LxMiniInitMessageCreateInstanceResult returned Result 0",
+    "CreateInstanceEnd returned success",
+    "The fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "candidateWarnings": [
+    "/etc/resolv.conf updating disabled in /etc/wsl.conf",
+    "/etc/hosts updating disabled in /etc/wsl.conf"
+  ],
+  "candidateFatalEvidence": "No GuestLog BUG, oops, panic, segfault, or fatal mini_init error was observed. The retained warnings reflect the fixed rootfs configuration and did not prevent B6-T.",
+  "recoveryEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "EXT4-fs mounts are recorded",
+    "The fixed Toybox process printed toybox-ok and exited zero"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-T",
+    "basis": "The corrected minimal-v4-stock-ns sender passed management checks, mounted the registered ext4 distro, completed instance creation and command relay, printed toybox-ok with exit code zero, and shut down cleanly. Independent stock recovery repeated B6-T."
+  }
+}

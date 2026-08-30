@@ -172,7 +172,7 @@
       "init_debug_sha256": "dbeb3b327aa8ba337c56de0742eb1f0d848ffebf22d7f50c7d94a22af9480cd8",
       "initrd_sha256": "be2707678605f74b8cadcc0275fd0d846a4ceaf5513555d73573f28a8dcff044",
       "reproducible": true,
-      "runtime_evidence": false
+      "runtime_evidence": true
     },
     "minimal-v4-mount-ns": {
       "parent": "minimal-v4-fail-closed",
@@ -187,7 +187,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v4-stock-ns-runtime-validated-elevation-blocked",
+    "status": "minimal-v4-stock-ns-runtime-complete-mount-ns-build-elevation-blocked",
     "executable": true,
     "approval_carried_forward": false,
     "active_build": {
@@ -279,6 +279,49 @@
         "next_action": "Execute only the separately hash-bound CP-MINIMAL-V4-STOCK-NS-001 runner after its fixture validation and plan validation pass."
       },
       "runtime_boundary": "Build, hash, extract, and return the fixture Off. Continue directly into hash-bound runner preparation after produced package identities are recorded; do not install an unhashed output."
+    },
+    "following_build": {
+      "candidate": "minimal-v4-mount-ns",
+      "parent": "minimal-v4-fail-closed",
+      "evidence_selected_by": "CP-MINIMAL-V4-STOCK-NS-001",
+      "script": "control-plane/controlled-package-offline/Build-MinimalV4MountNs.ps1",
+      "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV4MountNs.ps1",
+      "script_sha256": "69ed300901fac4159706c4b0f394a726ef3eff4c76c1b767e37d6f50fac090aa",
+      "layer_patches": [
+        "control-plane/patches/0006-minimal-v4-zero-initial-config.patch",
+        "control-plane/patches/0005-minimal-v3-mount-ns.patch"
+      ],
+      "complete_source_diff_sha256": "1978046984db35fd2a6de46aa53da6d3de17793bf163c262b222dc9e959da13a",
+      "build_command": "& 'C:\\Program Files\\PowerShell\\7\\pwsh.exe' -NoProfile -NonInteractive -ExecutionPolicy Bypass -File 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV4MountNs.ps1' -Execute",
+      "fresh_directories": [
+        "C:\\controlled-package\\source\\minimal-v4-mount-ns",
+        "C:\\controlled-package\\build\\minimal-v4-mount-ns",
+        "C:\\controlled-package\\deps"
+      ],
+      "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v4-mount-ns\\controlled-output-SHA256SUMS",
+      "expected_build_result": "C:\\controlled-package\\build\\minimal-v4-mount-ns\\controlled-build-result.json",
+      "completed": false,
+      "build_controller_sha256": "d4f2ffa20004722a6287f794bbae35de60fac20d00c2b92df2a2e04cd066ccd4",
+      "build_attempt_001": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "worker_log_created": false,
+        "operation_result_created": false,
+        "controlled_output_created": false,
+        "reason": "The elevation launcher did not progress past launching during the bounded controller wait; no matching worker process remained."
+      },
+      "build_attempt_002": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "worker_log_created": false,
+        "operation_result_created": false,
+        "controlled_output_created": false,
+        "reason": "One fresh-ID retry also remained at launching; no matching worker process, operation result, or controlled output exists."
+      },
+      "next_action": "Retry the unchanged hash-bound mount-namespace build controller under a fresh operation ID when the Windows elevation broker can start the worker; do not create a candidate result.",
+      "runtime_boundary": "Build, hash, extract, and return the fixture Off. Do not install until package identities are recorded and the exact runner is separately validated."
     },
     "build_attempt_001": {
       "disposition": "infrastructure-failure-no-candidate-result",
@@ -697,8 +740,8 @@
       "runtime_boundary": "CP-MINIMAL-V3-STOCK-NS-001 is finalized at B2 with independent stock recovery at B6-T. The byte-identical candidate must not run again."
     },
     "minimal_v4_stock_ns": {
-      "status": "runtime-plan-validated",
-      "executable": true,
+      "status": "runtime-finalized-pass-b6-t",
+      "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V4-STOCK-NS-001",
       "candidate_id": "minimal-v4-stock-ns",
@@ -751,11 +794,25 @@
         "worker_log_created": false,
         "candidate_install_performed": false,
         "candidate_probe_performed": false,
-        "reason": "The corrected hash-bound controller did not progress past the UAC launch state; one fresh-ID retry was canceled before worker start.",
-        "next_action": "Retry the stable runtime controller SHA-256 61b6fedd5bf36590eddd2d88bb0c2db7ae68476ca1218836761e1794815367df under a fresh operation ID when the elevation broker can start it; executable inputs remain independently hash-bound rather than relying on an incidental repository HEAD."
+        "reason": "The corrected hash-bound controller did not progress past the UAC launch state; one fresh-ID retry was canceled before worker start."
       },
-      "remaining_before_runtime": ["Windows elevation broker must start the already validated runtime controller"],
-      "runtime_boundary": "Execute exactly one serial candidate interval, always restore the pinned stock package, require the unchanged independent B6-T recovery probe, and append no terminal ledger row unless evidence and recovery verify."
+      "runtime_attempt_003": {
+        "disposition": "candidate-pass",
+        "candidate_result": "B6-T",
+        "candidate_manifest_files_verified": 20,
+        "recovery_result": "B6-T",
+        "recovery_manifest_files_verified": 20,
+        "candidate_archive_sha256": "c5a971bc1aa89ed1f5529174bd3e30e8701ea315e73905eeccbe1d95810a88ac",
+        "recovery_archive_sha256": "11d5cec4b5a1698b23d8d716c899f6fcdf1b41333b243a8be5d74163279a895d",
+        "operation_result_sha256": "8d2e02e3a5655197463d02a19d376b1f1f309d9718e8c3ba9d224933cc078c24",
+        "final_evidence_manifest_sha256": "ad7b1ae3d3bcb0766da27df721fd096ff2346c929b699d23efc5543af014db37",
+        "evidence_root": "recovery-harness/trials/CP-MINIMAL-V4-STOCK-NS-001",
+        "ledger_finalized": true,
+        "fixture_final_state": "Off",
+        "next_action": "Build and run the already reproducible minimal-v4-mount-ns sibling before selecting namespace requirements."
+      },
+      "remaining_before_runtime": [],
+      "runtime_boundary": "CP-MINIMAL-V4-STOCK-NS-001 is finalized at B6-T with independent stock recovery at B6-T. Do not rerun it for namespace selection; compare the mount-only sibling."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",

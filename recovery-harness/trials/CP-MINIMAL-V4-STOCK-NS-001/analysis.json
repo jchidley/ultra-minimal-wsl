@@ -1,0 +1,68 @@
+{
+  "trialId": "CP-MINIMAL-V4-STOCK-NS-001",
+  "purpose": "Test the hash-bound minimal-v4-stock-ns controlled package with the fixed Toybox probe and prove independent stock recovery.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-T",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The candidate completed all management checks, entered Linux /init, registered VMBus storage and VSOCK, mounted the registered ext4 distro, completed instance creation, relayed the fixed Toybox command and exit status, and shut down cleanly. This proves the corrected stock-namespace candidate viable but does not yet prove that its full namespace bundle is necessary."
+  },
+  "candidate": {
+    "id": "minimal-v4-stock-ns",
+    "parent": "minimal-v4-fail-closed",
+    "wslVersion": "2.7.12.0",
+    "sourceCommit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "completeSourceDiffSha256": "ee84b110ce27bbe9972315227fe3039da121e1d2e533e094e4c3a35bd6b6a6a5",
+    "packageSha256": "50f17bd74d3b5aafb4f48507ad926b2f003255db55d463117a23bc2890206cda",
+    "candidateManifestSha256": "a200746e4887f2106390f3e3e421bdcbcab247e7dd5b0ccec69627d277649949",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-30T18:07:53.5055982Z",
+    "finishedUtc": "2026-08-30T18:08:01.9088398Z",
+    "probeClassification": "B6-T",
+    "finalClassification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxResult": "PASS",
+    "toyboxExitCode": 0,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 1249,
+    "recoveryRows": 4962,
+    "directEvidence": "Registered distro ext4 mounted, CreateInstance returned success, toybox-ok exited zero, and VM termination was graceful."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V4-STOCK-NS-001-RECOVERY",
+    "startedUtc": "2026-08-30T18:08:25.0636111Z",
+    "finishedUtc": "2026-08-30T18:08:33.8448003Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "61b6fedd5bf36590eddd2d88bb0c2db7ae68476ca1218836761e1794815367df",
+    "operationResultSha256": "8d2e02e3a5655197463d02a19d376b1f1f309d9718e8c3ba9d224933cc078c24",
+    "candidateArchiveSha256": "c5a971bc1aa89ed1f5529174bd3e30e8701ea315e73905eeccbe1d95810a88ac",
+    "recoveryArchiveSha256": "11d5cec4b5a1698b23d8d716c899f6fcdf1b41333b243a8be5d74163279a895d"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChanged": false
+  },
+  "decision": "Finalize minimal-v4-stock-ns at B6-T. Build and run the already reproducible minimal-v4-mount-ns sibling with the identical probe and recovery contract before selecting the namespace requirement."
+}

@@ -171,7 +171,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             candidate = key_values(CONTROL / "candidates" / name / "candidate.txt")
             artifacts = sums(CONTROL / "candidates" / name / "SHA256SUMS")
             with self.subTest(candidate=name):
-                self.assertEqual(planned["runtime_evidence"], name == "minimal-v3-stock-ns")
+                self.assertEqual(planned["runtime_evidence"], name in {"minimal-v3-stock-ns", "minimal-v4-stock-ns"})
                 self.assertTrue(planned["reproducible"])
                 self.assertEqual(planned["complete_source_diff_sha256"], candidate["complete_source_diff_sha256"])
                 self.assertEqual(planned["init_sha256"], artifacts["init"])
@@ -326,16 +326,26 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(next_candidate["remaining_before_runtime"], [])
         self.assertIn("must not run again", next_candidate["runtime_boundary"])
         v4 = contract["minimal_v4_stock_ns"]
-        self.assertTrue(v4["executable"])
+        self.assertFalse(v4["executable"])
+        self.assertEqual(v4["status"], "runtime-finalized-pass-b6-t")
         self.assertEqual(v4["reserved_trial_id"], "CP-MINIMAL-V4-STOCK-NS-001")
         self.assertEqual(sha256(ROOT / v4["candidate_manifest_path"]), v4["candidate_manifest_sha256"])
         self.assertEqual(sha256(ROOT / v4["runner_path"]), v4["runner_sha256"])
         self.assertEqual(v4["runner_validation"]["failure_paths_tested"], 13)
         self.assertFalse(v4["runner_validation"]["candidate_install_performed"])
         self.assertEqual(v4["runner_validation"]["fixture_final_state"], "Off")
-        self.assertEqual(v4["remaining_before_runtime"], [
-            "Windows elevation broker must start the already validated runtime controller"
-        ])
+        self.assertEqual(v4["runtime_attempt_003"]["candidate_result"], "B6-T")
+        self.assertEqual(v4["runtime_attempt_003"]["recovery_result"], "B6-T")
+        self.assertTrue(v4["runtime_attempt_003"]["ledger_finalized"])
+        self.assertEqual(v4["remaining_before_runtime"], [])
+        mount_build = load_plan()["controlled_package_build"]["following_build"]
+        self.assertFalse(mount_build["completed"])
+        self.assertEqual(mount_build["candidate"], "minimal-v4-mount-ns")
+        self.assertEqual(sha256(ROOT / mount_build["script"]), mount_build["script_sha256"])
+        self.assertEqual(
+            mount_build["complete_source_diff_sha256"],
+            load_plan()["source_candidates"]["minimal-v4-mount-ns"]["complete_source_diff_sha256"],
+        )
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])
