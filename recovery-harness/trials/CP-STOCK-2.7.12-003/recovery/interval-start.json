@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-STOCK-2.7.12-003-RECOVERY",
+    "candidateId":  "stock-wsl-2.7.12-recovery",
+    "startedUtc":  "2026-08-30T01:06:31.7629976Z"
+}

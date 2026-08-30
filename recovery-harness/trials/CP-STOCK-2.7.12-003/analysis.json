@@ -1,0 +1,56 @@
+{
+  "trialId": "CP-STOCK-2.7.12-003",
+  "purpose": "Calibrate the fixed minimal-candidate probe against stock WSL 2.7.12 and the pinned Toybox rootfs.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-T",
+    "confidence": "high",
+    "basis": "Both the stock calibration interval and the independent stock recovery interval completed all fixed management processes, printed toybox-ok through wsl.exe, returned exit zero, captured WPR/event evidence, shut WSL down, and produced verified evidence manifests."
+  },
+  "candidate": {
+    "id": "stock-wsl-2.7.12-calibration",
+    "wslVersion": "2.7.12.0",
+    "sourceCommit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "packageSha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+    "candidateManifestSha256": "a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "fixtureBaseline": {
+    "wslOptionalFeature": "Enabled",
+    "virtualMachinePlatformFeature": "Enabled",
+    "nestedVirtualizationExposed": true,
+    "toyboxDistribution": "Toybox-Minimal",
+    "toyboxImportResult": "PASS",
+    "preCalibrationShutdown": "PASS",
+    "finalVmState": "Off"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-30T01:06:23.7273737Z",
+    "finishedUtc": "2026-08-30T01:06:31.0389448Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 19,
+    "evidencePath": "candidate"
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-STOCK-2.7.12-003-RECOVERY",
+    "startedUtc": "2026-08-30T01:06:31.7629976Z",
+    "finishedUtc": "2026-08-30T01:06:37.5114110Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 19,
+    "evidencePath": "recovery"
+  },
+  "infrastructureAttemptsExcluded": [
+    "CP-STOCK-2.7.12-001",
+    "CP-STOCK-2.7.12-002"
+  ],
+  "decision": "Accept stock WSL 2.7.12 calibration at B6-T. The fixed probe, Toybox rootfs, timeouts, instrumentation, classification rules, evidence layout, and recovery proof are now calibrated for minimal-v3-stock-ns; this result proves no custom control-plane or Kconfig requirement."
+}

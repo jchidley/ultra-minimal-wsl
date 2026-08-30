@@ -4,11 +4,11 @@
 
 ## Active action
 
-Obtain fresh explicit approval for the exact stock calibration and independent stock-recovery probe recorded in `control-plane/deferred-runtime-plan.json`. Until then, do not operate the fixture, elevate, run either `-Execute` command, or shut WSL down.
+Obtain one fresh bundled approval for the exact non-runtime `minimal-v3-stock-ns` build recorded in `control-plane/deferred-runtime-plan.json`: stage verified inputs, install the pinned Visual Studio layout in the fixture, run `control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1 -Execute`, extract the output manifest and build result, and return the fixture Off. This approval must not include installing the produced WSL package or running the reserved candidate trial.
 
 ## Comparison queue
 
-1. stock WSL 2.7.12 calibration with `toybox-minimal-wsl-rootfs.tar.gz`;
+1. stock WSL 2.7.12 calibration with `toybox-minimal-wsl-rootfs.tar.gz` — complete at `B6-T` in `CP-STOCK-2.7.12-003`;
 2. `minimal-v3-stock-ns`;
 3. `minimal-v3-mount-ns`;
 4. evidence-selected namespace decision;
@@ -18,7 +18,7 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- Runtime classification is blocked until the repository-validated fixed stock calibration is freshly approved and executed with complete recovery evidence.
+- `minimal-v3-stock-ns` runtime classification is blocked until its pinned controlled package is compiled reproducibly, installation/recovery is plan-validated, and the complete operation is freshly approved.
 - Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.

@@ -122,8 +122,28 @@
     }
   },
   "controlled_package_build": {
-    "status": "prepared-source-backed-non-executable",
+    "status": "minimal-v3-stock-ns-build-prepared-awaiting-fresh-approval",
     "executable": false,
+    "approval_carried_forward": false,
+    "active_build": {
+      "candidate": "minimal-v3-stock-ns",
+      "script": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1",
+      "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1",
+      "script_sha256": "417ba865977d0f4ac25fa914dfd9d209f6467f8eae4e89a580f2078f560a8b3b",
+      "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+      "visual_studio_install_root": "C:\\controlled-toolchain\\VS2022",
+      "visual_studio_install_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\vs-community-layout\\vs_setup.exe' --quiet --wait --norestart --noWeb --installPath 'C:\\controlled-toolchain\\VS2022' --in 'C:\\controlled-inputs\\ultra-minimal-wsl\\vs-community-layout\\Response.json'; if ($LASTEXITCODE -ne 0) { throw \"Visual Studio installation failed with exit $LASTEXITCODE.\" }",
+      "build_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1' -Execute",
+      "fresh_directories": [
+        "C:\\controlled-package\\source\\minimal-v3-stock-ns",
+        "C:\\controlled-package\\build\\minimal-v3-stock-ns",
+        "C:\\controlled-package\\deps"
+      ],
+      "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-output-SHA256SUMS",
+      "expected_build_result": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-build-result.json",
+      "runtime_boundary": "This approval packet ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe remain unauthorized until the produced hashes are recorded and separately plan-validated.",
+      "approval_boundary": "Input placement, Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require one fresh bundled approval."
+    },
     "approval_required_before": [
       "compilation",
       "package installation",
@@ -302,10 +322,10 @@
       "an output is missing, extra, outside the build root, or absent from the manifest",
       "the operation would require elevation, installation, shutdown, custom boot, or runtime"
     ],
-    "execution_boundary": "Preparation and plan validation only. Compilation and installation are unauthorized until this record is validated and fresh explicit approval is obtained."
+    "execution_boundary": "The minimal-v3-stock-ns build script and toolchain command are repository-validated but non-executable. Fresh approval may authorize only toolchain installation and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
   },
   "candidate_trial_contract": {
-    "status": "stock-calibration-plan-validated-awaiting-fresh-approval",
+    "status": "stock-calibration-complete-next-candidate-deferred",
     "executable": false,
     "approval_carried_forward": false,
     "comparison_order": [
@@ -316,7 +336,7 @@
     "fixed_probe": {
       "path": "tools/Invoke-WslCandidateProbe.ps1",
       "staged_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1",
-      "sha256": "7c2214a8f41e15f5d13d81e5fccf6863668626becfd744cf961ca8ea46d50adc",
+      "sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
       "distribution": "Toybox-Minimal",
       "process_timeout_seconds": 45,
       "shutdown_timeout_seconds": 30,
@@ -331,20 +351,101 @@
       "success_marker": "toybox-ok",
       "instrumentation": "same WSL WPR profile, System/Application event filter, new %TEMP%\\wsl-crashes files, and evidence manifest; debug-console capture is disabled for all three candidates"
     },
+    "stock_calibration_attempt_001": {
+      "disposition": "infrastructure-failure-no-candidate-result",
+      "approval_consumed": true,
+      "candidate_ledger_row": false,
+      "reason": "The disposable fixture did not have WSL installed. The first fixed process reported 'The Windows Subsystem for Linux is not installed'; no Toybox command was attempted and the nominal recovery probe encountered the same prerequisite failure.",
+      "candidate_archive_sha256": "84b5002f3bf15b323491a247536051bc020d4785e0a6016e5dc329bed0788288",
+      "recovery_archive_sha256": "bab73e453093753cb0581c88ab7e1f631cb7850f4d87a3802d6f79c6839dbcf0",
+      "candidate_manifest_files_verified": 17,
+      "recovery_manifest_files_verified": 17,
+      "active_wpr_after_extraction": false,
+      "fixture_final_state": "Off",
+      "next_action": "Install the pinned stock MSI and import the pinned Toybox rootfs before using a new trial ID. Do not append inventory rows for this infrastructure attempt."
+    },
+    "stock_calibration_attempt_002": {
+      "disposition": "infrastructure-failure-no-candidate-result",
+      "approval_consumed": true,
+      "candidate_ledger_row": false,
+      "stock_msi_installed": true,
+      "installed_wsl_version": "2.7.12.0",
+      "reason": "The pinned MSI installed and version verification passed, but Toybox import failed before either fixed probe because Microsoft-Windows-Subsystem-Linux and VirtualMachinePlatform were both Disabled.",
+      "nested_virtualization_exposed": true,
+      "hypervisor_present_in_guest": true,
+      "toybox_import_directory_created": false,
+      "candidate_evidence_created": false,
+      "recovery_evidence_created": false,
+      "fixture_final_state": "Off",
+      "next_action": "Enable both pinned Windows optional-feature prerequisites, reboot the fixture, import Toybox, and use a new trial ID. Do not append inventory rows for this infrastructure attempt."
+    },
+    "fixture_baseline_preparation": {
+      "executable": false,
+      "approval_carried_forward": false,
+      "status": "completed-by-attempt-003",
+      "stock_msi_state": "installed-by-attempt-002-version-2.7.12.0",
+      "enable_wsl_feature_command": "$p = Start-Process -FilePath 'dism.exe' -ArgumentList @('/online','/enable-feature','/featurename:Microsoft-Windows-Subsystem-Linux','/all','/norestart') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"WSL feature enable failed with exit $($p.ExitCode).\" }",
+      "enable_vmp_feature_command": "$p = Start-Process -FilePath 'dism.exe' -ArgumentList @('/online','/enable-feature','/featurename:VirtualMachinePlatform','/all','/norestart') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"VMP feature enable failed with exit $($p.ExitCode).\" }",
+      "reboot_requirement": "Restart the disposable fixture, re-establish PowerShell Direct, and require both optional features Enabled before import.",
+      "toybox_import_command": "if (Test-Path -LiteralPath 'C:\\WSL\\Toybox-Minimal') { throw 'Toybox import directory already exists.' }; & wsl.exe --import Toybox-Minimal 'C:\\WSL\\Toybox-Minimal' 'C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz' --version 2; if ($LASTEXITCODE -ne 0) { throw \"Toybox import failed with exit $LASTEXITCODE.\" }",
+      "postconditions": [
+        "both Windows optional features are Enabled after the controlled reboot",
+        "the installed WSL version remains exactly 2.7.12.0",
+        "Toybox-Minimal is the only newly imported distribution and uses the pinned rootfs",
+        "the guest .wslconfig remains absent",
+        "the package, rootfs, probe, manifest, and WPR profile retain their recorded hashes",
+        "WSL is shut down before calibration"
+      ],
+      "approval_boundary": "The consumed attempt-003 approval does not carry forward to custom-package compilation, installation, or probing.",
+      "completion": "Both optional features are Enabled, the controlled reboot completed, Toybox-Minimal imported from the pinned rootfs, and pre-calibration shutdown passed."
+    },
     "stock_calibration": {
-      "trial_id": "CP-STOCK-2.7.12-001",
+      "trial_id": "CP-STOCK-2.7.12-003",
       "candidate_id": "stock-wsl-2.7.12-calibration",
       "manifest_path": "control-plane/trial-manifests/stock-wsl-2.7.12-calibration.json",
       "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\stock-wsl-2.7.12-calibration.json",
       "manifest_sha256": "a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7",
       "package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi",
       "package_sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
-      "evidence_staging": "C:\\controlled-wsl-trials\\CP-STOCK-2.7.12-001",
-      "recovery_trial_id": "CP-STOCK-2.7.12-001-RECOVERY",
-      "recovery_evidence_staging": "C:\\controlled-wsl-trials\\CP-STOCK-2.7.12-001-RECOVERY",
-      "candidate_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1' -TrialId CP-STOCK-2.7.12-001 -CandidateId stock-wsl-2.7.12-calibration -CandidateManifestPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\stock-wsl-2.7.12-calibration.json' -ExpectedCandidateManifestSha256 a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7 -PackagePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi' -ExpectedPackageSha256 a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 -ExpectedProbeSha256 7c2214a8f41e15f5d13d81e5fccf6863668626becfd744cf961ca8ea46d50adc -Distribution Toybox-Minimal -ExpectedWslVersion 2.7.12.0 -RootfsPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz' -ExpectedRootfsSha256 a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4 -WprProfilePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp' -ExpectedWprProfileSha256 3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2 -EvidenceParent 'C:\\controlled-wsl-trials' -TimeoutSeconds 45 -Execute",
-      "recovery_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1' -TrialId CP-STOCK-2.7.12-001-RECOVERY -CandidateId stock-wsl-2.7.12-recovery -CandidateManifestPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\stock-wsl-2.7.12-calibration.json' -ExpectedCandidateManifestSha256 a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7 -PackagePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi' -ExpectedPackageSha256 a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 -ExpectedProbeSha256 7c2214a8f41e15f5d13d81e5fccf6863668626becfd744cf961ca8ea46d50adc -Distribution Toybox-Minimal -ExpectedWslVersion 2.7.12.0 -RootfsPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz' -ExpectedRootfsSha256 a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4 -WprProfilePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp' -ExpectedWprProfileSha256 3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2 -EvidenceParent 'C:\\controlled-wsl-trials' -TimeoutSeconds 45 -Execute",
-      "approval_boundary": "The candidate command, independent recovery command, fixture operation, elevation, and both WSL shutdowns require fresh explicit approval. No command in this object has been run."
+      "evidence_staging": "C:\\controlled-wsl-trials\\CP-STOCK-2.7.12-003",
+      "recovery_trial_id": "CP-STOCK-2.7.12-003-RECOVERY",
+      "recovery_evidence_staging": "C:\\controlled-wsl-trials\\CP-STOCK-2.7.12-003-RECOVERY",
+      "candidate_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1' -TrialId CP-STOCK-2.7.12-003 -CandidateId stock-wsl-2.7.12-calibration -CandidateManifestPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\stock-wsl-2.7.12-calibration.json' -ExpectedCandidateManifestSha256 a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7 -PackagePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi' -ExpectedPackageSha256 a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 -ExpectedProbeSha256 424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb -Distribution Toybox-Minimal -ExpectedWslVersion 2.7.12.0 -RootfsPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz' -ExpectedRootfsSha256 a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4 -WprProfilePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp' -ExpectedWprProfileSha256 3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2 -EvidenceParent 'C:\\controlled-wsl-trials' -TimeoutSeconds 45 -Execute",
+      "recovery_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1' -TrialId CP-STOCK-2.7.12-003-RECOVERY -CandidateId stock-wsl-2.7.12-recovery -CandidateManifestPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\stock-wsl-2.7.12-calibration.json' -ExpectedCandidateManifestSha256 a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7 -PackagePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi' -ExpectedPackageSha256 a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 -ExpectedProbeSha256 424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb -Distribution Toybox-Minimal -ExpectedWslVersion 2.7.12.0 -RootfsPath 'C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz' -ExpectedRootfsSha256 a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4 -WprProfilePath 'C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp' -ExpectedWprProfileSha256 3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2 -EvidenceParent 'C:\\controlled-wsl-trials' -TimeoutSeconds 45 -Execute",
+      "executed": true,
+      "result": "B6-T",
+      "recovery_result": "B6-T",
+      "candidate_archive_sha256": "22a10f7f3ca4e0b2c8a8581326674a6c5a349a216e30557c15ec7673219b1b55",
+      "recovery_archive_sha256": "72a5e0e3e02bff936fcd7a91f3ee5d7cebadd4854df4759cc0593144f6be320a",
+      "evidence_root": "recovery-harness/trials/CP-STOCK-2.7.12-003",
+      "ledger_finalized": true,
+      "fixture_final_state": "Off",
+      "approval_boundary": "Attempt-003 approval was consumed. No approval carries forward to minimal-v3-stock-ns compilation, installation, fixture operation, or probing."
+    },
+    "minimal_v3_stock_ns": {
+      "status": "blocked-awaiting-controlled-package-build",
+      "executable": false,
+      "approval_carried_forward": false,
+      "reserved_trial_id": "CP-MINIMAL-V3-STOCK-NS-001",
+      "candidate_id": "minimal-v3-stock-ns",
+      "parent": "minimal-v3-fail-closed",
+      "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+      "linux_init_sha256": "99828be3e706c29e26eaaf7ca6e423d897dd334ab88a4e4410a70a5d2d1726aa",
+      "linux_initrd_sha256": "a7e3f9f14ede0ecf626da9a74b71fc156b4550496908001a1cfbd1c54eda6989",
+      "probe_sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+      "rootfs_sha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+      "wpr_profile_sha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+      "process_timeout_seconds": 45,
+      "shutdown_timeout_seconds": 30,
+      "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
+      "missing_before_runtime_plan_validation": [
+        "controlled Windows package SHA-256",
+        "controlled output-manifest SHA-256",
+        "candidate trial-manifest SHA-256",
+        "exact installation and stock restoration commands bound to the produced package",
+        "fresh runtime approval"
+      ],
+      "runtime_boundary": "Compilation approval does not authorize package installation or this reserved trial. After a successful build, record all produced hashes, generate the candidate manifest, plan-validate installation and restoration against the accepted stock baseline, and stop for fresh approval."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",
@@ -392,7 +493,7 @@
   ],
   "stop_conditions": [
     "any required hash differs or an input is missing",
-    "the operation would modify the physical host package or write beneath C:\\Program Files\\WSL",
+    "the operation would modify the physical host package or directly write beneath C:\\Program Files\\WSL outside the approved MSI transaction inside the disposable fixture",
     "the fixture or trigger fails before the candidate interval",
     "evidence interval, process results, trace, manifest, or recovery proof is incomplete",
     "a timeout occurs without independent proof that launched processes stopped",

@@ -6,7 +6,7 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 
 - Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
 - No reduced control-plane package or new candidate kernel has been deployed by the current work.
-- The last reviewed disposable-fixture evidence reported the Windows VM Off, exact `clean-shell` restored, and zero host-attached disks. Live state is not asserted here.
+- The accepted stock calibration and independent recovery returned the disposable Windows VM to Off with no probe, trace, or shutdown failure. The retained `clean-shell` checkpoint was not restored or changed. Live state is not asserted here.
 - Any WSL shutdown, custom boot, package installation, fixture operation, or runtime trial still requires plan validation and fresh explicit approval.
 
 ## Proven boundary
@@ -38,8 +38,14 @@ The only active runtime path is candidate comparison:
 
 `tools/Invoke-WslCandidateProbe.ps1` is the retained guest-local measurement tool. It records exact candidate/rootfs hashes, bounded `wsl.exe` process results, WSL ETW/events/crashes, shutdown, and an evidence hash manifest. Fixture start, package placement, rollback, and evidence extraction are prerequisites around the experiment, not objects being minimized and not separate acceptance ledgers.
 
-The pinned source, build dependencies, stock package, candidate identities, and non-executable trial contract are recorded in `control-plane/deferred-runtime-plan.json`. The exact stock calibration and independent stock-recovery probe are repository-validated and stopped at the fresh-approval boundary. That record carries no approval and authorizes no execution.
+The pinned source, build dependencies, stock package, candidate identities, and non-executable trial contract are recorded in `control-plane/deferred-runtime-plan.json`. Approved attempt `CP-STOCK-2.7.12-001` proved only that the fixture lacked an installed WSL product: both fixed intervals reported that WSL was not installed, neither reached distro enumeration or Toybox, both evidence manifests verified, and no candidate ledger row was created. This is infrastructure failure, not stock-candidate failure.
+
+Approved baseline attempt `CP-STOCK-2.7.12-002` installed the pinned stock MSI and verified WSL 2.7.12.0, then stopped before either fixed probe because Toybox import found both required Windows optional features disabled. Nested virtualization is exposed, the guest sees a hypervisor, no Toybox import directory or candidate evidence was created, and the fixture returned Off. This is another infrastructure failure and has no candidate ledger row.
+
+Approved `CP-STOCK-2.7.12-003` enabled both optional features, completed a controlled reboot, imported the pinned Toybox rootfs, and calibrated the fixed probe against stock WSL 2.7.12. The candidate and independent recovery intervals both passed management checks, printed `toybox-ok`, reached `B6-T`, captured complete trace/event/process evidence, verified 19-file manifests, and shut WSL down cleanly. The immutable evidence and terminal ledger row are preserved under `recovery-harness/trials/CP-STOCK-2.7.12-003/`.
+
+Stock calibration approval is consumed and does not carry forward. `minimal-v3-stock-ns` remains uncompiled and untested. Its fail-closed offline Windows package build is now repository-validated through source-diff and output-manifest hashing, but remains non-executable. A build approval can cover only input placement, toolchain installation, compilation, output hashing, evidence extraction, and fixture shutdown; installation and runtime require produced hashes and later fresh approval.
 
 ## Inventory
 
-The durable inventory contains 9 config snapshots, 10 completed trials, and 174 reviewed annotations; synchronization integrity was last verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.
+The durable inventory contains 9 config snapshots, 11 completed trials, and 174 reviewed annotations; synchronization integrity was last verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.

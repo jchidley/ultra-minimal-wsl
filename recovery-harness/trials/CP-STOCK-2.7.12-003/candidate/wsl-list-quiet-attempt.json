@@ -1,0 +1,10 @@
+{
+    "schema":  1,
+    "name":  "wsl-list-quiet",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--list",
+                      "--quiet"
+                  ],
+    "attemptedUtc":  "2026-08-30T01:06:23.9976844Z"
+}

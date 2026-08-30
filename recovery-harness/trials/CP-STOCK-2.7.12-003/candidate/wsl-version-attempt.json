@@ -1,0 +1,9 @@
+{
+    "schema":  1,
+    "name":  "wsl-version",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--version"
+                  ],
+    "attemptedUtc":  "2026-08-30T01:06:23.7392509Z"
+}

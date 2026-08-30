@@ -59,7 +59,7 @@ All `minimal-v2` records remain preserved as historical parents.
 
 `patches/0004-minimal-v3-no-interop.patch` layers on `minimal-v2-fail-closed` and removes only mini-init's unconditional `binfmt_misc` mount and `WSLInterop` registration hard-fail. Focused record tests require both operations and their local definitions to be removed without changing distro-init policy or protocol dispatch. `minimal-v3-stock-ns` is tree-identical to the new fail-closed parent; `patches/0005-minimal-v3-mount-ns.patch` changes only the coherent namespace bundle to mount-only.
 
-All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. The Windows build and runtime phase remains deferred. The source-backed offline package procedure and candidate trial contract are recorded in `deferred-runtime-plan.json`, which remains non-executable and proves no B4/B5/B6 result.
+All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. Stock WSL calibration now passes `B6-T`; no custom candidate has runtime evidence. The non-executable `controlled-package-offline/Build-MinimalV3StockNs.ps1` and `deferred-runtime-plan.json` pin the next offline Windows package build through output hashing. Compilation approval cannot authorize installing or probing the produced package.
 
 ## Runtime comparison boundary
 

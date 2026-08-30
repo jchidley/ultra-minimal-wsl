@@ -168,7 +168,18 @@ class ControlPlaneRecordTests(unittest.TestCase):
 
         build = plan["controlled_package_build"]
         self.assertFalse(build["executable"])
+        self.assertFalse(build["approval_carried_forward"])
         self.assertEqual(build["source"]["commit"], plan["source"]["base_commit"])
+        active = build["active_build"]
+        build_script = ROOT / active["script"]
+        self.assertEqual(sha256(build_script), active["script_sha256"])
+        self.assertIn("Build-MinimalV3StockNs.ps1' -Execute", active["build_command"])
+        self.assertIn("runtime remain separately unauthorized", build["execution_boundary"])
+        build_source = build_script.read_text(encoding="utf-8")
+        self.assertIn("if (-not $Execute) { exit 0 }", build_source)
+        self.assertIn("FETCHCONTENT_FULLY_DISCONNECTED=ON", build_source)
+        self.assertNotIn("Start-VM", build_source)
+        self.assertNotIn("msiexec", build_source.lower())
         self.assertEqual(set(build["commands"]["candidate_commands"]), {
             "minimal-v3-stock-ns", "minimal-v3-mount-ns"
         })
@@ -198,6 +209,10 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("expectedProbeSha256", source)
         self.assertIn("candidateResult=$candidateResult", source)
         self.assertIn("'infrastructure-failure'", source)
+        self.assertIn("'WslNotInstalled'", source)
+        self.assertIn("Windows Subsystem for Linux is not installed", source)
+        self.assertIn("'WslPrerequisitesDisabled'", source)
+        self.assertIn("WSL2 is unable to start since virtualization is not enabled", source)
         for forbidden in ("Start-VM", "Stop-VM", "Restore-VMSnapshot", "Checkpoint-VM", "New-PSSession", "Invoke-Command", "msiexec"):
             self.assertNotIn(forbidden, source)
         evidence = " ".join(contract["evidence"]).lower()
@@ -208,9 +223,36 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("creates no candidate result", contract["infrastructure_boundary"])
         self.assertEqual(contract["ledger"]["trials"], "inventory/trials.csv")
         self.assertEqual(contract["ledger"]["metadata"], "inventory/trial-metadata.csv")
+        attempt = contract["stock_calibration_attempt_001"]
+        self.assertEqual(attempt["disposition"], "infrastructure-failure-no-candidate-result")
+        self.assertFalse(attempt["candidate_ledger_row"])
+        self.assertEqual(attempt["candidate_manifest_files_verified"], 17)
+        self.assertEqual(attempt["fixture_final_state"], "Off")
+        attempt2 = contract["stock_calibration_attempt_002"]
+        self.assertEqual(attempt2["disposition"], "infrastructure-failure-no-candidate-result")
+        self.assertTrue(attempt2["stock_msi_installed"])
+        self.assertFalse(attempt2["candidate_ledger_row"])
+        self.assertEqual(attempt2["fixture_final_state"], "Off")
+        baseline = contract["fixture_baseline_preparation"]
+        self.assertFalse(baseline["executable"])
+        self.assertFalse(baseline["approval_carried_forward"])
+        self.assertIn("Microsoft-Windows-Subsystem-Linux", baseline["enable_wsl_feature_command"])
+        self.assertIn("VirtualMachinePlatform", baseline["enable_vmp_feature_command"])
+        self.assertIn("--import Toybox-Minimal", baseline["toybox_import_command"])
         stock = contract["stock_calibration"]
+        self.assertEqual(stock["trial_id"], "CP-STOCK-2.7.12-003")
+        self.assertTrue(stock["executed"])
+        self.assertEqual(stock["result"], "B6-T")
+        self.assertEqual(stock["recovery_result"], "B6-T")
+        self.assertTrue(stock["ledger_finalized"])
+        self.assertEqual(stock["fixture_final_state"], "Off")
         stock_manifest = ROOT / stock["manifest_path"]
         self.assertEqual(sha256(stock_manifest), stock["manifest_sha256"])
+        next_candidate = contract["minimal_v3_stock_ns"]
+        self.assertFalse(next_candidate["executable"])
+        self.assertFalse(next_candidate["approval_carried_forward"])
+        self.assertEqual(next_candidate["reserved_trial_id"], "CP-MINIMAL-V3-STOCK-NS-001")
+        self.assertIn("controlled Windows package SHA-256", next_candidate["missing_before_runtime_plan_validation"])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])
