@@ -27,9 +27,13 @@ Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cann
 
 ## Controlled-package candidate trial
 
-The experiment begins when the fixed probe starts its first `wsl.exe` process, not when an outer fixture starts.
+The accepted stock baseline is `CP-STOCK-2.7.12-003`: stock WSL 2.7.12 and the pinned Toybox rootfs passed the fixed probe and an independent recovery interval at `B6-T`. Reusing that baseline requires its recorded identities and recovery contract; it does not carry execution approval forward.
 
-1. Establish the recorded stock baseline using any already-reviewed fixture procedure.
+Compilation is a separate prerequisite. Its approval ends after a closed output manifest, package hash, build evidence extraction, and fixture shutdown. Do not install an output until those produced hashes are recorded, the exact installation/restoration operation is plan-validated, and runtime is freshly approved.
+
+The candidate experiment begins when the fixed probe starts its first `wsl.exe` process, not when an outer fixture starts.
+
+1. Establish the recorded stock baseline using the already-reviewed fixture state.
 2. Install exactly one hash-verified candidate.
 3. Run `tools/Invoke-WslCandidateProbe.ps1` once with the fixed Toybox rootfs and candidate manifest.
 4. Extract the complete evidence directory.
@@ -37,7 +41,7 @@ The experiment begins when the fixed probe starts its first `wsl.exe` process, n
 6. Analyze the earliest supported B-gate.
 7. Append one immutable terminal trial row only after evidence and recovery are complete.
 
-Outer fixture start, command transport, and rollback are prerequisites. If any fails, record infrastructure failure outside the candidate ledger and do not alter the probe or classify the candidate. Do not develop infrastructure diagnostics as part of the minimisation loop.
+Outer fixture start, toolchain/package build, command transport, and rollback are prerequisites. If any fails, record infrastructure failure outside the candidate ledger and do not alter the probe or classify the candidate. Do not develop infrastructure diagnostics as part of the minimisation loop.
 
 ## Evidence required
 

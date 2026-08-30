@@ -28,13 +28,13 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 
 The project is no longer developing general Hyper-V, PowerShell Direct, checkpoint-race, baseline-installer, or VM-rebuild tooling. Those attempts are historical infrastructure work, not project milestones.
 
-The only active runtime path is candidate comparison:
+The only active experiment path is the fixed candidate comparison:
 
-1. calibrate the fixed probe against stock WSL 2.7.12 and the exact Toybox rootfs;
-2. test `minimal-v3-stock-ns` with the same probe;
-3. restore the same baseline and test `minimal-v3-mount-ns`;
-4. classify the earliest supported B-gate from captured evidence;
-5. use the comparison to select the next configuration change.
+1. stock WSL 2.7.12 calibration with the exact Toybox rootfs — accepted at `B6-T` in `CP-STOCK-2.7.12-003`;
+2. compile and hash the `minimal-v3-stock-ns` controlled package without installing it;
+3. separately plan-validate, approve, install, and test `minimal-v3-stock-ns` with the same probe;
+4. restore the accepted baseline and repeat the same build/runtime contract for `minimal-v3-mount-ns`;
+5. classify the earliest supported B-gate and use the comparison to select the next configuration change.
 
 `tools/Invoke-WslCandidateProbe.ps1` is the retained guest-local measurement tool. It records exact candidate/rootfs hashes, bounded `wsl.exe` process results, WSL ETW/events/crashes, shutdown, and an evidence hash manifest. Fixture start, package placement, rollback, and evidence extraction are prerequisites around the experiment, not objects being minimized and not separate acceptance ledgers.
 

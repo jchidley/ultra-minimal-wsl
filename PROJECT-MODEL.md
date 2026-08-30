@@ -145,11 +145,13 @@ Reproducible Linux builds can prove candidate source policy and artifact identit
 
 A pinned offline Windows compiler layout is therefore experimental infrastructure, not part of Minimal Viable WSL. It makes the controlled package reproducible and allows the patched host and guest pieces to be tested together in a disposable environment without silently changing toolchains or risking the physical host. Compiler acquisition by itself proves no `B` gate.
 
-The remaining proof has three distinct stages:
+The remaining custom-candidate proof has three distinct stages:
 
-1. **Enable the experiment:** acquire and verify the pinned compiler inputs, then define the exact offline build and recovery procedure.
-2. **Prove viability:** compile the controlled package and establish `B4`, `B5`, `B6-T`, relay, lifecycle, and recovery behavior.
+1. **Produce controlled artifacts:** install the verified offline compiler layout in the disposable fixture, compile one source-pinned package, and record its complete output manifest and package hash. Stock calibration has already shown that the fixed Toybox probe and recovery contract reach `B6-T`; it does not prove a reduced candidate.
+2. **Prove viability:** after separately validating and approving the hash-bound package operation, install the controlled package and establish `B4`, `B5`, `B6-T`, relay, lifecycle, and stock recovery behavior.
 3. **Prove minimality:** compare namespace siblings and ablate provisional kernel bundles, retaining a facility only when controlled removal fails and restoration succeeds.
+
+Compilation and runtime are separate approval boundaries because an exact installation trial cannot be validated until the compiled package hash exists.
 
 ## Path to Minimal Viable WSL
 
@@ -159,9 +161,9 @@ Preserve the layered patches, protocol fixture, policy tests, mutation evidence,
 
 ### 2. Produce and test controlled candidates
 
-Use the pinned compiler inputs and exact offline build procedure to produce the two controlled packages. Test them from the same known-good stock WSL baseline in an isolated Windows fixture, using the fixed Toybox probe and recovery contract.
+Use the pinned compiler inputs and exact offline build procedure to build `minimal-v3-stock-ns` first, ending at a closed output manifest and package hash. Only then prepare and approve its installation, fixed probe, and stock restoration. Preserve the resulting evidence before repeating the same build and runtime contract for `minimal-v3-mount-ns`.
 
-The fixture is not project architecture and its control mechanism is not a gate. Preparation and compilation establish no runtime result; only evidence captured from the fixed candidate interval can establish a `B` gate.
+The known-good comparison baseline is stock WSL 2.7.12 with the pinned Toybox rootfs; its accepted calibration and independent recovery both reach `B6-T`. The fixture is not project architecture and its control mechanism is not a gate. Preparation and compilation establish no runtime result; only evidence captured from a fixed candidate interval can establish a candidate `B` gate.
 
 ### 3. Establish `B4`
 

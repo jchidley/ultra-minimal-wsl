@@ -7,9 +7,9 @@ The inventory separates durable experiment records from reproducible query outpu
 - `annotations.csv` — reviewed symbol classifications and evidence.
 - `config-snapshots.csv` — candidate path, parent, hash, and trial mapping.
 - `trials.csv` — immutable append-only trial ledger.
-- `trial-metadata.csv` — supplements fields omitted by historical ledger rows.
+- `trial-metadata.csv` — supplements fields omitted by historical ledger rows and links each accepted controlled-package result to its analysis.
 
-Never rewrite completed trial rows. Update annotations only through `tools/inventory.py set` so CSV and SQLite remain synchronized.
+Never rewrite completed trial rows. Infrastructure-only attempts receive no ledger row. A controlled-package calibration or candidate row may have no Kconfig snapshot, but it must preserve its source/package identities and candidate/recovery evidence in `analysis.json`. Update annotations only through `tools/inventory.py set` so CSV and SQLite remain synchronized.
 
 ## Generated local outputs
 

@@ -18,7 +18,7 @@ The fixture retains handshake, instance creation, initialization, command creati
 ```bash
 uv run python -m unittest tools.test_control_plane_protocol tools.test_control_plane_records
 ~/git/agent-skills/skills/windows-env/ps-lint \
-  --offline --settings .PSScriptAnalyzerSettings.psd1 tools
+  --offline --settings .PSScriptAnalyzerSettings.psd1 tools control-plane/controlled-package-offline
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
@@ -63,7 +63,7 @@ All three replacement candidates built byte-identically twice with `OFFLINE=1` a
 
 ## Runtime comparison boundary
 
-`deferred-runtime-plan.json` is deliberately non-executable. It records pinned inputs, reproducible build mechanics, candidate identities, the fixed Toybox probe, evidence requirements, recovery assertions, and stop conditions without reserving a trial row or carrying approval forward.
+`deferred-runtime-plan.json` is deliberately non-executable. It records pinned inputs, reproducible build mechanics, candidate identities, the fixed Toybox probe, evidence requirements, recovery assertions, and stop conditions without carrying approval forward. The next candidate trial ID may be reserved for planning, but no ledger row exists until complete candidate and recovery evidence is finalized.
 
 The project does not own a general VM-control stack. A disposable Windows fixture may isolate package trials, but fixture start, transport, installation, extraction, and rollback are outer preconditions. Candidate measurement starts with the first `wsl.exe` process in `tools/Invoke-WslCandidateProbe.ps1`. A fixture failure creates no B-gate result and must not trigger more fixture automation work.
 

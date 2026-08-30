@@ -105,7 +105,7 @@ Every candidate uses `tools/Invoke-WslCandidateProbe.ps1` with identical inputs 
 
 Missing hashes, interval bounds, process results, trace evidence, manifest, or recovery prevents a positive classification. Reuse `inventory/trials.csv`, `inventory/trial-metadata.csv`, and `recovery-harness/trials/<TRIAL_ID>/`; append one immutable terminal row only after evidence and recovery complete. Infrastructure attempts get no separate experiment ledger.
 
-The comparison order is stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`, all with the exact registered Toybox rootfs. Only runtime comparison may select the namespace variant and resume kernel ablation.
+The comparison order is stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`, all with the exact registered Toybox rootfs. The accepted stock calibration and independent recovery in `CP-STOCK-2.7.12-003` both reached `B6-T`; this validates the measurement and recovery baseline but proves no reduced candidate requirement. Only runtime comparison may select the namespace variant and resume kernel ablation.
 
 ## Smoke-test contract
 
@@ -148,7 +148,7 @@ For a selected Kconfig review, query both relationship directions, inspect retai
 
 The command path under test spans the Windows service and Linux init components, so Linux-only artifacts cannot establish `B4`, `B5`, or `B6-T`. The pinned Windows compiler layout is experimental infrastructure used to produce a reproducible controlled package; it is not a target-system requirement and its acquisition proves no runtime gate.
 
-Preparation must keep Windows media, compiler/SDK inputs, pinned source, dependencies, stock package, candidate outputs, rootfs, and instrumentation in a reusable hash-verified cache with fail-closed offline reuse. Preparation does not authorize installation or execution.
+Preparation must keep Windows media, compiler/SDK inputs, pinned source, dependencies, stock package, candidate outputs, rootfs, and instrumentation in a reusable hash-verified cache with fail-closed offline reuse. Preparation does not authorize installation or execution. A controlled package build ends at a closed output manifest and package hash; because those hashes do not exist before compilation, build approval cannot also authorize candidate installation or runtime.
 
 `control-plane/deferred-runtime-plan.json` records these inputs, the reproducible build procedure, candidate identities, and the fixed trial contract. It is not an executable trial record and carries no approval forward. Preserve every candidate generation rather than rewriting it; any ABI or source change creates a new candidate and repeats the source-policy, mutation, and two-build reproducibility gates. Before runtime execution, require complete hashes, plan-validate the exact candidate operation and recovery path, and obtain fresh explicit approval.
 

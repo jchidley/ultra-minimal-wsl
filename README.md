@@ -45,7 +45,9 @@ Everything beyond this boundary is an optional integration profile. A separate, 
 
 ## Current position
 
-The generic Toybox baseline passes `G4`, and guarded WSL discovery has reached the `B3` storage boundary. Reduced control-plane candidates are source-ready but have not yet proved command dispatch at runtime. The active work is one fixed comparison: stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`, all using the same Toybox probe and evidence contract. See `STATUS.md` for verified current facts and `TASKS.md` for the active queue.
+The generic Toybox baseline passes `G4`, guarded custom-kernel discovery reached the `B3` storage boundary, and the fixed probe is now calibrated against stock WSL 2.7.12 at `B6-T` with an independent stock recovery pass. Reduced control-plane candidates remain source-ready but have no runtime evidence.
+
+The next bounded step is an offline Windows package build of `minimal-v3-stock-ns`. That build ends at package and output-manifest hashing; it cannot authorize installing or probing the result. After those hashes exist, the same Toybox probe and recovery contract will test `minimal-v3-stock-ns`, followed by `minimal-v3-mount-ns`. See `STATUS.md` for verified current facts and `TASKS.md` for the active queue.
 
 ## Documentation
 
@@ -57,7 +59,7 @@ The generic Toybox baseline passes `G4`, and guarded WSL discovery has reached t
 - `WSL-CONTROL-PLANE-AUDIT.md` — why stock `/init` is not the final minimum.
 - `MKROOT-MINIMAL-BOOT-METHOD.md` — rationale for the generic lower bound.
 - `inventory/README.md` — Kconfig graph and durable experiment records.
-- `control-plane/README.md` — reduced control-plane artifacts, tests, and deferred runtime gate.
+- `control-plane/README.md` — reduced control-plane artifacts, tests, offline package build, and runtime boundary.
 - `build-host/README.md` — pinned `LFS-Builder` role, profile, and provisioning.
 - `RUST-MINIMAL-WSL-FOLLOW-ON.md` — inactive charter for a `wsl.exe`-controllable Rust userspace after Minimal Viable WSL is frozen.
 - `session-history/README.md` — historical, grep-friendly project-session transcripts.
@@ -87,7 +89,7 @@ workflow's separate verified cache.
 ```bash
 uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
-~/git/agent-skills/skills/windows-env/ps-lint --offline --settings .PSScriptAnalyzerSettings.psd1 tools
+~/git/agent-skills/skills/windows-env/ps-lint --offline --settings .PSScriptAnalyzerSettings.psd1 tools control-plane/controlled-package-offline
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
