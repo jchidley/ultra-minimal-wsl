@@ -139,7 +139,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v3-stock-ns-build-prepared-awaiting-fresh-approval",
+    "status": "minimal-v3-stock-ns-build-blocked-visual-studio-exit-5003",
     "executable": false,
     "approval_carried_forward": false,
     "active_build": {
@@ -162,7 +162,7 @@
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-build-result.json",
       "runtime_boundary": "This approval packet ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe remain unauthorized until the produced hashes are recorded and separately plan-validated.",
-      "approval_boundary": "The consumed attempt-001 approval carried no retry authority. The PowerShell 7 input is now pinned and verified, but its installation, input placement, Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require fresh bundled approval."
+      "approval_boundary": "Attempt-002 approval is consumed. Inputs are staged and PowerShell is installed, but inspecting installer evidence, retrying or correcting Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require fresh bundled approval."
     },
     "build_attempt_001": {
       "disposition": "infrastructure-failure-no-candidate-result",
@@ -180,10 +180,27 @@
       "final_state_evidence_sha256": "f3113d52a6795a084d5874da22f7902fa328615272cc3f2a9bd0635457ed86d4",
       "next_action": "Acquire and hash-verify one explicit offline PowerShell 7 fixture input, record its version, source, installation command, and identity checks, revalidate the complete build packet, and obtain fresh approval. Do not weaken the script version gate or substitute an unrecorded host runtime."
     },
+    "build_attempt_002": {
+      "disposition": "infrastructure-failure-no-candidate-result",
+      "approval_consumed": true,
+      "candidate_package_created": false,
+      "all_inputs_staged_and_verified": true,
+      "staging_result_sha256": "b85f39696c68e96c246fe0e7c57f6e1bfaaeed6ecb6cc153093f77e1a2749eff",
+      "powershell_installed": true,
+      "powershell_version": "7.6.5",
+      "visual_studio_installer_exit_code": 5003,
+      "source_preparation_started": false,
+      "build_directories_created": false,
+      "failure_log_sha256": "dfd78cf7412e4ec3e930ba4bba1d09caf59d31c6d4672a62c1d709fc06b5605a",
+      "fixture_final_state": "Off",
+      "checkpoint": "clean-shell",
+      "final_state_evidence_sha256": "f3113d52a6795a084d5874da22f7902fa328615272cc3f2a9bd0635457ed86d4",
+      "next_action": "Under fresh approval, inspect the retained Visual Studio installer log, change only the exact offline installation invocation or prerequisite selected by that evidence, compile and extract hashes if installation succeeds, and return the fixture Off."
+    },
     "powershell_build_prerequisite": {
       "name": "PowerShell 7 fixture runtime",
       "required_by": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1 #Requires -Version 7.0",
-      "status": "pinned-and-verified-awaiting-installation-approval",
+      "status": "installed-and-identity-verified-in-fixture-attempt-002",
       "version": "7.6.5",
       "msi_sha256": "3a87c24e044ec792047d734c841917ee4323a535e25f645ae6c33141a35fca8d",
       "installation_authorized": false
@@ -367,7 +384,7 @@
       "an output is missing, extra, outside the build root, or absent from the manifest",
       "the operation would require elevation, installation, shutdown, custom boot, or runtime"
     ],
-    "execution_boundary": "The required PowerShell 7 fixture runtime and its exact installation checks are now pinned, but no fixture operation or installation is authorized. Fresh approval may authorize only prerequisite/toolchain installation and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
+    "execution_boundary": "All inputs are staged and the required PowerShell runtime is installed, but Visual Studio installation stopped with exit 5003 and no fixture operation is authorized. Fresh approval may authorize only evidence inspection, the narrow installation correction selected by that evidence, and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
   },
   "candidate_trial_contract": {
     "status": "stock-calibration-complete-next-candidate-deferred",

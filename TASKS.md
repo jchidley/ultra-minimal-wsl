@@ -4,7 +4,7 @@
 
 ## Active action
 
-Obtain fresh bundled approval for the revalidated non-runtime `minimal-v3-stock-ns` build packet: verified input staging, pinned PowerShell 7.6.5 and Visual Studio installation inside the fixture, `Build-MinimalV3StockNs.ps1 -Execute`, output-manifest and package hashing, evidence extraction, and returning the fixture Off. The consumed first attempt stopped before staging or installation; its missing PowerShell prerequisite is now pinned. Candidate-package installation and the reserved runtime trial remain excluded.
+Obtain fresh approval for one bounded continuation of the non-runtime `minimal-v3-stock-ns` build: inspect the retained Visual Studio installer log for attempt 002, correct only the pinned offline installation invocation or prerequisite selected by that evidence, run `Build-MinimalV3StockNs.ps1 -Execute`, extract and verify produced hashes, and return the fixture Off. All inputs are staged and PowerShell 7.6.5 is installed. Candidate-package installation and the reserved runtime trial remain excluded.
 
 ## Comparison queue
 
@@ -18,7 +18,7 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- `minimal-v3-stock-ns` package compilation is blocked on fresh build approval; its offline PowerShell and Visual Studio prerequisites are pinned.
+- `minimal-v3-stock-ns` package compilation is blocked on resolving pinned Visual Studio installer exit 5003 and fresh continuation approval.
 - `minimal-v3-stock-ns` runtime classification is blocked until its pinned controlled package is compiled reproducibly, installation/recovery is plan-validated, and the complete operation is freshly approved.
 - Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
