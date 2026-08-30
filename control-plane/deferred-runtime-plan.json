@@ -151,7 +151,7 @@
       "candidate": "minimal-v3-stock-ns",
       "script": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1",
       "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1",
-      "script_sha256": "0e2023b2da2396e2b2c64fedb225a64add3b83bee89711cee9f15beded5d3d75",
+      "script_sha256": "59e576efce816c87393db5e4d6dd52d1f2ef455b31c76cec1053a5129adb4e63",
       "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
       "powershell_install_root": "C:\\Program Files\\PowerShell\\7",
       "powershell_install_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\powershell\\PowerShell-7.6.5-win-x64.msi','/qn','/norestart','ADD_PATH=1','USE_MU=0','ENABLE_MU=0') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"PowerShell installation failed with exit $($p.ExitCode).\" }",
@@ -335,7 +335,7 @@
     "commands": {
       "preflight": "Verify staged inputs against manifests, refuse existing directories, verify Community identity, and verify CMake, MSBuild, SDK 10.0.26100.0, and the Visual Studio 17 2022 generator.",
       "source_prepare": [
-        "tar.exe --force-local -xzf C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz -C <fresh source parent>",
+        "tar.exe -xzf C:\\controlled-inputs\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz -C <fresh source parent>",
         "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0001-minimal-control-plane-v1.patch",
         "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0002-minimal-v2-fail-closed.patch",
         "git apply --unsafe-paths --directory=<candidate source> control-plane/patches/0004-minimal-v3-no-interop.patch",

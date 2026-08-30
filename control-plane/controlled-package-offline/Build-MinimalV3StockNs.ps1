@@ -108,9 +108,9 @@ foreach ($patch in $Patches.GetEnumerator()) { Assert-Hash (Join-Path $PatchRoot
 [IO.Directory]::CreateDirectory($BuildRoot) | Out-Null
 [IO.Directory]::CreateDirectory($GslRoot) | Out-Null
 [IO.Directory]::CreateDirectory($JsonRoot) | Out-Null
-Invoke-Native $Tar @('--force-local', '-xzf', $SourceArchive, '-C', $SourceRoot, '--strip-components=1')
-Invoke-Native $Tar @('--force-local', '-xzf', $gslArchive, '-C', $GslRoot, '--strip-components=1')
-Invoke-Native $Tar @('--force-local', '-xJf', $jsonArchive, '-C', $JsonRoot, '--strip-components=1')
+Invoke-Native $Tar @('-xzf', $SourceArchive, '-C', $SourceRoot, '--strip-components=1')
+Invoke-Native $Tar @('-xzf', $gslArchive, '-C', $GslRoot, '--strip-components=1')
+Invoke-Native $Tar @('-xJf', $jsonArchive, '-C', $JsonRoot, '--strip-components=1')
 Invoke-Native $Git @('-C', $SourceRoot, 'init', '--quiet')
 Invoke-Native $Git @('-C', $SourceRoot, 'config', 'core.autocrlf', 'false')
 Invoke-Native $Git @('-C', $SourceRoot, 'add', '-A')
