@@ -4,7 +4,7 @@
 
 ## Active action
 
-Obtain fresh approval for one bounded continuation of the non-runtime `minimal-v3-stock-ns` build: inspect the retained Visual Studio installer log for attempt 002, correct only the pinned offline installation invocation or prerequisite selected by that evidence, run `Build-MinimalV3StockNs.ps1 -Execute`, extract and verify produced hashes, and return the fixture Off. All inputs are staged and PowerShell 7.6.5 is installed. Candidate-package installation and the reserved runtime trial remain excluded.
+Continue the non-runtime `minimal-v3-stock-ns` build under the standing disposable-fixture authorization: inspect the retained Visual Studio installer log for attempt 002, correct only the pinned offline installation invocation or prerequisite selected by that evidence, run `Build-MinimalV3StockNs.ps1 -Execute`, extract and verify produced hashes, and return the fixture Off. All pinned build payload inputs are staged and PowerShell 7.6.5 is installed; restage and verify the revised procedure record before execution. Candidate-package installation and the reserved runtime trial remain excluded until the produced hashes are recorded and their exact operation is separately plan-validated.
 
 ## Comparison queue
 
@@ -18,8 +18,8 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- `minimal-v3-stock-ns` package compilation is blocked on resolving pinned Visual Studio installer exit 5003 and fresh continuation approval.
-- `minimal-v3-stock-ns` runtime classification is blocked until its pinned controlled package is compiled reproducibly, installation/recovery is plan-validated, and the complete operation is freshly approved.
+- `minimal-v3-stock-ns` package compilation is blocked only on resolving pinned Visual Studio installer exit 5003.
+- `minimal-v3-stock-ns` runtime classification is blocked until its pinned controlled package is compiled reproducibly and installation/recovery is plan-validated against the produced hashes.
 - Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
@@ -30,4 +30,4 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 - A fixture start/transport/recovery failure is infrastructure failure and creates no candidate result.
 - Preserve completed candidate and trial evidence; never rewrite terminal ledger rows.
 - Keep Linux builds on `LFS-Builder` ext4 and use only pinned, hash-verified offline inputs.
-- Do not operate WSL, install a package, change `.wslconfig`, shut WSL down, or operate the fixture without the required fresh explicit approval.
+- Disposable-fixture operations are standing-authorized only inside the pinned, offline, hash-verified, plan-validated recovery envelope. Require fresh explicit approval for any physical-host or shared-WSL effect; fail closed if target isolation, hashes, offline status, or recovery cannot be proved.

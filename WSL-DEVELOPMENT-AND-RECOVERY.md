@@ -8,8 +8,8 @@ Microsoft's packaged kernel remains at `C:\Program Files\WSL\tools\kernel`. The 
 
 ## Before any trial
 
-1. Obtain explicit approval for interruption of every WSL 2 distro.
-2. Require `tools/Test-WslSafeState.ps1` to report `safe:true`.
+1. Confirm the target boundary. Obtain explicit approval before interrupting the physical host or any shared WSL instance; no additional approval is required for operations wholly confined to the dedicated disposable fixture's pinned, offline, hash-verified, recoverable envelope.
+2. Require `tools/Test-WslSafeState.ps1` to report `safe:true` for a shared WSL target, or independently verify the disposable fixture identity and recoverable baseline.
 3. Record WSL version and packaged kernel/initrd hashes.
 4. Preserve `.wslconfig` byte-for-byte.
 5. Verify candidate config, image/package, rootfs, metadata, and hashes.
@@ -17,19 +17,19 @@ Microsoft's packaged kernel remains at `C:\Program Files\WSL\tools\kernel`. The 
 7. Pass the repository PowerShell, ShellCheck, record, and plan validations.
 8. Reserve a unique evidence directory, but append no terminal ledger row yet.
 
-A prepared candidate or valid plan implies no execution approval.
+A prepared candidate or valid plan implies no authorization outside the disposable-fixture envelope.
 
 ## Kernel-only trial
 
 `tools/Invoke-WslKernelTrial.ps1` journals before changing `.wslconfig`, enforces serial execution and timeouts, restores the exact original file in `finally`, verifies packaged hashes, and boots a recovery distro before finalizing the ledger.
 
-Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cannot classify a pre-dispatch failure. Its elevated WPR path requires separate approval. Interpret only evidence inside the recorded interval.
+Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cannot classify a pre-dispatch failure. Its elevated WPR path requires separate approval on the physical host or a shared WSL target, but is standing-authorized inside the disposable fixture envelope. Interpret only evidence inside the recorded interval.
 
 ## Controlled-package candidate trial
 
-The accepted stock baseline is `CP-STOCK-2.7.12-003`: stock WSL 2.7.12 and the pinned Toybox rootfs passed the fixed probe and an independent recovery interval at `B6-T`. Reusing that baseline requires its recorded identities and recovery contract; it does not carry execution approval forward.
+The accepted stock baseline is `CP-STOCK-2.7.12-003`: stock WSL 2.7.12 and the pinned Toybox rootfs passed the fixed probe and an independent recovery interval at `B6-T`. Reusing that baseline requires its recorded identities and recovery contract.
 
-Compilation is a separate prerequisite. Its approval ends after a closed output manifest, package hash, build evidence extraction, and fixture shutdown. Do not install an output until those produced hashes are recorded, the exact installation/restoration operation is plan-validated, and runtime is freshly approved.
+Compilation is a separate prerequisite and ends after a closed output manifest, package hash, build evidence extraction, and fixture shutdown. Do not install an output until those produced hashes are recorded and the exact installation/restoration operation is plan-validated. Compilation and runtime are standing-authorized only when wholly confined to the disposable fixture envelope.
 
 The candidate experiment begins when the fixed probe starts its first `wsl.exe` process, not when an outer fixture starts.
 

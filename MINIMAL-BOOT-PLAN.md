@@ -130,7 +130,7 @@ Alpine additionally runs `/bin/busybox true`; Arch and Debian run `/bin/true`. D
 6. **Reduce control plane:** remove stock-only host and guest policy, including the Microsoft system distro/overlay and GNS path.
 7. **Fail-closed static gate:** permit only handshake, one registered LUN/ext4 launch, minimal initialization, direct process relay, exit status, and termination; reject every other mini-init and distro-init operation in both implementation and tests.
 8. **Namespace variants:** derive coherent IPC/mount/PID/UTS and mount-only launch variants from one fail-closed parent; preserve both and do not select namespace Kconfig from source preference alone.
-9. **Command dispatch:** in a separately approved controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
+9. **Command dispatch:** in the isolated controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
 10. **Prove minimality:** ablate every provisional WSL bundle and freeze `minimal-viable-wsl-v1`.
 11. **Compatibility:** test Alpine, Arch, and Debian in order; attribute and ablate each addition; freeze `ultra-minimal-wsl-v1`.
 
@@ -138,7 +138,7 @@ If a failure does not select a narrow subsystem, delta-debug coherent feature gr
 
 ## Source-only readiness strategy
 
-Reduced host/guest candidates must be source-ready before attempting `B4`, `B5`, and `B6-T` in a separately approved controlled-package environment. Static Kconfig review supports a concrete retained-path question; it is not a substitute for runtime proof or an unbounded serial prerequisite.
+Reduced host/guest candidates must be source-ready before attempting `B4`, `B5`, and `B6-T` in the isolated controlled-package environment. Static Kconfig review supports a concrete retained-path question; it is not a substitute for runtime proof or an unbounded serial prerequisite.
 
 Before runtime, eliminate reachable hard-fail paths for excluded policy rather than adding their kernel facilities. Any source change creates a new layered candidate: preserve its parents, keep policy/protocol/mutation gates passing, and require two distinct offline builds of every affected candidate with durable source, profile, artifact, and reproducibility hashes.
 
@@ -148,9 +148,9 @@ For a selected Kconfig review, query both relationship directions, inspect retai
 
 The command path under test spans the Windows service and Linux init components, so Linux-only artifacts cannot establish `B4`, `B5`, or `B6-T`. The pinned Windows compiler layout is experimental infrastructure used to produce a reproducible controlled package; it is not a target-system requirement and its acquisition proves no runtime gate.
 
-Preparation must keep Windows media, compiler/SDK inputs, the PowerShell runtime required by the build procedure, pinned source, dependencies, stock package, candidate outputs, rootfs, and instrumentation in a reusable hash-verified cache with fail-closed offline reuse. Every fixture-side executable prerequisite must be pinned and checked before approval; host availability is not fixture availability. Preparation does not authorize installation or execution. A controlled package build ends at a closed output manifest and package hash; because those hashes do not exist before compilation, build approval cannot also authorize candidate installation or runtime.
+Preparation must keep Windows media, compiler/SDK inputs, the PowerShell runtime required by the build procedure, pinned source, dependencies, stock package, candidate outputs, rootfs, and instrumentation in a reusable hash-verified cache with fail-closed offline reuse. Every fixture-side executable prerequisite must be pinned and checked before execution; host availability is not fixture availability. Preparation does not establish readiness for installation or execution. A controlled package build ends at a closed output manifest and package hash; because those hashes do not exist before compilation, candidate installation and runtime must be separately plan-validated against the produced identities.
 
-`control-plane/deferred-runtime-plan.json` records these inputs, the reproducible build procedure, candidate identities, and the fixed trial contract. It is not an executable trial record and carries no approval forward. Preserve every candidate generation rather than rewriting it; any ABI or source change creates a new candidate and repeats the source-policy, mutation, and two-build reproducibility gates. Before runtime execution, require complete hashes, plan-validate the exact candidate operation and recovery path, and obtain fresh explicit approval.
+`control-plane/deferred-runtime-plan.json` records these inputs, the reproducible build procedure, candidate identities, and the fixed trial contract. It is not an executable trial record. Preserve every candidate generation rather than rewriting it; any ABI or source change creates a new candidate and repeats the source-policy, mutation, and two-build reproducibility gates. Before runtime execution, require complete hashes and plan-validate the exact candidate operation and recovery path. Operations wholly confined to the dedicated disposable fixture are standing-authorized within that pinned, offline, hash-verified, recoverable envelope. Physical-host or shared-WSL effects still require fresh explicit approval.
 
 Keep the proof order explicit: compiler acquisition enables reproducible compilation; compilation enables guarded runtime comparison; runtime establishes viability; namespace comparison and kernel ablation establish minimality. Do not treat completion of an earlier stage as evidence for a later one.
 
@@ -161,7 +161,7 @@ Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-D
 - synchronize durable records and require SQLite integrity `ok`;
 - require pinned PSScriptAnalyzer/PowerShell 5.1 compatibility checks for repository PowerShell and ShellCheck warning-or-higher checks for tracked shell scripts;
 - plan-validate before execution;
-- obtain fresh explicit approval for any shutdown or boot;
+- obtain fresh explicit approval for any shutdown, boot, installation, elevation, or configuration change affecting the physical host or a shared WSL instance; disposable-fixture equivalents are standing-authorized only within the recorded isolated recovery envelope;
 - use one serial trial because all WSL 2 distros share the kernel;
 - restore the exact original `.wslconfig` in all outcomes;
 - verify packaged hashes and boot a stock recovery distro;

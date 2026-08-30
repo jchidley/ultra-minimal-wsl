@@ -5,6 +5,11 @@
   "executable": false,
   "approval_carried_forward": false,
   "objective": "Compare WSL Linux candidates with one fixed Toybox probe and retain only evidence-proven configuration requirements.",
+  "authorization_policy": {
+    "disposable_fixture": "Standing-authorized for fixture operation, fixture-local elevation and installation, WSL shutdown, custom package/kernel/control-plane boot, candidate probing, diagnostics, stock restoration, and bounded retries when wholly confined to the dedicated disposable fixture and this pinned offline hash-verified recovery envelope.",
+    "approval_required": "Any operation that can affect the physical host, a shared WSL instance, or another resource outside the disposable fixture envelope.",
+    "fail_closed": "Stop on uncertain target isolation, hash mismatch, network access, an unrecorded executable, incomplete evidence, or failed recovery; do not broaden access or substitute inputs."
+  },
   "source": {
     "wsl_tag": "2.7.12",
     "base_commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
@@ -146,7 +151,7 @@
       "candidate": "minimal-v3-stock-ns",
       "script": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1",
       "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1",
-      "script_sha256": "417ba865977d0f4ac25fa914dfd9d209f6467f8eae4e89a580f2078f560a8b3b",
+      "script_sha256": "0e2023b2da2396e2b2c64fedb225a64add3b83bee89711cee9f15beded5d3d75",
       "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
       "powershell_install_root": "C:\\Program Files\\PowerShell\\7",
       "powershell_install_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\powershell\\PowerShell-7.6.5-win-x64.msi','/qn','/norestart','ADD_PATH=1','USE_MU=0','ENABLE_MU=0') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"PowerShell installation failed with exit $($p.ExitCode).\" }",
@@ -161,8 +166,8 @@
       ],
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-build-result.json",
-      "runtime_boundary": "This approval packet ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe remain unauthorized until the produced hashes are recorded and separately plan-validated.",
-      "approval_boundary": "Attempt-002 approval is consumed. Inputs are staged and PowerShell is installed, but inspecting installer evidence, retrying or correcting Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require fresh bundled approval."
+      "runtime_boundary": "This build stage ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe must wait until the produced hashes are recorded and separately plan-validated.",
+      "authorization_boundary": "Restaging and hash-verifying the revised procedure record, inspecting installer evidence, narrowly correcting the pinned Visual Studio installation, fixture-local elevation, fixture operation, compilation, evidence extraction, and fixture shutdown are standing-authorized inside the disposable fixture envelope. Physical-host and shared-WSL effects remain unauthorized."
     },
     "build_attempt_001": {
       "disposition": "infrastructure-failure-no-candidate-result",
@@ -195,7 +200,7 @@
       "fixture_final_state": "Off",
       "checkpoint": "clean-shell",
       "final_state_evidence_sha256": "f3113d52a6795a084d5874da22f7902fa328615272cc3f2a9bd0635457ed86d4",
-      "next_action": "Under fresh approval, inspect the retained Visual Studio installer log, change only the exact offline installation invocation or prerequisite selected by that evidence, compile and extract hashes if installation succeeds, and return the fixture Off."
+      "next_action": "Under the standing disposable-fixture authorization, inspect the retained Visual Studio installer log, change only the exact offline installation invocation or prerequisite selected by that evidence, compile and extract hashes if installation succeeds, and return the fixture Off."
     },
     "powershell_build_prerequisite": {
       "name": "PowerShell 7 fixture runtime",
@@ -203,17 +208,12 @@
       "status": "installed-and-identity-verified-in-fixture-attempt-002",
       "version": "7.6.5",
       "msi_sha256": "3a87c24e044ec792047d734c841917ee4323a535e25f645ae6c33141a35fca8d",
-      "installation_authorized": false
+      "standing_authorized_in_disposable_fixture": true
     },
-    "approval_required_before": [
-      "PowerShell 7 fixture installation",
-      "compilation",
-      "package installation",
-      "elevation",
-      "VM operation",
-      "WSL shutdown",
-      "custom boot",
-      "runtime trial"
+    "explicit_approval_required_before": [
+      "any physical-host modification, elevation, installation, shutdown, or boot",
+      "any operation affecting a shared WSL instance",
+      "any operation outside the pinned offline disposable-fixture recovery envelope"
     ],
     "source": {
       "archive_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\wsl-source\\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz",
@@ -382,9 +382,9 @@
       "a package is missing or restored from a global cache",
       "any configure/restore/compile/package command fails",
       "an output is missing, extra, outside the build root, or absent from the manifest",
-      "the operation would require elevation, installation, shutdown, custom boot, or runtime"
+      "the operation would affect the physical host or a shared WSL instance"
     ],
-    "execution_boundary": "All inputs are staged and the required PowerShell runtime is installed, but Visual Studio installation stopped with exit 5003 and no fixture operation is authorized. Fresh approval may authorize only evidence inspection, the narrow installation correction selected by that evidence, and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
+    "execution_boundary": "All pinned payload inputs are staged and the required PowerShell runtime is installed; the revised procedure record must be restaged and hash-verified. Visual Studio installation stopped with exit 5003. Evidence inspection, the narrow installation correction selected by that evidence, and compilation through output hashing are standing-authorized inside the disposable fixture. Candidate package installation and runtime must wait for produced hashes and separate plan validation."
   },
   "candidate_trial_contract": {
     "status": "stock-calibration-complete-next-candidate-deferred",
@@ -504,10 +504,9 @@
         "controlled Windows package SHA-256",
         "controlled output-manifest SHA-256",
         "candidate trial-manifest SHA-256",
-        "exact installation and stock restoration commands bound to the produced package",
-        "fresh runtime approval"
+        "exact installation and stock restoration commands bound to the produced package"
       ],
-      "runtime_boundary": "Compilation approval does not authorize package installation or this reserved trial. After a successful build, record all produced hashes, generate the candidate manifest, plan-validate installation and restoration against the accepted stock baseline, and stop for fresh approval."
+      "runtime_boundary": "After a successful build, record all produced hashes, generate the candidate manifest, and plan-validate installation and restoration against the accepted stock baseline. The validated trial is then standing-authorized inside the disposable fixture envelope."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",
@@ -543,7 +542,7 @@
     "all inputs and produced candidates match recorded hashes",
     "inventory synchronization integrity is ok",
     "the exact operation is plan-validated",
-    "fresh explicit approval is present for every shutdown, installation, fixture operation, and boot",
+    "the target is independently verified as the dedicated disposable fixture, or fresh explicit approval covers every physical-host/shared-WSL effect",
     "a known-good stock recovery path is independently available"
   ],
   "acceptance": [
@@ -555,7 +554,7 @@
   ],
   "stop_conditions": [
     "any required hash differs or an input is missing",
-    "the operation would modify the physical host package or directly write beneath C:\\Program Files\\WSL outside the approved MSI transaction inside the disposable fixture",
+    "the operation would modify the physical host or affect a shared WSL instance",
     "the fixture or trigger fails before the candidate interval",
     "evidence interval, process results, trace, manifest, or recovery proof is incomplete",
     "a timeout occurs without independent proof that launched processes stopped",

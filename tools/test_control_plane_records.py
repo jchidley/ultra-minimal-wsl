@@ -124,6 +124,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(plan["plan_id"], "CP-MINIMAL-V3-CANDIDATE-COMPARISON")
         self.assertFalse(plan["executable"])
         self.assertFalse(plan["approval_carried_forward"])
+        self.assertIn("Standing-authorized", plan["authorization_policy"]["disposable_fixture"])
+        self.assertIn("shared WSL", plan["authorization_policy"]["approval_required"])
         self.assertTrue(plan["status"].startswith("deferred-"))
         self.assertNotIn("recovery_install_contract", plan)
 
@@ -174,7 +176,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         build_script = ROOT / active["script"]
         self.assertEqual(sha256(build_script), active["script_sha256"])
         self.assertIn("Build-MinimalV3StockNs.ps1' -Execute", active["build_command"])
-        self.assertIn("runtime remain separately unauthorized", build["execution_boundary"])
+        self.assertIn("standing-authorized inside the disposable fixture", build["execution_boundary"])
         build_source = build_script.read_text(encoding="utf-8")
         self.assertIn("if (-not $Execute) { exit 0 }", build_source)
         self.assertIn("FETCHCONTENT_FULLY_DISCONNECTED=ON", build_source)

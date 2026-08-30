@@ -77,7 +77,7 @@ $plan = [ordered]@{
     toolchainRoot = $ToolchainRoot
     expectedCompleteSourceDiffSha256 = $ExpectedCompleteDiffSha256
     expectedOutputs = $ExpectedOutputs
-    approvalRequired = @('Visual Studio installation', 'compilation', 'package creation')
+    authorizationBoundary = 'Standing-authorized only inside the dedicated disposable fixture with pinned offline inputs; no physical-host or shared-WSL effects.'
 }
 $plan | ConvertTo-Json -Depth 8
 if (-not $Execute) { exit 0 }

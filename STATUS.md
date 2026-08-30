@@ -7,7 +7,8 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
 - No reduced control-plane package or new candidate kernel has been deployed by the current work.
 - The accepted stock calibration and independent recovery returned the disposable Windows VM to Off with no probe, trace, or shutdown failure. The retained `clean-shell` checkpoint was not restored or changed. Live state is not asserted here.
-- Any WSL shutdown, custom boot, package installation, fixture operation, or runtime trial still requires plan validation and fresh explicit approval. The approved non-runtime build attempt is consumed; it returned the fixture Off before input staging or installation.
+- Physical-host changes and operations affecting a shared WSL instance require fresh explicit approval. Operations wholly confined to the disposable fixture are standing-authorized within the pinned, offline, hash-verified, plan-validated, recoverable experiment envelope; they must fail closed on boundary or recovery failure.
+- The prior non-runtime build attempt returned the fixture Off before input staging or installation.
 
 ## Proven boundary
 
@@ -32,7 +33,7 @@ The only active experiment path is the fixed candidate comparison:
 
 1. stock WSL 2.7.12 calibration with the exact Toybox rootfs — accepted at `B6-T` in `CP-STOCK-2.7.12-003`;
 2. compile and hash the `minimal-v3-stock-ns` controlled package without installing it;
-3. separately plan-validate, approve, install, and test `minimal-v3-stock-ns` with the same probe;
+3. record produced hashes, separately plan-validate, install, and test `minimal-v3-stock-ns` with the same probe inside the disposable fixture;
 4. restore the accepted baseline and repeat the same build/runtime contract for `minimal-v3-mount-ns`;
 5. classify the earliest supported B-gate and use the comparison to select the next configuration change.
 
@@ -44,7 +45,7 @@ Approved baseline attempt `CP-STOCK-2.7.12-002` installed the pinned stock MSI a
 
 Approved `CP-STOCK-2.7.12-003` enabled both optional features, completed a controlled reboot, imported the pinned Toybox rootfs, and calibrated the fixed probe against stock WSL 2.7.12. The candidate and independent recovery intervals both passed management checks, printed `toybox-ok`, reached `B6-T`, captured complete trace/event/process evidence, verified 19-file manifests, and shut WSL down cleanly. The immutable evidence and terminal ledger row are preserved under `recovery-harness/trials/CP-STOCK-2.7.12-003/`.
 
-Stock calibration approval is consumed and does not carry forward. `minimal-v3-stock-ns` remains uncompiled and untested. Its first approved non-runtime build attempt verified every recorded host input, then stopped during guest preflight because the fixture has no `pwsh.exe`; no input was staged, no toolchain was installed, and no build directory or package was created. The fixture returned Off with the retained `clean-shell` checkpoint unchanged. The required PowerShell 7.6.5 x64 MSI is pinned and verified. Approved build attempt 002 staged and verified all inputs and installed PowerShell successfully, then the exact pinned Visual Studio installer command failed with exit 5003 before source preparation or compilation. No package or candidate result exists. The fixture returned Off with `clean-shell` unchanged. A bounded continuation must inspect the retained installer log, resolve only that installation failure, compile and extract hashes, then return Off; it requires fresh approval. Candidate-package installation and runtime remain unauthorized.
+`minimal-v3-stock-ns` remains uncompiled and untested. Its first non-runtime build attempt verified every recorded host input, then stopped during guest preflight because the fixture had no `pwsh.exe`; no input was staged, no toolchain was installed, and no build directory or package was created. The fixture returned Off with the retained `clean-shell` checkpoint unchanged. The required PowerShell 7.6.5 x64 MSI is pinned and verified. Build attempt 002 staged and verified all inputs and installed PowerShell successfully, then the exact pinned Visual Studio installer command failed with exit 5003 before source preparation or compilation. No package or candidate result exists. The fixture returned Off with `clean-shell` unchanged. A bounded continuation may now restage and verify the revised procedure record, inspect the retained installer log, resolve only that installation failure, compile and extract hashes, then return Off under the standing disposable-fixture authorization. Candidate-package installation and runtime still require complete produced hashes and separate plan validation, but no additional approval while confined to that fixture envelope.
 
 ## Inventory
 

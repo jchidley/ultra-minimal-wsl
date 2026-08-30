@@ -30,9 +30,9 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-Stock WSL 2.7.12 calibration passed `B6-T` with independent recovery in `CP-STOCK-2.7.12-003`. The next bounded objective remains the non-runtime `minimal-v3-stock-ns` Windows package build in `control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1`. Its first approved attempt stopped before staging because PowerShell 7 was absent. Attempt 002 staged every verified input and installed pinned PowerShell 7.6.5, then the exact offline Visual Studio command failed with exit 5003 before compilation. The fixture is Off. Inspect retained installer evidence and resolve only this prerequisite under fresh approval; do not broaden fixture tooling. Keep the accepted probe, rootfs, timeouts, instrumentation, evidence schema, classification rules, and recovery requirements unchanged.
+Stock WSL 2.7.12 calibration passed `B6-T` with independent recovery in `CP-STOCK-2.7.12-003`. The next bounded objective remains the non-runtime `minimal-v3-stock-ns` Windows package build in `control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1`. Its first attempt stopped before staging because PowerShell 7 was absent. Attempt 002 staged every verified input and installed pinned PowerShell 7.6.5, then the exact offline Visual Studio command failed with exit 5003 before compilation. The fixture is Off. Inspect retained installer evidence and resolve only this prerequisite; do not broaden fixture tooling. Keep the accepted probe, rootfs, timeouts, instrumentation, evidence schema, classification rules, and recovery requirements unchanged.
 
-Input placement, toolchain installation, compilation, fixture operation, elevation, and fixture shutdown remain unauthorized until freshly approved. Any build approval ends after output hashing and extraction: installing the produced package and running `CP-MINIMAL-V3-STOCK-NS-001` require complete produced hashes, separate plan validation, and later fresh approval. `control-plane/deferred-runtime-plan.json` carries no approval.
+Operations wholly confined to the dedicated disposable fixture are standing-authorized when they use pinned hash-verified offline inputs, preserve evidence, follow the recorded recovery path, and finish with independently verified fixture state. This includes fixture operation, fixture-local elevation and installation, WSL shutdown, custom package/kernel boot, candidate probing, stock restoration, and bounded retries or diagnostics. No standing authorization crosses into the physical host or a shared WSL instance. Produced hashes and exact installation/restoration commands must still be recorded and plan-validated before runtime, but disposable-fixture execution does not require another approval.
 
 ## Candidate records
 
@@ -41,17 +41,17 @@ Before any kernel-candidate boot:
 1. Record the full config, parent, hash, and trial ID in `inventory/config-snapshots.csv`.
 2. Review explicit and selected symbols with `tools/inventory.py`; update annotations only through `tools/inventory.py set`.
 
-Before any controlled-package trial, record the source parent/diff, output manifest, package hash, candidate manifest, and reserved trial ID. For every trial type, run `uv run python tools/inventory_records.py`, require integrity `ok`, plan-validate the exact operation and recovery, and obtain explicit approval.
+Before any controlled-package trial, record the source parent/diff, output manifest, package hash, candidate manifest, and reserved trial ID. For every trial type, run `uv run python tools/inventory_records.py`, require integrity `ok`, and plan-validate the exact operation and recovery. Obtain explicit approval only if the operation can affect the physical host, a shared WSL instance, or another resource outside the disposable fixture envelope.
 
 After a trial, preserve the harness evidence, append metadata, and resynchronize SQLite. Never rewrite completed ledger rows or trial evidence.
 
 ## Safety
 
-- Require explicit approval before `-Execute`, WSL shutdown, `.wslconfig` changes, elevation, or custom-kernel boot.
-- Use the ordinary unelevated harness unless separately approved WPR/ETW diagnostics are necessary.
-- Never directly write under `C:\Program Files\WSL` or replace its initrd. A hash-bound, freshly approved MSI transaction may modify the disposable fixture only; never the physical host.
+- Require explicit approval before `-Execute`, WSL shutdown, `.wslconfig` changes, elevation, installation, or custom-kernel/control-plane boot on the physical host or any shared WSL instance.
+- Inside the dedicated disposable fixture, those operations and WPR/ETW diagnostics are standing-authorized only within the pinned, offline, hash-verified, plan-validated, recoverable experiment envelope. Hash mismatch, network access, an unrecorded executable, failed recovery, or an uncertain target must fail closed rather than fall through to broader access.
+- Never directly write under the physical host's `C:\Program Files\WSL` or replace its initrd. A hash-bound MSI transaction may modify the disposable fixture only.
 - Keep kernel builds and source worktrees on `LFS-Builder` ext4.
-- Do not accept new packaged WSL hashes without an approved stock recovery trial.
+- Do not accept new packaged WSL hashes without a completed stock recovery trial.
 - A timeout does not prove a remote or elevated process stopped; verify durable state independently.
 
 ## Commands

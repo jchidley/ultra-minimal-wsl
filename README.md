@@ -47,7 +47,7 @@ Everything beyond this boundary is an optional integration profile. A separate, 
 
 The generic Toybox baseline passes `G4`, guarded custom-kernel discovery reached the `B3` storage boundary, and the fixed probe is now calibrated against stock WSL 2.7.12 at `B6-T` with an independent stock recovery pass. Reduced control-plane candidates remain source-ready but have no runtime evidence.
 
-The next bounded step is an offline Windows package build of `minimal-v3-stock-ns`. That build ends at package and output-manifest hashing; it cannot authorize installing or probing the result. After those hashes exist, the same Toybox probe and recovery contract will test `minimal-v3-stock-ns`, followed by `minimal-v3-mount-ns`. See `STATUS.md` for verified current facts and `TASKS.md` for the active queue.
+The next bounded step is an offline Windows package build of `minimal-v3-stock-ns`. That build ends at package and output-manifest hashing; installation and probing must wait until the produced identities are separately plan-validated. After that, the same Toybox probe and recovery contract will test `minimal-v3-stock-ns`, followed by `minimal-v3-mount-ns`. See `STATUS.md` for verified current facts and `TASKS.md` for the active queue.
 
 ## Documentation
 
@@ -95,7 +95,7 @@ git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 
 The PowerShell check uses pinned PSScriptAnalyzer 1.25.0 under PowerShell 7 from the verified `windows-env` cache. The generated SQLite database must already exist; rebuild instructions are in `inventory/README.md`.
 
-No kernel trial is authorized by this README. A trial changes the global WSL kernel, shuts down every WSL 2 distro, and must use the guarded recovery harness with fresh explicit approval.
+On the physical host or any shared WSL installation, a kernel trial changes global WSL state, shuts down every WSL 2 distro, and requires the guarded recovery harness plus fresh explicit approval. Equivalent operations wholly confined to the dedicated disposable fixture are standing-authorized within the repository's pinned, offline, hash-verified, plan-validated recovery envelope.
 
 ## Licensing
 
