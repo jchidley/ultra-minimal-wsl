@@ -4,7 +4,7 @@
 
 ## Active action
 
-Validate the exact `CP-MINIMAL-V3-STOCK-NS-001` runner now recorded in `control-plane/deferred-runtime-plan.json`: stage and verify the produced MSI and candidate manifest, prove installed-product detection and fail-closed stock restoration paths, and require inventory integrity `ok`. Do not install the candidate or run the probe until that runner validation is complete.
+Runner validation for `CP-MINIMAL-V3-STOCK-NS-001` is complete. Keep the current execution gate closed until a separately reviewed runtime step changes only executable state without altering the validated runner or accepted inputs; require inventory integrity `ok` immediately before execution. The candidate remains uninstalled and unrun.
 
 ## Comparison queue
 
@@ -18,7 +18,7 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- `minimal-v3-stock-ns` runtime classification is blocked until installation/recovery runner validation is complete against the produced package, manifest, product codes, and accepted stock baseline.
+- `minimal-v3-stock-ns` runtime classification is blocked only by the deliberately closed candidate execution gate and the immediate pre-execution inventory check; runner validation is complete.
 - Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.

@@ -524,7 +524,7 @@
       "approval_boundary": "Attempt-003 approval was consumed. No approval carries forward to minimal-v3-stock-ns compilation, installation, fixture operation, or probing."
     },
     "minimal_v3_stock_ns": {
-      "status": "built-hash-bound-runtime-plan-prepared-not-executed",
+      "status": "runner-validated-hash-bound-not-executed",
       "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V3-STOCK-NS-001",
@@ -547,6 +547,35 @@
       "process_timeout_seconds": 45,
       "shutdown_timeout_seconds": 30,
       "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
+      "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV3StockNsTrial.ps1",
+      "staged_runner_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV3StockNsTrial.ps1",
+      "runner_sha256": "357e77322499c2874a1cf813611b6a06cb04f700f7e6f199e6074e0644207e9f",
+      "runner_validation_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV3StockNsTrial.ps1' -Validate",
+      "runner_execution_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV3StockNsTrial.ps1' -Execute",
+      "runner_validation": {
+        "status": "complete",
+        "completed_utc": "2026-08-30T13:22:48.2017971Z",
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false,
+        "failure_paths_tested": 13,
+        "staged_hashes_verified": true,
+        "stock_product_state": 5,
+        "candidate_product_state": -1,
+        "fixture_final_state": "Off",
+        "validation_attempt_001": {
+          "disposition": "infrastructure-failure-before-runner-execution",
+          "reason": "The guest process execution policy blocked the staged script before runner code executed.",
+          "result_sha256": "e1e79e76128fd07edf299e34702498093f58268e6f5af76a9ff73599a06d98f6",
+          "fixture_final_state": "Off"
+        },
+        "validation_attempt_002": {
+          "disposition": "runner-validation-complete",
+          "correction": "Set only the guest PowerShell process execution policy to Bypass, matching the accepted stock-calibration process-local pattern.",
+          "result_sha256": "ea3addcb318aa3bc8b9fb53c5b85052377ac0da094b5db0f3fd22e2c2fbcdaf5",
+          "fixture_final_state": "Off"
+        },
+        "invariants": "Every post-mutation failure attempts bounded candidate removal, reinstalls the exact pinned stock MSI, verifies candidate absent and stock product/version present through Windows Installer APIs, and runs the unchanged independent stock probe."
+      },
       "pre_install_shutdown_command": "& wsl.exe --shutdown; if ($LASTEXITCODE -ne 0) { throw \"Pre-install WSL shutdown failed with exit $LASTEXITCODE.\" }",
       "remove_stock_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/x','{020F8AC8-A788-4E39-8E9B-8FECFA843632}','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-stock-remove.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Stock removal failed with exit $($p.ExitCode).\" }",
       "install_candidate_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v3-stock-ns\\wsl.msi','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-candidate-install.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Candidate installation failed with exit $($p.ExitCode).\" }",
@@ -554,11 +583,10 @@
       "restore_stock_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-stock-restore.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Stock restoration failed with exit $($p.ExitCode).\" }",
       "recovery_command": "Run the unchanged fixed probe as CP-MINIMAL-V3-STOCK-NS-001-RECOVERY with candidate_id stock-wsl-2.7.12-recovery only after stock product code {020F8AC8-A788-4E39-8E9B-8FECFA843632}, version 2.7.12.0, and package hash a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 are verified.",
       "remaining_before_runtime": [
-        "stage and independently verify the package and candidate manifest inside the fixture",
-        "validate installed-product detection and finally-path stock restoration in the exact trial runner",
+        "keep this candidate execution gate closed until a separately reviewed runtime step changes only the executable state without altering the validated runner or accepted inputs",
         "run inventory_records.py with integrity ok immediately before execution"
       ],
-      "runtime_boundary": "The package has not been installed and CP-MINIMAL-V3-STOCK-NS-001 has not run. Complete exact runner validation before relying on standing disposable-fixture authorization."
+      "runtime_boundary": "Exact runner validation is complete, but the package has not been installed and CP-MINIMAL-V3-STOCK-NS-001 has not run. The current candidate execution gate remains closed for this bounded objective."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",

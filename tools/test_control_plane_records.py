@@ -234,6 +234,18 @@ class ControlPlaneRecordTests(unittest.TestCase):
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         self.assertEqual(manifest["package_sha256"], stock_ns["package_sha256"])
         self.assertEqual(manifest["output_manifest_sha256"], stock_ns["output_manifest_sha256"])
+        runner = ROOT / stock_ns["runner_path"]
+        self.assertEqual(sha256(runner), stock_ns["runner_sha256"])
+        runner_source = runner.read_text(encoding="utf-8")
+        for required in (
+            "MsiQueryProductState", "MsiGetProductInfo", "Invoke-Recovery $recoveryFailures",
+            "Assert-ProductState $CandidateProductCode $false",
+            "Assert-ProductState $StockProductCode $true $ExpectedVersion",
+            "Invoke-FixedProbe $true", "TimeoutSeconds 45 -Execute",
+        ):
+            self.assertIn(required, runner_source)
+        for forbidden in ("Start-VM", "Stop-VM", "Restore-VMSnapshot", "New-PSSession", "Invoke-Command"):
+            self.assertNotIn(forbidden, runner_source)
         self.assertIn(stock_ns["candidate_product_code"], stock_ns["remove_candidate_command"])
         self.assertIn(stock_ns["stock_product_code"], stock_ns["remove_stock_command"])
         self.assertIn("stock-wsl-2.7.12-recovery", stock_ns["recovery_command"])
@@ -266,8 +278,12 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertFalse(next_candidate["executable"])
         self.assertFalse(next_candidate["approval_carried_forward"])
         self.assertEqual(next_candidate["reserved_trial_id"], "CP-MINIMAL-V3-STOCK-NS-001")
-        self.assertEqual(next_candidate["status"], "built-hash-bound-runtime-plan-prepared-not-executed")
-        self.assertIn("validate installed-product detection", next_candidate["remaining_before_runtime"][1])
+        self.assertEqual(next_candidate["status"], "runner-validated-hash-bound-not-executed")
+        self.assertEqual(next_candidate["runner_validation"]["status"], "complete")
+        self.assertEqual(next_candidate["runner_validation"]["failure_paths_tested"], 13)
+        self.assertFalse(next_candidate["runner_validation"]["candidate_install_performed"])
+        self.assertEqual(next_candidate["runner_validation"]["fixture_final_state"], "Off")
+        self.assertIn("inventory_records.py", next_candidate["remaining_before_runtime"][1])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])
@@ -285,6 +301,17 @@ class ControlPlaneRecordTests(unittest.TestCase):
         ], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertTrue(json.loads(result.stdout)["passed"])
+
+        runner_result = subprocess.run([
+            "pwsh", "-NoProfile", "-NonInteractive", "-File", str(runner), "-SelfTest",
+        ], capture_output=True, text=True)
+        self.assertEqual(runner_result.returncode, 0, runner_result.stdout + runner_result.stderr)
+        runner_self_test = json.loads(runner_result.stdout)
+        self.assertTrue(runner_self_test["passed"])
+        self.assertEqual(len(runner_self_test["failurePaths"]), 13)
+        for path in runner_self_test["failurePaths"]:
+            self.assertTrue(path["stockInstalled"])
+            self.assertFalse(path["candidateInstalled"])
 
     def test_historical_vm_packet_tooling_is_not_in_the_active_tree(self):
         obsolete = (
