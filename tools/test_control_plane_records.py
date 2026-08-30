@@ -275,7 +275,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         stock_manifest = ROOT / stock["manifest_path"]
         self.assertEqual(sha256(stock_manifest), stock["manifest_sha256"])
         next_candidate = contract["minimal_v3_stock_ns"]
-        self.assertFalse(next_candidate["executable"])
+        self.assertTrue(next_candidate["executable"])
         self.assertFalse(next_candidate["approval_carried_forward"])
         self.assertEqual(next_candidate["reserved_trial_id"], "CP-MINIMAL-V3-STOCK-NS-001")
         self.assertEqual(next_candidate["status"], "runner-validated-hash-bound-not-executed")

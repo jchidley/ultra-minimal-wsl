@@ -525,7 +525,7 @@
     },
     "minimal_v3_stock_ns": {
       "status": "runner-validated-hash-bound-not-executed",
-      "executable": false,
+      "executable": true,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V3-STOCK-NS-001",
       "candidate_id": "minimal-v3-stock-ns",
