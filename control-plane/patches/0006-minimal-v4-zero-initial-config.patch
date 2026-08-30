@@ -1,0 +1,24 @@
+diff --git a/src/windows/service/exe/WslCoreVm.cpp b/src/windows/service/exe/WslCoreVm.cpp
+index 4be3e08..2c67cb5 100644
+--- a/src/windows/service/exe/WslCoreVm.cpp
++++ b/src/windows/service/exe/WslCoreVm.cpp
+@@ -1724,12 +1724,12 @@ void WslCoreVm::InitializeGuest()
+     // Calculate the size of the configuration message.
+     wsl::shared::MessageWriter<LX_MINI_INIT_CONFIG_MESSAGE> message(LxMiniInitMessageInitialConfig);
+     message->EntropySize = c_bootEntropy;
+-    message->EnableGuiApps = LXSS_ENABLE_GUI_APPS();
+-    message->MountGpuShares = m_vmConfig.EnableGpuSupport;
+-    message->EnableInboxGpuLibs = m_enableInboxGpuLibs;
+-    if (m_networkingEngine)
+-    {
+-        m_networkingEngine->FillInitialConfiguration(message->NetworkingConfiguration);
+-    }
++    // Send an explicit zero-feature initial configuration. The fail-closed
++    // guest rejects GUI, GPU, networking, DHCP, port tracking, IPv6 policy,
++    // and ephemeral-port policy before distro storage is mounted.
++    message->EnableGuiApps = false;
++    message->MountGpuShares = false;
++    message->EnableInboxGpuLibs = false;
++    message->NetworkingConfiguration = {};
+ 
+     WI_ASSERT(message->NetworkingConfiguration.NetworkingMode == static_cast<LX_MINI_INIT_NETWORKING_MODE>(m_vmConfig.NetworkingMode));

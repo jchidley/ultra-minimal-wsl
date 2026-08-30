@@ -4,7 +4,7 @@
 
 ## Active action
 
-Run `CP-MINIMAL-V3-STOCK-NS-001` with the validated runner and accepted inputs after inventory integrity reports `ok`. The candidate remains uninstalled and unrun; no separate human review or execution-gate opening is required for the disposable-fixture trial.
+Use `CP-MINIMAL-V3-STOCK-NS-001` evidence to correct only the retained Windows host's initial-configuration message: explicitly send false/none/zero for every excluded GUI, GPU, and networking field, then repeat source-policy tests, two clean offline Linux builds, controlled Windows packaging, runtime, and recovery without pausing between agent-validated stages.
 
 ## Comparison queue
 
@@ -18,8 +18,8 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- `minimal-v3-stock-ns` runtime classification awaits the immediate pre-execution inventory check and disposable-fixture run; runner validation is complete.
-- Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
+- `minimal-v3-stock-ns` is finalized at `B2`; do not rerun the byte-identical candidate.
+- Namespace selection and Kconfig promotion are blocked until the evidence-selected initial-configuration correction reaches the namespace-dependent launch path.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
 

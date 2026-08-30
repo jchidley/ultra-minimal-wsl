@@ -1,0 +1,18 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V3-STOCK-NS-001",
+    "candidateId":  "minimal-v3-stock-ns",
+    "candidateManifestSha256":  "25ab8c17df7df2c2534542000978dc60a8a4735659f797a8ea6f44afad9cc6f0",
+    "packagePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v3-stock-ns\\wsl.msi",
+    "packageSha256":  "e9c41512246db9afe15a150a83f457ddd8087479225fee63f1e4a32c5ec8fe77",
+    "probeSha256":  "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsPath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz",
+    "rootfsSha256":  "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfilePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "expectedWslVersion":  "2.7.12.0",
+    "distribution":  "Toybox-Minimal",
+    "timeoutSeconds":  45,
+    "smokeCommand":  "test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf toybox-ok",
+    "debugConsoleCapture":  "disabled-for-fixed-comparison"
+}

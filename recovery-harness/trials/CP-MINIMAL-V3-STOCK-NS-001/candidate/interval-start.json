@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V3-STOCK-NS-001",
+    "candidateId":  "minimal-v3-stock-ns",
+    "startedUtc":  "2026-08-30T13:31:43.6255926Z"
+}

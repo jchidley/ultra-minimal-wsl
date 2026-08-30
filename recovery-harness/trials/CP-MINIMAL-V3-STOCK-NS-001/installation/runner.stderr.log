@@ -1,0 +1,8 @@
+Controlled WSL boot probe did not reach B6-T.
+At C:\controlled-inputs\ultra-minimal-wsl\procedure\Invoke-WslCandidateProbe.ps1:311 char:116
++ ...  -ne $true) { throw 'Controlled WSL boot probe did not reach B6-T.' }
++                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Controlled WSL ...not reach B6-T.:String) [], Ru 
+   ntimeException
+    + FullyQualifiedErrorId : Controlled WSL boot probe did not reach B6-T.
+ 

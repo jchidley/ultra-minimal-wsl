@@ -140,7 +140,7 @@
       "init_debug_sha256": "3a14ebe773f20ea4a9d63b7f82d2c24054abfeb333f676314019bb06ae59faf3",
       "initrd_sha256": "a7e3f9f14ede0ecf626da9a74b71fc156b4550496908001a1cfbd1c54eda6989",
       "reproducible": true,
-      "runtime_evidence": false
+      "runtime_evidence": true
     },
     "minimal-v3-mount-ns": {
       "parent": "minimal-v3-fail-closed",
@@ -152,11 +152,43 @@
       "initrd_sha256": "d6260c83155713c6c3cfa9e92f9fcba3d65cad8937ffa1d265cc32da78368f2c",
       "reproducible": true,
       "runtime_evidence": false
+    },
+    "minimal-v4-fail-closed": {
+      "parent": "minimal-v3-fail-closed",
+      "layer_patch": "control-plane/patches/0006-minimal-v4-zero-initial-config.patch",
+      "layer_patch_sha256": "5efe32be0185c6d080458e4a768959d7e5bd5ebdb2138626f60c0555fc7555e5",
+      "complete_source_diff_sha256": "ee84b110ce27bbe9972315227fe3039da121e1d2e533e094e4c3a35bd6b6a6a5",
+      "init_sha256": "61c35f3bdbb0afcc74d7e6d660ece5d4ab8e8e40b2d4a7c3b4892f4eb41d72e4",
+      "init_debug_sha256": "dbeb3b327aa8ba337c56de0742eb1f0d848ffebf22d7f50c7d94a22af9480cd8",
+      "initrd_sha256": "be2707678605f74b8cadcc0275fd0d846a4ceaf5513555d73573f28a8dcff044",
+      "reproducible": true,
+      "runtime_evidence": false
+    },
+    "minimal-v4-stock-ns": {
+      "parent": "minimal-v4-fail-closed",
+      "tree_identical_to_parent": true,
+      "complete_source_diff_sha256": "ee84b110ce27bbe9972315227fe3039da121e1d2e533e094e4c3a35bd6b6a6a5",
+      "init_sha256": "61c35f3bdbb0afcc74d7e6d660ece5d4ab8e8e40b2d4a7c3b4892f4eb41d72e4",
+      "init_debug_sha256": "dbeb3b327aa8ba337c56de0742eb1f0d848ffebf22d7f50c7d94a22af9480cd8",
+      "initrd_sha256": "be2707678605f74b8cadcc0275fd0d846a4ceaf5513555d73573f28a8dcff044",
+      "reproducible": true,
+      "runtime_evidence": false
+    },
+    "minimal-v4-mount-ns": {
+      "parent": "minimal-v4-fail-closed",
+      "layer_patch": "control-plane/patches/0005-minimal-v3-mount-ns.patch",
+      "layer_patch_sha256": "7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515",
+      "complete_source_diff_sha256": "1978046984db35fd2a6de46aa53da6d3de17793bf163c262b222dc9e959da13a",
+      "init_sha256": "3c844b818d77b7f34763bd3478790b64b8317d3b02800792cd23157c3349bff1",
+      "init_debug_sha256": "c990cadb03f9497fe477ff9a01a50557e773eed086c5dbd7eb06802809a51d4f",
+      "initrd_sha256": "2886fae8a75952cae122fbd6b61db3dc4d26fb51f0b84e38737783cecabaad72",
+      "reproducible": true,
+      "runtime_evidence": false
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v3-stock-ns-build-complete-hashes-extracted",
-    "executable": false,
+    "status": "minimal-v4-stock-ns-build-prepared",
+    "executable": true,
     "approval_carried_forward": false,
     "active_build": {
       "candidate": "minimal-v3-stock-ns",
@@ -188,6 +220,27 @@
       "fixture_final_state": "Off",
       "runtime_boundary": "This build stage ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe must wait until the produced hashes are recorded and separately plan-validated.",
       "authorization_boundary": "Restaging and hash-verifying the revised procedure record, inspecting installer evidence, narrowly correcting the pinned Visual Studio installation, fixture-local elevation, fixture operation, compilation, evidence extraction, and fixture shutdown are standing-authorized inside the disposable fixture envelope. Physical-host and shared-WSL effects remain unauthorized."
+    },
+    "next_build": {
+      "candidate": "minimal-v4-stock-ns",
+      "parent": "minimal-v4-fail-closed",
+      "evidence_selected_by": "CP-MINIMAL-V3-STOCK-NS-001",
+      "script": "control-plane/controlled-package-offline/Build-MinimalV4StockNs.ps1",
+      "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV4StockNs.ps1",
+      "script_sha256": "2340dd72cab6802c0a57aefe6eac79f3d674b99ca1d78e2ff639a9e9ad83848b",
+      "layer_patch": "control-plane/patches/0006-minimal-v4-zero-initial-config.patch",
+      "layer_patch_sha256": "5efe32be0185c6d080458e4a768959d7e5bd5ebdb2138626f60c0555fc7555e5",
+      "complete_source_diff_sha256": "ee84b110ce27bbe9972315227fe3039da121e1d2e533e094e4c3a35bd6b6a6a5",
+      "build_command": "& 'C:\\Program Files\\PowerShell\\7\\pwsh.exe' -NoProfile -NonInteractive -ExecutionPolicy Bypass -File 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV4StockNs.ps1' -Execute",
+      "fresh_directories": [
+        "C:\\controlled-package\\source\\minimal-v4-stock-ns",
+        "C:\\controlled-package\\build\\minimal-v4-stock-ns",
+        "C:\\controlled-package\\deps"
+      ],
+      "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v4-stock-ns\\controlled-output-SHA256SUMS",
+      "expected_build_result": "C:\\controlled-package\\build\\minimal-v4-stock-ns\\controlled-build-result.json",
+      "completed": false,
+      "runtime_boundary": "Build, hash, extract, and return the fixture Off. Continue directly into hash-bound runner preparation after produced package identities are recorded; do not install an unhashed output."
     },
     "build_attempt_001": {
       "disposition": "infrastructure-failure-no-candidate-result",
@@ -524,8 +577,8 @@
       "approval_boundary": "Attempt-003 approval was consumed. No approval carries forward to minimal-v3-stock-ns compilation, installation, fixture operation, or probing."
     },
     "minimal_v3_stock_ns": {
-      "status": "runner-validated-hash-bound-not-executed",
-      "executable": true,
+      "status": "runtime-finalized-fail-b2",
+      "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V3-STOCK-NS-001",
       "candidate_id": "minimal-v3-stock-ns",
@@ -582,10 +635,27 @@
       "remove_candidate_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/x','{E79C2ACE-26AB-48DA-BFFD-467C63035CDD}','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-candidate-remove.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Candidate removal failed with exit $($p.ExitCode).\" }",
       "restore_stock_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-stock-restore.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Stock restoration failed with exit $($p.ExitCode).\" }",
       "recovery_command": "Run the unchanged fixed probe as CP-MINIMAL-V3-STOCK-NS-001-RECOVERY with candidate_id stock-wsl-2.7.12-recovery only after stock product code {020F8AC8-A788-4E39-8E9B-8FECFA843632}, version 2.7.12.0, and package hash a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 are verified.",
-      "remaining_before_runtime": [
-        "run inventory_records.py with integrity ok immediately before execution"
-      ],
-      "runtime_boundary": "Exact runner validation is complete, but the package has not been installed and CP-MINIMAL-V3-STOCK-NS-001 has not run. After the recorded machine checks pass, proceed directly with the disposable-fixture runtime trial without separate human review or gate-opening."
+      "runtime_result": {
+        "executed": true,
+        "result": "FAIL",
+        "highest_checkpoint": "B2",
+        "classification": "UNRESOLVED",
+        "failure_signature": "Rejected excluded initial configuration",
+        "windows_error": "Wsl/Service/CreateInstance/E_ABORT",
+        "candidate_manifest_files_verified": 20,
+        "recovery_result": "B6-T",
+        "recovery_manifest_files_verified": 20,
+        "candidate_archive_sha256": "dbeec05adacdb380c26d21cb50ceb9eeb21a1b3bf2eebfb36110c9695c2e8787",
+        "recovery_archive_sha256": "c29c113348c60adeb4e72bb3b0421dacb246d3fda6d81fd0faecc963f4a27b5f",
+        "operation_result_sha256": "86d1bcf5489a9042ef7eb799a526b2176c4e284920fb4cfed32291e5afc55005",
+        "final_evidence_manifest_sha256": "f1e99e6b1cf0724a7a40b161f22101780e02f974e7e8f9073a63bcd5494cbee1",
+        "evidence_root": "recovery-harness/trials/CP-MINIMAL-V3-STOCK-NS-001",
+        "ledger_finalized": true,
+        "fixture_final_state": "Off",
+        "next_action": "Do not rerun the byte-identical candidate. Inspect which excluded initial-configuration field the retained Windows host still sends and make one evidence-selected source-policy correction."
+      },
+      "remaining_before_runtime": [],
+      "runtime_boundary": "CP-MINIMAL-V3-STOCK-NS-001 is finalized at B2 with independent stock recovery at B6-T. The byte-identical candidate must not run again."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",

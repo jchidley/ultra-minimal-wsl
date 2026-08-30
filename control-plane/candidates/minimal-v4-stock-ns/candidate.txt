@@ -1,0 +1,9 @@
+candidate=minimal-v4-stock-ns
+parent_candidate=minimal-v4-fail-closed
+parent_source_commit=c940f85e28722f517e3347b0bac131abf9c1eb1f
+source_commit=c940f85e28722f517e3347b0bac131abf9c1eb1f
+layer_patch=none
+layer_patch_sha256=none
+complete_source_diff_sha256=ee84b110ce27bbe9972315227fe3039da121e1d2e533e094e4c3a35bd6b6a6a5
+namespace_bundle=ipc,mount,pid,uts
+runtime_evidence=none

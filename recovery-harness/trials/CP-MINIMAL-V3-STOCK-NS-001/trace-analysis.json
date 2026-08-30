@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V3-STOCK-NS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1234,
+  "recoveryTraceRows": 4843,
+  "candidateGuestEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "WSL (1 - mini_init) ERROR: ProcessMessage:3393: Rejected excluded initial configuration",
+    "hv_vmbus: registering driver hv_storvsc",
+    "NET: Registered PF_VSOCK protocol family",
+    "scsi 0:0:0:1: Direct-Access Msft Virtual Disk"
+  ],
+  "candidateAbsentEvidence": "No candidate GuestLog event records an ext4 mount before the initial-configuration rejection and disk cache synchronization.",
+  "recoveryEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "EXT4-fs mounts are recorded",
+    "The fixed Toybox process printed toybox-ok and exited zero"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B2",
+    "basis": "Candidate /init ran and processed a host-channel initial-configuration message after VMBus, storvsc, and VSOCK registration. The message was rejected before an ext4 distro mount, so B3 is not supported."
+  }
+}

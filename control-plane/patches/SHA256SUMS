@@ -3,3 +3,4 @@
 f2bef4d7ebb0915d521cd5b8a4d020e196d3d2d35fefc31b996d336567c7d3b1  0003-minimal-v2-mount-ns.patch
 e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981  0004-minimal-v3-no-interop.patch
 7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515  0005-minimal-v3-mount-ns.patch
+5efe32be0185c6d080458e4a768959d7e5bd5ebdb2138626f60c0555fc7555e5  0006-minimal-v4-zero-initial-config.patch

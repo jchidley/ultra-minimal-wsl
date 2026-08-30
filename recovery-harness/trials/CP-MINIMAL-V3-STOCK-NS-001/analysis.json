@@ -1,0 +1,63 @@
+{
+  "trialId": "CP-MINIMAL-V3-STOCK-NS-001",
+  "purpose": "Test the hash-bound minimal-v3-stock-ns controlled package with the fixed Toybox probe and prove independent stock recovery.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B2",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The candidate completed all management checks, entered Linux /init, registered VMBus storage and VSOCK, and processed the host initial-configuration message. mini_init rejected that message before any ext4 distro mount; the Toybox CreateInstance call returned E_ABORT. Trace evidence therefore directly supports B2 but not B3. The exact excluded initial-configuration field remains unresolved."
+  },
+  "candidate": {
+    "id": "minimal-v3-stock-ns",
+    "parent": "minimal-v3-fail-closed",
+    "wslVersion": "2.7.12.0",
+    "sourceCommit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "completeSourceDiffSha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+    "packageSha256": "e9c41512246db9afe15a150a83f457ddd8087479225fee63f1e4a32c5ec8fe77",
+    "candidateManifestSha256": "25ab8c17df7df2c2534542000978dc60a8a4735659f797a8ea6f44afad9cc6f0",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-30T13:31:43.6255926Z",
+    "finishedUtc": "2026-08-30T13:31:49.8772011Z",
+    "probeClassification": "UNRESOLVED-TRACE-REQUIRED",
+    "finalClassification": "B2",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "toyboxExitCode": -1,
+    "windowsError": "Wsl/Service/CreateInstance/E_ABORT",
+    "failureSignature": "Rejected excluded initial configuration",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 1234,
+    "recoveryRows": 4843,
+    "earliestBlocker": "mini_init ProcessMessage rejected the initial configuration before an ext4 distro mount"
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V3-STOCK-NS-001-RECOVERY",
+    "startedUtc": "2026-08-30T13:32:12.9870532Z",
+    "finishedUtc": "2026-08-30T13:32:21.1613965Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "evidencePath": "recovery"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChanged": false
+  },
+  "decision": "Finalize minimal-v3-stock-ns at B2 with an unresolved initial-configuration policy blocker. Do not rerun this byte-identical candidate. Inspect the retained host configuration and mini_init fail-closed predicate to select one source change, while preserving the accepted probe and recovery contract."
+}

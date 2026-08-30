@@ -59,6 +59,19 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn('-#define BINFMT_PATH PROCFS_PATH "/sys/fs/binfmt_misc"', no_interop)
         self.assertNotIn("a/src/linux/init/config.cpp b/src/linux/init/config.cpp", no_interop)
 
+    def test_v4_sender_explicitly_zeros_excluded_initial_configuration(self):
+        patch = (CONTROL / "patches/0006-minimal-v4-zero-initial-config.patch").read_text(encoding="utf-8")
+        self.assertEqual(patch.count("diff --git "), 1)
+        self.assertIn("a/src/windows/service/exe/WslCoreVm.cpp b/src/windows/service/exe/WslCoreVm.cpp", patch)
+        for assignment in (
+            "message->EnableGuiApps = false;",
+            "message->MountGpuShares = false;",
+            "message->EnableInboxGpuLibs = false;",
+            "message->NetworkingConfiguration = {};",
+        ):
+            self.assertIn(assignment, patch)
+        self.assertNotIn("a/src/linux/init/", patch)
+
     def test_namespace_variants_change_only_the_clone_bundle(self):
         for name in ("0003-minimal-v2-mount-ns.patch", "0005-minimal-v3-mount-ns.patch"):
             patch = (CONTROL / "patches" / name).read_text(encoding="utf-8")
@@ -84,6 +97,9 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v3-fail-closed",
             "minimal-v3-stock-ns",
             "minimal-v3-mount-ns",
+            "minimal-v4-fail-closed",
+            "minimal-v4-stock-ns",
+            "minimal-v4-mount-ns",
         )
         for name in names:
             directory = CONTROL / "candidates" / name
@@ -115,6 +131,14 @@ class ControlPlaneRecordTests(unittest.TestCase):
             sums(CONTROL / "candidates/minimal-v3-stock-ns/SHA256SUMS")["init"],
             sums(CONTROL / "candidates/minimal-v3-mount-ns/SHA256SUMS")["init"],
         )
+        self.assertEqual(
+            sums(CONTROL / "candidates/minimal-v4-fail-closed/SHA256SUMS"),
+            sums(CONTROL / "candidates/minimal-v4-stock-ns/SHA256SUMS"),
+        )
+        self.assertNotEqual(
+            sums(CONTROL / "candidates/minimal-v4-stock-ns/SHA256SUMS")["init"],
+            sums(CONTROL / "candidates/minimal-v4-mount-ns/SHA256SUMS")["init"],
+        )
         for patch_name, digest in sums(CONTROL / "patches/SHA256SUMS").items():
             self.assertEqual(sha256(CONTROL / "patches" / patch_name), digest)
 
@@ -139,12 +163,15 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v3-fail-closed",
             "minimal-v3-stock-ns",
             "minimal-v3-mount-ns",
+            "minimal-v4-fail-closed",
+            "minimal-v4-stock-ns",
+            "minimal-v4-mount-ns",
         })
         for name, planned in plan["source_candidates"].items():
             candidate = key_values(CONTROL / "candidates" / name / "candidate.txt")
             artifacts = sums(CONTROL / "candidates" / name / "SHA256SUMS")
             with self.subTest(candidate=name):
-                self.assertFalse(planned["runtime_evidence"])
+                self.assertEqual(planned["runtime_evidence"], name == "minimal-v3-stock-ns")
                 self.assertTrue(planned["reproducible"])
                 self.assertEqual(planned["complete_source_diff_sha256"], candidate["complete_source_diff_sha256"])
                 self.assertEqual(planned["init_sha256"], artifacts["init"])
@@ -169,7 +196,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(sha256(wpr_profile), inputs["wpr_profile"]["sha256"])
 
         build = plan["controlled_package_build"]
-        self.assertFalse(build["executable"])
+        self.assertTrue(build["executable"])
         self.assertFalse(build["approval_carried_forward"])
         self.assertEqual(build["source"]["commit"], plan["source"]["base_commit"])
         active = build["active_build"]
@@ -192,6 +219,13 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("bin/x64/Release/wsl.msi", build["expected_outputs"]["msi"])
         overlay = ROOT / build["inputs"]["nuget"]["module_overlay"]
         self.assertEqual(sha256(overlay), build["inputs"]["nuget"]["module_overlay_sha256"])
+        next_build = build["next_build"]
+        next_script = ROOT / next_build["script"]
+        self.assertEqual(next_build["candidate"], "minimal-v4-stock-ns")
+        self.assertEqual(sha256(next_script), next_build["script_sha256"])
+        self.assertEqual(next_build["complete_source_diff_sha256"], plan["source_candidates"]["minimal-v4-stock-ns"]["complete_source_diff_sha256"])
+        self.assertFalse(next_build["completed"])
+        self.assertNotIn("msiexec", next_script.read_text(encoding="utf-8").lower())
 
     def test_fixed_probe_and_trial_contract_enforce_identical_comparison(self):
         plan = load_plan()
@@ -275,17 +309,19 @@ class ControlPlaneRecordTests(unittest.TestCase):
         stock_manifest = ROOT / stock["manifest_path"]
         self.assertEqual(sha256(stock_manifest), stock["manifest_sha256"])
         next_candidate = contract["minimal_v3_stock_ns"]
-        self.assertTrue(next_candidate["executable"])
+        self.assertFalse(next_candidate["executable"])
         self.assertFalse(next_candidate["approval_carried_forward"])
         self.assertEqual(next_candidate["reserved_trial_id"], "CP-MINIMAL-V3-STOCK-NS-001")
-        self.assertEqual(next_candidate["status"], "runner-validated-hash-bound-not-executed")
+        self.assertEqual(next_candidate["status"], "runtime-finalized-fail-b2")
+        self.assertEqual(next_candidate["runtime_result"]["highest_checkpoint"], "B2")
+        self.assertEqual(next_candidate["runtime_result"]["recovery_result"], "B6-T")
+        self.assertTrue(next_candidate["runtime_result"]["ledger_finalized"])
         self.assertEqual(next_candidate["runner_validation"]["status"], "complete")
         self.assertEqual(next_candidate["runner_validation"]["failure_paths_tested"], 13)
         self.assertFalse(next_candidate["runner_validation"]["candidate_install_performed"])
         self.assertEqual(next_candidate["runner_validation"]["fixture_final_state"], "Off")
-        self.assertEqual(len(next_candidate["remaining_before_runtime"]), 1)
-        self.assertIn("inventory_records.py", next_candidate["remaining_before_runtime"][0])
-        self.assertIn("without separate human review", next_candidate["runtime_boundary"])
+        self.assertEqual(next_candidate["remaining_before_runtime"], [])
+        self.assertIn("must not run again", next_candidate["runtime_boundary"])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])
