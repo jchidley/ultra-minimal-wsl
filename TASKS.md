@@ -4,7 +4,7 @@
 
 ## Active action
 
-Resume the non-runtime `minimal-v3-stock-ns` build only after operator consent to the required UAC prompt: extract the retained attempt-003-r4 build log, apply only its evidence-selected correction, rerun the hash-bound build from fresh generated directories, extract and verify produced hashes, and return the fixture Off. Visual Studio and PowerShell are installed and the two discovered procedure defects are fixed. Candidate-package installation and the reserved runtime trial remain excluded until produced hashes are recorded and separately plan-validated.
+Validate the exact `CP-MINIMAL-V3-STOCK-NS-001` runner now recorded in `control-plane/deferred-runtime-plan.json`: stage and verify the produced MSI and candidate manifest, prove installed-product detection and fail-closed stock restoration paths, and require inventory integrity `ok`. Do not install the candidate or run the probe until that runner validation is complete.
 
 ## Comparison queue
 
@@ -18,8 +18,7 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- `minimal-v3-stock-ns` package compilation is blocked on extracting the retained attempt-003-r4 failure log; the last UAC prompt was explicitly cancelled.
-- `minimal-v3-stock-ns` runtime classification is blocked until its pinned controlled package is compiled reproducibly and installation/recovery is plan-validated against the produced hashes.
+- `minimal-v3-stock-ns` runtime classification is blocked until installation/recovery runner validation is complete against the produced package, manifest, product codes, and accepted stock baseline.
 - Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.

@@ -155,7 +155,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v3-stock-ns-build-blocked-attempt-003-r4-log-extraction-cancelled",
+    "status": "minimal-v3-stock-ns-build-complete-hashes-extracted",
     "executable": false,
     "approval_carried_forward": false,
     "active_build": {
@@ -177,6 +177,15 @@
       ],
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-build-result.json",
+      "completed": true,
+      "completed_utc": "2026-08-30T05:37:54.3424568Z",
+      "controlled_output_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-outputs\\minimal-v3-stock-ns",
+      "package_bytes": 174407680,
+      "package_sha256": "e9c41512246db9afe15a150a83f457ddd8087479225fee63f1e4a32c5ec8fe77",
+      "output_manifest_sha256": "ab307e0793d9387c49754b3449513ab80d2fdc195c533d2b3191659c2794f6de",
+      "build_result_sha256": "bbbb6203da0ad757c5332ff16c4dcfdf320257086d5eedec903176c1e284666e",
+      "package_signature_status": "NotSigned",
+      "fixture_final_state": "Off",
       "runtime_boundary": "This build stage ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe must wait until the produced hashes are recorded and separately plan-validated.",
       "authorization_boundary": "Restaging and hash-verifying the revised procedure record, inspecting installer evidence, narrowly correcting the pinned Visual Studio installation, fixture-local elevation, fixture operation, compilation, evidence extraction, and fixture shutdown are standing-authorized inside the disposable fixture envelope. Physical-host and shared-WSL effects remain unauthorized."
     },
@@ -214,21 +223,23 @@
       "next_action": "Under the standing disposable-fixture authorization, inspect the retained Visual Studio installer log, change only the exact offline installation invocation or prerequisite selected by that evidence, compile and extract hashes if installation succeeds, and return the fixture Off."
     },
     "build_attempt_003": {
-      "disposition": "infrastructure-build-failure-no-candidate-result",
-      "candidate_package_created": false,
+      "disposition": "completed-non-runtime-build",
+      "candidate_package_created": true,
       "visual_studio_exit_5003_cause": "Missing Microsoft Windows Code Signing PCA 2024 in the offline fixture intermediate certificate store",
       "visual_studio_installed": true,
       "procedure_corrections_committed": [
         "remove unsupported GNU --force-local from Windows tar.exe invocations",
-        "mark new patched files intent-to-add before generating the complete source diff"
+        "mark new patched files intent-to-add before generating the complete source diff",
+        "normalize CMake-facing paths to forward slashes"
       ],
-      "latest_retry": "attempt-003-r4",
-      "latest_retry_exit_code": 1,
-      "latest_retry_log_retained_in_fixture": true,
-      "latest_retry_log_extracted": false,
-      "extraction_blocker": "The operator explicitly cancelled the UAC prompt for the bounded log-extraction operation.",
-      "fixture_shutdown_guard_completed": true,
-      "next_action": "After operator consent to elevation, extract the retained r4 build log and continue only with the narrow correction selected by it."
+      "successful_retry": "attempt-003-r5",
+      "build_exit_code": 0,
+      "package_sha256": "e9c41512246db9afe15a150a83f457ddd8087479225fee63f1e4a32c5ec8fe77",
+      "output_manifest_sha256": "ab307e0793d9387c49754b3449513ab80d2fdc195c533d2b3191659c2794f6de",
+      "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+      "evidence_extracted_and_reverified": true,
+      "fixture_final_state": "Off",
+      "next_action": "Use the recorded candidate manifest and exact uninstall/install/restore plan for CP-MINIMAL-V3-STOCK-NS-001; do not install until runtime plan validation is complete."
     },
     "powershell_build_prerequisite": {
       "name": "PowerShell 7 fixture runtime",
@@ -412,7 +423,7 @@
       "an output is missing, extra, outside the build root, or absent from the manifest",
       "the operation would affect the physical host or a shared WSL instance"
     ],
-    "execution_boundary": "All pinned payload inputs are staged; PowerShell and Visual Studio are installed; the revised procedure record must be restaged and hash-verified. Attempt-003-r4 failed during the build and its retained log has not been extracted because the UAC prompt was cancelled. Further bounded work is standing-authorized inside the disposable fixture, but do not bypass operator cancellation; resume only when UAC consent is given. Candidate package installation and runtime must wait for produced hashes and separate plan validation."
+    "execution_boundary": "The non-runtime minimal-v3-stock-ns build is complete, hash-verified, extracted, and closed with the fixture Off. Candidate package installation and runtime were not performed and must wait for the separately recorded exact installation/restoration plan validation."
   },
   "candidate_trial_contract": {
     "status": "stock-calibration-complete-next-candidate-deferred",
@@ -513,28 +524,41 @@
       "approval_boundary": "Attempt-003 approval was consumed. No approval carries forward to minimal-v3-stock-ns compilation, installation, fixture operation, or probing."
     },
     "minimal_v3_stock_ns": {
-      "status": "blocked-awaiting-controlled-package-build",
+      "status": "built-hash-bound-runtime-plan-prepared-not-executed",
       "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V3-STOCK-NS-001",
       "candidate_id": "minimal-v3-stock-ns",
       "parent": "minimal-v3-fail-closed",
       "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
-      "linux_init_sha256": "99828be3e706c29e26eaaf7ca6e423d897dd334ab88a4e4410a70a5d2d1726aa",
-      "linux_initrd_sha256": "a7e3f9f14ede0ecf626da9a74b71fc156b4550496908001a1cfbd1c54eda6989",
+      "package_bytes": 174407680,
+      "package_sha256": "e9c41512246db9afe15a150a83f457ddd8087479225fee63f1e4a32c5ec8fe77",
+      "output_manifest_sha256": "ab307e0793d9387c49754b3449513ab80d2fdc195c533d2b3191659c2794f6de",
+      "candidate_manifest_path": "control-plane/trial-manifests/minimal-v3-stock-ns.json",
+      "candidate_manifest_sha256": "25ab8c17df7df2c2534542000978dc60a8a4735659f797a8ea6f44afad9cc6f0",
+      "staged_package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v3-stock-ns\\wsl.msi",
+      "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v3-stock-ns.json",
+      "candidate_product_code": "{E79C2ACE-26AB-48DA-BFFD-467C63035CDD}",
+      "stock_product_code": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}",
+      "upgrade_code": "{6D5B792B-1EDC-4DE9-8EAD-201B820F8E82}",
       "probe_sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
       "rootfs_sha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
       "wpr_profile_sha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
       "process_timeout_seconds": 45,
       "shutdown_timeout_seconds": 30,
       "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
-      "missing_before_runtime_plan_validation": [
-        "controlled Windows package SHA-256",
-        "controlled output-manifest SHA-256",
-        "candidate trial-manifest SHA-256",
-        "exact installation and stock restoration commands bound to the produced package"
+      "pre_install_shutdown_command": "& wsl.exe --shutdown; if ($LASTEXITCODE -ne 0) { throw \"Pre-install WSL shutdown failed with exit $LASTEXITCODE.\" }",
+      "remove_stock_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/x','{020F8AC8-A788-4E39-8E9B-8FECFA843632}','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-stock-remove.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Stock removal failed with exit $($p.ExitCode).\" }",
+      "install_candidate_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v3-stock-ns\\wsl.msi','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-candidate-install.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Candidate installation failed with exit $($p.ExitCode).\" }",
+      "remove_candidate_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/x','{E79C2ACE-26AB-48DA-BFFD-467C63035CDD}','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-candidate-remove.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Candidate removal failed with exit $($p.ExitCode).\" }",
+      "restore_stock_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi','/qn','/norestart','/L*v','C:\\controlled-wsl-trials\\CP-MINIMAL-V3-STOCK-NS-001-stock-restore.log') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"Stock restoration failed with exit $($p.ExitCode).\" }",
+      "recovery_command": "Run the unchanged fixed probe as CP-MINIMAL-V3-STOCK-NS-001-RECOVERY with candidate_id stock-wsl-2.7.12-recovery only after stock product code {020F8AC8-A788-4E39-8E9B-8FECFA843632}, version 2.7.12.0, and package hash a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145 are verified.",
+      "remaining_before_runtime": [
+        "stage and independently verify the package and candidate manifest inside the fixture",
+        "validate installed-product detection and finally-path stock restoration in the exact trial runner",
+        "run inventory_records.py with integrity ok immediately before execution"
       ],
-      "runtime_boundary": "After a successful build, record all produced hashes, generate the candidate manifest, and plan-validate installation and restoration against the accepted stock baseline. The validated trial is then standing-authorized inside the disposable fixture envelope."
+      "runtime_boundary": "The package has not been installed and CP-MINIMAL-V3-STOCK-NS-001 has not run. Complete exact runner validation before relying on standing disposable-fixture authorization."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",

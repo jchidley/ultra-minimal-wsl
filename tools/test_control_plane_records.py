@@ -176,7 +176,10 @@ class ControlPlaneRecordTests(unittest.TestCase):
         build_script = ROOT / active["script"]
         self.assertEqual(sha256(build_script), active["script_sha256"])
         self.assertIn("Build-MinimalV3StockNs.ps1' -Execute", active["build_command"])
-        self.assertIn("standing-authorized inside the disposable fixture", build["execution_boundary"])
+        self.assertTrue(active["completed"])
+        self.assertRegex(active["package_sha256"], r"^[0-9a-f]{64}$")
+        self.assertRegex(active["output_manifest_sha256"], r"^[0-9a-f]{64}$")
+        self.assertIn("separately recorded exact installation/restoration plan validation", build["execution_boundary"])
         build_source = build_script.read_text(encoding="utf-8")
         self.assertIn("if (-not $Execute) { exit 0 }", build_source)
         self.assertIn("FETCHCONTENT_FULLY_DISCONNECTED=ON", build_source)
@@ -225,6 +228,15 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn("creates no candidate result", contract["infrastructure_boundary"])
         self.assertEqual(contract["ledger"]["trials"], "inventory/trials.csv")
         self.assertEqual(contract["ledger"]["metadata"], "inventory/trial-metadata.csv")
+        stock_ns = contract["minimal_v3_stock_ns"]
+        manifest_path = ROOT / stock_ns["candidate_manifest_path"]
+        self.assertEqual(sha256(manifest_path), stock_ns["candidate_manifest_sha256"])
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        self.assertEqual(manifest["package_sha256"], stock_ns["package_sha256"])
+        self.assertEqual(manifest["output_manifest_sha256"], stock_ns["output_manifest_sha256"])
+        self.assertIn(stock_ns["candidate_product_code"], stock_ns["remove_candidate_command"])
+        self.assertIn(stock_ns["stock_product_code"], stock_ns["remove_stock_command"])
+        self.assertIn("stock-wsl-2.7.12-recovery", stock_ns["recovery_command"])
         attempt = contract["stock_calibration_attempt_001"]
         self.assertEqual(attempt["disposition"], "infrastructure-failure-no-candidate-result")
         self.assertFalse(attempt["candidate_ledger_row"])
@@ -254,7 +266,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertFalse(next_candidate["executable"])
         self.assertFalse(next_candidate["approval_carried_forward"])
         self.assertEqual(next_candidate["reserved_trial_id"], "CP-MINIMAL-V3-STOCK-NS-001")
-        self.assertIn("controlled Windows package SHA-256", next_candidate["missing_before_runtime_plan_validation"])
+        self.assertEqual(next_candidate["status"], "built-hash-bound-runtime-plan-prepared-not-executed")
+        self.assertIn("validate installed-product detection", next_candidate["remaining_before_runtime"][1])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])
