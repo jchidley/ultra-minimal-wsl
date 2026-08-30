@@ -7,7 +7,7 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
 - No reduced control-plane package or new candidate kernel has been deployed by the current work.
 - The accepted stock calibration and independent recovery returned the disposable Windows VM to Off with no probe, trace, or shutdown failure. The retained `clean-shell` checkpoint was not restored or changed. Live state is not asserted here.
-- Physical-host changes and operations affecting a shared WSL instance require fresh explicit approval. Operations wholly confined to the disposable fixture are standing-authorized within the pinned, offline, hash-verified, plan-validated, recoverable experiment envelope; they must fail closed on boundary or recovery failure.
+- Physical-host changes and operations affecting a shared WSL instance require fresh explicit approval. Operations wholly confined to the disposable fixture are standing-authorized within the pinned, offline, hash-verified, plan-validated, recoverable experiment envelope and require no human stage review or confirmation; they must fail closed on boundary or recovery failure.
 - Exact runner validation staged and independently hash-verified the produced MSI, candidate manifest, and runner without installing or probing the candidate. Windows Installer reported the pinned stock product installed and the candidate absent; the fixture returned Off.
 
 ## Proven boundary
@@ -33,7 +33,7 @@ The only active experiment path is the fixed candidate comparison:
 
 1. stock WSL 2.7.12 calibration with the exact Toybox rootfs — accepted at `B6-T` in `CP-STOCK-2.7.12-003`;
 2. compile and hash the `minimal-v3-stock-ns` controlled package without installing it;
-3. record produced hashes, separately plan-validate, install, and test `minimal-v3-stock-ns` with the same probe inside the disposable fixture;
+3. record produced hashes, agent-validate the executable plan, then immediately install and test `minimal-v3-stock-ns` with the same probe inside the disposable fixture;
 4. restore the accepted baseline and repeat the same build/runtime contract for `minimal-v3-mount-ns`;
 5. classify the earliest supported B-gate and use the comparison to select the next configuration change.
 
@@ -47,7 +47,7 @@ Approved `CP-STOCK-2.7.12-003` enabled both optional features, completed a contr
 
 The non-runtime `minimal-v3-stock-ns` controlled package build is complete. Attempt 003 installed the pinned toolchain after adding the exact Microsoft Windows Code Signing PCA 2024 required offline, then evidence-selected three procedure corrections: remove GNU-only `tar.exe --force-local`, include intent-to-add files in the complete diff, and normalize CMake-facing paths. Retry r5 compiled and packaged successfully, reproduced complete source diff `97935c…76ad`, produced unsigned MSI SHA-256 `e9c415…fe77` (174,407,680 bytes) and output-manifest SHA-256 `ab307e…f6de`, extracted and independently reverified them, and returned the fixture Off.
 
-Exact installation/recovery runner validation is also complete. The hash-bound runner passed 13 local and fixture-side failure injections, including partial MSI transitions and recovery failures; every post-mutation path restored stock-only product state, and every path capable of doing so invoked the unchanged independent recovery probe. Fixture validation independently verified all staged hashes and 174,407,680-byte package size, reported Windows Installer state `5` for stock and `-1` for the candidate, found no candidate evidence, and returned the exact fixture Off. The first validation attempt was an infrastructure failure before runner execution because guest script execution was disabled; retrying with process-local `Bypass` succeeded. The candidate has not been installed or run, and the current execution gate remains closed.
+Exact installation/recovery runner validation is also complete. The hash-bound runner passed 13 local and fixture-side failure injections, including partial MSI transitions and recovery failures; every post-mutation path restored stock-only product state, and every path capable of doing so invoked the unchanged independent recovery probe. Fixture validation independently verified all staged hashes and 174,407,680-byte package size, reported Windows Installer state `5` for stock and `-1` for the candidate, found no candidate evidence, and returned the exact fixture Off. The first validation attempt was an infrastructure failure before runner execution because guest script execution was disabled; retrying with process-local `Bypass` succeeded. The candidate has not been installed or run; the disposable-fixture runtime trial may proceed after the recorded machine checks without a separate human gate.
 
 ## Inventory
 

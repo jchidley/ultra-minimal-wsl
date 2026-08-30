@@ -17,7 +17,7 @@ Microsoft's packaged kernel remains at `C:\Program Files\WSL\tools\kernel`. The 
 7. Pass the repository PowerShell, ShellCheck, record, and plan validations.
 8. Reserve a unique evidence directory, but append no terminal ledger row yet.
 
-A prepared candidate or valid plan implies no authorization outside the disposable-fixture envelope.
+A prepared candidate or valid plan implies no authorization outside the disposable-fixture envelope. Inside that envelope, complete the build → validate → test → recover → analyze loop autonomously; do not stop for operator stage review, routine confirmation, or gate-opening.
 
 ## Kernel-only trial
 
@@ -29,7 +29,7 @@ Use `tools/Invoke-WslDiagnosticKernelTrial.ps1` only when ordinary evidence cann
 
 The accepted stock baseline is `CP-STOCK-2.7.12-003`: stock WSL 2.7.12 and the pinned Toybox rootfs passed the fixed probe and an independent recovery interval at `B6-T`. Reusing that baseline requires its recorded identities and recovery contract.
 
-Compilation is a separate prerequisite and ends after a closed output manifest, package hash, build evidence extraction, and fixture shutdown. Do not install an output until those produced hashes are recorded and the exact installation/restoration operation is plan-validated. Compilation and runtime are standing-authorized only when wholly confined to the disposable fixture envelope.
+Compilation produces a closed output manifest, package hash, and build evidence. Once those outputs are recorded and the agent has plan-validated the exact installation/restoration operation, continue directly to installation and runtime testing. Compilation and runtime are standing-authorized when wholly confined to the disposable fixture envelope; the separation is evidentiary, not a human checkpoint.
 
 The candidate experiment begins when the fixed probe starts its first `wsl.exe` process, not when an outer fixture starts.
 
