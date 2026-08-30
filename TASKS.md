@@ -4,7 +4,7 @@
 
 ## Active action
 
-Use `CP-MINIMAL-V3-STOCK-NS-001` evidence to correct only the retained Windows host's initial-configuration message: explicitly send false/none/zero for every excluded GUI, GPU, and networking field, then repeat source-policy tests, two clean offline Linux builds, controlled Windows packaging, runtime, and recovery without pausing between agent-validated stages.
+Retry the identical hash-bound `minimal-v4-stock-ns` controlled Windows package build under a fresh operation ID when the Windows elevation broker can start the worker. The source-policy correction and two clean offline Linux builds are complete. After package hashes are extracted, continue directly through runner preparation, runtime, recovery, and analysis.
 
 ## Comparison queue
 

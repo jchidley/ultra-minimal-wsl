@@ -240,6 +240,27 @@
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v4-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v4-stock-ns\\controlled-build-result.json",
       "completed": false,
+      "build_attempt_001": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "candidate_package_created": false,
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "worker_log_created": false,
+        "operation_result_created": false,
+        "reason": "The approved elevation launcher did not progress past UAC launch state before the one-hour controller timeout; the fixture script never began.",
+        "live_fixture_state_independently_verified": false
+      },
+      "build_attempt_002": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "candidate_package_created": false,
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "worker_log_created": false,
+        "operation_result_created": false,
+        "reason": "One bounded retry under a fresh operation ID remained at the UAC launch state for five minutes; the fixture script again never began.",
+        "live_fixture_state_independently_verified": false,
+        "next_action": "Resume the identical hash-bound build launcher when the Windows elevation broker can start the worker; do not alter build inputs or treat either launch as a candidate result."
+      },
       "runtime_boundary": "Build, hash, extract, and return the fixture Off. Continue directly into hash-bound runner preparation after produced package identities are recorded; do not install an unhashed output."
     },
     "build_attempt_001": {

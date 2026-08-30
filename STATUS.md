@@ -51,6 +51,8 @@ Exact installation/recovery runner validation is also complete. The hash-bound r
 
 `CP-MINIMAL-V3-STOCK-NS-001` then completed as a valid candidate failure. Management checks passed; ETW GuestLog records `/init`, WSL 2.7.12, storvsc, VSOCK, and mini-init processing before `Rejected excluded initial configuration`. No ext4 mount occurred, and Toybox returned `Wsl/Service/CreateInstance/E_ABORT`, so the highest directly supported gate is `B2`. Both 20-file evidence manifests verified, the exact stock package was restored, the independent recovery interval passed `B6-T`, and the fixture returned Off. The immutable evidence and terminal ledger row are preserved under `recovery-harness/trials/CP-MINIMAL-V3-STOCK-NS-001/`.
 
+The evidence-selected `minimal-v4` layer explicitly zeros every excluded GUI, GPU, and networking initial-configuration field on the Windows sender without changing guest or namespace code. The parent, stock-namespace, and mount-namespace records are complete; stock and mount each built byte-identically twice offline in separate ext4 build directories. The controlled `minimal-v4-stock-ns` Windows package procedure is hash-bound and ready. Two bounded elevated controller launches remained at the UAC `launching` state, created no worker status/log/result, and therefore performed no recorded fixture build action; live fixture state after those controller timeouts is not asserted.
+
 ## Inventory
 
 The durable inventory contains 9 config snapshots, 12 completed trials, and 174 reviewed annotations; synchronization integrity is verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.
