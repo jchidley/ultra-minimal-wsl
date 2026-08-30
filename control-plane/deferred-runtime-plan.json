@@ -151,7 +151,7 @@
       "candidate": "minimal-v3-stock-ns",
       "script": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1",
       "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1",
-      "script_sha256": "59e576efce816c87393db5e4d6dd52d1f2ef455b31c76cec1053a5129adb4e63",
+      "script_sha256": "88b2ed038aa620d3d92cab4722639773ca55fc7a08b9adf029c80548ab546187",
       "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
       "powershell_install_root": "C:\\Program Files\\PowerShell\\7",
       "powershell_install_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\powershell\\PowerShell-7.6.5-win-x64.msi','/qn','/norestart','ADD_PATH=1','USE_MU=0','ENABLE_MU=0') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"PowerShell installation failed with exit $($p.ExitCode).\" }",

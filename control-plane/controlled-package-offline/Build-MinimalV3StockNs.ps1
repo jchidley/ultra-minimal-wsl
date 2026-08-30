@@ -115,6 +115,7 @@ Invoke-Native $Git @('-C', $SourceRoot, 'init', '--quiet')
 Invoke-Native $Git @('-C', $SourceRoot, 'config', 'core.autocrlf', 'false')
 Invoke-Native $Git @('-C', $SourceRoot, 'add', '-A')
 foreach ($patch in $Patches.Keys) { Invoke-Native $Git @('-C', $SourceRoot, 'apply', '--unsafe-paths', (Join-Path $PatchRoot $patch)) }
+Invoke-Native $Git @('-C', $SourceRoot, 'add', '--intent-to-add', '-A')
 $diffPath = Join-Path $BuildRoot 'controlled-source.diff'
 $diffOutput = & $Git -C $SourceRoot diff --binary --no-ext-diff
 if ($LASTEXITCODE -ne 0) { throw 'Failed to generate the complete source diff.' }
