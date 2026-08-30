@@ -4,15 +4,16 @@
 
 ## Active action
 
-Retry the identical hash-bound `minimal-v4-stock-ns` controlled Windows package build under a fresh operation ID when the Windows elevation broker can start the worker. The source-policy correction and two clean offline Linux builds are complete. After package hashes are extracted, continue directly through runner preparation, runtime, recovery, and analysis.
+Retry the already validated `minimal-v4-stock-ns` runtime controller (SHA-256 `61b6fe…67df`) under a fresh operation ID when the Windows elevation broker can start the worker. Build, package identity extraction, runner fault injection, fixture-side validation, and the trial-scoped outer-log correction are complete. Continue directly through the single candidate interval, mandatory stock recovery, evidence extraction, and analysis; create no candidate result if the worker does not start.
 
 ## Comparison queue
 
 1. stock WSL 2.7.12 calibration with `toybox-minimal-wsl-rootfs.tar.gz` — complete at `B6-T` in `CP-STOCK-2.7.12-003`;
-2. `minimal-v3-stock-ns`;
-3. `minimal-v3-mount-ns`;
-4. evidence-selected namespace decision;
-5. one evidence-selected kernel/configuration change or minimality ablation.
+2. `minimal-v3-stock-ns` — superseded after its B2 sender-policy evidence;
+3. `minimal-v4-stock-ns`;
+4. `minimal-v4-mount-ns`;
+5. evidence-selected namespace decision;
+6. one evidence-selected kernel/configuration change or minimality ablation.
 
 Every comparison uses the identical Toybox smoke command, timeouts, instrumentation, rootfs, classification rules, and recovery proof.
 

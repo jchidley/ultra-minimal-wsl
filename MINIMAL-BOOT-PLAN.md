@@ -105,7 +105,7 @@ Every candidate uses `tools/Invoke-WslCandidateProbe.ps1` with identical inputs 
 
 Missing hashes, interval bounds, process results, trace evidence, manifest, or recovery prevents a positive classification. Reuse `inventory/trials.csv`, `inventory/trial-metadata.csv`, and `recovery-harness/trials/<TRIAL_ID>/`; append one immutable terminal row only after evidence and recovery complete. Infrastructure attempts get no separate experiment ledger.
 
-The comparison order is stock WSL 2.7.12 calibration, `minimal-v3-stock-ns`, then `minimal-v3-mount-ns`, all with the exact registered Toybox rootfs. The accepted stock calibration and independent recovery in `CP-STOCK-2.7.12-003` both reached `B6-T`; this validates the measurement and recovery baseline but proves no reduced candidate requirement. Only runtime comparison may select the namespace variant and resume kernel ablation.
+The comparison order is stock WSL 2.7.12 calibration, the finalized `minimal-v3-stock-ns` diagnostic interval, then the evidence-corrected `minimal-v4-stock-ns` and `minimal-v4-mount-ns` siblings, all with the exact registered Toybox rootfs. The accepted stock calibration and independent recovery in `CP-STOCK-2.7.12-003` both reached `B6-T`; this validates the measurement and recovery baseline but proves no reduced candidate requirement. Only runtime comparison may select the namespace variant and resume kernel ablation.
 
 ## Smoke-test contract
 

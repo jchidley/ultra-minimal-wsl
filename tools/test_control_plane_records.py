@@ -224,18 +224,21 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(next_build["candidate"], "minimal-v4-stock-ns")
         self.assertEqual(sha256(next_script), next_build["script_sha256"])
         self.assertEqual(next_build["complete_source_diff_sha256"], plan["source_candidates"]["minimal-v4-stock-ns"]["complete_source_diff_sha256"])
-        self.assertFalse(next_build["completed"])
+        self.assertTrue(next_build["completed"])
+        self.assertEqual(next_build["package_sha256"], "50f17bd74d3b5aafb4f48507ad926b2f003255db55d463117a23bc2890206cda")
+        self.assertEqual(next_build["fixture_final_state"], "Off")
         self.assertNotIn("msiexec", next_script.read_text(encoding="utf-8").lower())
 
     def test_fixed_probe_and_trial_contract_enforce_identical_comparison(self):
         plan = load_plan()
         contract = plan["candidate_trial_contract"]
-        self.assertFalse(contract["executable"])
+        self.assertTrue(contract["executable"])
         self.assertFalse(contract["approval_carried_forward"])
         self.assertEqual(contract["comparison_order"], [
             "stock-wsl-2.7.12-calibration",
             "minimal-v3-stock-ns",
-            "minimal-v3-mount-ns",
+            "minimal-v4-stock-ns",
+            "minimal-v4-mount-ns",
         ])
         probe = ROOT / contract["fixed_probe"]["path"]
         self.assertEqual(sha256(probe), contract["fixed_probe"]["sha256"])
@@ -322,6 +325,17 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(next_candidate["runner_validation"]["fixture_final_state"], "Off")
         self.assertEqual(next_candidate["remaining_before_runtime"], [])
         self.assertIn("must not run again", next_candidate["runtime_boundary"])
+        v4 = contract["minimal_v4_stock_ns"]
+        self.assertTrue(v4["executable"])
+        self.assertEqual(v4["reserved_trial_id"], "CP-MINIMAL-V4-STOCK-NS-001")
+        self.assertEqual(sha256(ROOT / v4["candidate_manifest_path"]), v4["candidate_manifest_sha256"])
+        self.assertEqual(sha256(ROOT / v4["runner_path"]), v4["runner_sha256"])
+        self.assertEqual(v4["runner_validation"]["failure_paths_tested"], 13)
+        self.assertFalse(v4["runner_validation"]["candidate_install_performed"])
+        self.assertEqual(v4["runner_validation"]["fixture_final_state"], "Off")
+        self.assertEqual(v4["remaining_before_runtime"], [
+            "Windows elevation broker must start the already validated runtime controller"
+        ])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])

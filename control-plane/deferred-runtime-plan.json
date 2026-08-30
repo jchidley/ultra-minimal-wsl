@@ -187,7 +187,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v4-stock-ns-build-prepared",
+    "status": "minimal-v4-stock-ns-runtime-validated-elevation-blocked",
     "executable": true,
     "approval_carried_forward": false,
     "active_build": {
@@ -239,7 +239,17 @@
       ],
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v4-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v4-stock-ns\\controlled-build-result.json",
-      "completed": false,
+      "completed": true,
+      "completed_utc": "2026-08-30T17:43:10.0173289Z",
+      "controlled_output_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-outputs\\minimal-v4-stock-ns",
+      "package_bytes": 174411776,
+      "package_sha256": "50f17bd74d3b5aafb4f48507ad926b2f003255db55d463117a23bc2890206cda",
+      "package_product_code": "{929334FC-D0AF-423B-A33D-0068D4AC506B}",
+      "output_manifest_sha256": "b8d887ff736bbe085825be52af3da45dc0767ca9d87e1da304d80f694d8f1826",
+      "build_result_sha256": "ec2822d7e4b193ad2ca956875780d976ecedb8ae11ac227efa42aa8fc5e11acf",
+      "operation_result_sha256": "3068e90678cbf157557cd9a1ced7a5f8cceb56feaa91ac54cfe8b8756ef5eb1",
+      "package_signature_status": "NotSigned",
+      "fixture_final_state": "Off",
       "build_attempt_001": {
         "disposition": "infrastructure-failure-before-worker-start",
         "candidate_package_created": false,
@@ -258,8 +268,15 @@
         "worker_log_created": false,
         "operation_result_created": false,
         "reason": "One bounded retry under a fresh operation ID remained at the UAC launch state for five minutes; the fixture script again never began.",
-        "live_fixture_state_independently_verified": false,
-        "next_action": "Resume the identical hash-bound build launcher when the Windows elevation broker can start the worker; do not alter build inputs or treat either launch as a candidate result."
+        "live_fixture_state_independently_verified": false
+      },
+      "build_attempt_003": {
+        "disposition": "completed-non-runtime-build",
+        "candidate_package_created": true,
+        "build_exit_code": 0,
+        "evidence_extracted_and_reverified": true,
+        "fixture_final_state": "Off",
+        "next_action": "Execute only the separately hash-bound CP-MINIMAL-V4-STOCK-NS-001 runner after its fixture validation and plan validation pass."
       },
       "runtime_boundary": "Build, hash, extract, and return the fixture Off. Continue directly into hash-bound runner preparation after produced package identities are recorded; do not install an unhashed output."
     },
@@ -500,13 +517,14 @@
     "execution_boundary": "The non-runtime minimal-v3-stock-ns build is complete, hash-verified, extracted, and closed with the fixture Off. Candidate package installation and runtime were not performed and must wait for the separately recorded exact installation/restoration plan validation."
   },
   "candidate_trial_contract": {
-    "status": "stock-calibration-complete-next-candidate-deferred",
-    "executable": false,
+    "status": "minimal-v4-stock-ns-runtime-validated",
+    "executable": true,
     "approval_carried_forward": false,
     "comparison_order": [
       "stock-wsl-2.7.12-calibration",
       "minimal-v3-stock-ns",
-      "minimal-v3-mount-ns"
+      "minimal-v4-stock-ns",
+      "minimal-v4-mount-ns"
     ],
     "fixed_probe": {
       "path": "tools/Invoke-WslCandidateProbe.ps1",
@@ -677,6 +695,67 @@
       },
       "remaining_before_runtime": [],
       "runtime_boundary": "CP-MINIMAL-V3-STOCK-NS-001 is finalized at B2 with independent stock recovery at B6-T. The byte-identical candidate must not run again."
+    },
+    "minimal_v4_stock_ns": {
+      "status": "runtime-plan-validated",
+      "executable": true,
+      "approval_carried_forward": false,
+      "reserved_trial_id": "CP-MINIMAL-V4-STOCK-NS-001",
+      "candidate_id": "minimal-v4-stock-ns",
+      "parent": "minimal-v4-fail-closed",
+      "complete_source_diff_sha256": "ee84b110ce27bbe9972315227fe3039da121e1d2e533e094e4c3a35bd6b6a6a5",
+      "package_bytes": 174411776,
+      "package_sha256": "50f17bd74d3b5aafb4f48507ad926b2f003255db55d463117a23bc2890206cda",
+      "output_manifest_sha256": "b8d887ff736bbe085825be52af3da45dc0767ca9d87e1da304d80f694d8f1826",
+      "candidate_manifest_path": "control-plane/trial-manifests/minimal-v4-stock-ns.json",
+      "candidate_manifest_sha256": "a200746e4887f2106390f3e3e421bdcbcab247e7dd5b0ccec69627d277649949",
+      "staged_package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v4-stock-ns\\wsl.msi",
+      "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v4-stock-ns.json",
+      "candidate_product_code": "{929334FC-D0AF-423B-A33D-0068D4AC506B}",
+      "stock_product_code": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}",
+      "upgrade_code": "{6D5B792B-1EDC-4DE9-8EAD-201B820F8E82}",
+      "probe_sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+      "rootfs_sha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+      "wpr_profile_sha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+      "process_timeout_seconds": 45,
+      "shutdown_timeout_seconds": 30,
+      "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
+      "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV4StockNsTrial.ps1",
+      "staged_runner_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV4StockNsTrial.ps1",
+      "runner_sha256": "f8bf41656b84e26cebcff02f4150f7c24de39c981367518291471b319f204d1b",
+      "runtime_controller_sha256": "61b6fedd5bf36590eddd2d88bb0c2db7ae68476ca1218836761e1794815367df",
+      "runner_execution_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV4StockNsTrial.ps1' -Execute",
+      "runner_validation": {
+        "status": "complete",
+        "completed_utc": "2026-08-30T17:49:44.9409503Z",
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false,
+        "failure_paths_tested": 13,
+        "staged_hashes_verified": true,
+        "stock_product_state": 5,
+        "candidate_product_state": -1,
+        "fixture_final_state": "Off",
+        "result_sha256": "adb072c3cabdcd94b40a419c2641ac3fa3f5761e93a25a117829032d03457796"
+      },
+      "runtime_attempt_001": {
+        "disposition": "infrastructure-failure-before-runner-execution",
+        "reason": "The outer controller found generic runner logs retained from the completed v3 trial before any MSI mutation or candidate probe.",
+        "operation_result_sha256": "3a46e5846e0a42a76b363209b7350dd98607d5ec7a403b2b391d9606202d2a24",
+        "fixture_final_state": "Off",
+        "correction": "Use trial-scoped outer runner stdout and stderr names without deleting or rewriting retained v3 logs."
+      },
+      "runtime_attempt_002": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "worker_log_created": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false,
+        "reason": "The corrected hash-bound controller did not progress past the UAC launch state; one fresh-ID retry was canceled before worker start.",
+        "next_action": "Retry the stable runtime controller SHA-256 61b6fedd5bf36590eddd2d88bb0c2db7ae68476ca1218836761e1794815367df under a fresh operation ID when the elevation broker can start it; executable inputs remain independently hash-bound rather than relying on an incidental repository HEAD."
+      },
+      "remaining_before_runtime": ["Windows elevation broker must start the already validated runtime controller"],
+      "runtime_boundary": "Execute exactly one serial candidate interval, always restore the pinned stock package, require the unchanged independent B6-T recovery probe, and append no terminal ledger row unless evidence and recovery verify."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",
