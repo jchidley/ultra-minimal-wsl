@@ -4,7 +4,7 @@
 
 ## Active action
 
-Pin and hash-verify an offline PowerShell 7 fixture input, add its exact installation command and identity checks to `control-plane/deferred-runtime-plan.json`, and revalidate the non-runtime `minimal-v3-stock-ns` build packet. Then obtain fresh bundled approval for PowerShell and Visual Studio installation, verified input staging, `Build-MinimalV3StockNs.ps1 -Execute`, evidence extraction, and returning the fixture Off. The consumed first attempt stopped before staging or installation because the fixture has no `pwsh.exe`. Candidate package installation and the reserved runtime trial remain excluded.
+Obtain fresh bundled approval for the revalidated non-runtime `minimal-v3-stock-ns` build packet: verified input staging, pinned PowerShell 7.6.5 and Visual Studio installation inside the fixture, `Build-MinimalV3StockNs.ps1 -Execute`, output-manifest and package hashing, evidence extraction, and returning the fixture Off. The consumed first attempt stopped before staging or installation; its missing PowerShell prerequisite is now pinned. Candidate-package installation and the reserved runtime trial remain excluded.
 
 ## Comparison queue
 
@@ -18,7 +18,7 @@ Every comparison uses the identical Toybox smoke command, timeouts, instrumentat
 
 ## Blocked
 
-- `minimal-v3-stock-ns` package compilation is blocked on a pinned offline PowerShell 7 fixture input and fresh build approval.
+- `minimal-v3-stock-ns` package compilation is blocked on fresh build approval; its offline PowerShell and Visual Studio prerequisites are pinned.
 - `minimal-v3-stock-ns` runtime classification is blocked until its pinned controlled package is compiled reproducibly, installation/recovery is plan-validated, and the complete operation is freshly approved.
 - Namespace selection and Kconfig promotion are blocked on controlled runtime evidence.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.

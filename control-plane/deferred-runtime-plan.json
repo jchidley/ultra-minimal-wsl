@@ -25,6 +25,23 @@
       "manifest_sha256": "8bd31e90c71055f523f7d17e3789019f8cae4cf48ce14c027dd7480e78c7a08d",
       "verified": true
     },
+    "powershell": {
+      "version": "7.6.5",
+      "architecture": "x64",
+      "path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\powershell\\PowerShell-7.6.5-win-x64.msi",
+      "staged_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\powershell\\PowerShell-7.6.5-win-x64.msi",
+      "bytes": 113750016,
+      "sha256": "3a87c24e044ec792047d734c841917ee4323a535e25f645ae6c33141a35fca8d",
+      "source": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.5/PowerShell-7.6.5-win-x64.msi",
+      "release_manifest_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-inputs\\powershell\\PowerShell-7.6.5-hashes.sha256",
+      "release_manifest_source": "https://github.com/PowerShell/PowerShell/releases/download/v7.6.5/hashes.sha256",
+      "release_manifest_bytes": 6522,
+      "release_manifest_sha256": "c01275fd380911ef2adfdaf04f04e3e06872dc0112e401de18a88dd3ddc055d8",
+      "signature_status": "Valid",
+      "signer": "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "signer_thumbprint": "AB172913A2960A224809EE8A0C371CD47A079B72",
+      "verified": true
+    },
     "wsl_source": {
       "tag": "2.7.12",
       "commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
@@ -122,7 +139,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v3-stock-ns-build-blocked-missing-pinned-powershell-7",
+    "status": "minimal-v3-stock-ns-build-prepared-awaiting-fresh-approval",
     "executable": false,
     "approval_carried_forward": false,
     "active_build": {
@@ -131,9 +148,12 @@
       "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1",
       "script_sha256": "417ba865977d0f4ac25fa914dfd9d209f6467f8eae4e89a580f2078f560a8b3b",
       "complete_source_diff_sha256": "97935ccd9541bb221e87cf2dee746cdcff221b5b69d98d3e43b42fddf69576ad",
+      "powershell_install_root": "C:\\Program Files\\PowerShell\\7",
+      "powershell_install_command": "$p = Start-Process -FilePath 'C:\\Windows\\System32\\msiexec.exe' -ArgumentList @('/i','C:\\controlled-inputs\\ultra-minimal-wsl\\powershell\\PowerShell-7.6.5-win-x64.msi','/qn','/norestart','ADD_PATH=1','USE_MU=0','ENABLE_MU=0') -Wait -PassThru; if ($p.ExitCode -notin @(0,3010)) { throw \"PowerShell installation failed with exit $($p.ExitCode).\" }",
+      "powershell_identity_check": "Require C:\\Program Files\\PowerShell\\7\\pwsh.exe, FileVersion 7.6.5.500, runtime version 7.6.5, and a valid Microsoft Authenticode signature before Visual Studio installation or build execution.",
       "visual_studio_install_root": "C:\\controlled-toolchain\\VS2022",
       "visual_studio_install_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\vs-community-layout\\vs_setup.exe' --quiet --wait --norestart --noWeb --installPath 'C:\\controlled-toolchain\\VS2022' --in 'C:\\controlled-inputs\\ultra-minimal-wsl\\vs-community-layout\\Response.json'; if ($LASTEXITCODE -ne 0) { throw \"Visual Studio installation failed with exit $LASTEXITCODE.\" }",
-      "build_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1' -Execute",
+      "build_command": "& 'C:\\Program Files\\PowerShell\\7\\pwsh.exe' -NoProfile -NonInteractive -ExecutionPolicy Bypass -File 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV3StockNs.ps1' -Execute",
       "fresh_directories": [
         "C:\\controlled-package\\source\\minimal-v3-stock-ns",
         "C:\\controlled-package\\build\\minimal-v3-stock-ns",
@@ -142,7 +162,7 @@
       "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-output-SHA256SUMS",
       "expected_build_result": "C:\\controlled-package\\build\\minimal-v3-stock-ns\\controlled-build-result.json",
       "runtime_boundary": "This approval packet ends after compilation, package hashing, output-manifest verification, evidence extraction, and fixture shutdown. Installation of the produced MSI and every candidate probe remain unauthorized until the produced hashes are recorded and separately plan-validated.",
-      "approval_boundary": "The consumed attempt-001 approval carried no retry authority. PowerShell 7 input acquisition or installation, input placement, Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require a newly validated plan and fresh bundled approval."
+      "approval_boundary": "The consumed attempt-001 approval carried no retry authority. The PowerShell 7 input is now pinned and verified, but its installation, input placement, Visual Studio installation, elevation, fixture operation, compilation, and fixture shutdown require fresh bundled approval."
     },
     "build_attempt_001": {
       "disposition": "infrastructure-failure-no-candidate-result",
@@ -160,18 +180,13 @@
       "final_state_evidence_sha256": "f3113d52a6795a084d5874da22f7902fa328615272cc3f2a9bd0635457ed86d4",
       "next_action": "Acquire and hash-verify one explicit offline PowerShell 7 fixture input, record its version, source, installation command, and identity checks, revalidate the complete build packet, and obtain fresh approval. Do not weaken the script version gate or substitute an unrecorded host runtime."
     },
-    "missing_build_prerequisite": {
+    "powershell_build_prerequisite": {
       "name": "PowerShell 7 fixture runtime",
       "required_by": "control-plane/controlled-package-offline/Build-MinimalV3StockNs.ps1 #Requires -Version 7.0",
-      "status": "not-pinned-not-authorized",
-      "required_records": [
-        "offline installer or archive path",
-        "source and exact version",
-        "bytes and SHA-256",
-        "signature or release identity",
-        "silent installation command and accepted exit codes",
-        "post-install pwsh.exe version and file identity checks"
-      ]
+      "status": "pinned-and-verified-awaiting-installation-approval",
+      "version": "7.6.5",
+      "msi_sha256": "3a87c24e044ec792047d734c841917ee4323a535e25f645ae6c33141a35fca8d",
+      "installation_authorized": false
     },
     "approval_required_before": [
       "PowerShell 7 fixture installation",
@@ -352,7 +367,7 @@
       "an output is missing, extra, outside the build root, or absent from the manifest",
       "the operation would require elevation, installation, shutdown, custom boot, or runtime"
     ],
-    "execution_boundary": "The minimal-v3-stock-ns build remains non-executable because its required PowerShell 7 fixture runtime is not pinned. After that input and its exact installation checks are recorded and validated, fresh approval may authorize only prerequisite/toolchain installation and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
+    "execution_boundary": "The required PowerShell 7 fixture runtime and its exact installation checks are now pinned, but no fixture operation or installation is authorized. Fresh approval may authorize only prerequisite/toolchain installation and compilation through output hashing; candidate package installation and runtime remain separately unauthorized."
   },
   "candidate_trial_contract": {
     "status": "stock-calibration-complete-next-candidate-deferred",
