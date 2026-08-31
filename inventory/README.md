@@ -64,7 +64,8 @@ uv run --with kconfiglib==14.1.0 python tools/build-kconfig-inventory.py \
   --config k-hostchan-001=candidates/K-HOSTCHAN-001/linux-fullconfig \
   --config k-storage-001=candidates/K-STORAGE-001/linux-fullconfig \
   --config k-overlay-001=candidates/K-OVERLAY-001/linux-fullconfig \
-  --config k-pidns-001=candidates/K-PIDNS-001/linux-fullconfig
+  --config k-pidns-001=candidates/K-PIDNS-001/linux-fullconfig \
+  --config k-overlay-pidns-001=candidates/K-OVERLAY-PIDNS-001/linux-fullconfig
 uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_inventory_records
 ```

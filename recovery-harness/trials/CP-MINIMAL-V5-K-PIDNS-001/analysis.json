@@ -1,0 +1,75 @@
+{
+  "trialId": "CP-MINIMAL-V5-K-PIDNS-001",
+  "purpose": "Test the reproducible K-STORAGE-001 plus CONFIG_PID_NS reduced kernel with the finalized minimal-v5 mount-plus-PID control plane under the fixed Toybox probe and independent stock recovery contract.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B2",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The exact external kernel booted and exchanged guest capabilities, EarlyConfig, and InitialConfig over the retained host channel. Dynamic association of the registered Toybox VHDX then failed in HCS with an invalid storage handle before ext4 mount."
+  },
+  "candidate": {
+    "id": "minimal-v5-k-pidns-001",
+    "kernelCandidate": "K-PIDNS-001",
+    "kernelConfigParent": "k-storage-001",
+    "controlPlaneParent": "minimal-v5-mount-pid-ns",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "explicitSymbols": ["CONFIG_PID_NS"],
+    "autoselectedSymbols": [],
+    "packageSha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+    "candidateManifestSha256": "e3bd73bd70be85dcecf73e5baeb78ce4f5711c1a32ed9c853f1a840ce1ea1134",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-31T03:37:51.3782306Z",
+    "finishedUtc": "2026-08-31T03:38:41.7534751Z",
+    "probeClassification": "UNRESOLVED-TRACE-REQUIRED",
+    "finalClassification": "B2",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "windowsError": "Wsl/Service/CreateInstance/MountDisk/HCS/0x80010105",
+    "failureSignature": "Dynamic registered-distro VHDX association failed with an invalid Hyper-V storage handle before ext4 mount",
+    "shutdownTimedOut": true,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 984,
+    "recoveryRows": 4937,
+    "directEvidence": "CreateVmEnd reported kernel 6.18.40.1+; mini_init capabilities and both configuration messages crossed the host channel; HCS storage association then failed before B3."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V5-K-PIDNS-001-RECOVERY",
+    "startedUtc": "2026-08-31T03:39:04.8721483Z",
+    "finishedUtc": "2026-08-31T03:39:13.3445273Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "47efb917411165e1c0daae751f53f4eadf9695678d2426aadb89d6e073df960d",
+    "candidateArchiveSha256": "d24222296eefd6d71165a6b36c92a4d12b28bb72caa2146eafe04ddc69afc998",
+    "recoveryArchiveSha256": "8ed154eb757a7498da61579b5eb747f21a21323a238b31335b03b6da8d12d34c",
+    "operationResultSha256": "866534b581732d5b1cb215e24d64d02bcfeba6c7dbb956bbbce37f3b6b4e9baf"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChangedDuringCandidate": true,
+    "wslconfigRestoredAbsent": true
+  },
+  "decision": "Finalize K-PIDNS-001 at B2 without rerun. CONFIG_PID_NS remains proven required by the prior namespace comparison, but the reduced kernel lacks a facility needed for dynamic registered-distro VHDX attachment under the retained control plane. Select the next narrow kernel group from the HCS/StorVsp dynamic-association evidence."
+}
+

@@ -1,0 +1,9 @@
+{
+    "schema":  1,
+    "name":  "wsl-shutdown",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--shutdown"
+                  ],
+    "attemptedUtc":  "2026-08-31T03:38:08.8775223Z"
+}

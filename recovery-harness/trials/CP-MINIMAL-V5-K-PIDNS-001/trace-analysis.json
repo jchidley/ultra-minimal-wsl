@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V5-K-PIDNS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 984,
+  "recoveryTraceRows": 4937,
+  "candidateGuestLogRecords": 0,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the external 6.18.40.1+ kernel",
+    "mini_init returned LxMiniInitMessageGuestCapabilities",
+    "the reduced host sent the accepted zero-feature EarlyConfig and InitialConfig messages",
+    "the Hyper-V storage adapter started successfully",
+    "HCS attempted to add C:\\WSL\\Toybox-Minimal\\ext4.vhdx as SCSI attachment 0",
+    "StorVspDeviceMountAndAssociateAdapter failed with an invalid HANDLE",
+    "HcsModifyComputeSystem returned 0x80010105 before any guest ext4 mount",
+    "wsl.exe reported Wsl/Service/CreateInstance/MountDisk/HCS/0x80010105"
+  ],
+  "candidateFatalEvidence": "No GuestLog records were emitted. The custom kernel completed guest-capability and initial-configuration exchange, but the host could not dynamically associate the registered distro VHDX with the running Hyper-V storage adapter. The fixed shutdown process timed out and the controller subsequently forced termination before recovery.",
+  "recoveryEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "the registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceEnd returned success",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B2",
+    "basis": "The candidate booted the recorded external kernel and exchanged mini-init capabilities plus early and initial configuration over the host channel. Dynamic registered-distro storage attachment failed in HCS before ext4 mounted, so B3 and later gates are not supported. Independent stock recovery repeated B6-T."
+  }
+}

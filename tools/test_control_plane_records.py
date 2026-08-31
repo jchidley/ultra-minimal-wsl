@@ -242,6 +242,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v4-mount-ns",
             "minimal-v5-mount-pid-ns",
             "minimal-v5-k-pidns-001",
+            "minimal-v5-k-overlay-pidns-001",
         ])
         probe = ROOT / contract["fixed_probe"]["path"]
         self.assertEqual(sha256(probe), contract["fixed_probe"]["sha256"])
@@ -398,11 +399,16 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(v5["runtime_attempt_001"]["recovery_result"], "B6-T")
         self.assertTrue(v5["runtime_attempt_001"]["ledger_finalized"])
         self.assertEqual(v5["remaining_before_runtime"], [])
+        first_reduced = contract["k_pidns_001"]
+        self.assertFalse(first_reduced["executable"])
+        self.assertEqual(first_reduced["runtime_attempt_001"]["candidate_result"], "B2")
+        self.assertEqual(first_reduced["runtime_attempt_001"]["recovery_result"], "B6-T")
+        self.assertTrue(first_reduced["runtime_attempt_001"]["ledger_finalized"])
         reduced = contract["next_reduced_kernel_candidate"]
         self.assertTrue(reduced["executable"])
-        self.assertEqual(reduced["reserved_trial_id"], "CP-MINIMAL-V5-K-PIDNS-001")
-        self.assertEqual(reduced["parent_trial"], "CP-MINIMAL-V5-MOUNT-PID-NS-001")
-        self.assertEqual(reduced["kernel_config_parent"], "k-storage-001")
+        self.assertEqual(reduced["reserved_trial_id"], "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001")
+        self.assertEqual(reduced["parent_trial"], "CP-MINIMAL-V5-K-PIDNS-001")
+        self.assertEqual(reduced["kernel_config_parent"], "k-overlay-001")
         self.assertEqual(reduced["explicit_symbols"], ["CONFIG_PID_NS"])
         self.assertEqual(reduced["autoselected_symbols"], [])
         self.assertEqual(sha256(ROOT / reduced["kernel_path"]), reduced["kernel_sha256"])
