@@ -1,0 +1,9 @@
+candidate=minimal-v5-mount-pid-ns
+parent_candidate=minimal-v4-fail-closed
+parent_source_commit=c940f85e28722f517e3347b0bac131abf9c1eb1f
+source_commit=b01db8716b78c76b871dda69b92055e87ba10c93
+layer_patch=control-plane/patches/0007-minimal-v5-mount-pid-ns.patch
+layer_patch_sha256=1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a
+complete_source_diff_sha256=cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8
+namespace_bundle=mount,pid
+runtime_evidence=none

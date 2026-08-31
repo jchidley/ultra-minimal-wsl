@@ -1,0 +1,22 @@
+{
+    "schema":  1,
+    "name":  "toybox-smoke",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Toybox-Minimal",
+                      "--exec",
+                      "/bin/sh",
+                      "-c",
+                      "test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf toybox-ok"
+                  ],
+    "processId":  1168,
+    "startedUtc":  "2026-08-31T01:05:06.6922644Z",
+    "completedUtc":  "2026-08-31T01:05:08.9413193Z",
+    "timedOut":  false,
+    "streamsCompleted":  true,
+    "taskkillExitCode":  null,
+    "exitCode":  -1,
+    "stdout":  "C\u0000a\u0000t\u0000a\u0000s\u0000t\u0000r\u0000o\u0000p\u0000h\u0000i\u0000c\u0000 \u0000f\u0000a\u0000i\u0000l\u0000u\u0000r\u0000e\u0000 \u0000\r\u0000\n\u0000E\u0000r\u0000r\u0000o\u0000r\u0000 \u0000c\u0000o\u0000d\u0000e\u0000:\u0000 \u0000W\u0000s\u0000l\u0000/\u0000S\u0000e\u0000r\u0000v\u0000i\u0000c\u0000e\u0000/\u0000C\u0000r\u0000e\u0000a\u0000t\u0000e\u0000I\u0000n\u0000s\u0000t\u0000a\u0000n\u0000c\u0000e\u0000/\u0000E\u0000_\u0000U\u0000N\u0000E\u0000X\u0000P\u0000E\u0000C\u0000T\u0000E\u0000D\u0000\r\u0000\n\u0000",
+    "stderr":  ""
+}

@@ -5,12 +5,12 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 ## Safety state
 
 - Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
-- No reduced control-plane package or new candidate kernel is currently deployed; the completed `minimal-v4-stock-ns` interval restored the pinned stock package.
+- No reduced control-plane package or new candidate kernel is currently deployed; the completed `minimal-v4-mount-ns` interval restored the pinned stock package.
 - The accepted stock calibration and independent recovery returned the disposable Windows VM to Off with no probe, trace, or shutdown failure. The retained `clean-shell` checkpoint was not restored or changed. Live state is not asserted here.
 - Physical-host changes and operations affecting a shared WSL instance require fresh explicit approval. Operations wholly confined to the disposable fixture are standing-authorized within the pinned, offline, hash-verified, plan-validated, recoverable experiment envelope and require no human stage review or confirmation; they must fail closed on boundary or recovery failure.
 - Exact `minimal-v4-stock-ns` runner validation staged and independently hash-verified its MSI, candidate manifest, and runner without installing or probing the candidate. Windows Installer reported the pinned stock product installed and that candidate absent; the fixture returned Off.
 - The `minimal-v4-mount-ns` build completed with pinned offline inputs and extracted identities independently reverified. Exact runner validation then independently verified staged hashes, all 13 fault paths, stock-only MSI state, absent candidate evidence, and final fixture Off without installation or probing.
-- Three subsequent runtime elevation launches stopped before worker start and produced no operation result, MSI mutation, probe, or candidate evidence.
+- Three runtime elevation launches stopped before worker start and produced no operation result. Fresh launch 004 completed the candidate and recovery intervals; stock product state `5`, candidate state `-1`, final fixture Off, and independent recovery `B6-T` are verified.
 
 ## Proven boundary
 
@@ -24,8 +24,8 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - The retained source base is WSL 2.7.12 commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`.
 - `minimal-v3-fail-closed` removes the known excluded interop hard-fail while retaining only the minimal command-control policy.
 - `minimal-v3-stock-ns` is finalized at `B2`; its initial-configuration rejection selected the v4 sender correction, not a namespace or Kconfig requirement.
-- `minimal-v4-stock-ns` and `minimal-v4-mount-ns` are reproducible siblings that differ only in the coherent namespace bundle. The stock-namespace sibling passed `B6-T`, but neither namespace policy is selected until the mount-only sibling runs.
-- Every v3 and v4 Linux artifact built byte-identically twice offline in separate ext4 directories.
+- `minimal-v4-stock-ns` and `minimal-v4-mount-ns` are reproducible siblings that differ only in the coherent namespace bundle. Stock namespaces passed `B6-T`; mount-only reached `B3` and closed its control socket after ext4 mount, selecting the full bundle as the passing baseline without isolating IPC, PID, or UTS individually.
+- Every v3 and v4 Linux artifact built byte-identically twice offline in separate ext4 directories. The evidence-selected `minimal-v5-mount-pid-ns` source candidate also built byte-identically twice offline.
 
 ## Active experiment boundary
 
@@ -36,8 +36,9 @@ The only active experiment path is the fixed candidate comparison:
 1. stock WSL 2.7.12 calibration with the exact Toybox rootfs — accepted at `B6-T` in `CP-STOCK-2.7.12-003`;
 2. `minimal-v3-stock-ns` diagnostic interval — finalized at `B2` in `CP-MINIMAL-V3-STOCK-NS-001`;
 3. evidence-corrected `minimal-v4-stock-ns` — finalized at `B6-T` in `CP-MINIMAL-V4-STOCK-NS-001`;
-4. validate and run the built `minimal-v4-mount-ns` package with the unchanged probe and recovery contract;
-5. use the sibling comparison to select the namespace requirement, then make one evidence-selected minimality ablation.
+4. `minimal-v4-mount-ns` — finalized at `B3` in `CP-MINIMAL-V4-MOUNT-NS-001`;
+5. namespace decision — retain the full coherent bundle as the passing baseline;
+6. build and run the reproducible `minimal-v5-mount-pid-ns` ablation to isolate whether PID semantics explain the mount-only failure.
 
 `tools/Invoke-WslCandidateProbe.ps1` is the retained guest-local measurement tool. It records exact candidate/rootfs hashes, bounded `wsl.exe` process results, WSL ETW/events/crashes, shutdown, and an evidence hash manifest. Fixture start, package placement, rollback, and evidence extraction are prerequisites around the experiment, not objects being minimized and not separate acceptance ledgers.
 
@@ -59,8 +60,12 @@ The v4 runner preserves the accepted probe, timeouts, transaction, and independe
 
 `CP-MINIMAL-V4-STOCK-NS-001` then completed at `B6-T`. Management checks passed, the registered Toybox ext4 filesystem mounted, instance creation succeeded, the exact smoke command printed `toybox-ok` with exit zero, and termination was graceful. Both 20-file evidence manifests verified, the exact stock package was restored, independent recovery passed `B6-T`, and the fixture returned Off. The immutable evidence and terminal ledger row are preserved under `recovery-harness/trials/CP-MINIMAL-V4-STOCK-NS-001/`. This establishes corrected-control-plane viability, not that IPC/PID/UTS namespaces are required.
 
-The evidence-selected `minimal-v4-mount-ns` controlled Windows build subsequently started under fresh operation ID 003 and completed from the unchanged pinned offline inputs. The unsigned MSI is 174,403,584 bytes with SHA-256 `0348f4…2518`, ProductCode `{13294BEB-3E05-4814-A642-84742C1DAFAF}`, output-manifest SHA-256 `db215c…3e61`, and complete source diff `197804…a13a`; extracted identities independently reverified and the fixture returned Off. The exact hash-bound `CP-MINIMAL-V4-MOUNT-NS-001` runner preserves the accepted probe and recovery mechanics and passes all 13 local fault injections. After two validation launches stopped before worker start, fresh validation operation 003 independently verified every staged hash, package size, all 13 fixture-side fault paths, stock product state `5`, candidate state `-1`, absent candidate evidence, and final fixture Off without installation or probing. The runtime controller is hash-bound and plan-validated. Three fresh-ID runtime elevation launches then remained at `launching` without a worker, result, MSI mutation, probe, or candidate evidence. They are infrastructure failures, not candidate results. The next action is retrying that unchanged runtime controller when the elevation broker can start it, then proceeding directly to the fixed candidate interval and mandatory stock recovery.
+The evidence-selected `minimal-v4-mount-ns` controlled Windows build subsequently started under fresh operation ID 003 and completed from the unchanged pinned offline inputs. The unsigned MSI is 174,403,584 bytes with SHA-256 `0348f4…2518`, ProductCode `{13294BEB-3E05-4814-A642-84742C1DAFAF}`, output-manifest SHA-256 `db215c…3e61`, and complete source diff `197804…a13a`; extracted identities independently reverified and the fixture returned Off. The exact hash-bound `CP-MINIMAL-V4-MOUNT-NS-001` runner preserves the accepted probe and recovery mechanics and passes all 13 local fault injections. After two validation launches stopped before worker start, fresh validation operation 003 independently verified every staged hash, package size, all 13 fixture-side fault paths, stock product state `5`, candidate state `-1`, absent candidate evidence, and final fixture Off without installation or probing.
+
+After three runtime launches stopped before worker start, fresh launch 004 completed a valid candidate interval. Management checks passed, `/init`, VSOCK, and Hyper-V storage initialized, and the registered Toybox ext4 filesystem mounted read-write. The mount-only launch child then unmounted it and closed `WslCorePort` before returning `LxMiniInitMessageCreateInstanceResult`; the host reported `Wsl/Service/CreateInstance/E_UNEXPECTED`. The highest directly supported gate is `B3`. Both 20-file manifests verify, the pinned stock MSI was restored, independent recovery passed `B6-T`, and the fixture returned Off. Immutable evidence and the terminal ledger row are preserved under `recovery-harness/trials/CP-MINIMAL-V4-MOUNT-NS-001/`.
+
+The sibling result retains the full IPC/mount/PID/UTS namespace bundle as the passing baseline but does not prove each member individually necessary. The next narrow ablation is `minimal-v5-mount-pid-ns`, restoring PID namespace semantics while continuing to remove IPC and UTS. Its complete source diff is `cfd8cd…efe8`; two pinned offline Linux builds produced byte-identical `init`, `init.debug`, and `initrd.img`. The pinned controlled Windows build then completed: the unsigned MSI is 174,411,776 bytes with SHA-256 `343f90…f50d`, ProductCode `{796B7461-B342-4554-AF96-A8CFEF80EE5B}`, and output-manifest SHA-256 `67385c…7569`; extracted identities independently reverified and the fixture returned Off. The exact runner passes all 13 local fault injections. Its first fixture-validation elevation launch remained at `launching` without a worker, operation result, installation, probe, or candidate evidence.
 
 ## Inventory
 
-The durable inventory contains 9 config snapshots, 13 completed trials, and 174 reviewed annotations; synchronization integrity is verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.
+The durable inventory contains 9 config snapshots, 14 completed trials, and 174 reviewed annotations; synchronization integrity is verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.

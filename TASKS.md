@@ -4,23 +4,23 @@
 
 ## Active action
 
-Retry the unchanged hash-bound `minimal-v4-mount-ns` runtime controller under one fresh operation ID when the elevation broker can start its worker. The pinned offline package build and exact runner validation are complete: fixture validation independently verified staged hashes, all 13 fault paths, stock-only MSI state, absent candidate evidence, and final Off state. Three fresh-ID runtime launches remained at `launching` without a worker or output. Proceed directly through the single fixed candidate interval and mandatory stock recovery once a worker starts. Do not rerun the completed `minimal-v4-stock-ns` baseline or create a candidate result for runtime-launch infrastructure failure.
+Retry the unchanged hash-bound `minimal-v5-mount-pid-ns` fixture validation controller under one fresh operation ID when the elevation broker can start its worker. The pinned controlled Windows package build completed, extracted identities independently reverified, and the fixture returned Off; the exact runner passes all 13 local fault injections. The first validation launch remained at `launching` without a worker or output. After fixture validation, continue directly through one fixed candidate interval and mandatory stock recovery. Do not rerun finalized v3 or v4 candidates.
 
 ## Comparison queue
 
 1. stock WSL 2.7.12 calibration with `toybox-minimal-wsl-rootfs.tar.gz` — complete at `B6-T` in `CP-STOCK-2.7.12-003`;
 2. `minimal-v3-stock-ns` — superseded after its B2 sender-policy evidence;
 3. `minimal-v4-stock-ns` — complete at `B6-T` in `CP-MINIMAL-V4-STOCK-NS-001`;
-4. `minimal-v4-mount-ns`;
-5. evidence-selected namespace decision;
-6. one evidence-selected kernel/configuration change or minimality ablation.
+4. `minimal-v4-mount-ns` — complete at `B3` in `CP-MINIMAL-V4-MOUNT-NS-001`;
+5. namespace decision — full bundle retained as the passing baseline; mount-only rejected;
+6. `minimal-v5-mount-pid-ns` — evidence-selected minimality ablation; reproducible Linux artifacts and controlled package complete, fixture validation pending.
 
 Every comparison uses the identical Toybox smoke command, timeouts, instrumentation, rootfs, classification rules, and recovery proof.
 
 ## Blocked
 
 - `minimal-v3-stock-ns` is finalized at `B2`; do not rerun the byte-identical candidate.
-- Namespace selection and Kconfig promotion are blocked until the evidence-selected initial-configuration correction reaches the namespace-dependent launch path.
+- Individual IPC, PID, and UTS namespace necessity and Kconfig promotion remain blocked until the selected mount-plus-PID ablation runs.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
 

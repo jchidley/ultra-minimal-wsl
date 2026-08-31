@@ -1,0 +1,17 @@
+{
+    "schema":  1,
+    "name":  "wsl-shutdown",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--shutdown"
+                  ],
+    "processId":  6028,
+    "startedUtc":  "2026-08-31T01:05:08.9515220Z",
+    "completedUtc":  "2026-08-31T01:05:09.2347620Z",
+    "timedOut":  false,
+    "streamsCompleted":  true,
+    "taskkillExitCode":  null,
+    "exitCode":  0,
+    "stdout":  "",
+    "stderr":  ""
+}

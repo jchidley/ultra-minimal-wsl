@@ -1,0 +1,18 @@
+{
+    "schema":  1,
+    "name":  "wsl-list-quiet",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--list",
+                      "--quiet"
+                  ],
+    "processId":  5712,
+    "startedUtc":  "2026-08-31T01:05:33.9742322Z",
+    "completedUtc":  "2026-08-31T01:05:34.0524446Z",
+    "timedOut":  false,
+    "streamsCompleted":  true,
+    "taskkillExitCode":  null,
+    "exitCode":  0,
+    "stdout":  "T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000",
+    "stderr":  ""
+}

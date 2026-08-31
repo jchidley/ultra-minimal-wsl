@@ -166,12 +166,13 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v4-fail-closed",
             "minimal-v4-stock-ns",
             "minimal-v4-mount-ns",
+            "minimal-v5-mount-pid-ns",
         })
         for name, planned in plan["source_candidates"].items():
             candidate = key_values(CONTROL / "candidates" / name / "candidate.txt")
             artifacts = sums(CONTROL / "candidates" / name / "SHA256SUMS")
             with self.subTest(candidate=name):
-                self.assertEqual(planned["runtime_evidence"], name in {"minimal-v3-stock-ns", "minimal-v4-stock-ns"})
+                self.assertEqual(planned["runtime_evidence"], name in {"minimal-v3-stock-ns", "minimal-v4-stock-ns", "minimal-v4-mount-ns"})
                 self.assertTrue(planned["reproducible"])
                 self.assertEqual(planned["complete_source_diff_sha256"], candidate["complete_source_diff_sha256"])
                 self.assertEqual(planned["init_sha256"], artifacts["init"])
@@ -239,6 +240,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v3-stock-ns",
             "minimal-v4-stock-ns",
             "minimal-v4-mount-ns",
+            "minimal-v5-mount-pid-ns",
         ])
         probe = ROOT / contract["fixed_probe"]["path"]
         self.assertEqual(sha256(probe), contract["fixed_probe"]["sha256"])
@@ -349,8 +351,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(mount_build["build_attempt_003"]["package_sha256"], mount_build["package_sha256"])
         self.assertEqual(mount_build["build_attempt_003"]["fixture_final_state"], "Off")
         mount = contract["minimal_v4_mount_ns"]
-        self.assertTrue(mount["executable"])
-        self.assertEqual(mount["status"], "runtime-plan-validated-elevation-blocked")
+        self.assertFalse(mount["executable"])
+        self.assertEqual(mount["status"], "runtime-finalized-fail-b3")
         self.assertEqual(mount["reserved_trial_id"], "CP-MINIMAL-V4-MOUNT-NS-001")
         self.assertEqual(sha256(ROOT / mount["candidate_manifest_path"]), mount["candidate_manifest_sha256"])
         self.assertEqual(sha256(ROOT / mount["runner_path"]), mount["runner_sha256"])
@@ -364,7 +366,30 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(mount["runtime_attempt_001"]["elevation_state"], "launching")
         self.assertEqual(mount["runtime_attempt_002"]["elevation_state"], "launching")
         self.assertEqual(mount["runtime_attempt_003"]["elevation_state"], "launching")
-        self.assertEqual(len(mount["remaining_before_runtime"]), 1)
+        self.assertEqual(mount["runtime_attempt_004"]["candidate_result"], "B3")
+        self.assertEqual(mount["runtime_attempt_004"]["recovery_result"], "B6-T")
+        self.assertTrue(mount["runtime_attempt_004"]["ledger_finalized"])
+        self.assertEqual(mount["remaining_before_runtime"], [])
+        ablation = contract["next_minimality_ablation"]
+        self.assertEqual(ablation["candidate_id"], "minimal-v5-mount-pid-ns")
+        self.assertEqual(ablation["namespace_bundle"], ["mount", "pid"])
+        self.assertEqual(sha256(ROOT / ablation["layer_patch"]), ablation["layer_patch_sha256"])
+        self.assertTrue(ablation["linux_artifacts_byte_identical"])
+        self.assertTrue(ablation["controlled_windows_package_built"])
+        ablation_build = load_plan()["controlled_package_build"]["next_ablation_build"]
+        self.assertTrue(ablation_build["completed"])
+        self.assertEqual(ablation_build["candidate"], ablation["candidate_id"])
+        self.assertEqual(sha256(ROOT / ablation_build["script"]), ablation_build["script_sha256"])
+        self.assertEqual(sha256(ROOT / ablation_build["layer_patch"]), ablation_build["layer_patch_sha256"])
+        self.assertEqual(ablation_build["complete_source_diff_sha256"], ablation["complete_source_diff_sha256"])
+        v5 = contract["minimal_v5_mount_pid_ns"]
+        self.assertFalse(v5["executable"])
+        self.assertEqual(v5["status"], "runner-validation-elevation-blocked")
+        self.assertEqual(sha256(ROOT / v5["candidate_manifest_path"]), v5["candidate_manifest_sha256"])
+        self.assertEqual(sha256(ROOT / v5["runner_path"]), v5["runner_sha256"])
+        self.assertEqual(v5["package_sha256"], ablation_build["package_sha256"])
+        self.assertEqual(v5["runner_validation_attempt_001"]["elevation_state"], "launching")
+        self.assertEqual(len(v5["remaining_before_runtime"]), 1)
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])

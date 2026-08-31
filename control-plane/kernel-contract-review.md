@@ -90,7 +90,7 @@ Searches of pinned WSL 2.7.12 and all three preserved `minimal-v2` trees found n
 
 - The retained Hyper-V/VSOCK/storage additions remain the only evidence-selected WSL kernel bundles.
 - Ext4, SCSI core, procfs, sysfs, devtmpfs, PTYs, signalfd, epoll, and generic namespace support are now durably reviewed as `BASE`; they are not new WSL tax.
-- The preserved stock-namespace siblings request IPC, PID, and UTS namespaces while all completed reduced kernel candidates disable them; each mount-only sibling removes precisely those three requests.
-- Do not add those namespace symbols now. Replacement `minimal-v3-stock-ns` and `minimal-v3-mount-ns` are reproducibly built from the exact replacement fail-closed parent. Add back a coherent namespace bundle only if the deferred runtime comparison selects it.
+- The finalized runtime comparison selected namespace semantics: `minimal-v4-stock-ns` passed `B6-T`, while mount-only reached `B3`, unmounted the registered ext4 filesystem, and closed its control socket before `CreateInstanceResult`.
+- Retain the coherent IPC, mount, PID, and UTS bundle as the passing baseline, but do not yet classify each optional namespace as individually required. The evidence-selected `minimal-v5-mount-pid-ns` ablation restores PID semantics while continuing to remove IPC and UTS; promote Kconfig requirements only after runtime isolates the retained subset.
 - Networking remains excluded even though `CONFIG_HYPERV_VSOCKETS` has a Kconfig dependency on `CONFIG_NET`; that dependency is transport plumbing, not approval for IP networking, GNS, or DNS.
 - Completed excluded-feature classifications and their supporting evidence are recorded in the sections above and in `inventory/annotations.csv`; none changed a candidate config.

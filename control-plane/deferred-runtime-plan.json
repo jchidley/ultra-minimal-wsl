@@ -183,11 +183,23 @@
       "init_debug_sha256": "c990cadb03f9497fe477ff9a01a50557e773eed086c5dbd7eb06802809a51d4f",
       "initrd_sha256": "2886fae8a75952cae122fbd6b61db3dc4d26fb51f0b84e38737783cecabaad72",
       "reproducible": true,
+      "runtime_evidence": true
+    },
+    "minimal-v5-mount-pid-ns": {
+      "parent": "minimal-v4-fail-closed",
+      "evidence_selected_by": "CP-MINIMAL-V4-MOUNT-NS-001",
+      "layer_patch": "control-plane/patches/0007-minimal-v5-mount-pid-ns.patch",
+      "layer_patch_sha256": "1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a",
+      "complete_source_diff_sha256": "cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8",
+      "init_sha256": "0d4bc653c3c4aa216be1d339c8f33e4a5a84bad933eef2f9015aaa4eb0d4d3b9",
+      "init_debug_sha256": "3278a2155130dfe96951e0bb7b69be76a351978472208b41926c132bd8e21b82",
+      "initrd_sha256": "771e54cdea68b0d81b776456287bdf433a60a7e3729cc05f4efe7945725a100d",
+      "reproducible": true,
       "runtime_evidence": false
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v4-mount-ns-runtime-plan-validated-elevation-blocked",
+    "status": "minimal-v5-mount-pid-package-built-runner-validation-elevation-blocked",
     "executable": true,
     "approval_carried_forward": false,
     "active_build": {
@@ -341,6 +353,45 @@
         "fixture_final_state": "Off"
       },
       "next_action": "Independently validate the exact hash-bound CP-MINIMAL-V4-MOUNT-NS-001 runner, then execute one fixed candidate interval and mandatory stock recovery.",
+      "runtime_boundary": "The package is built, extracted, and independently identity-verified. Installation remains forbidden until the recorded exact runner passes fixture validation."
+    },
+    "next_ablation_build": {
+      "candidate": "minimal-v5-mount-pid-ns",
+      "parent": "minimal-v4-fail-closed",
+      "evidence_selected_by": "CP-MINIMAL-V4-MOUNT-NS-001",
+      "script": "control-plane/controlled-package-offline/Build-MinimalV5MountPidNs.ps1",
+      "staged_script": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV5MountPidNs.ps1",
+      "script_sha256": "8977c4e623e49065c0823e9e19a8598a2c418cad02e8ec7a2b7b6f3069813879",
+      "layer_patch": "control-plane/patches/0007-minimal-v5-mount-pid-ns.patch",
+      "layer_patch_sha256": "1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a",
+      "complete_source_diff_sha256": "cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8",
+      "build_command": "& 'C:\\Program Files\\PowerShell\\7\\pwsh.exe' -NoProfile -NonInteractive -ExecutionPolicy Bypass -File 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Build-MinimalV5MountPidNs.ps1' -Execute",
+      "fresh_directories": [
+        "C:\\controlled-package\\source\\minimal-v5-mount-pid-ns",
+        "C:\\controlled-package\\build\\minimal-v5-mount-pid-ns",
+        "C:\\controlled-package\\deps"
+      ],
+      "expected_output_manifest": "C:\\controlled-package\\build\\minimal-v5-mount-pid-ns\\controlled-output-SHA256SUMS",
+      "expected_build_result": "C:\\controlled-package\\build\\minimal-v5-mount-pid-ns\\controlled-build-result.json",
+      "completed": true,
+      "completed_utc": "2026-08-31T01:57:09.6397897Z",
+      "controlled_output_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\controlled-outputs\\minimal-v5-mount-pid-ns",
+      "package_bytes": 174411776,
+      "package_sha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+      "package_product_code": "{796B7461-B342-4554-AF96-A8CFEF80EE5B}",
+      "output_manifest_sha256": "67385cee129cb4c39dfb909304448b934a31a7bda0ea09948602578414017569",
+      "build_result_sha256": "f6b7ee468fa5f95f28608fbee1809c8b9d48b319004763827687387315201977",
+      "package_signature_status": "NotSigned",
+      "fixture_final_state": "Off",
+      "build_controller_sha256": "a787061236ccf8807b3c352b68b8a4d1baec58134fa13a23b52f81f039a95629",
+      "build_attempt_001": {
+        "disposition": "build-complete",
+        "worker_started": true,
+        "build_exit_code": 0,
+        "operation_result_sha256": "4e091b6dee8fe1b804a81c8681b9a51d27a86aa14a559b9e313b575e8d5c08f2",
+        "evidence_extracted_and_reverified": true,
+        "fixture_final_state": "Off"
+      },
       "runtime_boundary": "The package is built, extracted, and independently identity-verified. Installation remains forbidden until the recorded exact runner passes fixture validation."
     },
     "build_attempt_001": {
@@ -587,7 +638,8 @@
       "stock-wsl-2.7.12-calibration",
       "minimal-v3-stock-ns",
       "minimal-v4-stock-ns",
-      "minimal-v4-mount-ns"
+      "minimal-v4-mount-ns",
+      "minimal-v5-mount-pid-ns"
     ],
     "fixed_probe": {
       "path": "tools/Invoke-WslCandidateProbe.ps1",
@@ -835,8 +887,8 @@
       "runtime_boundary": "CP-MINIMAL-V4-STOCK-NS-001 is finalized at B6-T with independent stock recovery at B6-T. Do not rerun it for namespace selection; compare the mount-only sibling."
     },
     "minimal_v4_mount_ns": {
-      "status": "runtime-plan-validated-elevation-blocked",
-      "executable": true,
+      "status": "runtime-finalized-fail-b3",
+      "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V4-MOUNT-NS-001",
       "candidate_id": "minimal-v4-mount-ns",
@@ -922,10 +974,88 @@
         "candidate_install_performed": false,
         "candidate_probe_performed": false
       },
-      "remaining_before_runtime": [
-        "Windows elevation broker must start the already validated runtime controller under one fresh operation ID"
-      ],
-      "runtime_boundary": "Do not install or probe until fixture validation completes. Then run exactly one serial candidate interval, always restore the pinned stock package, and require unchanged independent B6-T recovery."
+      "runtime_attempt_004": {
+        "disposition": "candidate-fail",
+        "candidate_result": "B3",
+        "failure_signature": "WslCorePort closed before LxMiniInitMessageCreateInstanceResult",
+        "windows_error": "Wsl/Service/CreateInstance/E_UNEXPECTED",
+        "candidate_manifest_files_verified": 20,
+        "recovery_result": "B6-T",
+        "recovery_manifest_files_verified": 20,
+        "candidate_archive_sha256": "e79a0dadf869577d7cd922c2c8fb229aa66c78a409d22cd7674cb51c5957999b",
+        "recovery_archive_sha256": "9961fdb0528948bf8b642ea2e8ce4b9adab9a38883d8cf2e672d400f6ee52cc5",
+        "operation_result_sha256": "6169e96662b26481a9453df738ab35d016fc06a3ba32dec68541f85222bfe8a4",
+        "final_evidence_manifest_sha256": "b594c6af5fba636851904dda607255e339eac5d6e6546b140c25e6c34898930b",
+        "evidence_root": "recovery-harness/trials/CP-MINIMAL-V4-MOUNT-NS-001",
+        "ledger_finalized": true,
+        "fixture_final_state": "Off",
+        "next_action": "Build the reproducible minimal-v5-mount-pid-ns controlled Windows package and continue through the unchanged runtime contract."
+      },
+      "namespace_decision": "The full IPC, mount, PID, and UTS namespace bundle remains the passing baseline; mount-only is insufficient. Individual IPC, PID, and UTS necessity remains unresolved.",
+      "remaining_before_runtime": [],
+      "runtime_boundary": "CP-MINIMAL-V4-MOUNT-NS-001 is finalized at B3 with independent stock recovery at B6-T. Do not rerun it; continue with the evidence-selected mount-plus-PID ablation."
+    },
+    "next_minimality_ablation": {
+      "candidate_id": "minimal-v5-mount-pid-ns",
+      "parent": "minimal-v4-fail-closed",
+      "evidence_selected_by": "CP-MINIMAL-V4-MOUNT-NS-001",
+      "rationale": "The mount-only launch child exited after ext4 mount and before CreateInstanceResult. Restore PID namespace semantics while continuing to ablate IPC and UTS together.",
+      "namespace_bundle": ["mount", "pid"],
+      "layer_patch": "control-plane/patches/0007-minimal-v5-mount-pid-ns.patch",
+      "layer_patch_sha256": "1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a",
+      "complete_source_diff_sha256": "cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8",
+      "reproducible_linux_builds": 2,
+      "linux_artifacts_byte_identical": true,
+      "controlled_windows_package_built": true,
+      "package_sha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+      "next_action": "Validate the exact runner, then continue directly through one fixed candidate interval and mandatory stock recovery."
+    },
+    "minimal_v5_mount_pid_ns": {
+      "status": "runner-validation-elevation-blocked",
+      "executable": false,
+      "approval_carried_forward": false,
+      "reserved_trial_id": "CP-MINIMAL-V5-MOUNT-PID-NS-001",
+      "candidate_id": "minimal-v5-mount-pid-ns",
+      "parent": "minimal-v4-fail-closed",
+      "evidence_selected_by": "CP-MINIMAL-V4-MOUNT-NS-001",
+      "complete_source_diff_sha256": "cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8",
+      "package_bytes": 174411776,
+      "package_sha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+      "output_manifest_sha256": "67385cee129cb4c39dfb909304448b934a31a7bda0ea09948602578414017569",
+      "candidate_manifest_path": "control-plane/trial-manifests/minimal-v5-mount-pid-ns.json",
+      "candidate_manifest_sha256": "2f6dd1c0e81079bd98dfadf5ee56a8bc98b2f62f872e9adaa2a13eac192ceb26",
+      "staged_package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v5-mount-pid-ns\\wsl.msi",
+      "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v5-mount-pid-ns.json",
+      "candidate_product_code": "{796B7461-B342-4554-AF96-A8CFEF80EE5B}",
+      "stock_product_code": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}",
+      "upgrade_code": "{6D5B792B-1EDC-4DE9-8EAD-201B820F8E82}",
+      "probe_sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+      "rootfs_sha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+      "wpr_profile_sha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+      "process_timeout_seconds": 45,
+      "shutdown_timeout_seconds": 30,
+      "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
+      "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV5MountPidNsTrial.ps1",
+      "staged_runner_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV5MountPidNsTrial.ps1",
+      "runner_sha256": "eb5199322038eba5f90bb5a6a6447188ee1939a70644132c81e051bac17cc4d7",
+      "runner_execution_command": "& 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV5MountPidNsTrial.ps1' -Execute",
+      "runner_validation_controller_sha256": "8e720bb9743d518acdd91182a4adf01707af94589ec03e02b42b9c5def3af712",
+      "runner_local_validation": {
+        "self_test_passed": true,
+        "failure_paths_tested": 13,
+        "psscriptanalyzer_findings": 0
+      },
+      "runner_validation_attempt_001": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "operation_result_created": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false
+      },
+      "remaining_before_runtime": ["Windows elevation broker must start the hash-bound fixture validation controller"],
+      "runtime_boundary": "Do not install or probe until fixture validation independently verifies staged hashes, all fault paths, stock-only state, absent candidate evidence, and final fixture Off."
+
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",

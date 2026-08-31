@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: controlled <controlled@invalid>
+Date: Mon, 31 Aug 2026 01:10:00 +0000
+Subject: [PATCH] Retain mount and PID namespaces
+
+---
+ src/linux/init/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -3213,7 +3213,7 @@ try
+                     ProcessLaunchInitMessage(Message, Buffer, std::move(Channel), std::move(SystemDistroSocketFd), Config);
+                     FATAL_ERROR("Unexpected return from ProcessLaunchInitMessage");
+                 },
+-                (CLONE_NEWIPC | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS | SIGCHLD));
++                (CLONE_NEWNS | CLONE_NEWPID | SIGCHLD));
+ 
+             return (ChildPid < 0) ? -1 : 0;
+         }
+-- 
+2.47.3

@@ -1,0 +1,75 @@
+{
+  "trialId": "CP-MINIMAL-V4-MOUNT-NS-001",
+  "purpose": "Compare the hash-bound minimal-v4-mount-ns controlled package with the finalized minimal-v4-stock-ns B6-T baseline under the fixed Toybox probe and prove independent stock recovery.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "Management checks passed, Linux /init and VSOCK initialized, the registered Toybox VHDX attached, and its ext4 filesystem mounted read-write. The launch child then unmounted it and closed WslCorePort before returning CreateInstanceResult, so the control plane did not reach B4."
+  },
+  "candidate": {
+    "id": "minimal-v4-mount-ns",
+    "parent": "minimal-v4-fail-closed",
+    "wslVersion": "2.7.12.0",
+    "sourceCommit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "completeSourceDiffSha256": "1978046984db35fd2a6de46aa53da6d3de17793bf163c262b222dc9e959da13a",
+    "packageSha256": "0348f46804735773cb89d1d25908f950402b69c9a76435634dc5af9633dd2518",
+    "candidateManifestSha256": "b7fa44a0168c00cdb75d1fb6b8c0bddbb6685083f0b13a6c5a40c3ba022a6312",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-31T01:05:04.9295150Z",
+    "finishedUtc": "2026-08-31T01:05:11.1255602Z",
+    "probeClassification": "UNRESOLVED-TRACE-REQUIRED",
+    "finalClassification": "B3",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "toyboxExitCode": -1,
+    "windowsError": "Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "failureSignature": "WslCorePort closed before LxMiniInitMessageCreateInstanceResult",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 1223,
+    "recoveryRows": 4842,
+    "directEvidence": "The registered ext4 distro mounted at B3, then unmounted before CreateInstanceResult; the host recorded WslCorePort closure and E_UNEXPECTED."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V4-MOUNT-NS-001-RECOVERY",
+    "startedUtc": "2026-08-31T01:05:33.2076785Z",
+    "finishedUtc": "2026-08-31T01:05:40.9536719Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "6600dd0de7d9c9f4456d5ee5653ee7f15f94932b1f635388e9c85bf9c77c5918",
+    "operationResultSha256": "6169e96662b26481a9453df738ab35d016fc06a3ba32dec68541f85222bfe8a4",
+    "candidateArchiveSha256": "e79a0dadf869577d7cd922c2c8fb229aa66c78a409d22cd7674cb51c5957999b",
+    "recoveryArchiveSha256": "9961fdb0528948bf8b642ea2e8ce4b9adab9a38883d8cf2e672d400f6ee52cc5"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChanged": false
+  },
+  "comparison": {
+    "baselineTrial": "CP-MINIMAL-V4-STOCK-NS-001",
+    "baselineResult": "B6-T",
+    "candidateResult": "B3",
+    "selectedNamespacePolicy": "The stock coherent IPC, mount, PID, and UTS namespace bundle remains the passing baseline; mount-only is insufficient. Individual IPC, PID, and UTS necessity is not yet isolated."
+  },
+  "decision": "Finalize minimal-v4-mount-ns at B3. Preserve the full passing namespace bundle as the selected baseline and make one narrow mount-plus-PID control-plane ablation before promoting individual namespace Kconfig requirements."
+}

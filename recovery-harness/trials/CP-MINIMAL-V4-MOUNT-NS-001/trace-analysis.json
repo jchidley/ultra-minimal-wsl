@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V4-MOUNT-NS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1223,
+  "recoveryTraceRows": 4842,
+  "candidateGuestLogRecords": 88,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "NET: Registered PF_VSOCK protocol family",
+    "hv_vmbus: registering driver hv_storvsc",
+    "LxMiniInitMessageLaunchInit selected DeviceId 1 and ext4",
+    "EXT4-fs (sdb) mounted the Toybox filesystem read-write",
+    "The filesystem unmounted before any LxMiniInitMessageCreateInstanceResult",
+    "WslCorePort closed while the host awaited LxMiniInitMessageCreateInstanceResult",
+    "CreateInstanceEnd returned 0x8000FFFF and wsl.exe reported Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "candidateFatalEvidence": "No GuestLog BUG, oops, panic, or segfault was observed. The mount-only launch child closed its control socket after mounting and then unmounting the registered ext4 filesystem, before returning CreateInstanceResult.",
+  "recoveryEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "The registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceEnd returned success",
+    "The fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B3",
+    "basis": "The candidate entered /init, established VSOCK, attached the registered distro VHDX, and mounted its ext4 filesystem. It did not return CreateInstanceResult or keep the control plane alive, so B4 and later gates are not supported. Independent stock recovery repeated B6-T."
+  }
+}

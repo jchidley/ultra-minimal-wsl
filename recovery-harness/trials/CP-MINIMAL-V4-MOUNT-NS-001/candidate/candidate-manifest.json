@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "candidate_id": "minimal-v4-mount-ns",
+  "candidate_kind": "controlled-package",
+  "wsl_version": "2.7.12.0",
+  "architecture": "x64",
+  "source_tag": "2.7.12",
+  "source_commit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+  "complete_source_diff_sha256": "1978046984db35fd2a6de46aa53da6d3de17793bf163c262b222dc9e959da13a",
+  "output_manifest_sha256": "db215c6136ebf8faebd93b5ffb17b742cb365c4b0a3c968732c98f02b6593e61",
+  "package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v4-mount-ns\\wsl.msi",
+  "package_bytes": 174403584,
+  "package_sha256": "0348f46804735773cb89d1d25908f950402b69c9a76435634dc5af9633dd2518",
+  "package_product_code": "{13294BEB-3E05-4814-A642-84742C1DAFAF}",
+  "package_upgrade_code": "{6D5B792B-1EDC-4DE9-8EAD-201B820F8E82}",
+  "signature_status": "NotSigned",
+  "init_sha256": "6355ad6d5c5ae52bfc9c8dd19a462133b7a1f2faf934a57688b0a7c71e7285e4",
+  "initrd_sha256": "38d22e3287c53df1e72b888087d01e501c034e0fb5f15becd3c87595f5d1628d",
+  "recovery_package_sha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+  "recovery_product_code": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}"
+}
