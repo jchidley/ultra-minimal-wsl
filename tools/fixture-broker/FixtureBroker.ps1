@@ -99,9 +99,7 @@ function Copy-JobToProtectedSnapshot {
 
 function Get-Workload {
     param([Parameter(Mandatory)][string] $Id)
-    $workloadMatches = @($config.workloads | Where-Object { $_.id -eq $Id })
-    if ($workloadMatches.Count -ne 1) { throw 'Workload is not in the protected allowlist.' }
-    $workload = $workloadMatches[0]
+    $workload = Select-AllowlistedWorkload @($config.workloads) $Id
     Assert-BrokerId ([string]$workload.id) 'workloadId' | Out-Null
     Assert-Sha256 ([string]$workload.sha256) | Out-Null
     $path = Assert-PathUnderRoots -Path (Join-Path $workloadRoot ([string]$workload.file)) -Roots @($workloadRoot) -MustExist -Leaf
@@ -109,7 +107,7 @@ function Get-Workload {
     $stream = [IO.File]::Open($path, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
     try { $actual = Get-StreamSha256 $stream }
     finally { $stream.Dispose() }
-    if ($actual -ne [string]$workload.sha256) { throw 'Protected workload hash mismatch.' }
+    Assert-ExpectedHash $actual ([string]$workload.sha256) | Out-Null
     [pscustomobject]@{ Record = $workload; Path = $path }
 }
 
@@ -172,7 +170,7 @@ try {
             $snapshot = Copy-JobToProtectedSnapshot $jobs[0].FullName
             $job = Read-StrictJob $snapshot
             $sequence = Assert-Sequence $job.sequence
-            if ($sequence -ne $expectedSequence) { throw 'Job sequence is not the next expected value.' }
+            Assert-ExpectedSequence $sequence $expectedSequence | Out-Null
             if (-not $processedIds.Add([string]$job.id)) { throw 'Job ID replay rejected.' }
             $result = $null
             switch ([string]$job.operation) {

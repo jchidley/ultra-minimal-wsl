@@ -70,6 +70,21 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
             "if($failed-ne 3){exit 1}"
         )
 
+    def test_allowlist_hash_and_sequence_policy_is_executable(self):
+        module = str(BROKER / "FixtureBroker.Policy.psm1").replace("'", "''")
+        self.pwsh(
+            f"Import-Module '{module}' -Force;"
+            "$items=@([pscustomobject]@{id='one'},[pscustomobject]@{id='two'});$caught=0;"
+            "if((Select-AllowlistedWorkload $items 'two').id-ne'two'){exit 1};"
+            "try{Select-AllowlistedWorkload $items 'missing'|Out-Null}catch{$caught++};"
+            "try{Select-AllowlistedWorkload @($items[0],$items[0]) 'one'|Out-Null}catch{$caught++};"
+            "$h=('a'*64-join'');if(-not(Assert-ExpectedHash $h $h)){exit 2};"
+            "try{Assert-ExpectedHash $h ('b'*64-join'')|Out-Null}catch{$caught++};"
+            "if(-not(Assert-ExpectedSequence 7 7)){exit 3};"
+            "try{Assert-ExpectedSequence 8 7|Out-Null}catch{$caught++};"
+            "if($caught-ne 4){exit 4}"
+        )
+
     def test_broker_has_no_arbitrary_host_execution_surface(self):
         broker = (BROKER / "FixtureBroker.ps1").read_text(encoding="utf-8")
         policy = (BROKER / "FixtureBroker.Policy.psm1").read_text(encoding="utf-8")
@@ -84,7 +99,7 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
         ):
             self.assertNotIn(forbidden, combined)
         self.assertIn("@('status','execute','finish')", policy)
-        self.assertIn("Workload is not in the protected allowlist", broker)
+        self.assertIn("Workload is not in the protected allowlist", policy)
         self.assertIn("Get-Workload ([string]$job.workloadId)", broker)
         self.assertNotIn("$job.scriptPath", broker)
         self.assertNotIn("$job.command", broker)
@@ -94,10 +109,17 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
         self.assertIn("[IO.FileShare]::None", broker)
         self.assertIn("Copy-JobToProtectedSnapshot", broker)
         self.assertIn("Get-StreamSha256", broker)
-        self.assertIn("Protected workload hash mismatch", broker)
         self.assertIn("Workload replay rejected", broker)
-        self.assertIn("Job sequence is not the next expected value", broker)
         self.assertIn("Global\\UltraMinimalWslFixtureBroker-", broker)
+        self.assertIn("Select-AllowlistedWorkload @($config.workloads) $Id", broker)
+        self.assertIn("Assert-ExpectedHash $actual ([string]$workload.sha256)", broker)
+        self.assertIn("Assert-ExpectedSequence $sequence $expectedSequence", broker)
+
+    def test_failure_and_completion_force_exact_fixture_off(self):
+        broker = (BROKER / "FixtureBroker.ps1").read_text(encoding="utf-8")
+        self.assertIn("'finish' { Stop-ExactFixture;", broker)
+        self.assertIn("try { Stop-ExactFixture } catch", broker)
+        self.assertIn("Stop-ExactFixture\n        [ordered]@{ exitCode = 0", broker)
 
     def test_installer_is_race_and_archive_traversal_resistant(self):
         installer = (BROKER / "Install-FixtureBroker.ps1").read_text(encoding="utf-8")

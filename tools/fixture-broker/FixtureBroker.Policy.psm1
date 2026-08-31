@@ -112,6 +112,30 @@ function Get-StreamSha256 {
     finally { $Stream.Position = $position }
 }
 
+function Assert-ExpectedHash {
+    param([Parameter(Mandatory)][string] $Actual, [Parameter(Mandatory)][string] $Expected)
+    Assert-Sha256 $Actual | Out-Null
+    Assert-Sha256 $Expected | Out-Null
+    if ($Actual -ne $Expected) { throw 'Protected workload hash mismatch.' }
+    $true
+}
+
+function Assert-ExpectedSequence {
+    param([Parameter(Mandatory)][object] $Actual, [Parameter(Mandatory)][object] $Expected)
+    $actualNumber = Assert-Sequence $Actual
+    $expectedNumber = Assert-Sequence $Expected
+    if ($actualNumber -ne $expectedNumber) { throw 'Job sequence is not the next expected value.' }
+    $true
+}
+
+function Select-AllowlistedWorkload {
+    param([Parameter(Mandatory)][object[]] $Workloads, [Parameter(Mandatory)][string] $Id)
+    Assert-BrokerId $Id 'workloadId' | Out-Null
+    $workloadMatches = @($Workloads | Where-Object { $_.id -eq $Id })
+    if ($workloadMatches.Count -ne 1) { throw 'Workload is not in the protected allowlist.' }
+    $workloadMatches[0]
+}
+
 function Assert-ProtectedAcl {
     param(
         [Parameter(Mandatory)][string] $Path,
@@ -172,4 +196,4 @@ function Read-StrictJob {
     $job
 }
 
-Export-ModuleMember -Function Assert-BrokerId,Assert-Sequence,Assert-Sha256,Get-CanonicalPath,Assert-PathUnderRoots,Assert-NoReparsePoint,Assert-RelativeOutputPath,Assert-GuestPath,Get-StreamSha256,Assert-ProtectedAcl,Read-StrictJob
+Export-ModuleMember -Function Assert-BrokerId,Assert-Sequence,Assert-Sha256,Get-CanonicalPath,Assert-PathUnderRoots,Assert-NoReparsePoint,Assert-RelativeOutputPath,Assert-GuestPath,Get-StreamSha256,Assert-ExpectedHash,Assert-ExpectedSequence,Select-AllowlistedWorkload,Assert-ProtectedAcl,Read-StrictJob
