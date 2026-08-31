@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V5-MOUNT-PID-NS-001",
+    "candidateId":  "minimal-v5-mount-pid-ns",
+    "startedUtc":  "2026-08-31T02:22:01.2836650Z"
+}

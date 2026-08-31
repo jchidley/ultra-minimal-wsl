@@ -4,6 +4,7 @@
 *.wprp -text
 recovery-harness/trials/**/guest-log-*.txt binary
 recovery-harness/trials/K-OVERLAY-DIAG-001/** -text
+recovery-harness/trials/CP-MINIMAL-V5-MOUNT-PID-NS-001/** -text
 recovery-harness/trials/** whitespace=-trailing-space
 inventory/*.csv whitespace=-trailing-space
 *.log whitespace=-trailing-space

@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V5-MOUNT-PID-NS-001-RECOVERY",
+    "candidateId":  "stock-wsl-2.7.12-recovery",
+    "startedUtc":  "2026-08-31T02:22:30.7293348Z"
+}

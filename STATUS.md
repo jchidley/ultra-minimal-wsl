@@ -5,12 +5,13 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 ## Safety state
 
 - Microsoft's packaged WSL 2.7.12 kernel and initrd remain the recovery baseline.
-- No reduced control-plane package or new candidate kernel is currently deployed; the completed `minimal-v4-mount-ns` interval restored the pinned stock package.
+- No reduced control-plane package or new candidate kernel is currently deployed; the completed `minimal-v5-mount-pid-ns` interval restored the pinned stock package.
 - The accepted stock calibration and independent recovery returned the disposable Windows VM to Off with no probe, trace, or shutdown failure. The retained `clean-shell` checkpoint was not restored or changed. Live state is not asserted here.
 - Physical-host changes and operations affecting a shared WSL instance require fresh explicit approval. Operations wholly confined to the disposable fixture are standing-authorized within the pinned, offline, hash-verified, plan-validated, recoverable experiment envelope and require no human stage review or confirmation; they must fail closed on boundary or recovery failure.
 - Exact `minimal-v4-stock-ns` runner validation staged and independently hash-verified its MSI, candidate manifest, and runner without installing or probing the candidate. Windows Installer reported the pinned stock product installed and that candidate absent; the fixture returned Off.
 - The `minimal-v4-mount-ns` build completed with pinned offline inputs and extracted identities independently reverified. Exact runner validation then independently verified staged hashes, all 13 fault paths, stock-only MSI state, absent candidate evidence, and final fixture Off without installation or probing.
-- Three runtime elevation launches stopped before worker start and produced no operation result. Fresh launch 004 completed the candidate and recovery intervals; stock product state `5`, candidate state `-1`, final fixture Off, and independent recovery `B6-T` are verified.
+- Three v4 runtime elevation launches stopped before worker start and produced no operation result. Fresh launch 004 completed the v4 candidate and recovery intervals; stock product state `5`, candidate state `-1`, final fixture Off, and independent recovery `B6-T` are verified.
+- Fresh v5 validation launch 002 verified every staged hash, all 13 fault paths, stock-only state, absent evidence, and final fixture Off. Runtime launch 001 then completed both fixed intervals; the candidate and independent recovery passed `B6-T`, stock product state is `5`, candidate state is `-1`, and the fixture returned Off.
 
 ## Proven boundary
 
@@ -25,7 +26,8 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - `minimal-v3-fail-closed` removes the known excluded interop hard-fail while retaining only the minimal command-control policy.
 - `minimal-v3-stock-ns` is finalized at `B2`; its initial-configuration rejection selected the v4 sender correction, not a namespace or Kconfig requirement.
 - `minimal-v4-stock-ns` and `minimal-v4-mount-ns` are reproducible siblings that differ only in the coherent namespace bundle. Stock namespaces passed `B6-T`; mount-only reached `B3` and closed its control socket after ext4 mount, selecting the full bundle as the passing baseline without isolating IPC, PID, or UTS individually.
-- Every v3 and v4 Linux artifact built byte-identically twice offline in separate ext4 directories. The evidence-selected `minimal-v5-mount-pid-ns` source candidate also built byte-identically twice offline.
+- Every v3 and v4 Linux artifact built byte-identically twice offline in separate ext4 directories. The `minimal-v5-mount-pid-ns` source candidate also built byte-identically twice offline and passed `B6-T`.
+- The controlled comparison isolates PID semantics: mount-only failed after `B3`, while mount plus PID passed `B6-T` with IPC and UTS still omitted. `CONFIG_PID_NS` is now `PROVEN_WSL_REQUIRED`; IPC and UTS namespace options are `DEFERRED` for the tested minimal contract.
 
 ## Active experiment boundary
 
@@ -37,8 +39,9 @@ The only active experiment path is the fixed candidate comparison:
 2. `minimal-v3-stock-ns` diagnostic interval — finalized at `B2` in `CP-MINIMAL-V3-STOCK-NS-001`;
 3. evidence-corrected `minimal-v4-stock-ns` — finalized at `B6-T` in `CP-MINIMAL-V4-STOCK-NS-001`;
 4. `minimal-v4-mount-ns` — finalized at `B3` in `CP-MINIMAL-V4-MOUNT-NS-001`;
-5. namespace decision — retain the full coherent bundle as the passing baseline;
-6. build and run the reproducible `minimal-v5-mount-pid-ns` ablation to isolate whether PID semantics explain the mount-only failure.
+5. provisional v4 decision — retain the full coherent bundle pending a narrow PID ablation;
+6. `minimal-v5-mount-pid-ns` — finalized at `B6-T` in `CP-MINIMAL-V5-MOUNT-PID-NS-001`, selecting mount plus PID and rejecting IPC and UTS;
+7. promote the proved `CONFIG_PID_NS` requirement into the next reduced-kernel candidate and verify it with the finalized mount-plus-PID control plane.
 
 `tools/Invoke-WslCandidateProbe.ps1` is the retained guest-local measurement tool. It records exact candidate/rootfs hashes, bounded `wsl.exe` process results, WSL ETW/events/crashes, shutdown, and an evidence hash manifest. Fixture start, package placement, rollback, and evidence extraction are prerequisites around the experiment, not objects being minimized and not separate acceptance ledgers.
 
@@ -64,8 +67,12 @@ The evidence-selected `minimal-v4-mount-ns` controlled Windows build subsequentl
 
 After three runtime launches stopped before worker start, fresh launch 004 completed a valid candidate interval. Management checks passed, `/init`, VSOCK, and Hyper-V storage initialized, and the registered Toybox ext4 filesystem mounted read-write. The mount-only launch child then unmounted it and closed `WslCorePort` before returning `LxMiniInitMessageCreateInstanceResult`; the host reported `Wsl/Service/CreateInstance/E_UNEXPECTED`. The highest directly supported gate is `B3`. Both 20-file manifests verify, the pinned stock MSI was restored, independent recovery passed `B6-T`, and the fixture returned Off. Immutable evidence and the terminal ledger row are preserved under `recovery-harness/trials/CP-MINIMAL-V4-MOUNT-NS-001/`.
 
-The sibling result retains the full IPC/mount/PID/UTS namespace bundle as the passing baseline but does not prove each member individually necessary. The next narrow ablation is `minimal-v5-mount-pid-ns`, restoring PID namespace semantics while continuing to remove IPC and UTS. Its complete source diff is `cfd8cd…efe8`; two pinned offline Linux builds produced byte-identical `init`, `init.debug`, and `initrd.img`. The pinned controlled Windows build then completed: the unsigned MSI is 174,411,776 bytes with SHA-256 `343f90…f50d`, ProductCode `{796B7461-B342-4554-AF96-A8CFEF80EE5B}`, and output-manifest SHA-256 `67385c…7569`; extracted identities independently reverified and the fixture returned Off. The exact runner passes all 13 local fault injections. Its first fixture-validation elevation launch remained at `launching` without a worker, operation result, installation, probe, or candidate evidence.
+The sibling result initially retained the full IPC/mount/PID/UTS namespace bundle as the passing baseline. The narrow `minimal-v5-mount-pid-ns` ablation then restored PID semantics while continuing to remove IPC and UTS. Its complete source diff is `cfd8cd…efe8`; two pinned offline Linux builds produced byte-identical `init`, `init.debug`, and `initrd.img`. The pinned controlled Windows build produced unsigned MSI SHA-256 `343f90…f50d`, ProductCode `{796B7461-B342-4554-AF96-A8CFEF80EE5B}`, and output-manifest SHA-256 `67385c…7569`; extracted identities independently reverified.
+
+Fresh validation operation 002 independently verified every staged hash, package size, all 13 fixture-side fault paths, stock product state `5`, candidate state `-1`, absent candidate evidence, and final fixture Off without installation or probing. The exact runtime controller was then hash-bound and plan-validated. Runtime operation 001 passed management checks, mounted the registered Toybox ext4 filesystem, returned CreateInstanceResult successfully, printed `toybox-ok` with exit zero, and terminated gracefully. Both 20-file manifests verify, no GuestLog fatal signature was observed, the pinned stock MSI was restored, independent recovery passed `B6-T`, and the fixture returned Off. Immutable evidence and the terminal ledger row are preserved under `recovery-harness/trials/CP-MINIMAL-V5-MOUNT-PID-NS-001/`.
+
+The controlled delta from mount-only `B3` to mount-plus-PID `B6-T` selects PID namespace semantics. IPC and UTS remained omitted in the passing candidate and are not required by the tested minimal contract. The next reduced-kernel candidate must enable `CONFIG_PID_NS` while retaining the finalized mount-plus-PID control plane.
 
 ## Inventory
 
-The durable inventory contains 9 config snapshots, 14 completed trials, and 174 reviewed annotations; synchronization integrity is verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.
+The durable inventory contains 9 config snapshots, 15 completed trials, and 174 reviewed annotations; synchronization integrity is verified `ok`. Candidate runtime work must reuse the existing ledgers and evidence directories rather than creating infrastructure-specific records.

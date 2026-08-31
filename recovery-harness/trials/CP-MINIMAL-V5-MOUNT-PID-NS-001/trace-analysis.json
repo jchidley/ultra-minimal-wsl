@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V5-MOUNT-PID-NS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1244,
+  "recoveryTraceRows": 4910,
+  "candidateGuestLogRecords": 92,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "NET: Registered PF_VSOCK protocol family",
+    "hv_vmbus: registering driver hv_storvsc",
+    "The registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceEnd returned success",
+    "The fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "candidateFatalEvidence": "No GuestLog BUG, oops, panic, or segfault was observed. The mount-plus-PID launch completed instance creation, command relay, and graceful termination.",
+  "recoveryEvidence": [
+    "Run /init as init process",
+    "WSL (1 - ): WSL version 2.7.12.0",
+    "The registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceEnd returned success",
+    "The fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-T",
+    "basis": "The candidate entered /init, established VSOCK, attached and mounted the registered distro, returned CreateInstanceResult successfully, executed the exact Toybox smoke command with exit zero, and terminated gracefully. Independent stock recovery repeated B6-T."
+  }
+}

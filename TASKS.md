@@ -4,7 +4,7 @@
 
 ## Active action
 
-Retry the unchanged hash-bound `minimal-v5-mount-pid-ns` fixture validation controller under one fresh operation ID when the elevation broker can start its worker. The pinned controlled Windows package build completed, extracted identities independently reverified, and the fixture returned Off; the exact runner passes all 13 local fault injections. The first validation launch remained at `launching` without a worker or output. After fixture validation, continue directly through one fixed candidate interval and mandatory stock recovery. Do not rerun finalized v3 or v4 candidates.
+Prepare the next reduced-kernel candidate by promoting the now-proven `CONFIG_PID_NS` requirement while retaining the finalized `minimal-v5-mount-pid-ns` control plane. `CP-MINIMAL-V5-MOUNT-PID-NS-001` passed `B6-T` with independent stock recovery, proving mount-plus-PID sufficient and selecting PID semantics after the mount-only `B3` failure. Keep IPC and UTS namespaces omitted. Record the full config, parent, hashes, and reserved trial before any boot; build twice offline and continue through the unchanged fixed probe and recovery contract.
 
 ## Comparison queue
 
@@ -12,15 +12,16 @@ Retry the unchanged hash-bound `minimal-v5-mount-pid-ns` fixture validation cont
 2. `minimal-v3-stock-ns` — superseded after its B2 sender-policy evidence;
 3. `minimal-v4-stock-ns` — complete at `B6-T` in `CP-MINIMAL-V4-STOCK-NS-001`;
 4. `minimal-v4-mount-ns` — complete at `B3` in `CP-MINIMAL-V4-MOUNT-NS-001`;
-5. namespace decision — full bundle retained as the passing baseline; mount-only rejected;
-6. `minimal-v5-mount-pid-ns` — evidence-selected minimality ablation; reproducible Linux artifacts and controlled package complete, fixture validation pending.
+5. provisional v4 decision — full bundle retained pending a narrow PID ablation; mount-only rejected;
+6. `minimal-v5-mount-pid-ns` — complete at `B6-T` in `CP-MINIMAL-V5-MOUNT-PID-NS-001`; retain mount plus PID, omit IPC and UTS;
+7. next reduced-kernel candidate — promote `CONFIG_PID_NS` and verify the finalized minimal control plane against the reduced kernel.
 
 Every comparison uses the identical Toybox smoke command, timeouts, instrumentation, rootfs, classification rules, and recovery proof.
 
 ## Blocked
 
 - `minimal-v3-stock-ns` is finalized at `B2`; do not rerun the byte-identical candidate.
-- Individual IPC, PID, and UTS namespace necessity and Kconfig promotion remain blocked until the selected mount-plus-PID ablation runs.
+- IPC and UTS namespace semantics are rejected for the tested minimal contract; `CONFIG_PID_NS` is proven required and awaits incorporation into the next reduced-kernel candidate.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
 

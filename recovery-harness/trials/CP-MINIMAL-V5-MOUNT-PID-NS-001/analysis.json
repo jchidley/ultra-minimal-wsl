@@ -1,0 +1,76 @@
+{
+  "trialId": "CP-MINIMAL-V5-MOUNT-PID-NS-001",
+  "purpose": "Test the evidence-selected mount-plus-PID namespace control-plane ablation against the finalized stock-namespace B6-T and mount-only B3 baselines under the fixed Toybox probe, then prove independent stock recovery.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-T",
+    "confidence": "high",
+    "ledgerClassification": "PROVEN_WSL_REQUIRED",
+    "basis": "Management checks passed, Linux /init and VSOCK initialized, the registered Toybox VHDX mounted read-write, CreateInstanceResult succeeded, and the exact Toybox smoke command printed toybox-ok with exit zero. The mount-only sibling failed after B3, while restoring PID namespace semantics recovered B6-T without IPC or UTS namespaces."
+  },
+  "candidate": {
+    "id": "minimal-v5-mount-pid-ns",
+    "parent": "minimal-v4-fail-closed",
+    "wslVersion": "2.7.12.0",
+    "sourceCommit": "68f601bba8eac1df20a0bbd403c6c87c92369ade",
+    "completeSourceDiffSha256": "cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8",
+    "packageSha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+    "candidateManifestSha256": "2f6dd1c0e81079bd98dfadf5ee56a8bc98b2f62f872e9adaa2a13eac192ceb26",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-31T02:22:01.2836650Z",
+    "finishedUtc": "2026-08-31T02:22:08.7106755Z",
+    "probeClassification": "B6-T",
+    "finalClassification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxResult": "PASS",
+    "toyboxExitCode": 0,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 1244,
+    "recoveryRows": 4910,
+    "directEvidence": "The registered ext4 distro mounted, CreateInstanceEnd returned success, the exact Toybox smoke process passed, and termination was graceful with no GuestLog fatal signature."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V5-MOUNT-PID-NS-001-RECOVERY",
+    "startedUtc": "2026-08-31T02:22:30.7293348Z",
+    "finishedUtc": "2026-08-31T02:22:38.8086992Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "43fe4d9b6f0369129bf8d74f58cde122f408d48faef9b41f491b3eeaf4a267a5",
+    "operationResultSha256": "3577dcaa1f90b665ee07d9a397def43367084c2f40f35e8f78383ffffc93f194",
+    "candidateArchiveSha256": "1dcd475980e6be69c0e4b8b99d79d8298a88f4d89a4294871ff8911c947d04f1",
+    "recoveryArchiveSha256": "1c809ebe988d1f9d3c78c1ab54b4f8fbdb92ab3df1fb75a8231f5ccef4a5258b"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChanged": false
+  },
+  "comparison": {
+    "stockNamespaceTrial": "CP-MINIMAL-V4-STOCK-NS-001",
+    "stockNamespaceResult": "B6-T",
+    "mountOnlyTrial": "CP-MINIMAL-V4-MOUNT-NS-001",
+    "mountOnlyResult": "B3",
+    "candidateResult": "B6-T",
+    "selectedNamespacePolicy": "Retain mount and PID namespace semantics. IPC and UTS namespace semantics are not required by the tested minimal WSL contract; PID semantics are selected by the controlled mount-only failure and mount-plus-PID restored success."
+  },
+  "decision": "Finalize minimal-v5-mount-pid-ns at B6-T. Retain mount plus PID semantics, reject IPC and UTS from the minimal control plane, and promote CONFIG_PID_NS as a WSL control requirement before the next reduced-kernel runtime candidate."
+}

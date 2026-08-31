@@ -195,11 +195,11 @@
       "init_debug_sha256": "3278a2155130dfe96951e0bb7b69be76a351978472208b41926c132bd8e21b82",
       "initrd_sha256": "771e54cdea68b0d81b776456287bdf433a60a7e3729cc05f4efe7945725a100d",
       "reproducible": true,
-      "runtime_evidence": false
+      "runtime_evidence": true
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v5-mount-pid-package-built-runner-validation-elevation-blocked",
+    "status": "minimal-v5-mount-pid-runtime-finalized-pass-b6-t",
     "executable": true,
     "approval_carried_forward": false,
     "active_build": {
@@ -1008,10 +1008,10 @@
       "linux_artifacts_byte_identical": true,
       "controlled_windows_package_built": true,
       "package_sha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
-      "next_action": "Validate the exact runner, then continue directly through one fixed candidate interval and mandatory stock recovery."
+      "next_action": "Runtime complete at B6-T; retain mount plus PID semantics, omit IPC and UTS, and promote CONFIG_PID_NS for the next reduced-kernel candidate."
     },
     "minimal_v5_mount_pid_ns": {
-      "status": "runner-validation-elevation-blocked",
+      "status": "runtime-finalized-pass-b6-t",
       "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V5-MOUNT-PID-NS-001",
@@ -1053,9 +1053,37 @@
         "candidate_install_performed": false,
         "candidate_probe_performed": false
       },
-      "remaining_before_runtime": ["Windows elevation broker must start the hash-bound fixture validation controller"],
-      "runtime_boundary": "Do not install or probe until fixture validation independently verifies staged hashes, all fault paths, stock-only state, absent candidate evidence, and final fixture Off."
-
+      "runner_validation_attempt_002": {
+        "disposition": "validation-complete",
+        "staged_hashes_verified": true,
+        "failure_paths_tested": 13,
+        "stock_product_state": 5,
+        "candidate_product_state": -1,
+        "candidate_evidence_exists": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false,
+        "fixture_final_state": "Off",
+        "result_sha256": "b2b413684d64c285cf41654dfa03c8158469ad96ff27eba42a812eb48ebdbf4e"
+      },
+      "runtime_controller_sha256": "43fe4d9b6f0369129bf8d74f58cde122f408d48faef9b41f491b3eeaf4a267a5",
+      "runtime_attempt_001": {
+        "disposition": "candidate-pass",
+        "candidate_result": "B6-T",
+        "candidate_manifest_files_verified": 20,
+        "recovery_result": "B6-T",
+        "recovery_manifest_files_verified": 20,
+        "candidate_archive_sha256": "1dcd475980e6be69c0e4b8b99d79d8298a88f4d89a4294871ff8911c947d04f1",
+        "recovery_archive_sha256": "1c809ebe988d1f9d3c78c1ab54b4f8fbdb92ab3df1fb75a8231f5ccef4a5258b",
+        "operation_result_sha256": "3577dcaa1f90b665ee07d9a397def43367084c2f40f35e8f78383ffffc93f194",
+        "final_evidence_manifest_sha256": "368dca1fd07f4fd5c356a4caaabe13c4084bff81ee06b02330f516575fbc0113",
+        "evidence_root": "recovery-harness/trials/CP-MINIMAL-V5-MOUNT-PID-NS-001",
+        "ledger_finalized": true,
+        "fixture_final_state": "Off",
+        "next_action": "Promote CONFIG_PID_NS into the next reduced-kernel candidate while retaining mount-plus-PID control-plane semantics and omitting IPC and UTS."
+      },
+      "namespace_decision": "Mount plus PID passed B6-T after mount-only failed at B3. Retain mount and PID semantics; IPC and UTS are not required by the tested minimal WSL contract.",
+      "remaining_before_runtime": [],
+      "runtime_boundary": "CP-MINIMAL-V5-MOUNT-PID-NS-001 is finalized at B6-T with independent stock recovery at B6-T. Do not rerun it; promote CONFIG_PID_NS for the next reduced-kernel candidate."
     },
     "invariant_inputs": [
       "same WSL 2.7.12 source/package baseline and per-candidate hash-verified package manifest",
