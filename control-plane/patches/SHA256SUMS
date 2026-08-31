@@ -5,3 +5,4 @@ e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981  0004-minimal-v
 7bf14daf6388b322db5bf69eb05394f84baa3260b3c1127efaae0fc62e473515  0005-minimal-v3-mount-ns.patch
 5efe32be0185c6d080458e4a768959d7e5bd5ebdb2138626f60c0555fc7555e5  0006-minimal-v4-zero-initial-config.patch
 1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a  0007-minimal-v5-mount-pid-ns.patch
+5b2f5dcc3c0ca2e8e24c19b6a6a1bee05c1140cf8e3561f7d0fb23edd63eeda0  0008-minimal-v6-excluded-initialize.patch

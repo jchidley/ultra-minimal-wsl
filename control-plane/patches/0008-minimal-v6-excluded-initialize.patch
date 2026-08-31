@@ -1,0 +1,76 @@
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+index e80442a..b61ea50 100644
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -1444,15 +1444,6 @@ Return Value:
+         return -1;
+     }
+ 
+-    //
+-    // Set max inotify watches to the value suggested by Visual Studio Code Remote.
+-    //
+-
+-    if (WriteToFile(PROCFS_PATH "/sys/fs/inotify/max_user_watches", "524288\n") < 0)
+-    {
+-        return -1;
+-    }
+-
+     //
+     // Increase the soft and hard limit for number of open file descriptors.
+     // N.B. the soft limit shouldn't be too high. See https://github.com/microsoft/WSL/issues/12985 .
+@@ -1479,22 +1470,6 @@ Return Value:
+         return -1;
+     }
+ 
+-    //
+-    // Enable the loopback interface.
+-    //
+-
+-    wil::unique_fd Fd{socket(AF_INET, SOCK_DGRAM, IPPROTO_IP)};
+-    if (!Fd)
+-    {
+-        LOG_ERROR("socket failed {}", errno);
+-        return -1;
+-    }
+-
+-    if (EnableInterface(Fd.get(), "lo") < 0)
+-    {
+-        return -1;
+-    }
+-
+     //
+     // Enable logging when processes receive fatal signals.
+     //
+@@ -1522,32 +1497,6 @@ Return Value:
+         LOG_ERROR("sethostname({}) failed {}", Hostname, errno);
+     }
+ 
+-    //
+-    // Create a tmpfs mount for the cross-distro shared mount.
+-    //
+-
+-    if (UtilMount(nullptr, CROSS_DISTRO_SHARE_PATH, "tmpfs", 0, nullptr) < 0)
+-    {
+-        return -1;
+-    }
+-
+-    if (mount(nullptr, CROSS_DISTRO_SHARE_PATH, nullptr, MS_SHARED, nullptr) < 0)
+-    {
+-        LOG_ERROR("mount({}, MS_SHARED) failed {}", CROSS_DISTRO_SHARE_PATH, errno);
+-        return -1;
+-    }
+-
+-    //
+-    // Create the resolv.conf symlink in the cross-distro share (gns writes to /etc/resolv.conf).
+-    //
+-
+-    remove(RESOLV_CONF_PATH);
+-    if (symlink(CROSS_DISTRO_SHARE_PATH "/" RESOLV_CONF_FILE, RESOLV_CONF_PATH) < 0)
+-    {
+-        LOG_ERROR("symlink({}, {}) failed {}", CROSS_DISTRO_SHARE_PATH "/" RESOLV_CONF_FILE, RESOLV_CONF_PATH, errno);
+-        return -1;
+-    }
+-
+     return 0;
+ }
+ 

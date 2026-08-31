@@ -1,0 +1,9 @@
+candidate=minimal-v6-excluded-initialize
+parent_candidate=minimal-v5-mount-pid-ns
+parent_source_commit=b01db8716b78c76b871dda69b92055e87ba10c93
+source_commit=1d6b039cd306354b2addb1bb9d00ee881f551617
+layer_patch=control-plane/patches/0008-minimal-v6-excluded-initialize.patch
+layer_patch_sha256=5b2f5dcc3c0ca2e8e24c19b6a6a1bee05c1140cf8e3561f7d0fb23edd63eeda0
+complete_source_diff_sha256=6dc4920fcf3632161137036c126550ee843b1019d268e291ad586211ceaae2c0
+namespace_bundle=mount,pid
+runtime_evidence=none

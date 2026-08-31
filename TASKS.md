@@ -4,16 +4,13 @@
 
 ## Active action
 
-Prepare the next reduced control-plane source layer and retest the finalized `K-PIDNS-001` kernel:
+Complete the `minimal-v6-excluded-initialize` package and retest the finalized `K-PIDNS-001` kernel:
 
-1. remove mini-init `Initialize` operations that hard-fail on excluded inotify, loopback/networking, GNS/DNS, and cross-distro policy;
-2. retain reachable resource-limit, diagnostic, hostname, command-relay, lifecycle, and fail-closed protocol behavior unless evidence selects a narrower change;
-3. pass source-policy, protocol, record, mutation, and repository validation;
-4. build the Linux artifacts twice offline in distinct `LFS-Builder` ext4 directories and require byte identity;
-5. build and independently verify the hash-bound controlled package;
-6. plan-validate and run one fixed `K-PIDNS-001` candidate interval in the disposable fixture, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger.
+1. let the recorded retry controller extract the failed build logs, prove attempt 001 produced no MSI identity, and clean only its partial fixture directories;
+2. rebuild and independently verify the hash-bound controlled package;
+3. plan-validate and run one fixed `K-PIDNS-001` candidate interval in the disposable fixture, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger.
 
-Do not treat the in-progress source, test, or package-preparation files as a completed candidate until all applicable gates above pass.
+The source-policy review, tests, and two byte-identical offline Linux builds are complete. The first package build returned the fixture Off without an accepted package identity; its exact record is in `control-plane/deferred-runtime-plan.json`. Do not treat package-preparation files as a completed runtime candidate.
 
 ## Blocked
 

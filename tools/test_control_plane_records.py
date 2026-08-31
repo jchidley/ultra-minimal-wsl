@@ -59,6 +59,28 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertIn('-#define BINFMT_PATH PROCFS_PATH "/sys/fs/binfmt_misc"', no_interop)
         self.assertNotIn("a/src/linux/init/config.cpp b/src/linux/init/config.cpp", no_interop)
 
+    def test_v6_initialize_layer_removes_only_excluded_policy_operations(self):
+        patch = (CONTROL / "patches/0008-minimal-v6-excluded-initialize.patch").read_text(encoding="utf-8")
+        self.assertEqual(patch.count("diff --git "), 1)
+        self.assertIn("a/src/linux/init/main.cpp b/src/linux/init/main.cpp", patch)
+        for excluded in (
+            'WriteToFile(PROCFS_PATH "/sys/fs/inotify/max_user_watches"',
+            'EnableInterface(Fd.get(), "lo")',
+            'UtilMount(nullptr, CROSS_DISTRO_SHARE_PATH, "tmpfs"',
+            'symlink(CROSS_DISTRO_SHARE_PATH "/" RESOLV_CONF_FILE, RESOLV_CONF_PATH)',
+        ):
+            self.assertIn(excluded, patch)
+            self.assertNotIn(f"+    {excluded}", patch)
+        for retained in (
+            "setrlimit(RLIMIT_NOFILE, &Limit)",
+            "setrlimit(RLIMIT_MEMLOCK, &Limit)",
+            'WriteToFile("/proc/sys/kernel/print-fatal-signals"',
+            'WriteToFile("/proc/sys/kernel/printk_devkmsg"',
+            "sethostname(Hostname, strlen(Hostname))",
+        ):
+            self.assertNotIn(f"-{retained}", patch)
+        self.assertNotIn("CONFIG_INOTIFY_USER", patch)
+
     def test_v4_sender_explicitly_zeros_excluded_initial_configuration(self):
         patch = (CONTROL / "patches/0006-minimal-v4-zero-initial-config.patch").read_text(encoding="utf-8")
         self.assertEqual(patch.count("diff --git "), 1)
@@ -100,6 +122,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v4-fail-closed",
             "minimal-v4-stock-ns",
             "minimal-v4-mount-ns",
+            "minimal-v5-mount-pid-ns",
+            "minimal-v6-excluded-initialize",
         )
         for name in names:
             directory = CONTROL / "candidates" / name
@@ -167,6 +191,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v4-stock-ns",
             "minimal-v4-mount-ns",
             "minimal-v5-mount-pid-ns",
+            "minimal-v6-excluded-initialize",
         })
         for name, planned in plan["source_candidates"].items():
             candidate = key_values(CONTROL / "candidates" / name / "candidate.txt")
@@ -384,6 +409,12 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(sha256(ROOT / ablation_build["script"]), ablation_build["script_sha256"])
         self.assertEqual(sha256(ROOT / ablation_build["layer_patch"]), ablation_build["layer_patch_sha256"])
         self.assertEqual(ablation_build["complete_source_diff_sha256"], ablation["complete_source_diff_sha256"])
+        source_build = load_plan()["controlled_package_build"]["next_source_build"]
+        self.assertFalse(source_build["completed"])
+        self.assertEqual(source_build["candidate"], "minimal-v6-excluded-initialize")
+        self.assertEqual(sha256(ROOT / source_build["script"]), source_build["script_sha256"])
+        self.assertEqual(sha256(ROOT / source_build["layer_patch"]), source_build["layer_patch_sha256"])
+        self.assertEqual(source_build["complete_source_diff_sha256"], load_plan()["source_candidates"]["minimal-v6-excluded-initialize"]["complete_source_diff_sha256"])
         v5 = contract["minimal_v5_mount_pid_ns"]
         self.assertFalse(v5["executable"])
         self.assertEqual(v5["status"], "runtime-finalized-pass-b6-t")
@@ -435,7 +466,11 @@ class ControlPlaneRecordTests(unittest.TestCase):
         source_reduction = contract["next_source_reduction"]
         self.assertFalse(source_reduction["executable"])
         self.assertIn("CONFIG_INOTIFY_USER", source_reduction["source_finding"])
-        self.assertIn("Do not add storage, PCI hotplug, networking, or CONFIG_INOTIFY_USER", source_reduction["decision"])
+        self.assertEqual(source_reduction["source_candidate"], "minimal-v6-excluded-initialize")
+        self.assertIn("does not add storage, PCI hotplug, networking, or CONFIG_INOTIFY_USER", source_reduction["decision"])
+        self.assertIn("Complete:", source_reduction["remaining_review"])
+        self.assertTrue(source_reduction["linux_artifacts_byte_identical"])
+        self.assertEqual(source_reduction["reserved_trial_id"], "CP-MINIMAL-V6-K-PIDNS-001")
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])

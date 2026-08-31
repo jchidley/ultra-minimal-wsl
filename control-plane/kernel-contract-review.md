@@ -86,6 +86,22 @@ The pinned stock distro init contains `ConfigInitializeCgroups`, `/proc/cgroups`
 
 Searches of pinned WSL 2.7.12 and all three preserved `minimal-v2` trees found no `PR_SET_VMA`, `PR_SET_VMA_ANON_NAME`, anonymous-map-label dependency, or product-source `maps`/`smaps` consumer. Retained command relay and lifecycle code use other proc interfaces, and the smoke contract reads only `/proc/self/status`. Therefore neither process creation, stdio/exit relay, lifecycle, nor the smoke contract selects this facility. The symbol is `DEFERRED`; no candidate source or config changed during this review, and static absence is not runtime necessity proof.
 
+## Excluded mini-init initialization policy
+
+The retained `LxMiniInitMessageEarlyConfig` handler calls `Initialize` before registered-distro attachment. Review of every kernel-facing operation at and after the selected inotify boundary produced this narrow source disposition:
+
+| Operation | Retained-contract finding | Disposition |
+|---|---|---|
+| write `/proc/sys/fs/inotify/max_user_watches` | The source cites only Visual Studio Code Remote; every reduced kernel has `CONFIG_INOTIFY_USER=n`. | Remove the operation; do not add the symbol. |
+| `setrlimit(RLIMIT_NOFILE)` | Bounds file-descriptor availability for the retained process and stdio relay. | Retain fail-closed. |
+| `setrlimit(RLIMIT_MEMLOCK)` | Uses a baseline resource-limit interface and does not select an absent kernel facility; the current evidence does not isolate it as excluded policy. | Retain pending later source ablation. |
+| create an IPv4 datagram socket and enable `lo` | IP loopback belongs to excluded networking; VSOCK and local process relay do not require an IP interface. | Remove the operation and its hard-fails. |
+| write `print-fatal-signals` and `printk_devkmsg` | Supports fatal-signal evidence and the mandatory recovery instrumentation without selecting an absent reduced-kernel facility. | Retain fail-closed for this layer. |
+| `sethostname` | Nonfatal launch identity setup; it does not require a UTS namespace, and failure is already logged without ending initialization. | Retain unchanged. |
+| mount `/mnt/wsl` tmpfs, mark it shared, and replace `/etc/resolv.conf` with its GNS-managed symlink | Cross-distro integration, GNS, and DNS are explicitly excluded. The one-LUN ext4 launch has no retained consumer. | Remove the operations and their hard-fails. |
+
+The resulting `minimal-v6-excluded-initialize` layer changes only `src/linux/init/main.cpp`, preserves mount-plus-PID launch semantics, and does not weaken inbound protocol rejection. Runtime remains required before this source layer can establish a later gate.
+
 ## Conclusions
 
 - The retained Hyper-V/VSOCK/storage additions remain the only evidence-selected WSL kernel bundles.

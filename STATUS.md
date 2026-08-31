@@ -24,7 +24,8 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - WSL source is pinned to tag 2.7.12, commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`.
 - The retained passing control-plane baseline is mount plus PID namespace semantics with IPC and UTS omitted.
 - `K-PIDNS-001`, derived from the proved Hyper-V storage floor, is the kernel to retest after the next source reduction. `K-OVERLAY-PIDNS-001` is finalized and must not be rerun.
-- Source ordering selects mini-init `Initialize`, not speculative Kconfig growth. Its inotify sysctl setup serves excluded Visual Studio Code Remote policy and cannot succeed with the intentionally absent `CONFIG_INOTIFY_USER`. The remaining initialization operations are being reduced only where they serve excluded networking, DNS, GNS, or cross-distro policy.
+- `minimal-v6-excluded-initialize` removes only the inotify, IP-loopback, and cross-distro/GNS-DNS setup selected by the retained `Initialize` review. Its Linux artifacts built byte-identically twice offline; no controlled package identity or runtime result exists yet.
+- The first controlled package build exited before producing an accepted package identity and returned the fixture Off. Exact failure and retry records are in `control-plane/deferred-runtime-plan.json`.
 - Do not add inotify, storage-hotplug, PCI, networking, IPC namespace, or UTS namespace support without new runtime evidence.
 
 ## Evidence ownership
