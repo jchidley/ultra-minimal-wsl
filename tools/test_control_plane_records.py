@@ -223,6 +223,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
 
         build = plan["controlled_package_build"]
         self.assertTrue(build["executable"])
+        self.assertEqual(build["status"], "minimal-v6-controlled-package-built-runtime-planned")
         self.assertFalse(build["approval_carried_forward"])
         self.assertEqual(build["source"]["commit"], plan["source"]["base_commit"])
         active = build["active_build"]
@@ -410,11 +411,54 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(sha256(ROOT / ablation_build["layer_patch"]), ablation_build["layer_patch_sha256"])
         self.assertEqual(ablation_build["complete_source_diff_sha256"], ablation["complete_source_diff_sha256"])
         source_build = load_plan()["controlled_package_build"]["next_source_build"]
-        self.assertFalse(source_build["completed"])
+        self.assertTrue(source_build["completed"])
+        self.assertEqual(source_build["package_sha256"], "1995a9f3b247e246bfdf8a6a3a566a7a20d0846ac70cc6ecc942bff35780a8df")
+        self.assertEqual(source_build["package_signature_status"], "NotSigned")
         self.assertEqual(source_build["candidate"], "minimal-v6-excluded-initialize")
         self.assertEqual(sha256(ROOT / source_build["script"]), source_build["script_sha256"])
         self.assertEqual(sha256(ROOT / source_build["layer_patch"]), source_build["layer_patch_sha256"])
         self.assertEqual(source_build["complete_source_diff_sha256"], load_plan()["source_candidates"]["minimal-v6-excluded-initialize"]["complete_source_diff_sha256"])
+        self.assertEqual(source_build["fixture_operation_id"], "minimal-v6-excluded-initialize-build-007")
+        self.assertEqual(
+            source_build["build_controller_path"],
+            r"%LOCALAPPDATA%\ultra-minimal-wsl\approval-state\minimal-v6-excluded-initialize-build-007\Run-ControlledBuild.ps1",
+        )
+        self.assertEqual(source_build["build_controller_sha256"], "dfe5e18c9b13ce3c8ec7035bf75c6c041f8dafa88defe6a39fa9814ff6ce829d")
+        self.assertEqual(source_build["build_attempt_002"]["disposition"], "infrastructure-failure-before-worker-start")
+        self.assertFalse(source_build["build_attempt_002"]["worker_started"])
+        self.assertFalse(source_build["build_attempt_002"]["fixture_touched"])
+        self.assertEqual(source_build["build_attempt_003"]["build_exit_code"], 1)
+        self.assertFalse(source_build["build_attempt_003"]["candidate_result_created"])
+        self.assertEqual(source_build["build_attempt_003"]["fixture_final_state"], "Off")
+        inspection = source_build["capacity_inspection_004"]
+        self.assertFalse(inspection["executable"])
+        self.assertEqual(inspection["status"], "completed")
+        self.assertEqual(inspection["operation_id"], "minimal-v6-capacity-inspection-004")
+        self.assertEqual(inspection["controller_sha256"], "00951b16a1bd70afdf15ee126af6da88fb350e0f64c7f5b4dcca05645efc1630")
+        self.assertEqual(inspection["target_vm_id"], "dcbf722c-0702-444e-9496-04a4623c3198")
+        failed_expansion = source_build["capacity_expansion_005"]
+        self.assertFalse(failed_expansion["executable"])
+        self.assertFalse(failed_expansion["worker_started"])
+        expansion = source_build["capacity_expansion_006"]
+        self.assertFalse(expansion["executable"])
+        self.assertEqual(expansion["status"], "completed")
+        self.assertEqual(expansion["target_virtual_size"], 160 * 1024**3)
+        self.assertEqual(expansion["controller_sha256"], "d3d0c46207f9d88aae5618c4fa42b8792097ff8012a65c630f3a72332aa8234e")
+        self.assertEqual(expansion["fixture_final_state"], "Off")
+        retry = source_build["build_retry_007"]
+        self.assertFalse(retry["executable"])
+        self.assertEqual(retry["status"], "completed")
+        self.assertEqual(retry["controller_sha256"], source_build["build_controller_sha256"])
+        v6 = contract["minimal_v6_k_pidns_001"]
+        self.assertTrue(v6["executable"])
+        self.assertEqual(v6["reserved_trial_id"], "CP-MINIMAL-V6-K-PIDNS-001")
+        self.assertEqual(sha256(ROOT / v6["candidate_manifest_path"]), v6["candidate_manifest_sha256"])
+        self.assertEqual(sha256(ROOT / v6["runner_path"]), v6["runner_sha256"])
+        self.assertEqual(v6["package_sha256"], source_build["package_sha256"])
+        self.assertEqual(v6["kernel_sha256"], contract["k_pidns_001"]["kernel_sha256"])
+        self.assertEqual(v6["runtime_controller_sha256"], "8c7fbc383d7233f5b75b0405657973ddac98aa46814e16e394994282c544a43b")
+        self.assertFalse(v6["runtime_attempt_008"]["worker_started"])
+        self.assertFalse(v6["runtime_attempt_009"]["worker_started"])
         v5 = contract["minimal_v5_mount_pid_ns"]
         self.assertFalse(v5["executable"])
         self.assertEqual(v5["status"], "runtime-finalized-pass-b6-t")

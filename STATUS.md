@@ -24,8 +24,8 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - WSL source is pinned to tag 2.7.12, commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`.
 - The retained passing control-plane baseline is mount plus PID namespace semantics with IPC and UTS omitted.
 - `K-PIDNS-001`, derived from the proved Hyper-V storage floor, is the kernel to retest after the next source reduction. `K-OVERLAY-PIDNS-001` is finalized and must not be rerun.
-- `minimal-v6-excluded-initialize` removes only the inotify, IP-loopback, and cross-distro/GNS-DNS setup selected by the retained `Initialize` review. Its Linux artifacts built byte-identically twice offline; no controlled package identity or runtime result exists yet.
-- The first controlled package build exited before producing an accepted package identity and returned the fixture Off. Exact failure and retry records are in `control-plane/deferred-runtime-plan.json`.
+- `minimal-v6-excluded-initialize` removes only the inotify, IP-loopback, and cross-distro/GNS-DNS setup selected by the retained `Initialize` review. Its Linux artifacts built byte-identically twice offline, and its controlled unsigned MSI is built and independently identity-verified. No runtime result exists yet.
+- The disposable fixture disk was expanded from 100 GiB to 160 GiB after a recorded capacity inspection; C: has 60+ GiB free, the `clean-shell` checkpoint is preserved, and the fixture returned Off. Build operation 007 then completed after guarded cleanup of operation 003. Runtime operations 008 and 009 stopped at UAC before worker start and touched neither fixture nor candidate; fresh operation 010 carries the unchanged plan-valid trial. Exact hashes and dispositions are in `control-plane/deferred-runtime-plan.json`.
 - Do not add inotify, storage-hotplug, PCI, networking, IPC namespace, or UTS namespace support without new runtime evidence.
 
 ## Evidence ownership

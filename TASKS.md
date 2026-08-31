@@ -4,13 +4,13 @@
 
 ## Active action
 
-Complete the `minimal-v6-excluded-initialize` package and retest the finalized `K-PIDNS-001` kernel:
+Run the prepared `minimal-v6-excluded-initialize` plus finalized `K-PIDNS-001` comparison:
 
-1. let the recorded retry controller extract the failed build logs, prove attempt 001 produced no MSI identity, and clean only its partial fixture directories;
-2. rebuild and independently verify the hash-bound controlled package;
-3. plan-validate and run one fixed `K-PIDNS-001` candidate interval in the disposable fixture, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger.
+1. launch fresh operation 010 during an attended UAC window; do not reuse operations 008 or 009 and do not alter their unchanged hash-bound contract;
+2. complete one fixed `K-PIDNS-001` candidate interval in the disposable fixture, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
+3. continue only to the next decision selected by that runtime evidence.
 
-The source-policy review, tests, and two byte-identical offline Linux builds are complete. The first package build returned the fixture Off without an accepted package identity; its exact record is in `control-plane/deferred-runtime-plan.json`. Do not treat package-preparation files as a completed runtime candidate.
+The source-policy review, two byte-identical offline Linux builds, fixture capacity correction, controlled MSI, complete source diff, output manifest, ProductCode, unsigned signature state, candidate manifest, guarded runner, and local fault-matrix validation are complete. Runtime operations 008 and 009 stopped before worker start because UAC was unattended; they are infrastructure launch failures, not build or candidate failures. Fresh operation 010 is recorded and ready. Exact identities and dispositions are in `control-plane/deferred-runtime-plan.json`.
 
 ## Blocked
 

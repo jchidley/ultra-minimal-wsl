@@ -55,6 +55,7 @@ After a trial, preserve the harness evidence, append metadata, and resynchronize
 - Keep kernel builds and source worktrees on `LFS-Builder` ext4.
 - Do not accept new packaged WSL hashes without a completed stock recovery trial.
 - A timeout does not prove a remote or elevated process stopped; verify durable state independently.
+- UAC cancellation or expiry before durable elevated-worker start is an infrastructure launch failure, not a build, package, or candidate failure. Record that no worker started and no fixture mutation occurred, then use a fresh operation ID for the unchanged hash-bound controller. An existing approval or standing fixture authorization remains applicable to that fresh launch when scope and controller content are unchanged; do not alter the experiment or diagnose a build problem solely because the operator was unavailable for UAC.
 
 ## Commands
 

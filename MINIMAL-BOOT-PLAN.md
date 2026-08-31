@@ -161,6 +161,7 @@ Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-D
 - synchronize durable records and require SQLite integrity `ok`;
 - require pinned PSScriptAnalyzer/PowerShell 5.1 compatibility checks for repository PowerShell and ShellCheck warning-or-higher checks for tracked shell scripts;
 - agent-run plan validation before execution without treating it as a human checkpoint;
+- treat UAC cancellation or expiry before durable worker start as infrastructure launch failure only: record no worker/no mutation, keep it out of candidate and build-result classifications, and retry the unchanged hash-bound operation under a fresh operation ID without requiring renewed approval when the existing authorization still covers the identical scope;
 - obtain fresh explicit approval for any shutdown, boot, installation, elevation, or configuration change affecting the physical host or a shared WSL instance; disposable-fixture equivalents are standing-authorized within the recorded isolated recovery envelope and proceed autonomously;
 - use one serial trial because all WSL 2 distros share the kernel;
 - restore the exact original `.wslconfig` in all outcomes;
