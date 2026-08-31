@@ -63,9 +63,7 @@ This is a source-level candidate contract, not proof that every listed namespace
 
 ## Runtime stopping gate
 
-`K-OVERLAY-DIAG-001` confirmed the source-map boundary. Overlay construction completed without the prior crash, then the host logged `Expected message LxGnsMessageResult, but socket GNS was closed`. NAT and no-network fallbacks did not recover the already closed control path. The guest then shut down cleanly.
-
-This selects host/guest control-plane reduction, not another kernel bundle. Networking and GNS are outside the target, so no Hyper-V network, seccomp, cgroup, PTP, `/proc` children, or console additions follow from this trial. Detailed timing, guest logs, ETW, and analysis are preserved under `recovery-harness/trials/K-OVERLAY-DIAG-001/`.
+Additive stock-init discovery reached system-distro overlay construction and then stopped at excluded GNS policy. That boundary selects host/guest control-plane reduction, not networking or another speculative kernel bundle. Exact timing, logs, ETW, and analysis remain in `recovery-harness/trials/K-OVERLAY-DIAG-001/`.
 
 ## Selected design
 

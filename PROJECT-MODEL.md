@@ -123,7 +123,7 @@ That was the reason to pivot from **adding kernel facilities for stock `/init`**
 
 ## How candidates are layered
 
-Control-plane candidates form an immutable lineage rather than rewriting earlier experiments:
+Candidates form an immutable lineage rather than rewriting earlier experiments:
 
 ```text
 pinned WSL source
@@ -132,75 +132,42 @@ broad host/guest reduction
     ↓
 fail-closed contract-only parent
     ↓
-small layers removing reachable hard-fails for excluded policy
-    ├── coherent stock-like namespace sibling
-    └── mount-only namespace sibling
+narrow layers removing reachable excluded-policy hard-fails
+    ↓
+controlled source or Kconfig siblings selected by runtime evidence
 ```
 
-The namespace siblings must share the same parent so their coherent namespace bundle is the only source difference. Neither is preferred merely because it is smaller or resembles stock behavior; runtime evidence must select one. Current candidate identities, hashes, and build results belong in `STATUS.md`, `control-plane/README.md`, and the candidate audit records.
+Each layer changes one evidence-selected boundary. Source, ABI, or toolchain changes create a new candidate with new policy, mutation, reproducibility, package, runtime, and recovery evidence as applicable. Exact identities belong in candidate records and the runtime plan, not in this conceptual document.
 
-## Why Windows compiler preparation is on the critical path
+## Why the Windows build remains necessary
 
-Reproducible Linux builds can prove candidate source policy and artifact identity, but the retained command path crosses both Windows and Linux components. A Linux-only build cannot prove that an ordinary, unmodified `wsl.exe` can communicate with the reduced service, launch a distro process, relay its result, and terminate it.
+The command path crosses Windows and Linux components. A Linux-only build cannot prove that ordinary `wsl.exe` can communicate with the reduced service, launch a distro process, relay its result, and terminate it.
 
-A pinned offline Windows compiler layout is therefore experimental infrastructure, not part of Minimal Viable WSL. It makes the controlled package reproducible and allows the patched host and guest pieces to be tested together in a disposable environment without silently changing toolchains or risking the physical host. Compiler acquisition by itself proves no `B` gate.
+The pinned offline Windows compiler layout is experimental infrastructure, not a target-system requirement. It produces a hash-bound package for a disposable fixture; compiler acquisition or successful compilation proves no runtime gate.
 
-The remaining custom-candidate proof has three distinct stages:
+Compilation and runtime are distinct evidence stages but one continuous loop:
 
-1. **Produce controlled artifacts:** install the verified offline compiler layout in the disposable fixture, compile one source-pinned package, and record its complete output manifest and package hash. Stock calibration has already shown that the fixed Toybox probe and recovery contract reach `B6-T`; it does not prove a reduced candidate.
-2. **Prove viability:** after the agent plan-validates the hash-bound package operation, continue directly by installing the controlled package in the disposable fixture and establishing `B4`, `B5`, `B6-T`, relay, lifecycle, and stock recovery behavior.
-3. **Prove minimality:** compare namespace siblings and ablate provisional kernel bundles, retaining a facility only when controlled removal fails and restoration succeeds.
+1. preserve source and policy evidence;
+2. build Linux artifacts twice offline and require byte identity;
+3. build and independently verify one controlled package;
+4. plan-validate the exact package, probe, and recovery operation;
+5. run the unchanged candidate interval;
+6. restore stock and prove independent recovery;
+7. classify the earliest supported gate and select the next narrow change.
 
-Compilation and runtime remain distinct evidence stages because an exact installation trial cannot be validated until the compiled package hash exists, but they form one continuous build → validate → test → recover loop. Both are standing-authorized when wholly confined to the disposable fixture's pinned, offline, recoverable envelope and require no human checkpoint; physical-host or shared-WSL effects are not.
+Only the disposable fixture carries standing authorization for that loop. Physical-host or shared-WSL effects require fresh explicit approval.
 
 ## Path to Minimal Viable WSL
 
-### 1. Freeze controlled source inputs
+1. Preserve the mkroot `G4` lower bound and stock `B6-T` comparison baseline.
+2. Remove reachable host/guest hard-fails for excluded policy instead of adding their kernel facilities.
+3. Establish command dispatch, relay, lifecycle, and Toybox `B6-T` through ordinary `wsl.exe`.
+4. Ablate each provisional source and Kconfig bundle with controlled siblings, unchanged probes, and independent recovery.
+5. Classify every non-mkroot facility and pass the repeated cold-start and reproducibility gates.
+6. Freeze the resulting Toybox-capable core as `minimal-viable-wsl-v1`.
+7. Test Alpine, Arch, and Debian in order, attributing and proving each compatibility addition before freezing `ultra-minimal-wsl-v1`.
 
-Preserve the layered patches, protocol fixture, policy tests, mutation evidence, candidate hashes, and reproducible Linux artifacts. Any source, ABI, or toolchain change becomes a new candidate.
-
-### 2. Produce and test controlled candidates
-
-Use the pinned compiler inputs and exact offline build procedure to build `minimal-v3-stock-ns` first, producing a closed output manifest and package hash. Then agent-validate its installation, fixed probe, and stock restoration and continue directly into runtime testing. Preserve the resulting evidence before repeating the same continuous contract for `minimal-v3-mount-ns`.
-
-The known-good comparison baseline is stock WSL 2.7.12 with the pinned Toybox rootfs; its accepted calibration and independent recovery both reach `B6-T`. The fixture is not project architecture and its control mechanism is not a gate. Preparation and compilation establish no runtime result; only evidence captured from a fixed candidate interval can establish a candidate `B` gate.
-
-### 3. Establish `B4`
-
-Run each candidate without the system distro, GNS, DNS, DrvFs, WSLg, or interop and show that the required host, mini-init, distro-init, and lifecycle channels remain alive.
-
-### 4. Establish `B5`
-
-Use ordinary, unmodified `wsl.exe` to create a Linux process, relay all standard streams and exit status, and exercise clean and forced termination.
-
-This is the gate that distinguishes a functioning WSL control path from a Linux VM that merely boots.
-
-### 5. Establish `B6-T`
-
-Run the deliberately small Toybox smoke contract through `wsl.exe`:
-
-```sh
-test -r /proc/self/status &&
-test -d /sys &&
-test -c /dev/null &&
-printf 'toybox-ok'
-```
-
-### 6. Select the namespace bundle
-
-Compare the stock-namespace and mount-only siblings from the same recovery baseline. If mount-only passes the full lifecycle contract, IPC/PID/UTS namespace support remains excluded. If it fails repeatably and the stock bundle restores success, retain only the coherent requirement demonstrated by that comparison.
-
-### 7. Prove minimality by ablation
-
-Remove each provisional feature bundle in turn, require repeated failure, restore it, and require repeated success. Classify every non-mkroot kernel facility and run repeated cold-start, termination, and recovery tests.
-
-The resulting frozen Toybox-capable core becomes `minimal-viable-wsl-v1`.
-
-### 8. Add distribution compatibility without changing the core definition
-
-Test Alpine, Arch, and Debian in that order. Attribute every added requirement to the distribution that selected it, prove it by ablation, and freeze the combined result as `ultra-minimal-wsl-v1`.
-
-This prevents assumptions from a large distribution or its service manager from being mistaken for generic WSL requirements.
+This sequence prevents stock product policy, fixture mechanics, or assumptions from a large distribution from being mistaken for generic WSL requirements.
 
 ## What “fully working” means
 

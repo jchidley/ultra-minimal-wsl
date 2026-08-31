@@ -4,34 +4,27 @@
 
 ## Active action
 
-Prepare the next reduced control-plane source layer by removing the excluded inotify hard-fail from mini-init `Initialize`, then retest the finalized `k-pidns-001` kernel under the unchanged fixed probe and recovery contract. Both `CP-MINIMAL-V5-K-PIDNS-001` and the conservative overlay-parent sibling finalized at `B2`: mini-init exchanged capabilities and configuration, then the utility VM ended before registered-distro attachment completed. ETW ordering proves the invalid HCS storage handle was consequential. Do not add `CONFIG_INOTIFY_USER`: the source comment ties `max_user_watches` only to excluded Visual Studio Code Remote integration. Review the remaining `Initialize` operations for retained-contract reachability, keep the source change narrow and fail closed, build twice offline, rebuild the controlled package, and proceed through one fixed candidate interval plus mandatory stock recovery.
+Prepare the next reduced control-plane source layer and retest the finalized `K-PIDNS-001` kernel:
 
-## Comparison queue
+1. remove mini-init `Initialize` operations that hard-fail on excluded inotify, loopback/networking, GNS/DNS, and cross-distro policy;
+2. retain reachable resource-limit, diagnostic, hostname, command-relay, lifecycle, and fail-closed protocol behavior unless evidence selects a narrower change;
+3. pass source-policy, protocol, record, mutation, and repository validation;
+4. build the Linux artifacts twice offline in distinct `LFS-Builder` ext4 directories and require byte identity;
+5. build and independently verify the hash-bound controlled package;
+6. plan-validate and run one fixed `K-PIDNS-001` candidate interval in the disposable fixture, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger.
 
-1. stock WSL 2.7.12 calibration with `toybox-minimal-wsl-rootfs.tar.gz` — complete at `B6-T` in `CP-STOCK-2.7.12-003`;
-2. `minimal-v3-stock-ns` — superseded after its B2 sender-policy evidence;
-3. `minimal-v4-stock-ns` — complete at `B6-T` in `CP-MINIMAL-V4-STOCK-NS-001`;
-4. `minimal-v4-mount-ns` — complete at `B3` in `CP-MINIMAL-V4-MOUNT-NS-001`;
-5. provisional v4 decision — full bundle retained pending a narrow PID ablation; mount-only rejected;
-6. `minimal-v5-mount-pid-ns` — complete at `B6-T` in `CP-MINIMAL-V5-MOUNT-PID-NS-001`; retain mount plus PID, omit IPC and UTS;
-7. `K-PIDNS-001` — complete at `B2`; dynamic VHDX association failed after mini-init configuration and independent stock recovery passed `B6-T`;
-8. `K-OVERLAY-PIDNS-001` — complete at the same `B2`, rejecting overlay as the missing facility;
-9. next source layer — remove the excluded inotify initialization hard-fail without enabling `CONFIG_INOTIFY_USER`, then retest `k-pidns-001`.
-
-Every comparison uses the identical Toybox smoke command, timeouts, instrumentation, rootfs, classification rules, and recovery proof.
+Do not treat the in-progress source, test, or package-preparation files as a completed candidate until all applicable gates above pass.
 
 ## Blocked
 
-- `minimal-v3-stock-ns` is finalized at `B2`; do not rerun the byte-identical candidate.
-- IPC and UTS namespace semantics are rejected for the tested minimal contract; `CONFIG_PID_NS` remains proven required and is incorporated in both finalized reduced-kernel candidates.
-- The retained mini-init `Initialize` path hard-fails on the absent inotify sysctl before registered-distro attachment; source reduction is required before further kernel selection.
-- Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
-- No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
+- Alpine, Arch, and Debian compatibility testing waits for a frozen Toybox-capable `minimal-viable-wsl-v1`.
+- No finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidate is eligible for an unchanged rerun.
+- No speculative Kconfig group or replacement fixture infrastructure is queued.
 
 ## Constraints
 
-- Do not retry or extend historical VM-rebuild, baseline-installer, command-diagnostic, PowerShell Direct, or checkpoint-race work.
-- A fixture start/transport/recovery failure is infrastructure failure and creates no candidate result.
-- Preserve completed candidate and trial evidence; never rewrite terminal ledger rows.
+- Keep the fixed Toybox smoke command, timeouts, instrumentation, classification rules, and recovery proof unchanged.
+- A failure before the first probe `wsl.exe` process is infrastructure failure and creates no candidate result.
+- Preserve completed candidate records, terminal ledger rows, and trial evidence.
 - Keep Linux builds on `LFS-Builder` ext4 and use only pinned, hash-verified offline inputs.
-- Disposable-fixture operations are standing-authorized inside the pinned, offline, hash-verified, plan-validated recovery envelope and proceed without human stage reviews or confirmations. Require fresh explicit approval for any physical-host or shared-WSL effect; fail closed if target isolation, hashes, offline status, or recovery cannot be proved.
+- Proceed autonomously inside the disposable-fixture envelope. Require fresh explicit approval for any physical-host or shared-WSL effect and fail closed if isolation, hashes, offline status, or recovery cannot be proved.

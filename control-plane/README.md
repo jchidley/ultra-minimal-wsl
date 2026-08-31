@@ -1,74 +1,47 @@
 # Reduced control-plane development
 
-This directory contains the layered source-level candidates for the host and guest path described in `WSL-CONTROL-PLANE-AUDIT.md`. They are buildable prototypes, not runtime proof of Minimal Viable WSL.
+This directory preserves layered reductions of WSL 2.7.12's Windows/guest command path. Source, tests, and reproducible builds establish candidate identity and fail-closed policy; only guarded runtime trials establish a `B` gate. Current facts belong in `../STATUS.md`, incomplete work in `../TASKS.md`, and exact build/runtime identities in `deferred-runtime-plan.json`.
 
-## Pinned protocol fixture
+## Pinned boundary
 
-`protocol/wsl-2.7.12.json` records message identifiers, constants, sizes, and offsets compiled from WSL 2.7.12's shared host/guest header. Verify it on `LFS-Builder`:
+All layers apply to WSL tag 2.7.12, commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`. The retained contract is one registered ext4 distro launch, command creation, stdio and signed exit-status relay, termination, and shutdown. Networking, DNS, GNS, DrvFs, Windows interop, WSLg/GPU, systemd, cgroup policy, general disk management, and cross-distro integration remain excluded.
 
-```bash
-SOURCE=/root/src/WSL-2.7.12 \
-  /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/extract-control-plane-protocol.sh check
+`protocol/wsl-2.7.12.json` is compiler-extracted from the pinned shared header. It records ABI facts, not runtime requirements. The strict validator and record tests enumerate all recorded message families, malformed framing, excluded policy fields, launch/process flags, exit status, and termination. Mutation results are preserved in `protocol/test-evidence.md`.
+
+## Preserved lineage
+
+| Generation | Narrow purpose | Durable evidence |
+|---|---|---|
+| `minimal-v1` | Broadly remove excluded host and guest product policy. | `minimal-v1-audit.md`, `candidates/minimal-v1/` |
+| `minimal-v2` | Add shared fail-closed channel/configuration policy and coherent namespace siblings. | `minimal-v2-audit.md`, `candidates/minimal-v2-*` |
+| `minimal-v3` | Remove unconditional `binfmt_misc`/`WSLInterop` initialization rather than enabling excluded kernel support. | `minimal-v3-audit.md`, `candidates/minimal-v3-*` |
+| `minimal-v4` | Zero excluded GUI, GPU, and networking fields on the retained Windows sender. | `candidates/minimal-v4-*`, runtime trial evidence |
+| `minimal-v5` | Retain mount plus PID namespaces while omitting IPC and UTS. | `candidates/minimal-v5-mount-pid-ns/`, runtime trial evidence |
+| next layer | Remove only reachable `Initialize` hard-fails that implement excluded policy, then retest the reduced PID kernel. | `kernel-contract-review.md`, `TASKS.md` |
+
+Earlier generations are immutable evidence, not alternative current plans. `minimal-v5-mount-pid-ns` is the passing control-plane baseline: stock-like namespaces passed, mount-only stopped after `B3`, and mount plus PID restored `B6-T`. Runtime proof and exact hashes remain in the trial and candidate records rather than being repeated here.
+
+## Validation
+
+Run from the repository root in PowerShell:
+
+```powershell
+uv run python tools/inventory_records.py
+uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
+& ~/git/agent-skills/skills/windows-env/Invoke-PsLint.ps1 -Offline -Settings .PSScriptAnalyzerSettings.psd1 -Path tools,control-plane/controlled-package-offline
 ```
 
-Protocol extraction and Linux control-plane builds first require the pinned `LFS-Builder` profile in `../build-host/` to pass. New build metadata records that profile's bundle SHA-256.
-
-The fixture retains handshake, instance creation, initialization, command creation, exit status, and termination ABI. A value appearing in the fixture does not by itself prove runtime necessity. Strict framing and policy tests exercise malformed lengths, every excluded configuration field, all process-flag combinations, sampled signed exit statuses, and termination flags. Mutation evidence is recorded in `protocol/test-evidence.md`:
+Verify Linux tooling and shell scripts on `LFS-Builder`:
 
 ```bash
-uv run python -m unittest tools.test_control_plane_protocol tools.test_control_plane_records
-~/git/agent-skills/skills/windows-env/ps-lint \
-  --offline --settings .PSScriptAnalyzerSettings.psd1 tools control-plane/controlled-package-offline
+bash tools/bootstrap-lfs-builder.sh --check
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
-## Candidate `minimal-v1`
+Linux control-plane builds use `tools/build-control-plane-linux.sh` with `OFFLINE=1`, `MINIMAL_LINK=1`, and an independently calculated complete source-diff hash. Candidate directories preserve source, profile, artifact, size, and two-build reproducibility records.
 
-`patches/0001-minimal-control-plane-v1.patch` applies to commit `68f601bba8eac1df20a0bbd403c6c87c92369ade`. It makes the first coarse reduction:
+## Runtime boundary
 
-- host: supplies no system distro, swap, kernel-modules disk, GNS, DNS, networking engine, WSLg, DrvFs, interop, or OOBE policy;
-- mini init: rejects excluded early/initial configuration and non-launch instance operations;
-- distro host path: sends a zero-feature direct-command configuration and clears DrvFs, elevation, interop, and OOBE process flags;
-- retained: primary and notification VSOCK channels, one registered distro VHDX/ext4 launch, distro-init channel, command sockets, stdio, exit status, and termination code.
+`deferred-runtime-plan.json` is a non-executable, hash-bound contract. It records pinned inputs, package and candidate identities, the fixed Toybox probe, recovery assertions, and stop conditions. A prepared plan grants no authority outside the dedicated disposable fixture.
 
-The Linux side compiles reproducibly. `candidates/minimal-v1/` records the complete source-diff hash, build inputs, output hashes, size comparison, and two-clean-build comparison. `minimal-v1-audit.md` distinguishes removed, rejected, ABI-retained, and still-reachable stock paths. `kernel-contract-review.md` records the corresponding static Kconfig review without promoting unproved requirements. The Windows service side still requires a controlled Windows build and runtime test in the disposable VM.
-
-To build a clean applied worktree offline, calculate the source diff hash after applying the patch and pass it explicitly:
-
-```bash
-base=68f601bba8eac1df20a0bbd403c6c87c92369ade
-patch_sha=$(git diff --binary "$base" | sha256sum | cut -d' ' -f1)
-SOURCE=$PWD BUILD=/root/experiments/minimal-wsl/control-plane-build/minimal-v1 \
-OFFLINE=1 MINIMAL_LINK=1 EXPECTED_SOURCE_PATCH_SHA256="$patch_sha" \
-  /mnt/c/Users/jackc/git/ultra-minimal-wsl/tools/build-control-plane-linux.sh
-```
-
-## Completed `minimal-v2` source-only phase
-
-The recorded layers preserve `minimal-v1`:
-
-1. `patches/0002-minimal-v2-fail-closed.patch` adds the shared policy seam in `policy/minimal-v2-policy.h`, rejects all non-contract channel messages, constrains launch to one unflagged LUN/ext4 device, rejects excluded process/configuration flags, and prevents distro-local policy from re-enabling excluded integration;
-2. the compiler-derived fixture and tests enumerate all 52 recorded message families on every inbound channel; focused add-import and remove-termination allowlist mutations were caught;
-3. `minimal-v2-stock-ns` is tree-identical to the fail-closed parent, while `patches/0003-minimal-v2-mount-ns.patch` changes only IPC/mount/PID/UTS to mount-only launch;
-4. the parent and both siblings each produced byte-identical `init`, `init.debug`, and `initrd.img` in two separate `OFFLINE=1 MINIMAL_LINK=1` builds with verified cache hits;
-5. `candidates/minimal-v2-*` and `minimal-v2-audit.md` record parent, layer, complete-diff, artifact, size, and reproducibility evidence.
-
-All `minimal-v2` records remain preserved as historical parents.
-
-## Completed `minimal-v3` source-only readiness phase
-
-`patches/0004-minimal-v3-no-interop.patch` layers on `minimal-v2-fail-closed` and removes only mini-init's unconditional `binfmt_misc` mount and `WSLInterop` registration hard-fail. Focused record tests require both operations and their local definitions to be removed without changing distro-init policy or protocol dispatch. `minimal-v3-stock-ns` is tree-identical to the new fail-closed parent; `patches/0005-minimal-v3-mount-ns.patch` changes only the coherent namespace bundle to mount-only.
-
-All three replacement candidates built byte-identically twice with `OFFLINE=1` and `MINIMAL_LINK=1` in separate ext4 directories. `minimal-v3-audit.md` and `candidates/minimal-v3-*` preserve source, patch, profile, artifact, size, and reproducibility evidence. Stock WSL calibration passes `B6-T`. The controlled `minimal-v3-stock-ns` package is finalized at `B2`: mini-init processed the host initial-configuration message but rejected an excluded field before ext4 mount; independent stock recovery passed `B6-T`. The next source layer must explicitly zero every excluded initial GUI, GPU, and networking field on the retained Windows sender before namespace comparison resumes.
-
-## Runtime comparison boundary
-
-`deferred-runtime-plan.json` is deliberately non-executable. It records pinned inputs, reproducible build mechanics, candidate identities, the fixed Toybox probe, evidence requirements, recovery assertions, and stop conditions. Operations wholly confined to the disposable fixture are standing-authorized within that recorded envelope and flow from build to runtime test without human stage review; the plan grants no authorization over the physical host or a shared WSL instance. The next candidate trial ID may be reserved for planning, but no ledger row exists until complete candidate and recovery evidence is finalized.
-
-The project does not own a general VM-control stack. A disposable Windows fixture may isolate package trials, but fixture start, transport, installation, extraction, and rollback are outer preconditions. Candidate measurement starts with the first `wsl.exe` process in `tools/Invoke-WslCandidateProbe.ps1`. A fixture failure creates no B-gate result and must not trigger more fixture automation work.
-
-## Evidence boundary
-
-The v3 records establish source-policy and Linux-artifact reproducibility only; they do not establish controlled Windows compilation or any runtime gate. Preserve each generation: a later source or ABI change creates a new layer and repeats the policy, mutation, and reproducibility gates.
-
-`STATUS.md` owns the present boundary, `TASKS.md` the immediate queue, and `MINIMAL-BOOT-PLAN.md` the proof order and authorization rules. Exact compiler, source, candidate, build-procedure, probe, and recovery inputs belong in `deferred-runtime-plan.json`; that evidence grants no authorization outside the disposable-fixture envelope.
+The candidate interval begins with the first `wsl.exe` process in `tools/Invoke-WslCandidateProbe.ps1`. Fixture start, transport, package placement, and rollback are prerequisites; failure there is infrastructure failure and creates no candidate ledger row. A valid candidate result requires immutable interval evidence, stock restoration, independent recovery, and one terminal ledger row.

@@ -30,9 +30,11 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-Stock WSL 2.7.12 calibration passed `B6-T` with independent recovery in `CP-STOCK-2.7.12-003`. `CP-MINIMAL-V3-STOCK-NS-001` is finalized at `B2`; do not rerun it. The corrected `minimal-v4-stock-ns` sibling passed `B6-T` in `CP-MINIMAL-V4-STOCK-NS-001`. `CP-MINIMAL-V4-MOUNT-NS-001` is now finalized at `B3`: the registered ext4 distro mounted, then the mount-only launch child unmounted it and closed `WslCorePort` before `CreateInstanceResult`; independent stock recovery passed `B6-T` and the fixture returned Off. This selects the full IPC/mount/PID/UTS bundle as the passing baseline but does not isolate individual namespace necessity. The evidence-selected `minimal-v5-mount-pid-ns` ablation restored PID semantics while continuing to remove IPC and UTS; it passed `B6-T` in `CP-MINIMAL-V5-MOUNT-PID-NS-001`, independent stock recovery passed `B6-T`, and the fixture returned Off. The controlled mount-only `B3` versus mount-plus-PID `B6-T` delta proves PID namespace semantics are required, while IPC and UTS are not required by the tested minimal contract. The first two PID-enabled reduced kernels are finalized at `B2`: both exchanged mini-init configuration, then the utility VM ended and HCS reported a consequential invalid storage handle before ext4 mount; independent stock recovery passed `B6-T` and the fixture returned Off. The overlay sibling reproduced the storage-parent failure, so overlay is not the missing facility. Source ordering selects the excluded `Initialize` inotify hard-fail for the next source-reduction layer; do not add `CONFIG_INOTIFY_USER`, storage hotplug, PCI, or networking speculatively. Do not rerun finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidates.
+- Stock and the retained mount-plus-PID control plane pass `B6-T`; IPC and UTS remain omitted. The PID-enabled storage-floor and overlay-floor kernels both stop at `B2` after mini-init configuration, so overlay is not the missing facility.
+- Follow source ordering through mini-init `Initialize`: remove only hard-fails that implement excluded inotify, networking, GNS/DNS, or cross-distro policy, then retest `K-PIDNS-001`. Do not add `CONFIG_INOTIFY_USER`, storage hotplug, PCI, networking, IPC namespaces, or UTS namespaces speculatively.
+- Do not rerun finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidates unchanged. `STATUS.md` owns the complete verified boundary and `TASKS.md` the exact active action.
 
-Operations wholly confined to the dedicated disposable fixture are standing-authorized when they use pinned hash-verified offline inputs, preserve evidence, follow the recorded recovery path, and finish with independently verified fixture state. This includes fixture operation, fixture-local elevation and installation, WSL shutdown, custom package/kernel boot, candidate probing, stock restoration, and bounded retries or diagnostics. No standing authorization crosses into the physical host or a shared WSL instance. Produced hashes and exact installation/restoration commands must still be recorded and plan-validated before runtime, but these are agent-executed technical checks, not human approval points.
+Operations wholly confined to the dedicated disposable fixture are standing-authorized when they use pinned hash-verified offline inputs, preserve evidence, follow the recorded recovery path, and finish with independently verified fixture state. No standing authorization crosses into the physical host or a shared WSL instance. Record and plan-validate produced hashes and exact installation/restoration commands before runtime; these are agent-executed technical checks, not human approval points.
 
 ## Candidate records
 
@@ -56,13 +58,20 @@ After a trial, preserve the harness evidence, append metadata, and resynchronize
 
 ## Commands
 
-```bash
-bash tools/bootstrap-lfs-builder.sh --check  # run inside LFS-Builder
+From PowerShell:
+
+```powershell
 uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
 & ~/git/agent-skills/skills/windows-env/Invoke-PsLint.ps1 -Offline -Settings .PSScriptAnalyzerSettings.psd1 -Path tools,control-plane/controlled-package-offline
+```
+
+On `LFS-Builder`:
+
+```bash
+bash tools/bootstrap-lfs-builder.sh --check
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 

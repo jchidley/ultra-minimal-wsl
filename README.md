@@ -45,9 +45,9 @@ Everything beyond this boundary is an optional integration profile. A separate, 
 
 ## Current position
 
-The generic Toybox baseline passes `G4`, guarded custom-kernel discovery reached the `B3` storage boundary, and the fixed probe is now calibrated against stock WSL 2.7.12 at `B6-T` with an independent stock recovery pass. Reduced control-plane candidates remain source-ready but have no runtime evidence.
+Toybox passes QEMU `G4`, and stock WSL 2.7.12 passes the fixed probe at `B6-T`. Controlled control-plane comparison proved that mount plus PID namespace semantics can execute the same Toybox command while IPC and UTS remain omitted. The first PID-enabled reduced kernels currently stop at `B2` after mini-init configuration and before registered-distro mount; retaining overlay reproduced the same boundary.
 
-The `minimal-v3-stock-ns` offline Windows package build and installation/recovery runner validation are complete. The next bounded step is its disposable-fixture runtime trial after the recorded machine checks pass, followed by the same build → validate → test → recover loop for `minimal-v3-mount-ns`. These stages proceed without human review gates inside the isolated fixture. See `STATUS.md` for verified current facts and `TASKS.md` for the active queue.
+The active work removes reachable mini-init initialization hard-fails that implement excluded policy, then retests the reduced PID kernel without speculative Kconfig additions. See `STATUS.md` for verified facts and `TASKS.md` for the bounded queue.
 
 ## Documentation
 
@@ -86,10 +86,18 @@ workflow's separate verified cache.
 
 ## Verify the repository
 
-```bash
+From PowerShell:
+
+```powershell
 uv run python tools/inventory_records.py
 uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records
-~/git/agent-skills/skills/windows-env/ps-lint --offline --settings .PSScriptAnalyzerSettings.psd1 tools control-plane/controlled-package-offline
+& ~/git/agent-skills/skills/windows-env/Invoke-PsLint.ps1 -Offline -Settings .PSScriptAnalyzerSettings.psd1 -Path tools,control-plane/controlled-package-offline
+```
+
+From `LFS-Builder`:
+
+```bash
+bash tools/bootstrap-lfs-builder.sh --check
 git ls-files '*.sh' -z | xargs -0 shellcheck --severity=warning -x
 ```
 
