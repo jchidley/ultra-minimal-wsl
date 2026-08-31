@@ -4,7 +4,7 @@
 
 ## Active action
 
-Retry the unchanged hash-bound `minimal-v4-mount-ns` runner validation controller under a fresh operation ID when the elevation broker can start its worker. The pinned offline package build completed, extracted identities independently reverified, and the fixture returned Off; the exact runner passes all 13 local fault injections. Two fresh-ID fixture-validation launches remained at `launching` without a worker or output. After fixture validation proves staged hashes, stock-only MSI state, absent candidate evidence, and final Off state, continue directly through one fixed candidate interval and mandatory stock recovery. Do not rerun the completed `minimal-v4-stock-ns` baseline or create a candidate result for validation infrastructure failure.
+Retry the unchanged hash-bound `minimal-v4-mount-ns` runtime controller under one fresh operation ID when the elevation broker can start its worker. The pinned offline package build and exact runner validation are complete: fixture validation independently verified staged hashes, all 13 fault paths, stock-only MSI state, absent candidate evidence, and final Off state. Three fresh-ID runtime launches remained at `launching` without a worker or output. Proceed directly through the single fixed candidate interval and mandatory stock recovery once a worker starts. Do not rerun the completed `minimal-v4-stock-ns` baseline or create a candidate result for runtime-launch infrastructure failure.
 
 ## Comparison queue
 

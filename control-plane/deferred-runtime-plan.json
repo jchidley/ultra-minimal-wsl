@@ -187,7 +187,7 @@
     }
   },
   "controlled_package_build": {
-    "status": "minimal-v4-mount-ns-build-complete-runner-validation-elevation-blocked",
+    "status": "minimal-v4-mount-ns-runtime-plan-validated-elevation-blocked",
     "executable": true,
     "approval_carried_forward": false,
     "active_build": {
@@ -835,8 +835,8 @@
       "runtime_boundary": "CP-MINIMAL-V4-STOCK-NS-001 is finalized at B6-T with independent stock recovery at B6-T. Do not rerun it for namespace selection; compare the mount-only sibling."
     },
     "minimal_v4_mount_ns": {
-      "status": "runner-validation-elevation-blocked",
-      "executable": false,
+      "status": "runtime-plan-validated-elevation-blocked",
+      "executable": true,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V4-MOUNT-NS-001",
       "candidate_id": "minimal-v4-mount-ns",
@@ -885,9 +885,45 @@
         "candidate_install_performed": false,
         "candidate_probe_performed": false
       },
+      "runner_validation_attempt_003": {
+        "disposition": "validation-complete",
+        "staged_hashes_verified": true,
+        "failure_paths_tested": 13,
+        "stock_product_state": 5,
+        "candidate_product_state": -1,
+        "candidate_evidence_exists": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false,
+        "fixture_final_state": "Off",
+        "result_sha256": "4d0a86995f752f0afa0fcdfa1bf348128dc56b0817c616c1a5d4e4bec44707a1"
+      },
+      "runtime_controller_sha256": "6600dd0de7d9c9f4456d5ee5653ee7f15f94932b1f635388e9c85bf9c77c5918",
+      "runtime_attempt_001": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "operation_result_created": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false
+      },
+      "runtime_attempt_002": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "operation_result_created": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false
+      },
+      "runtime_attempt_003": {
+        "disposition": "infrastructure-failure-before-worker-start",
+        "elevation_state": "launching",
+        "worker_status_created": false,
+        "operation_result_created": false,
+        "candidate_install_performed": false,
+        "candidate_probe_performed": false
+      },
       "remaining_before_runtime": [
-        "Windows elevation broker must start the hash-bound fixture validation controller",
-        "fixture validation must independently verify staged hashes, all 13 recovery fault paths, stock-only MSI state, absent candidate evidence, and final fixture Off"
+        "Windows elevation broker must start the already validated runtime controller under one fresh operation ID"
       ],
       "runtime_boundary": "Do not install or probe until fixture validation completes. Then run exactly one serial candidate interval, always restore the pinned stock package, and require unchanged independent B6-T recovery."
     },
