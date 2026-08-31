@@ -241,6 +241,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v4-stock-ns",
             "minimal-v4-mount-ns",
             "minimal-v5-mount-pid-ns",
+            "minimal-v5-k-pidns-001",
         ])
         probe = ROOT / contract["fixed_probe"]["path"]
         self.assertEqual(sha256(probe), contract["fixed_probe"]["sha256"])
@@ -397,6 +398,31 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(v5["runtime_attempt_001"]["recovery_result"], "B6-T")
         self.assertTrue(v5["runtime_attempt_001"]["ledger_finalized"])
         self.assertEqual(v5["remaining_before_runtime"], [])
+        reduced = contract["next_reduced_kernel_candidate"]
+        self.assertTrue(reduced["executable"])
+        self.assertEqual(reduced["reserved_trial_id"], "CP-MINIMAL-V5-K-PIDNS-001")
+        self.assertEqual(reduced["parent_trial"], "CP-MINIMAL-V5-MOUNT-PID-NS-001")
+        self.assertEqual(reduced["kernel_config_parent"], "k-storage-001")
+        self.assertEqual(reduced["explicit_symbols"], ["CONFIG_PID_NS"])
+        self.assertEqual(reduced["autoselected_symbols"], [])
+        self.assertEqual(sha256(ROOT / reduced["kernel_path"]), reduced["kernel_sha256"])
+        self.assertEqual(sha256(ROOT / reduced["kernel_config_path"]), reduced["kernel_config_sha256"])
+        self.assertEqual(sha256(ROOT / reduced["candidate_manifest_path"]), reduced["candidate_manifest_sha256"])
+        reduced_runner = ROOT / reduced["runner_path"]
+        self.assertEqual(sha256(reduced_runner), reduced["runner_sha256"])
+        reduced_source = reduced_runner.read_text(encoding="utf-8")
+        for required in ("Set-CandidateKernelConfig", "Clear-CandidateKernelConfig", "Invoke-FixedProbe $false", "Invoke-FixedProbe $true"):
+            self.assertIn(required, reduced_source)
+        reduced_result = subprocess.run([
+            "pwsh", "-NoProfile", "-NonInteractive", "-File", str(reduced_runner), "-SelfTest",
+        ], capture_output=True, text=True)
+        self.assertEqual(reduced_result.returncode, 0, reduced_result.stdout + reduced_result.stderr)
+        reduced_self_test = json.loads(reduced_result.stdout)
+        self.assertTrue(reduced_self_test["passed"])
+        self.assertEqual(len(reduced_self_test["failurePaths"]), 17)
+        for path in reduced_self_test["failurePaths"]:
+            self.assertTrue(path["stockInstalled"])
+            self.assertFalse(path["candidateInstalled"])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])

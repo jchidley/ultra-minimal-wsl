@@ -1,0 +1,7 @@
+make: Entering directory '/root/kernel-builds/K-PIDNS-001/tree-b'
+  SYNC    include/config/auto.conf
+  DESCEND objtool
+  CALL    scripts/checksyscalls.sh
+  INSTALL libsubcmd_headers
+Kernel: arch/x86/boot/bzImage is ready  (#1)
+make: Leaving directory '/root/kernel-builds/K-PIDNS-001/tree-b'

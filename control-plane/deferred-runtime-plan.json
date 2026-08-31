@@ -1,7 +1,7 @@
 {
   "schema": 4,
   "plan_id": "CP-MINIMAL-V3-CANDIDATE-COMPARISON",
-  "status": "deferred-candidate-comparison-preparation",
+  "status": "deferred-next-reduced-kernel-runtime-plan-validated",
   "executable": false,
   "approval_carried_forward": false,
   "objective": "Compare WSL Linux candidates with one fixed Toybox probe and retain only evidence-proven configuration requirements.",
@@ -631,7 +631,7 @@
     "execution_boundary": "The non-runtime minimal-v3-stock-ns build is complete, hash-verified, extracted, and closed with the fixture Off. Candidate package installation and runtime were not performed and must wait for the separately recorded exact installation/restoration plan validation."
   },
   "candidate_trial_contract": {
-    "status": "minimal-v4-stock-ns-runtime-validated",
+    "status": "next-reduced-kernel-runtime-plan-validated",
     "executable": true,
     "approval_carried_forward": false,
     "comparison_order": [
@@ -639,7 +639,8 @@
       "minimal-v3-stock-ns",
       "minimal-v4-stock-ns",
       "minimal-v4-mount-ns",
-      "minimal-v5-mount-pid-ns"
+      "minimal-v5-mount-pid-ns",
+      "minimal-v5-k-pidns-001"
     ],
     "fixed_probe": {
       "path": "tools/Invoke-WslCandidateProbe.ps1",
@@ -1000,7 +1001,10 @@
       "parent": "minimal-v4-fail-closed",
       "evidence_selected_by": "CP-MINIMAL-V4-MOUNT-NS-001",
       "rationale": "The mount-only launch child exited after ext4 mount and before CreateInstanceResult. Restore PID namespace semantics while continuing to ablate IPC and UTS together.",
-      "namespace_bundle": ["mount", "pid"],
+      "namespace_bundle": [
+        "mount",
+        "pid"
+      ],
       "layer_patch": "control-plane/patches/0007-minimal-v5-mount-pid-ns.patch",
       "layer_patch_sha256": "1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a",
       "complete_source_diff_sha256": "cfd8cd05bd302f2a0c3f40f3f3266c6a992e6a0275d873ad66cd2a94b211efe8",
@@ -1113,7 +1117,53 @@
       "finalization": "After both staging manifests verify and stock recovery passes, copy the first staging tree to recovery-harness/trials/<TRIAL_ID>/candidate and the recovery tree to recovery-harness/trials/<TRIAL_ID>/recovery, write analysis.json plus one sorted final SHA-256 manifest covering both trees, rerun inventory_records.py with integrity ok, then append exactly one terminal trials.csv row and its matching trial-metadata.csv row. If extraction, verification, recovery, or inventory synchronization fails, append nothing."
     },
     "infrastructure_boundary": "Fixture start, transport, input placement, installation, extraction, and rollback are prerequisites only. Failure before the first candidate probe wsl.exe process, an absent Toybox-Minimal registration, or failure to recover/extract creates no candidate result and must not cause probe variation or infrastructure-tool development inside the minimisation loop.",
-    "classification": "The probe may report B6-T only when the exact smoke succeeds and required management, trace, event, shutdown, hash, and interval evidence is complete. Other candidate intervals remain UNRESOLVED-TRACE-REQUIRED or INCOMPLETE-EVIDENCE until analysis identifies the highest directly supported B0-B5 gate. Infrastructure disposition is NOT-A-CANDIDATE-RESULT. Missing recovery prohibits ledger finalization and every positive classification."
+    "classification": "The probe may report B6-T only when the exact smoke succeeds and required management, trace, event, shutdown, hash, and interval evidence is complete. Other candidate intervals remain UNRESOLVED-TRACE-REQUIRED or INCOMPLETE-EVIDENCE until analysis identifies the highest directly supported B0-B5 gate. Infrastructure disposition is NOT-A-CANDIDATE-RESULT. Missing recovery prohibits ledger finalization and every positive classification.",
+    "next_reduced_kernel_candidate": {
+      "status": "runtime-plan-validated",
+      "executable": true,
+      "approval_carried_forward": false,
+      "reserved_trial_id": "CP-MINIMAL-V5-K-PIDNS-001",
+      "candidate_id": "minimal-v5-k-pidns-001",
+      "parent_trial": "CP-MINIMAL-V5-MOUNT-PID-NS-001",
+      "control_plane_parent": "minimal-v5-mount-pid-ns",
+      "kernel_candidate": "K-PIDNS-001",
+      "kernel_config_parent": "k-storage-001",
+      "kernel_config_path": "candidates/K-PIDNS-001/linux-fullconfig",
+      "kernel_config_sha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+      "kernel_path": "candidates/K-PIDNS-001/linux-kernel",
+      "kernel_bytes": 3720192,
+      "kernel_sha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+      "explicit_symbols": [
+        "CONFIG_PID_NS"
+      ],
+      "autoselected_symbols": [],
+      "package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v5-mount-pid-ns\\wsl.msi",
+      "package_sha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+      "candidate_manifest_path": "control-plane/trial-manifests/minimal-v5-k-pidns-001.json",
+      "candidate_manifest_sha256": "e3bd73bd70be85dcecf73e5baeb78ce4f5711c1a32ed9c853f1a840ce1ea1134",
+      "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV5KPidNsTrial.ps1",
+      "runner_sha256": "2917296486b6223cfc9138bffca41592fe59424cbb25754597e478c964a8bf30",
+      "runner_local_validation": {
+        "self_test_passed": true,
+        "failure_paths_tested": 17,
+        "psscriptanalyzer_findings": 0
+      },
+      "runtime_controller_path": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v5-k-pidns-runtime-001\\Run-ControlledTrial.ps1",
+      "runtime_controller_sha256": "47efb917411165e1c0daae751f53f4eadf9695678d2426aadb89d6e073df960d",
+      "staged_runner_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV5KPidNsTrial.ps1",
+      "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v5-k-pidns-001.json",
+      "staged_kernel_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-kernel",
+      "staged_kernel_config_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-fullconfig",
+      "probe_sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+      "rootfs_sha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+      "wpr_profile_sha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+      "process_timeout_seconds": 45,
+      "shutdown_timeout_seconds": 30,
+      "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
+      "kernel_selection": "Write the hash-verified external kernel to the otherwise-absent fixture .wslconfig only after controlled package installation; always remove it before exact stock package restoration and independent recovery.",
+      "fixed_contract": "Unchanged Toybox rootfs, probe commands, timeouts, WPR/events/crash instrumentation, evidence manifests, classification rules, candidate package transaction, and independent B6-T stock recovery.",
+      "runtime_boundary": "One fixed disposable-fixture candidate interval followed by mandatory stock recovery. Infrastructure failure before the first probe creates no candidate result. Any failed recovery prohibits ledger finalization."
+    }
   },
   "preconditions": [
     "all inputs and produced candidates match recorded hashes",
@@ -1136,5 +1186,38 @@
     "evidence interval, process results, trace, manifest, or recovery proof is incomplete",
     "a timeout occurs without independent proof that launched processes stopped",
     "the proposed response is new generalized VM-control or remoting infrastructure rather than a candidate change"
-  ]
+  ],
+  "reduced_kernel_build": {
+    "status": "complete-reproducible",
+    "candidate_id": "K-PIDNS-001",
+    "parent_config": "k-storage-001",
+    "parent_trial": "K-STORAGE-001",
+    "evidence_selected_by": "CP-MINIMAL-V5-MOUNT-PID-NS-001",
+    "reserved_trial_id": "CP-MINIMAL-V5-K-PIDNS-001",
+    "kernel_source_commit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "builder_profile_bundle_sha256": "35284f8aecb56a5e2bf6af091e1877ed7ed9c8730211aee2600766c05e586543",
+    "source_date_epoch": 1785544001,
+    "cross_compiler": "/root/src/toybox/ccc/x86_64-linux-musl-cross/bin/x86_64-linux-musl-",
+    "compiler": "x86_64-linux-musl-gcc (GCC) 15.1.0",
+    "pahole_override": "__minimal_wsl_no_pahole__",
+    "offline_local_source": "/root/src/WSL2-Linux-Kernel",
+    "separate_ext4_directories": [
+      "/root/kernel-builds/K-PIDNS-001/tree-a",
+      "/root/kernel-builds/K-PIDNS-001/tree-b"
+    ],
+    "requested_fragment": "candidates/K-PIDNS-001/requested.fragment",
+    "explicit_symbols": [
+      "CONFIG_PID_NS"
+    ],
+    "autoselected_symbols": [],
+    "relationship_review": "CONFIG_PID_NS depends only on existing BASE CONFIG_NAMESPACES; it has no incoming select/imply relationships and selects no symbols.",
+    "generated_config_path": "candidates/K-PIDNS-001/linux-fullconfig",
+    "generated_config_sha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernel_path": "candidates/K-PIDNS-001/linux-kernel",
+    "kernel_bytes": 3720192,
+    "kernel_sha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "reproducible": true,
+    "config_delta": "PID_NS n -> y",
+    "preparation_record": "candidates/K-PIDNS-001/build-metadata.txt"
+  }
 }

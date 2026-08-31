@@ -1,0 +1,21 @@
+candidate=K-PIDNS-001
+prepared_utc=2026-08-31T04:37:00Z
+kernel_commit=14794180686c2fb6307fbe359c359bec765249f3
+parent_artifact=K-STORAGE-001
+parent_config_sha256=b8d9068b9dc901ad66a4e5ff03fdfd78b02a09261ffebfdc006699b91a437bd8
+requested_fragment_sha256=ebc9610a9cc910b39ef20879ec935970a69cf1d721f4f1729ccbc8fb09f7fb50
+compiler=x86_64-linux-musl-gcc (GCC) 15.1.0
+linker=GNU ld (GNU Binutils) 2.44
+builder_profile_bundle_sha256=35284f8aecb56a5e2bf6af091e1877ed7ed9c8730211aee2600766c05e586543
+source_date_epoch=1785544001
+kbuild_build_timestamp=@1785544001
+kbuild_build_user=root
+kbuild_build_host=black
+pahole_override=__minimal_wsl_no_pahole__
+fullconfig_sha256=e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563
+kernel_sha256=24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959
+kernel_bytes=3720192
+explicit_additions=CONFIG_PID_NS
+resulting_enabled_closure=none
+reproducibility=byte-identical full configs and bzImage artifacts from tree-a and tree-b
+preparation_note=An initial out-of-tree attempt failed before compilation because ignored generated files remained in the retained source checkout. Two fresh offline local clones were then used. Build B was resumed after the transport's 1200-second timeout sent SIGHUP; final artifacts were byte-identical. A review-only olddefconfig correction restored CONFIG_PAHOLE_VERSION=0 using the historical PAHOLE override; the accepted full config differs from K-STORAGE-001 only by CONFIG_PID_NS=y.
