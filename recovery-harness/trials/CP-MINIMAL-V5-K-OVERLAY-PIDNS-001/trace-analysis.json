@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 986,
+  "recoveryTraceRows": 4854,
+  "candidateGuestLogRecords": 0,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the external 6.18.40.1+ kernel",
+    "mini_init returned LxMiniInitMessageGuestCapabilities",
+    "the reduced host sent zero-feature EarlyConfig and InitialConfig",
+    "the Hyper-V storage adapter started",
+    "HCS attempted to add the registered Toybox ext4.vhdx",
+    "StorVspDeviceMountAndAssociateAdapter failed with an invalid HANDLE",
+    "HcsModifyComputeSystem returned 0x80010105 before any guest ext4 mount"
+  ],
+  "candidateFatalEvidence": "The overlay-plus-PID sibling reproduced the storage-parent-plus-PID failure before B3. No GuestLog records were emitted; the fixed shutdown timed out and the controller forced termination before exact stock recovery.",
+  "recoveryEvidence": [
+    "Run /init as init process",
+    "the registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceEnd returned success",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "termination was graceful"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B2",
+    "basis": "The external kernel and host channel initialized and exchanged mini-init capabilities/configuration. Dynamic registered-distro storage association failed before ext4 mounted. Independent stock recovery repeated B6-T."
+  }
+}

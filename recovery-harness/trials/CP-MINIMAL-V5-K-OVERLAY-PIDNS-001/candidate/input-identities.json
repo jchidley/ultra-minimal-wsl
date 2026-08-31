@@ -1,0 +1,18 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001",
+    "candidateId":  "minimal-v5-k-overlay-pidns-001",
+    "candidateManifestSha256":  "534faa9f3db03a52eb7c69a19d28b74f7fd80fc49dfe5db91552820b802d510b",
+    "packagePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v5-mount-pid-ns\\wsl.msi",
+    "packageSha256":  "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+    "probeSha256":  "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsPath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz",
+    "rootfsSha256":  "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfilePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "expectedWslVersion":  "2.7.12.0",
+    "distribution":  "Toybox-Minimal",
+    "timeoutSeconds":  45,
+    "smokeCommand":  "test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf toybox-ok",
+    "debugConsoleCapture":  "disabled-for-fixed-comparison"
+}

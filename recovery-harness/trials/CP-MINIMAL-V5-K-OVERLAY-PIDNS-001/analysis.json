@@ -1,0 +1,74 @@
+{
+  "trialId": "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001",
+  "purpose": "Test the known post-B3 K-OVERLAY-001 parent plus CONFIG_PID_NS against the B2 K-STORAGE-plus-PID result under the finalized control plane and fixed recovery contract.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B2",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The exact external kernel booted and exchanged mini-init capabilities and configuration. Dynamic association of the Toybox VHDX reproduced the invalid Hyper-V storage handle before ext4 mount."
+  },
+  "candidate": {
+    "id": "minimal-v5-k-overlay-pidns-001",
+    "kernelCandidate": "K-OVERLAY-PIDNS-001",
+    "kernelConfigParent": "k-overlay-001",
+    "controlPlaneParent": "minimal-v5-mount-pid-ns",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
+    "kernelSha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
+    "explicitSymbols": ["CONFIG_PID_NS"],
+    "autoselectedSymbols": [],
+    "packageSha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
+    "candidateManifestSha256": "534faa9f3db03a52eb7c69a19d28b74f7fd80fc49dfe5db91552820b802d510b"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-08-31T04:23:30.5458419Z",
+    "finishedUtc": "2026-08-31T04:24:21.643619Z",
+    "finalClassification": "B2",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "windowsError": "Wsl/Service/CreateInstance/MountDisk/HCS/0x80010105",
+    "failureSignature": "Dynamic registered-distro VHDX association failed with an invalid Hyper-V storage handle before ext4 mount",
+    "shutdownTimedOut": true,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 986,
+    "recoveryRows": 4854,
+    "directEvidence": "The overlay sibling reproduced the exact pre-B3 storage-association failure, rejecting overlay support as the missing dynamic-storage facility."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001-RECOVERY",
+    "startedUtc": "2026-08-31T04:24:43.7195297Z",
+    "finishedUtc": "2026-08-31T04:24:51.7271266Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "87fbf1f6c80c388e0b50e5a05b78a4214d8ed6bfb5c9c7349deb923179337f75",
+    "candidateArchiveSha256": "63232c19b2fe880807e7a3581ff54e78dd177b9d1332325088f4f360eb081ff9",
+    "recoveryArchiveSha256": "29b1c9d75b8aba9a64b899afae817ab9e34081181fba3312fe91d8d7b2c01596",
+    "operationResultSha256": "99536d3c4cad12a6635ea4ec924ac639678f2277144479bf2d7b5b23a311e66e"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigRestoredAbsent": true
+  },
+  "comparison": {
+    "storagePidTrial": "CP-MINIMAL-V5-K-PIDNS-001",
+    "storagePidResult": "B2",
+    "overlayPidResult": "B2",
+    "decision": "Overlay support does not restore dynamic VHDX association and remains excluded from the reduced control-plane contract."
+  },
+  "decision": "Finalize at B2 without rerun. Preserve CONFIG_PID_NS as proven required, reject overlay as the explanation, and review the dynamic Hyper-V storage channel lifecycle before selecting another kernel group."
+}

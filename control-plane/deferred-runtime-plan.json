@@ -1,7 +1,7 @@
 {
   "schema": 4,
   "plan_id": "CP-MINIMAL-V3-CANDIDATE-COMPARISON",
-  "status": "deferred-overlay-pidns-runtime-plan-validated",
+  "status": "deferred-evidence-selected-guest-initialize-source-reduction",
   "executable": false,
   "approval_carried_forward": false,
   "objective": "Compare WSL Linux candidates with one fixed Toybox probe and retain only evidence-proven configuration requirements.",
@@ -631,7 +631,7 @@
     "execution_boundary": "The non-runtime minimal-v3-stock-ns build is complete, hash-verified, extracted, and closed with the fixture Off. Candidate package installation and runtime were not performed and must wait for the separately recorded exact installation/restoration plan validation."
   },
   "candidate_trial_contract": {
-    "status": "overlay-pidns-runtime-plan-validated",
+    "status": "next-guest-initialize-source-reduction-selected",
     "executable": true,
     "approval_carried_forward": false,
     "comparison_order": [
@@ -1181,9 +1181,9 @@
         "fixture_final_state": "Off"
       }
     },
-    "next_reduced_kernel_candidate": {
-      "status": "runtime-plan-validated",
-      "executable": true,
+    "k_overlay_pidns_001": {
+      "status": "runtime-finalized-fail-b2",
+      "executable": false,
       "approval_carried_forward": false,
       "reserved_trial_id": "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001",
       "candidate_id": "minimal-v5-k-overlay-pidns-001",
@@ -1225,13 +1225,43 @@
       "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
       "rationale": "The storage-parent PID candidate failed dynamic VHDX association at B2. K-OVERLAY-001 is the only preserved reduced-kernel sibling already proved beyond B3; retain its one coherent overlay closure and add only proven PID_NS to test whether that known sibling restores adapter lifetime.",
       "fixed_contract": "Unchanged Toybox rootfs, probe commands, timeouts, instrumentation, evidence manifests, classification rules, candidate package transaction, external-kernel selection, and independent stock recovery.",
-      "runtime_boundary": "One fixed candidate interval and mandatory stock recovery; no rerun of finalized candidates.",
+      "runtime_boundary": "Finalized at B2 with independent stock B6-T recovery. Do not rerun.",
       "runtime_attempt_001": {
         "disposition": "infrastructure-failure-before-runner-execution",
         "reason": "Controller recorded the overlay parent kernel byte count instead of the produced PID-enabled kernel byte count; staged hashes passed but the size guard failed before self-test, MSI mutation, or candidate probe.",
         "candidate_ledger_row": false,
         "fixture_final_state": "Off"
+      },
+      "runtime_attempt_002": {
+        "disposition": "candidate-fail",
+        "candidate_result": "B2",
+        "failure_signature": "Dynamic registered-distro VHDX association failed with an invalid Hyper-V storage handle before ext4 mount",
+        "windows_error": "Wsl/Service/CreateInstance/MountDisk/HCS/0x80010105",
+        "candidate_manifest_files_verified": 20,
+        "recovery_result": "B6-T",
+        "recovery_manifest_files_verified": 20,
+        "candidate_archive_sha256": "63232c19b2fe880807e7a3581ff54e78dd177b9d1332325088f4f360eb081ff9",
+        "recovery_archive_sha256": "29b1c9d75b8aba9a64b899afae817ab9e34081181fba3312fe91d8d7b2c01596",
+        "operation_result_sha256": "99536d3c4cad12a6635ea4ec924ac639678f2277144479bf2d7b5b23a311e66e",
+        "final_evidence_manifest_sha256": "2163117a8b24096e1f1c8e612aca3ba6c65d7521107bf56aebc2c492fa303bf9",
+        "evidence_root": "recovery-harness/trials/CP-MINIMAL-V5-K-OVERLAY-PIDNS-001",
+        "ledger_finalized": true,
+        "fixture_final_state": "Off"
       }
+    },
+    "next_source_reduction": {
+      "status": "evidence-selected-not-yet-built",
+      "executable": false,
+      "parent_control_plane": "minimal-v5-mount-pid-ns",
+      "kernel_parent": "k-pidns-001",
+      "evidence_selected_by": [
+        "CP-MINIMAL-V5-K-PIDNS-001",
+        "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001"
+      ],
+      "failure_boundary": "Both PID-enabled reduced kernels ended the utility VM immediately after EarlyConfig/InitialConfig; the host storage invalid-handle failure is consequential.",
+      "source_finding": "The retained EarlyConfig handler calls Initialize before registered-distro attachment. Initialize hard-fails while writing /proc/sys/fs/inotify/max_user_watches, but CONFIG_INOTIFY_USER is disabled in every reduced kernel. The setting is justified in source only for Visual Studio Code Remote, outside the target contract.",
+      "decision": "Do not add storage, PCI hotplug, networking, or CONFIG_INOTIFY_USER. Create one source layer removing the excluded inotify hard-fail, preserve fail-closed policy, rebuild Linux artifacts twice and the controlled package, then retest k-pidns-001 under the fixed contract.",
+      "remaining_review": "Review every subsequent kernel-facing operation in Initialize for retained-contract reachability so the patch removes only excluded hard-fails without masking a required failure."
     }
   },
   "preconditions": [

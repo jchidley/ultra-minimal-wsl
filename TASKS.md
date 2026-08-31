@@ -4,7 +4,7 @@
 
 ## Active action
 
-Prepare the next reduced-kernel candidate by promoting the now-proven `CONFIG_PID_NS` requirement while retaining the finalized `minimal-v5-mount-pid-ns` control plane. `CP-MINIMAL-V5-MOUNT-PID-NS-001` passed `B6-T` with independent stock recovery, proving mount-plus-PID sufficient and selecting PID semantics after the mount-only `B3` failure. Keep IPC and UTS namespaces omitted. Record the full config, parent, hashes, and reserved trial before any boot; build twice offline and continue through the unchanged fixed probe and recovery contract.
+Prepare the next reduced control-plane source layer by removing the excluded inotify hard-fail from mini-init `Initialize`, then retest the finalized `k-pidns-001` kernel under the unchanged fixed probe and recovery contract. Both `CP-MINIMAL-V5-K-PIDNS-001` and the conservative overlay-parent sibling finalized at `B2`: mini-init exchanged capabilities and configuration, then the utility VM ended before registered-distro attachment completed. ETW ordering proves the invalid HCS storage handle was consequential. Do not add `CONFIG_INOTIFY_USER`: the source comment ties `max_user_watches` only to excluded Visual Studio Code Remote integration. Review the remaining `Initialize` operations for retained-contract reachability, keep the source change narrow and fail closed, build twice offline, rebuild the controlled package, and proceed through one fixed candidate interval plus mandatory stock recovery.
 
 ## Comparison queue
 
@@ -14,14 +14,17 @@ Prepare the next reduced-kernel candidate by promoting the now-proven `CONFIG_PI
 4. `minimal-v4-mount-ns` — complete at `B3` in `CP-MINIMAL-V4-MOUNT-NS-001`;
 5. provisional v4 decision — full bundle retained pending a narrow PID ablation; mount-only rejected;
 6. `minimal-v5-mount-pid-ns` — complete at `B6-T` in `CP-MINIMAL-V5-MOUNT-PID-NS-001`; retain mount plus PID, omit IPC and UTS;
-7. next reduced-kernel candidate — promote `CONFIG_PID_NS` and verify the finalized minimal control plane against the reduced kernel.
+7. `K-PIDNS-001` — complete at `B2`; dynamic VHDX association failed after mini-init configuration and independent stock recovery passed `B6-T`;
+8. `K-OVERLAY-PIDNS-001` — complete at the same `B2`, rejecting overlay as the missing facility;
+9. next source layer — remove the excluded inotify initialization hard-fail without enabling `CONFIG_INOTIFY_USER`, then retest `k-pidns-001`.
 
 Every comparison uses the identical Toybox smoke command, timeouts, instrumentation, rootfs, classification rules, and recovery proof.
 
 ## Blocked
 
 - `minimal-v3-stock-ns` is finalized at `B2`; do not rerun the byte-identical candidate.
-- IPC and UTS namespace semantics are rejected for the tested minimal contract; `CONFIG_PID_NS` is proven required and awaits incorporation into the next reduced-kernel candidate.
+- IPC and UTS namespace semantics are rejected for the tested minimal contract; `CONFIG_PID_NS` remains proven required and is incorporated in both finalized reduced-kernel candidates.
+- The retained mini-init `Initialize` path hard-fails on the absent inotify sysctl before registered-distro attachment; source reduction is required before further kernel selection.
 - Alpine, Arch, and Debian compatibility testing is blocked until `minimal-viable-wsl-v1` passes Toybox and is frozen.
 - No speculative Kconfig group, VM-control diagnostic, or replacement infrastructure packet is queued.
 

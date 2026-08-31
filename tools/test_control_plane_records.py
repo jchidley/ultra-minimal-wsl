@@ -404,11 +404,14 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(first_reduced["runtime_attempt_001"]["candidate_result"], "B2")
         self.assertEqual(first_reduced["runtime_attempt_001"]["recovery_result"], "B6-T")
         self.assertTrue(first_reduced["runtime_attempt_001"]["ledger_finalized"])
-        reduced = contract["next_reduced_kernel_candidate"]
-        self.assertTrue(reduced["executable"])
+        reduced = contract["k_overlay_pidns_001"]
+        self.assertFalse(reduced["executable"])
         self.assertEqual(reduced["reserved_trial_id"], "CP-MINIMAL-V5-K-OVERLAY-PIDNS-001")
         self.assertEqual(reduced["parent_trial"], "CP-MINIMAL-V5-K-PIDNS-001")
         self.assertEqual(reduced["kernel_config_parent"], "k-overlay-001")
+        self.assertEqual(reduced["runtime_attempt_002"]["candidate_result"], "B2")
+        self.assertEqual(reduced["runtime_attempt_002"]["recovery_result"], "B6-T")
+        self.assertTrue(reduced["runtime_attempt_002"]["ledger_finalized"])
         self.assertEqual(reduced["explicit_symbols"], ["CONFIG_PID_NS"])
         self.assertEqual(reduced["autoselected_symbols"], [])
         self.assertEqual(sha256(ROOT / reduced["kernel_path"]), reduced["kernel_sha256"])
@@ -429,6 +432,10 @@ class ControlPlaneRecordTests(unittest.TestCase):
         for path in reduced_self_test["failurePaths"]:
             self.assertTrue(path["stockInstalled"])
             self.assertFalse(path["candidateInstalled"])
+        source_reduction = contract["next_source_reduction"]
+        self.assertFalse(source_reduction["executable"])
+        self.assertIn("CONFIG_INOTIFY_USER", source_reduction["source_finding"])
+        self.assertIn("Do not add storage, PCI hotplug, networking, or CONFIG_INOTIFY_USER", source_reduction["decision"])
         self.assertIn("-TimeoutSeconds 45 -Execute", stock["candidate_command"])
         self.assertIn(contract["fixed_probe"]["sha256"], stock["candidate_command"])
         self.assertIn(inputs := load_plan()["pinned_inputs"]["toybox_rootfs"]["sha256"], stock["candidate_command"])

@@ -18,9 +18,9 @@ Static review performed against `inventory/kconfig-dependencies.sqlite` after th
 | `CONFIG_SIGNALFD` | y | y | y | reviewed, base | Current relay/lifecycle code uses `signalfd`; already in mkroot. |
 | `CONFIG_EPOLL` | y | y | y | reviewed, base | Event machinery floor; already in mkroot. |
 | `CONFIG_NAMESPACES` | y | y | y | reviewed, base | Generic namespace support exists in mkroot. |
-| `CONFIG_IPC_NS` | n | n | n | reviewed, unresolved | Stock launcher requests it, but no reduced-path evidence exists. |
-| `CONFIG_PID_NS` | n | n | n | reviewed, unresolved | Stock launcher requests it, but no reduced-path evidence exists. |
-| `CONFIG_UTS_NS` | n | n | n | reviewed, unresolved | Stock launcher requests it, but no reduced-path evidence exists. |
+| `CONFIG_IPC_NS` | n | n | n | reviewed, deferred | Mount-plus-PID passed B6-T without IPC isolation. |
+| `CONFIG_PID_NS` | n | n | n | reviewed, proven WSL required | Mount-only stopped at B3; restoring PID semantics recovered B6-T. |
+| `CONFIG_UTS_NS` | n | n | n | reviewed, deferred | Mount-plus-PID passed B6-T without UTS isolation. |
 
 ## Excluded Plan 9/DrvFs group
 
@@ -92,5 +92,7 @@ Searches of pinned WSL 2.7.12 and all three preserved `minimal-v2` trees found n
 - Ext4, SCSI core, procfs, sysfs, devtmpfs, PTYs, signalfd, epoll, and generic namespace support are now durably reviewed as `BASE`; they are not new WSL tax.
 - The finalized runtime comparison selected namespace semantics: `minimal-v4-stock-ns` passed `B6-T`, while mount-only reached `B3`, unmounted the registered ext4 filesystem, and closed its control socket before `CreateInstanceResult`.
 - The controlled namespace comparison is complete: mount-only reached `B3`, while `minimal-v5-mount-pid-ns` restored `B6-T` with IPC and UTS still omitted. Retain mount plus PID semantics, classify `CONFIG_PID_NS` as `PROVEN_WSL_REQUIRED`, and keep `CONFIG_IPC_NS` and `CONFIG_UTS_NS` deferred from the tested minimal contract.
+- Both PID-enabled reduced-kernel candidates finalized at `B2`; retaining overlay did not change the dynamic VHDX invalid-handle boundary. ETW shows adapter teardown preceded the HCS storage failure, so do not add storage or PCI facilities from that consequential error.
+- Source ordering selects mini-init `Initialize`: it hard-fails on `/proc/sys/fs/inotify/max_user_watches` even though every reduced kernel has `CONFIG_INOTIFY_USER=n`, and its own comment ties the setting to excluded Visual Studio Code Remote integration. Remove that hard-fail in the next source layer rather than adding the kernel symbol.
 - Networking remains excluded even though `CONFIG_HYPERV_VSOCKETS` has a Kconfig dependency on `CONFIG_NET`; that dependency is transport plumbing, not approval for IP networking, GNS, or DNS.
 - Completed excluded-feature classifications and their supporting evidence are recorded in the sections above and in `inventory/annotations.csv`; none changed a candidate config.

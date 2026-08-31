@@ -1,0 +1,786 @@
+[
+    {
+        "TimeCreated":  "\/Date(1788150209090)\/",
+        "Id":  7045,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Service Control Manager",
+        "LogName":  "System",
+        "Message":  "A service was installed in the system.\r\n\r\nService Name:  WSL Service\r\nService File Name:  \"C:\\Program Files\\WSL\\wslservice.exe\"\r\nService Type:  user mode service\r\nService Start Type:  auto start\r\nService Account:  LocalSystem"
+    },
+    {
+        "TimeCreated":  "\/Date(1788150149002)\/",
+        "Id":  7026,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Service Control Manager",
+        "LogName":  "System",
+        "Message":  "The following boot-start or system-start driver(s) did not load: \r\ndam\r\nuiomap"
+    },
+    {
+        "TimeCreated":  "\/Date(1788150146931)\/",
+        "Id":  277,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "vmswitch.sys build 26100.amd64.ge_release_svc_prod1, debug false, official true, 1 1"
+    },
+    {
+        "TimeCreated":  "\/Date(1788150135655)\/",
+        "Id":  165,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor configured mitigations for CVE-2019-11091, CVE-2018-12126, CVE-2018-12127, CVE-2018-12130 for virtual machines.\r\n\r\nProcessor not affected: false\r\nProcessor family not affected: false\r\nProcessor supports microarchitectural buffer flush: false\r\nBuffer flush needed: false\r\n"
+    },
+    {
+        "TimeCreated":  "\/Date(1788150135655)\/",
+        "Id":  156,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor configured mitigations for CVE-2018-3646 for virtual machines.\r\n\r\nProcessor not affected: false\r\nProcessor family not affected: false\r\nProcessor supports cache flush: false\r\nHyperThreading enabled: true\r\nParent hypervisor applies mitigations: false\r\nMitigations disabled by bcdedit: false\r\nMitigations enabled: true\r\nCache flush needed: false\r\n"
+    },
+    {
+        "TimeCreated":  "\/Date(1788150135655)\/",
+        "Id":  129,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor initialized I/O remapping.\r\n\r\nHardware present: false\r\nHardware enabled: false\r\nPolicy: 0x0\r\nEnabled features: 0x0\r\nInternal information: 0x0\r\nProblems: 0x0\r\nAdditional information: 0x0"
+    },
+    {
+        "TimeCreated":  "\/Date(1788150135655)\/",
+        "Id":  2,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor scheduler type is 0x4."
+    },
+    {
+        "TimeCreated":  "\/Date(1788150135655)\/",
+        "Id":  1,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor successfully started."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950320)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Delete\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)), Instance Id {a7449e3d-ce5f-41fb-8a5f-1fc71428564f}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950269)\/",
+        "Id":  62,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully deleted."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950268)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Delete\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950268)\/",
+        "Id":  71,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Delete complete for port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950268)\/",
+        "Id":  71,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Delete complete for port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E)."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950268)\/",
+        "Id":  69,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) successfully deleted - switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950267)\/",
+        "Id":  234,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87F successfully disconnected from port 790E58B4-7939-4434-9358-89AE7DDBE87F."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950250)\/",
+        "Id":  69,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully deleted - switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149950250)\/",
+        "Id":  234,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87E successfully disconnected from port 790E58B4-7939-4434-9358-89AE7DDBE87E."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149948735)\/",
+        "Id":  7026,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Service Control Manager",
+        "LogName":  "System",
+        "Message":  "The following boot-start or system-start driver(s) did not load: \r\ndam\r\nuiomap"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936587)\/",
+        "Id":  5,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Miniport NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully enabled"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936587)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully connected to port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936586)\/",
+        "Id":  7,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Miniport NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully initialized."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936586)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC start"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  264,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Internal or External Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  9,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully initialized."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully connected to port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  67,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936585)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149936583)\/",
+        "Id":  277,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "vmswitch.sys build 26100.amd64.ge_release_svc_prod1, debug false, official true, 1 1"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149935655)\/",
+        "Id":  165,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor configured mitigations for CVE-2019-11091, CVE-2018-12126, CVE-2018-12127, CVE-2018-12130 for virtual machines.\r\n\r\nProcessor not affected: false\r\nProcessor family not affected: false\r\nProcessor supports microarchitectural buffer flush: false\r\nBuffer flush needed: false\r\n"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149935655)\/",
+        "Id":  156,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor configured mitigations for CVE-2018-3646 for virtual machines.\r\n\r\nProcessor not affected: false\r\nProcessor family not affected: false\r\nProcessor supports cache flush: false\r\nHyperThreading enabled: true\r\nParent hypervisor applies mitigations: false\r\nMitigations disabled by bcdedit: false\r\nMitigations enabled: true\r\nCache flush needed: false\r\n"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149935655)\/",
+        "Id":  129,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor initialized I/O remapping.\r\n\r\nHardware present: false\r\nHardware enabled: false\r\nPolicy: 0x0\r\nEnabled features: 0x0\r\nInternal information: 0x0\r\nProblems: 0x0\r\nAdditional information: 0x0"
+    },
+    {
+        "TimeCreated":  "\/Date(1788149935655)\/",
+        "Id":  2,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor scheduler type is 0x4."
+    },
+    {
+        "TimeCreated":  "\/Date(1788149935655)\/",
+        "Id":  1,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor successfully started."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147552017)\/",
+        "Id":  71,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Delete complete for port E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: E4042D80-6B97-4032-8100-B8056F4D41C8)."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147552016)\/",
+        "Id":  69,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: E4042D80-6B97-4032-8100-B8056F4D41C8) successfully deleted - switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147552013)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Delete\u0027 succeeded on nic FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: ), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147552012)\/",
+        "Id":  234,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 successfully disconnected from port ."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147551658)\/",
+        "Id":  234,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 successfully disconnected from port ."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548454)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: ) Previous IPv4: Disabled, Current IPv4: Enabled, Previous IPv6: Disabled, Current IPv6: Enabled. Reason: RSC OID"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548453)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: ) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC connect"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548422)\/",
+        "Id":  102,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Networking driver in FBEB18A6-D82E-450E-97C2-F588116AAFC2 is loaded and the protocol version is negotiated to the most recent version (Virtual machine ID FBEB18A6-D82E-450E-97C2-F588116AAFC2)."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548419)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: ) successfully connected to port E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: E4042D80-6B97-4032-8100-B8056F4D41C8) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548410)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: ), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548410)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC FBEB18A6-D82E-450E-97C2-F588116AAFC2--E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: ) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548388)\/",
+        "Id":  67,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: E4042D80-6B97-4032-8100-B8056F4D41C8) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548386)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port E4042D80-6B97-4032-8100-B8056F4D41C8 (Friendly Name: E4042D80-6B97-4032-8100-B8056F4D41C8) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548258)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully connected to port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548216)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Enabled, Current IPv4: Enabled, Previous IPv6: Enabled, Current IPv6: Enabled. Reason: RSC OID"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548211)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Enabled, Previous IPv6: Disabled, Current IPv6: Enabled. Reason: RSC OID"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548206)\/",
+        "Id":  7,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Miniport NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully initialized."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548206)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC start"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548204)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548204)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548125)\/",
+        "Id":  264,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Internal or External Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147548123)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147547882)\/",
+        "Id":  9,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully initialized."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147547882)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully connected to port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147547882)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147547882)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147547882)\/",
+        "Id":  67,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147547882)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147543270)\/",
+        "Id":  7045,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Service Control Manager",
+        "LogName":  "System",
+        "Message":  "A service was installed in the system.\r\n\r\nService Name:  WSL Service\r\nService File Name:  \"C:\\Program Files\\WSL\\wslservice.exe\"\r\nService Type:  user mode service\r\nService Start Type:  auto start\r\nService Account:  LocalSystem"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147470014)\/",
+        "Id":  7045,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Service Control Manager",
+        "LogName":  "System",
+        "Message":  "A service was installed in the system.\r\n\r\nService Name:  WSL Service\r\nService File Name:  \"C:\\Program Files\\WSL\\wslservice.exe\"\r\nService Type:  user mode service\r\nService Start Type:  auto start\r\nService Account:  LocalSystem"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410894)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Delete\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)), Instance Id {87957539-8a68-454b-8784-56caacc6bfa8}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410838)\/",
+        "Id":  62,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully deleted."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410838)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Delete\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410838)\/",
+        "Id":  71,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Delete complete for port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410838)\/",
+        "Id":  71,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Delete complete for port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E)."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410838)\/",
+        "Id":  69,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) successfully deleted - switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410837)\/",
+        "Id":  234,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87F successfully disconnected from port 790E58B4-7939-4434-9358-89AE7DDBE87F."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410817)\/",
+        "Id":  69,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully deleted - switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147410817)\/",
+        "Id":  234,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87E successfully disconnected from port 790E58B4-7939-4434-9358-89AE7DDBE87E."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147409457)\/",
+        "Id":  7026,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Service Control Manager",
+        "LogName":  "System",
+        "Message":  "The following boot-start or system-start driver(s) did not load: \r\ndam\r\nuiomap"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397700)\/",
+        "Id":  5,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Miniport NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully enabled"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397700)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully connected to port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397699)\/",
+        "Id":  7,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Miniport NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) successfully initialized."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397698)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC start"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397698)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397698)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  264,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Internal or External Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port 790E58B4-7939-4434-9358-89AE7DDBE87F (Friendly Name: Host Vnic 790E58B4-7939-4434-9358-89AE7DDBE87E) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  9,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully initialized."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  232,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "NIC 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully connected to port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) on switch 790E58B4-7939-4434-9358-89AE7DDBE87E(Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  233,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "The operation \u0027Create\u0027 succeeded on nic 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)), Instance Id {00000000-0000-0000-0000-000000000000}."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  291,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for NIC 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) Previous IPv4: Disabled, Current IPv4: Disabled, Previous IPv6: Disabled, Current IPv6: Disabled. Reason: NIC create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  67,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) successfully created on switch 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall))."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397697)\/",
+        "Id":  292,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "RSC offload modified for Port 790E58B4-7939-4434-9358-89AE7DDBE87E (Friendly Name: WSL (Hyper-V firewall)) Previous: Disabled, Current: Enabled. Reason: Port create"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147397695)\/",
+        "Id":  277,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-VmSwitch",
+        "LogName":  "System",
+        "Message":  "vmswitch.sys build 26100.amd64.ge_release_svc_prod1, debug false, official true, 1 1"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147396656)\/",
+        "Id":  165,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor configured mitigations for CVE-2019-11091, CVE-2018-12126, CVE-2018-12127, CVE-2018-12130 for virtual machines.\r\n\r\nProcessor not affected: false\r\nProcessor family not affected: false\r\nProcessor supports microarchitectural buffer flush: false\r\nBuffer flush needed: false\r\n"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147396656)\/",
+        "Id":  156,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor configured mitigations for CVE-2018-3646 for virtual machines.\r\n\r\nProcessor not affected: false\r\nProcessor family not affected: false\r\nProcessor supports cache flush: false\r\nHyperThreading enabled: true\r\nParent hypervisor applies mitigations: false\r\nMitigations disabled by bcdedit: false\r\nMitigations enabled: true\r\nCache flush needed: false\r\n"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147396656)\/",
+        "Id":  129,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor initialized I/O remapping.\r\n\r\nHardware present: false\r\nHardware enabled: false\r\nPolicy: 0x0\r\nEnabled features: 0x0\r\nInternal information: 0x0\r\nProblems: 0x0\r\nAdditional information: 0x0"
+    },
+    {
+        "TimeCreated":  "\/Date(1788147396656)\/",
+        "Id":  2,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor scheduler type is 0x4."
+    },
+    {
+        "TimeCreated":  "\/Date(1788147396656)\/",
+        "Id":  1,
+        "LevelDisplayName":  "Information",
+        "ProviderName":  "Microsoft-Windows-Hyper-V-Hypervisor",
+        "LogName":  "System",
+        "Message":  "Hypervisor successfully started."
+    }
+]
