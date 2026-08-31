@@ -10,6 +10,6 @@ Two fresh offline local clones on `LFS-Builder` ext4 produced byte-identical con
 
 - full config SHA-256 `22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7`;
 - kernel SHA-256 `5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca`;
-- kernel size 3,777,536 bytes.
+- kernel size 3,781,632 bytes.
 
 This sibling tests whether the known post-B3 overlay parent changes the observed storage-adapter lifetime. Static source reachability still predicts overlay is unnecessary under the reduced control plane; a repeated B2 failure will reject overlay as the explanation and select a different narrow dynamic-storage facility.

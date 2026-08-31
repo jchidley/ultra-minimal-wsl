@@ -17,7 +17,7 @@
   "kernel_config_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-fullconfig",
   "kernel_config_sha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
   "kernel_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-kernel",
-  "kernel_bytes": 3777536,
+  "kernel_bytes": 3781632,
   "kernel_sha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
   "explicit_symbols": ["CONFIG_PID_NS"],
   "autoselected_symbols": [],

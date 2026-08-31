@@ -1194,7 +1194,7 @@
       "kernel_config_path": "candidates/K-OVERLAY-PIDNS-001/linux-fullconfig",
       "kernel_config_sha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
       "kernel_path": "candidates/K-OVERLAY-PIDNS-001/linux-kernel",
-      "kernel_bytes": 3777536,
+      "kernel_bytes": 3781632,
       "kernel_sha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
       "explicit_symbols": [
         "CONFIG_PID_NS"
@@ -1203,16 +1203,16 @@
       "package_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v5-mount-pid-ns\\wsl.msi",
       "package_sha256": "343f90177e3dbb29e273d60c55a9254cee6683d884ec1ea344581459220df50d",
       "candidate_manifest_path": "control-plane/trial-manifests/minimal-v5-k-overlay-pidns-001.json",
-      "candidate_manifest_sha256": "30b70543d2a6e58e1ea6a80b305e3ae59e8a91aa9419bd29cdcbd97c024f4bae",
+      "candidate_manifest_sha256": "534faa9f3db03a52eb7c69a19d28b74f7fd80fc49dfe5db91552820b802d510b",
       "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV5KOverlayPidNsTrial.ps1",
-      "runner_sha256": "d1e1442542246201551307bfe581a4f2dd9e9fa78a9bd2801e13e7024706a625",
+      "runner_sha256": "efaa2a9aa8e2e5481c2f000e80f34eb286031719d8da511aca186a5fb3e12fc0",
       "runner_local_validation": {
         "self_test_passed": true,
         "failure_paths_tested": 17,
         "psscriptanalyzer_findings": 0
       },
-      "runtime_controller_path": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v5-k-overlay-pidns-runtime-001\\Run-ControlledTrial.ps1",
-      "runtime_controller_sha256": "995188ebc6704bd0b402efbb7da1f57dc63d63ca460e9b6108dbf8f170e3ae93",
+      "runtime_controller_path": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v5-k-overlay-pidns-runtime-002\\Run-ControlledTrial.ps1",
+      "runtime_controller_sha256": "87fbf1f6c80c388e0b50e5a05b78a4214d8ed6bfb5c9c7349deb923179337f75",
       "staged_runner_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV5KOverlayPidNsTrial.ps1",
       "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v5-k-overlay-pidns-001.json",
       "staged_kernel_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-kernel",
@@ -1225,7 +1225,13 @@
       "recovery_baseline_trial": "CP-STOCK-2.7.12-003",
       "rationale": "The storage-parent PID candidate failed dynamic VHDX association at B2. K-OVERLAY-001 is the only preserved reduced-kernel sibling already proved beyond B3; retain its one coherent overlay closure and add only proven PID_NS to test whether that known sibling restores adapter lifetime.",
       "fixed_contract": "Unchanged Toybox rootfs, probe commands, timeouts, instrumentation, evidence manifests, classification rules, candidate package transaction, external-kernel selection, and independent stock recovery.",
-      "runtime_boundary": "One fixed candidate interval and mandatory stock recovery; no rerun of finalized candidates."
+      "runtime_boundary": "One fixed candidate interval and mandatory stock recovery; no rerun of finalized candidates.",
+      "runtime_attempt_001": {
+        "disposition": "infrastructure-failure-before-runner-execution",
+        "reason": "Controller recorded the overlay parent kernel byte count instead of the produced PID-enabled kernel byte count; staged hashes passed but the size guard failed before self-test, MSI mutation, or candidate probe.",
+        "candidate_ledger_row": false,
+        "fixture_final_state": "Off"
+      }
     }
   },
   "preconditions": [
@@ -1302,7 +1308,7 @@
       "autoselected_symbols": [],
       "generated_config_sha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
       "kernel_sha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
-      "kernel_bytes": 3777536,
+      "kernel_bytes": 3781632,
       "reproducible": true,
       "config_delta": "PID_NS n -> y",
       "preparation_record": "candidates/K-OVERLAY-PIDNS-001/build-metadata.txt"
