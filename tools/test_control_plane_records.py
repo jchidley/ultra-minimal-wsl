@@ -456,9 +456,23 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(sha256(ROOT / v6["runner_path"]), v6["runner_sha256"])
         self.assertEqual(v6["package_sha256"], source_build["package_sha256"])
         self.assertEqual(v6["kernel_sha256"], contract["k_pidns_001"]["kernel_sha256"])
-        self.assertEqual(v6["runtime_controller_sha256"], "8c7fbc383d7233f5b75b0405657973ddac98aa46814e16e394994282c544a43b")
+        self.assertEqual(v6["runtime_controller_sha256"], "78d3c13ba5abd3ee68bdf0d798ddb33e9ed9268ecd3944c444e4c7251426dfe7")
+        secure_broker = v6["secure_broker"]
+        self.assertTrue(secure_broker["required"])
+        self.assertEqual(secure_broker["run_id"], "minimal-v6-k-pidns-runtime-011")
+        for path_key, hash_key in (
+            ("broker_path", "broker_sha256"),
+            ("policy_path", "policy_sha256"),
+            ("installer_path", "installer_sha256"),
+            ("run_creator_path", "run_creator_sha256"),
+            ("run_launcher_path", "run_launcher_sha256"),
+            ("job_client_path", "job_client_sha256"),
+        ):
+            self.assertEqual(sha256(ROOT / secure_broker[path_key]), secure_broker[hash_key])
         self.assertFalse(v6["runtime_attempt_008"]["worker_started"])
         self.assertFalse(v6["runtime_attempt_009"]["worker_started"])
+        self.assertEqual(v6["runtime_attempt_010"]["disposition"], "superseded-before-launch-security-hardening")
+        self.assertFalse(v6["runtime_attempt_010"]["fixture_touched"])
         v5 = contract["minimal_v5_mount_pid_ns"]
         self.assertFalse(v5["executable"])
         self.assertEqual(v5["status"], "runtime-finalized-pass-b6-t")

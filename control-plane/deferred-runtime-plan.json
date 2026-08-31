@@ -1,7 +1,7 @@
 {
   "schema": 4,
   "plan_id": "CP-MINIMAL-V3-CANDIDATE-COMPARISON",
-  "status": "deferred-minimal-v6-k-pidns-runtime-ready-uac-transport-pending",
+  "status": "deferred-minimal-v6-k-pidns-runtime-ready-secure-broker-install-pending",
   "executable": false,
   "approval_carried_forward": false,
   "objective": "Compare WSL Linux candidates with one fixed Toybox probe and retain only evidence-proven configuration requirements.",
@@ -1454,8 +1454,26 @@
       "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV6KPidNsTrial.ps1",
       "runner_sha256": "85056c65c6fbcb7ca39feadcab1b523497b9c8797255e05cd9a7c022412d6f0d",
       "runner_local_validation": {"self_test_passed": true, "failure_paths_tested": 17, "psscriptanalyzer_findings": 0},
-      "runtime_controller_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\minimal-v6-k-pidns-runtime-010\\Run-ControlledTrial.ps1",
-      "runtime_controller_sha256": "8c7fbc383d7233f5b75b0405657973ddac98aa46814e16e394994282c544a43b",
+      "runtime_controller_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\minimal-v6-k-pidns-runtime-011\\Run-ControlledTrial.ps1",
+      "runtime_controller_sha256": "78d3c13ba5abd3ee68bdf0d798ddb33e9ed9268ecd3944c444e4c7251426dfe7",
+      "secure_broker": {
+        "required": true,
+        "run_id": "minimal-v6-k-pidns-runtime-011",
+        "workload_id": "minimal-v6-k-pidns-runtime",
+        "security_boundary": "One attended UAC creates an administrator-protected immutable workload snapshot and ephemeral broker. The hostile queue may select only that allowlisted workload; it cannot supply host code, paths, hashes, commands, or executables. Protected results and credentials remain outside user-writable approval-state paths, and finalization forces the exact fixture Off.",
+        "broker_path": "tools/fixture-broker/FixtureBroker.ps1",
+        "broker_sha256": "c7470b68a0e0232b7e573f960463ce1e70775ac4a09f9cdd20aa88533c51f995",
+        "policy_path": "tools/fixture-broker/FixtureBroker.Policy.psm1",
+        "policy_sha256": "234863c3b4a2e4fb2d67a71ad4ce96cf5020f4298726974b8941985730abffa2",
+        "installer_path": "tools/fixture-broker/Install-FixtureBroker.ps1",
+        "installer_sha256": "d1b65d287aa3b340b819ae933fa9713502fe276fbf1a92df2e9123c67cfd1b0f",
+        "run_creator_path": "tools/fixture-broker/New-FixtureBrokerRun.ps1",
+        "run_creator_sha256": "d0f228eb5b4178fa6d1c9ed3463b1593daef21bf5d92b2b16b7456b742ee3884",
+        "run_launcher_path": "tools/fixture-broker/Start-FixtureBrokerRun.ps1",
+        "run_launcher_sha256": "b989c01e53f8e0b31a7a990dc5d764f3a013d952f53e6de2b8c3a3a318a6b251",
+        "job_client_path": "tools/fixture-broker/Submit-FixtureBrokerJob.ps1",
+        "job_client_sha256": "faa4ceb743f49b46a584e76095a3f09b7ed3c39cd4645b7c21babbfe48fc641d"
+      },
       "staged_runner_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV6KPidNsTrial.ps1",
       "staged_manifest_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v6-k-pidns-001.json",
       "staged_kernel_path": "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-kernel",
@@ -1483,7 +1501,15 @@
         "worker_started": false,
         "fixture_touched": false,
         "candidate_result_created": false,
-        "reason": "The second unattended UAC request also did not progress to durable worker start. No further automatic launch is permitted until an attended UAC window; fresh operation 010 retains the unchanged contract."
+        "reason": "The second unattended UAC request also did not progress to durable worker start. No candidate or fixture operation began."
+      },
+      "runtime_attempt_010": {
+        "operation_id": "minimal-v6-k-pidns-runtime-010",
+        "disposition": "superseded-before-launch-security-hardening",
+        "worker_started": false,
+        "fixture_touched": false,
+        "candidate_result_created": false,
+        "reason": "Independent host-security review rejected persistent or repeated elevation of a controller and output root stored under a normal-user-writable directory. Operation 011 preserves the exact candidate contract while moving the immutable controller, credential, queue processing, and results into the protected ephemeral broker boundary."
       },
       "runtime_boundary": "One serial candidate interval only. Failure before the first candidate probe process is infrastructure failure with no candidate result. Missing extraction, manifest verification, or stock recovery prohibits ledger finalization."
     },

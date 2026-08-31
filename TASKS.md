@@ -6,11 +6,11 @@
 
 Run the prepared `minimal-v6-excluded-initialize` plus finalized `K-PIDNS-001` comparison:
 
-1. launch fresh operation 010 during an attended UAC window; do not reuse operations 008 or 009 and do not alter their unchanged hash-bound contract;
-2. complete one fixed `K-PIDNS-001` candidate interval in the disposable fixture, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
-3. continue only to the next decision selected by that runtime evidence.
+1. finish the protected ephemeral fixture-broker validation, install its exact tested payload under administrator-protected Program Files ACLs, and create secure operation 011 with one attended UAC;
+2. submit only the protected allowlisted runtime workload, complete one fixed `K-PIDNS-001` candidate interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
+3. finish the broker so it returns the exact fixture Off, then continue only to the next decision selected by runtime evidence.
 
-The source-policy review, two byte-identical offline Linux builds, fixture capacity correction, controlled MSI, complete source diff, output manifest, ProductCode, unsigned signature state, candidate manifest, guarded runner, and local fault-matrix validation are complete. Runtime operations 008 and 009 stopped before worker start because UAC was unattended; they are infrastructure launch failures, not build or candidate failures. Fresh operation 010 is recorded and ready. Exact identities and dispositions are in `control-plane/deferred-runtime-plan.json`.
+The source-policy review, two byte-identical offline Linux builds, fixture capacity correction, controlled MSI, complete source diff, output manifest, ProductCode, unsigned signature state, candidate manifest, guarded runner, and local fault-matrix validation are complete. Runtime operations 008 and 009 stopped before worker start because UAC was unattended. Unlaunched operation 010 is superseded only at the host transport boundary: operation 011 retains the exact candidate, probe, package, recovery, and classification contract while preventing privileged execution or output through user-writable paths. Exact identities and dispositions are in `control-plane/deferred-runtime-plan.json`.
 
 ## Blocked
 
