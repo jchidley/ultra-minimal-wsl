@@ -1,0 +1,69 @@
+{
+  "trialId": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-DIAG-001",
+  "purpose": "Capture the missing guest failure from the finalized minimal-v6 plus K-OVERLAY-PIDNS-001 B3 interval using debugConsole as the only runtime delta.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The diagnostic GuestLog stream proves that the registered ext4 filesystem mounted and overlay construction succeeded, then the intentionally absent cross-distro share move failed with ENOENT before CreateInstanceResult."
+  },
+  "candidate": {
+    "id": "minimal-v6-k-overlay-pidns-001",
+    "kernelCandidate": "K-OVERLAY-PIDNS-001",
+    "controlPlaneParent": "minimal-v6-excluded-initialize",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
+    "kernelSha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
+    "packageSha256": "1995a9f3b247e246bfdf8a6a3a566a7a20d0846ac70cc6ecc942bff35780a8df",
+    "runnerSha256": "c3b3820dfe57c898c72b8d83587e5acda95d8306d13e4b72b33ee1f04c86f9a5",
+    "diagnosticDelta": "transactional debugConsole=true with exact wslrelay cleanup"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-01T12:43:59.4518709Z",
+    "finishedUtc": "2026-09-01T12:44:20.6016498Z",
+    "finalClassification": "B3",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "windowsError": "Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "failureSignature": "LaunchDistro retried an absent cross-distro shared mount after successful overlay construction and exited with ENOENT before CreateInstanceResult",
+    "manifestFilesVerified": 20,
+    "guestLogRecords": 216,
+    "guestLogPath": "guest-log-candidate.txt"
+  },
+  "sourceFinding": {
+    "buildSource": "/root/experiments/minimal-wsl/control-plane-build/minimal-v6-excluded-initialize-r1/source/src/linux/init/main.cpp",
+    "sourceCommit": "1d6b039cd306354b2addb1bb9d00ee881f551617",
+    "failingLine": 1676,
+    "retainedBlock": "LaunchDistro unconditionally calls AddTemporaryMount for CROSS_DISTRO_SHARE_PATH at lines 1701-1732",
+    "mechanism": "The first ENOENT enters a broad catch intended for read-only/full filesystems; overlay creation succeeds, but the same absent cross-distro mount is retried and fails again.",
+    "targetContract": "Cross-distro integration is excluded."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-DIAG-001-RECOVERY",
+    "startedUtc": "2026-09-01T12:44:43.9725264Z",
+    "finishedUtc": "2026-09-01T12:44:52.3477047Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "controller": {
+    "sha256": "18807abc0a728c22650a109319c4a71fd1a6278d9b6a102340b1c8029cc8507a",
+    "candidateArchiveSha256": "604f87369172061a6eede1205bb8584bd508fdb146e8bddfdd34090cb7036c89",
+    "recoveryArchiveSha256": "fca70a6e33d168e809c76fc7bbab3b3d293c2482dd9f64811243091ab34b0635",
+    "operationResultSha256": "e989526436747f3c732dcc85d66be51d925f22a4a90950b4f242709ebe7235de",
+    "brokerStatusSha256": "bc21c034545c6d9ec7e2aff644797a92a9a330a38fb942f33982b704138e343d"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigRestoredAbsent": true,
+    "diagnosticRelaysRemoved": true
+  },
+  "decision": "Finalize this diagnostic at B3 without rerun. The evidence selects a new control-plane source layer that removes only the excluded LaunchDistro cross-distro temporary-mount block. Repeat policy, mutation, and two-build reproducibility gates, then retest the unchanged overlay-plus-PID kernel; do not add a Kconfig group."
+}

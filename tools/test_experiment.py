@@ -17,24 +17,25 @@ DIAGNOSTIC_CONTROLLER = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-
 
 
 class ExperimentInventoryTests(unittest.TestCase):
-    def test_canonical_database_is_valid_and_has_one_diagnostic_operation(self) -> None:
+    def test_canonical_database_is_valid_and_has_no_active_operation(self) -> None:
         db = connect(DB)
         try:
             result = validate(db)
             self.assertEqual(result["integrity"], "ok")
             self.assertEqual(result["schemaVersion"], 1)
-            self.assertEqual(result["trials"], 19)
-            self.assertEqual(
-                result["activeOperation"],
-                "minimal-v6-k-overlay-pidns-diagnostic-runtime-014",
-            )
+            self.assertEqual(result["trials"], 20)
+            self.assertIsNone(result["activeOperation"])
         finally:
             db.close()
 
-    def test_active_diagnostic_controller_is_hash_bound(self) -> None:
+    def test_finalized_diagnostic_controller_is_hash_bound(self) -> None:
         db = connect(DB)
         try:
-            row = db.execute("SELECT controller_path,controller_sha256 FROM active_operation").fetchone()
+            row = db.execute(
+                "SELECT a.path AS controller_path,a.sha256 AS controller_sha256 "
+                "FROM operations o JOIN artifacts a ON a.artifact_id=o.controller_artifact_id "
+                "WHERE o.operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-015'"
+            ).fetchone()
             self.assertEqual(Path(row["controller_path"]), DIAGNOSTIC_CONTROLLER)
             self.assertEqual(
                 hashlib.sha256(DIAGNOSTIC_CONTROLLER.read_bytes()).hexdigest(),
@@ -47,7 +48,7 @@ class ExperimentInventoryTests(unittest.TestCase):
             runner = db.execute(
                 "SELECT a.path,a.sha256 FROM operation_artifacts oa "
                 "JOIN artifacts a USING(artifact_id) "
-                "WHERE oa.operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-014' "
+                "WHERE oa.operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-015' "
                 "AND oa.role='runner'"
             ).fetchone()
             runner_path = ROOT / runner["path"]
@@ -97,10 +98,6 @@ class ExperimentInventoryTests(unittest.TestCase):
             shutil.copy2(DB, copy)
             db = connect(copy, writable=True)
             try:
-                db.execute(
-                    "UPDATE operations SET status='cancelled',executable=0 "
-                    "WHERE operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-014'"
-                )
                 artifacts = [
                     {"artifact_id": row[0], "role": row[1]}
                     for row in db.execute(
@@ -123,10 +120,6 @@ class ExperimentInventoryTests(unittest.TestCase):
             shutil.copy2(DB, copy)
             db = connect(copy, writable=True)
             try:
-                db.execute(
-                    "UPDATE operations SET status='cancelled',executable=0 "
-                    "WHERE operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-014'"
-                )
                 db.execute(
                     "INSERT INTO operations(operation_id,kind,status,executable,rationale,fixed_contract,runtime_boundary) "
                     "VALUES ('lifecycle-test','runtime','runtime-planned',1,'test','test','test')"

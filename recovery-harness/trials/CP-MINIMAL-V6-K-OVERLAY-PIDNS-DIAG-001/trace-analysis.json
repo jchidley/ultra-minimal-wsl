@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-DIAG-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1291,
+  "recoveryTraceRows": 4962,
+  "candidateGuestLogRecords": 216,
+  "recoveryGuestLogRecords": 146,
+  "candidateEvidence": [
+    "CreateVmEnd identified the external 6.18.40.1+ kernel",
+    "mini_init returned LxMiniInitMessageGuestCapabilities and received the reduced configuration",
+    "the registered Toybox VHDX attached and ext4 mounted read-write",
+    "LxMiniInitMessageLaunchInit selected ext4 device 0",
+    "LaunchDistro attempted to move the absent cross-distro shared mount and logged ENOENT at main.cpp:1676",
+    "the generic catch mislabeled ENOENT as a read-only or full filesystem and added a tmpfs overlay",
+    "the repeated cross-distro mount still failed with ENOENT, then _init unmounted ext4 and powered down",
+    "WslCorePort closed before LxMiniInitMessageCreateInstanceResult",
+    "CreateInstanceEnd returned 0x8000FFFF and TerminateVm reported GracefulExit"
+  ],
+  "candidateFatalEvidence": "The diagnostic stream directly identifies the retained LaunchDistro cross-distro mount move as the fatal path. CROSS_DISTRO_SHARE_PATH is intentionally absent under the reduced target. AddTemporaryMount failed at main.cpp:1676, the broad catch incorrectly treated ENOENT as a read-only filesystem, overlay construction succeeded, and the same absent mount failed again before CreateInstanceResult.",
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 146 GuestLog records",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B3",
+    "basis": "Storage association, ext4 mount, and LaunchInit succeeded. The excluded cross-distro mount policy then terminated _init before CreateInstanceResult, so B4 and later gates are not supported."
+  },
+  "nextEvidenceAction": "Create a new reduced control-plane source layer that removes only the unconditional cross-distro temporary-mount block from LaunchDistro, repeat source-policy and two-build reproducibility gates, then retest with the unchanged overlay-plus-PID kernel. Do not add a kernel facility."
+}

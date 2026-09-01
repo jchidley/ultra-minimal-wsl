@@ -4,13 +4,13 @@
 
 ## Active action
 
-Prepare one bounded diagnostic sibling of the finalized minimal-v6 plus `K-OVERLAY-PIDNS-001` comparison:
+Create the evidence-selected control-plane layer after `minimal-v6-excluded-initialize`:
 
-1. keep the package, kernel, rootfs, command, timeouts, ETW, package transaction, recovery proof, and fixture broker unchanged;
-2. add only transactional `debugConsole=true` capture so the already-enabled kernel printk stream is recorded through `GuestLog`, with exact relay cleanup and `.wslconfig` restoration;
-3. run one protected diagnostic interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, finalize the SQLite ledger, and choose the next change only from the captured guest failure.
+1. remove only the unconditional `LaunchDistro` cross-distro temporary-mount block that moves `CROSS_DISTRO_SHARE_PATH` and sets its environment variable;
+2. preserve all other minimal-v6 behavior, pass source-policy and mutation gates, and produce two byte-identical offline builds with complete hashes;
+3. prepare and run one SQLite-recorded comparison using the unchanged `K-OVERLAY-PIDNS-001` kernel, fixed Toybox probe, protected broker, and independent stock `B6-T` recovery.
 
-Operation 013 is finalized at `B3`. Dynamic registered-distro association succeeded and `LaunchInit` began; overlay removed the prior absent-overlay signal-11 signature, but `WslCorePort` closed before `CreateInstanceResult` and ETW captured no guest log records. Stock recovery passed `B6-T`, all manifests verified, `.wslconfig` was absent, the fixture returned Off, and the ledger and immutable evidence are complete. This result selects diagnostic capture, not another Kconfig group or an unchanged candidate rerun. Operation 014 is prepared in `inventory/experiments.sqlite` with an atomic SQL-selected artifact set, a 19-path recovery matrix, protected controller, and `debugConsole`/relay-cleanup-only delta; independently validate and execute that exact contract.
+Diagnostic operation 015 is finalized at `B3`. Its 216 `GuestLog` records prove ext4 mounted read-write and overlay construction succeeded. `LaunchDistro` then attempted the intentionally absent cross-distro share, failed with ENOENT at `main.cpp:1676`, entered the broad read-only/full-filesystem catch, and failed the same mount again before `CreateInstanceResult`. Operation 014 ended before durable worker start with no mutation. Operation 015 verified both manifests, zero diagnostic relays, absent `.wslconfig`, stock `B6-T` recovery, and fixture Off. This evidence selects source reduction, not a Kconfig addition or unchanged rerun.
 
 ## Blocked
 

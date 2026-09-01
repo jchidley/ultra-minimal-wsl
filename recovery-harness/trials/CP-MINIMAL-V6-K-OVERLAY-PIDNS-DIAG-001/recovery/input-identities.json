@@ -1,0 +1,18 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V6-K-OVERLAY-PIDNS-DIAG-001-RECOVERY",
+    "candidateId":  "stock-wsl-2.7.12-recovery",
+    "candidateManifestSha256":  "a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7",
+    "packagePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\stock-wsl\\wsl.2.7.12.0.x64.msi",
+    "packageSha256":  "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+    "probeSha256":  "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsPath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz",
+    "rootfsSha256":  "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfilePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "expectedWslVersion":  "2.7.12.0",
+    "distribution":  "Toybox-Minimal",
+    "timeoutSeconds":  45,
+    "smokeCommand":  "test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf toybox-ok",
+    "debugConsoleCapture":  "disabled-for-fixed-comparison"
+}
