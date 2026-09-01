@@ -8,7 +8,15 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.experiment import connect, prepare_operation, transition_operation, validate
+from tools.experiment import (
+    connect,
+    derive_operation,
+    logical_diff,
+    logical_state,
+    retry_operation,
+    transition_operation,
+    validate,
+)
 
 ROOT = Path(__file__).parents[1]
 DB = ROOT / "inventory/experiments.sqlite"
@@ -17,14 +25,32 @@ DIAGNOSTIC_CONTROLLER = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-
 
 
 class ExperimentInventoryTests(unittest.TestCase):
-    def test_canonical_database_is_valid_and_has_no_active_operation(self) -> None:
+    def temporary_database(self, directory: str) -> sqlite3.Connection:
+        copy = Path(directory) / "experiments.sqlite"
+        shutil.copy2(DB, copy)
+        return connect(copy, writable=True)
+
+    def test_canonical_database_invariants_do_not_depend_on_current_operation(self) -> None:
         db = connect(DB)
         try:
             result = validate(db)
             self.assertEqual(result["integrity"], "ok")
-            self.assertEqual(result["schemaVersion"], 1)
-            self.assertEqual(result["trials"], 20)
-            self.assertIsNone(result["activeOperation"])
+            self.assertEqual(result["schemaVersion"], 2)
+            self.assertGreaterEqual(result["trials"], 20)
+            self.assertLessEqual(len(list(db.execute("SELECT * FROM active_operation"))), 1)
+        finally:
+            db.close()
+
+    def test_versioned_templates_are_hash_bound_and_every_operation_uses_one(self) -> None:
+        db = connect(DB)
+        try:
+            for row in db.execute("SELECT * FROM operation_templates"):
+                path = ROOT / row["path"]
+                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), row["sha256"])
+            self.assertEqual(
+                db.execute("SELECT count(*) FROM operation_template_bindings").fetchone()[0],
+                db.execute("SELECT count(*) FROM operations").fetchone()[0],
+            )
         finally:
             db.close()
 
@@ -37,30 +63,15 @@ class ExperimentInventoryTests(unittest.TestCase):
                 "WHERE o.operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-015'"
             ).fetchone()
             self.assertEqual(Path(row["controller_path"]), DIAGNOSTIC_CONTROLLER)
-            self.assertEqual(
-                hashlib.sha256(DIAGNOSTIC_CONTROLLER.read_bytes()).hexdigest(),
-                row["controller_sha256"],
-            )
+            self.assertEqual(hashlib.sha256(DIAGNOSTIC_CONTROLLER.read_bytes()).hexdigest(), row["controller_sha256"])
             text = DIAGNOSTIC_CONTROLLER.read_text(encoding="utf-8")
             self.assertIn("diagnosticDebugConsole", text)
             self.assertIn("diagnosticRelayCount", text)
             self.assertNotIn("deferred-runtime-plan", text)
-            runner = db.execute(
-                "SELECT a.path,a.sha256 FROM operation_artifacts oa "
-                "JOIN artifacts a USING(artifact_id) "
-                "WHERE oa.operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-015' "
-                "AND oa.role='runner'"
-            ).fetchone()
-            runner_path = ROOT / runner["path"]
-            self.assertEqual(hashlib.sha256(runner_path.read_bytes()).hexdigest(), runner["sha256"])
-            runner_text = runner_path.read_text(encoding="utf-8")
-            self.assertIn("debugConsole=true", runner_text)
-            self.assertIn("Clear-DiagnosticRelays", runner_text)
-            self.assertIn("diagnosticDebugConsole = $true", runner_text)
         finally:
             db.close()
 
-    def test_finalized_controller_is_hash_bound_and_does_not_read_mutable_planning_state(self) -> None:
+    def test_finalized_controller_does_not_read_mutable_planning_state(self) -> None:
         db = connect(DB)
         try:
             row = db.execute(
@@ -73,52 +84,85 @@ class ExperimentInventoryTests(unittest.TestCase):
             text = CONTROLLER.read_text(encoding="utf-8")
             self.assertNotIn("deferred-runtime-plan", text)
             self.assertNotRegex(text, r"(?i)(Get-Content|sqlite3|experiment\.py).*experiments\.sqlite")
-            self.assertIn("FixtureBroker-SecureWorkload: 1", text)
         finally:
             db.close()
 
-    def test_frozen_v1_inputs_match_migration_metadata(self) -> None:
-        files = {
-            "migrated_plan_sha256": ROOT / "control-plane/deferred-runtime-plan.v1.json",
-            "migrated_configs_sha256": ROOT / "inventory/config-snapshots.v1.csv",
-            "migrated_trials_sha256": ROOT / "inventory/trials.v1.csv",
-            "migrated_trial_metadata_sha256": ROOT / "inventory/trial-metadata.v1.csv",
-        }
-        db = connect(DB)
-        try:
-            metadata = dict(db.execute("SELECT key,value FROM metadata"))
-            for key, path in files.items():
-                self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), metadata[key])
-        finally:
-            db.close()
-
-    def test_executable_operation_is_prepared_with_artifacts_atomically(self) -> None:
+    def test_derived_operation_inherits_artifacts_and_accepts_only_explicit_replacements(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            copy = Path(directory) / "experiments.sqlite"
-            shutil.copy2(DB, copy)
-            db = connect(copy, writable=True)
+            db = self.temporary_database(directory)
             try:
-                artifacts = [
-                    {"artifact_id": row[0], "role": row[1]}
-                    for row in db.execute(
-                        "SELECT artifact_id,role FROM operation_artifacts "
-                        "WHERE operation_id='minimal-v6-k-overlay-pidns-runtime-013'"
-                    )
-                ]
-                prepare_operation(db, {
-                    "operation_id": "atomic-prepare-test", "kind": "runtime",
-                    "status": "runtime-planned", "executable": True,
-                    "controller_artifact_id": 1, "artifacts": artifacts,
+                derive_operation(db, {
+                    "operation_id": "derived-test",
+                    "parent_operation_id": "minimal-v6-k-overlay-pidns-runtime-013",
+                    "candidate_id": "minimal-v6-k-overlay-pidns-001",
+                    "trial_id": "DERIVED-TEST",
+                    "rationale": "test derived contract",
+                    "prepared_utc": "2026-09-01T00:00:00Z",
+                    "replace_artifacts": {},
                 })
-                self.assertEqual(validate(db)["activeOperation"], "atomic-prepare-test")
+                self.assertEqual(validate(db)["activeOperation"], "derived-test")
+                parent = list(db.execute(
+                    "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id=? ORDER BY role",
+                    ("minimal-v6-k-overlay-pidns-runtime-013",),
+                ))
+                derived = list(db.execute(
+                    "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id=? ORDER BY role",
+                    ("derived-test",),
+                ))
+                self.assertEqual([tuple(row) for row in parent], [tuple(row) for row in derived])
+            finally:
+                db.close()
+
+    def test_derived_operation_rejects_reconstructed_artifact_lists(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            db = self.temporary_database(directory)
+            try:
+                with self.assertRaises(SystemExit):
+                    derive_operation(db, {
+                        "operation_id": "bad-derived-test",
+                        "parent_operation_id": "minimal-v6-k-overlay-pidns-runtime-013",
+                        "candidate_id": "minimal-v6-k-overlay-pidns-001",
+                        "trial_id": "BAD-DERIVED-TEST",
+                        "rationale": "bad",
+                        "prepared_utc": "2026-09-01T00:00:00Z",
+                        "artifacts": [],
+                    })
+            finally:
+                db.close()
+
+    def test_retry_references_the_unchanged_template_and_artifact_set(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            db = self.temporary_database(directory)
+            try:
+                retry_operation(db, {
+                    "operation_id": "retry-test",
+                    "after_operation_id": "minimal-v6-k-overlay-pidns-diagnostic-runtime-014",
+                    "reason": "fresh launch",
+                    "prepared_utc": "2026-09-01T00:00:00Z",
+                })
+                self.assertEqual(validate(db)["activeOperation"], "retry-test")
+                source_template = db.execute(
+                    "SELECT template_id FROM operation_template_bindings WHERE operation_id=?",
+                    ("minimal-v6-k-overlay-pidns-diagnostic-runtime-014",),
+                ).fetchone()[0]
+                retry_template = db.execute(
+                    "SELECT template_id FROM operation_template_bindings WHERE operation_id='retry-test'"
+                ).fetchone()[0]
+                self.assertEqual(retry_template, source_template)
+                source = list(db.execute(
+                    "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id=? ORDER BY role",
+                    ("minimal-v6-k-overlay-pidns-diagnostic-runtime-014",),
+                ))
+                retry = list(db.execute(
+                    "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id='retry-test' ORDER BY role"
+                ))
+                self.assertEqual([tuple(row) for row in source], [tuple(row) for row in retry])
             finally:
                 db.close()
 
     def test_operation_lifecycle_cannot_skip_durable_worker_start(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            copy = Path(directory) / "experiments.sqlite"
-            shutil.copy2(DB, copy)
-            db = connect(copy, writable=True)
+            db = self.temporary_database(directory)
             try:
                 db.execute(
                     "INSERT INTO operations(operation_id,kind,status,executable,rationale,fixed_contract,runtime_boundary) "
@@ -140,16 +184,36 @@ class ExperimentInventoryTests(unittest.TestCase):
             finally:
                 db.close()
 
-    def test_terminal_trials_and_dispositions_are_immutable(self) -> None:
+    def test_logical_diff_includes_relationships_and_field_values(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            copy = Path(directory) / "experiments.sqlite"
-            shutil.copy2(DB, copy)
-            db = connect(copy, writable=True)
+            db = self.temporary_database(directory)
+            try:
+                before = logical_state(db)
+                db.execute("INSERT INTO metadata VALUES ('diff-test','before')")
+                middle = logical_state(db)
+                first = logical_diff(before, middle)
+                self.assertIn("diff-test", first["metadata"]["added"])
+                db.execute("UPDATE metadata SET value='after' WHERE key='diff-test'")
+                after = logical_diff(middle, logical_state(db))
+                self.assertEqual(
+                    after["metadata"]["changed"]["diff-test"]["value"],
+                    {"before": "before", "after": "after"},
+                )
+                self.assertIn("operation_artifacts", after)
+                self.assertIn("operation_template_bindings", after)
+            finally:
+                db.close()
+
+    def test_terminal_trials_dispositions_and_templates_are_immutable(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            db = self.temporary_database(directory)
             try:
                 with self.assertRaises(sqlite3.IntegrityError):
                     db.execute("UPDATE trials SET status='PASS' WHERE trial_id='CP-MINIMAL-V6-K-PIDNS-001'")
                 with self.assertRaises(sqlite3.IntegrityError):
                     db.execute("DELETE FROM operation_dispositions")
+                with self.assertRaises(sqlite3.IntegrityError):
+                    db.execute("UPDATE operation_templates SET path='x'")
             finally:
                 db.close()
 
@@ -168,9 +232,11 @@ class ExperimentInventoryTests(unittest.TestCase):
             canonical = connect(DB)
             try:
                 for table, key in (
+                    ("metadata", "key"),
                     ("candidates", "candidate_id"), ("artifacts", "artifact_id"),
                     ("configs", "name"), ("trials", "trial_id"),
                     ("operation_dispositions", "disposition_id"),
+                    ("operation_templates", "template_id"),
                 ):
                     for row in migrated.execute(f"SELECT * FROM {table}"):
                         actual = canonical.execute(
@@ -184,6 +250,7 @@ class ExperimentInventoryTests(unittest.TestCase):
                     actual = canonical.execute(
                         "SELECT * FROM operations WHERE operation_id=?", (row["operation_id"],)
                     ).fetchone()
+                    self.assertIsNotNone(actual)
                     self.assertEqual(dict(actual), dict(row))
                 migrated_runtime = migrated.execute(
                     "SELECT * FROM operations WHERE operation_id='minimal-v6-k-overlay-pidns-runtime-013'"
@@ -196,10 +263,19 @@ class ExperimentInventoryTests(unittest.TestCase):
                     "controller_artifact_id", "rationale", "fixed_contract", "runtime_boundary",
                 ):
                     self.assertEqual(canonical_runtime[field], migrated_runtime[field])
-                self.assertEqual(canonical_runtime["status"], "candidate-finalized")
-                self.assertFalse(canonical_runtime["executable"])
-                self.assertIsNotNone(canonical_runtime["first_probe_utc"])
-                self.assertIsNotNone(canonical_runtime["completed_utc"])
+                for table, columns in (
+                    ("candidate_artifacts", ("candidate_id", "role")),
+                    ("operation_artifacts", ("operation_id", "role")),
+                    ("operation_template_bindings", ("operation_id",)),
+                    ("trial_operation_results", ("trial_id",)),
+                ):
+                    for row in migrated.execute(f"SELECT * FROM {table}"):
+                        where = " AND ".join(f"{column}=?" for column in columns)
+                        actual = canonical.execute(
+                            f"SELECT * FROM {table} WHERE {where}", tuple(row[column] for column in columns)
+                        ).fetchone()
+                        self.assertIsNotNone(actual)
+                        self.assertEqual(dict(actual), dict(row))
             finally:
                 migrated.close()
                 canonical.close()

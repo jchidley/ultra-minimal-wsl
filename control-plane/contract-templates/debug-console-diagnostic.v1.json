@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "templateId": "debug-console-diagnostic-v1",
+  "baseTemplate": "controlled-runtime-v1",
+  "kind": "runtime-diagnostic",
+  "invariants": {
+    "debugConsole": true,
+    "guestLogCapture": true,
+    "relayCleanup": "exact-zero-wslrelay",
+    "wslconfigRestoration": "exact-original-state"
+  }
+}

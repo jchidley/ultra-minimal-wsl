@@ -10,7 +10,7 @@ Create the evidence-selected control-plane layer after `minimal-v6-excluded-init
 2. preserve all other minimal-v6 behavior, pass source-policy and mutation gates, and produce two byte-identical offline builds with complete hashes;
 3. prepare and run one SQLite-recorded comparison using the unchanged `K-OVERLAY-PIDNS-001` kernel, fixed Toybox probe, protected broker, and independent stock `B6-T` recovery.
 
-Diagnostic operation 015 is finalized at `B3`. Its 216 `GuestLog` records prove ext4 mounted read-write and overlay construction succeeded. `LaunchDistro` then attempted the intentionally absent cross-distro share, failed with ENOENT at `main.cpp:1676`, entered the broad read-only/full-filesystem catch, and failed the same mount again before `CreateInstanceResult`. Operation 014 ended before durable worker start with no mutation. Operation 015 verified both manifests, zero diagnostic relays, absent `.wslconfig`, stock `B6-T` recovery, and fixture Off. This evidence selects source reduction, not a Kconfig addition or unchanged rerun.
+The finalized diagnostic's 216 `GuestLog` records prove ext4 mounted read-write and overlay construction succeeded. `LaunchDistro` then attempted the intentionally absent cross-distro share, failed with ENOENT at `main.cpp:1676`, entered the broad read-only/full-filesystem catch, and failed the same mount again before `CreateInstanceResult`. Recovery verified both manifests, zero diagnostic relays, absent `.wslconfig`, stock `B6-T`, and fixture Off. This evidence selects source reduction, not a Kconfig addition or unchanged rerun. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
 
 ## Blocked
 

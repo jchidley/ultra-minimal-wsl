@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "templateId": "legacy-migrated-runtime-v1",
+  "kind": "runtime",
+  "requiredArtifactRoles": [],
+  "invariants": {
+    "historicalMigrationOnly": true
+  }
+}

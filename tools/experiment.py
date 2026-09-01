@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 DEFAULT_DB = ROOT / "inventory/experiments.sqlite"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 TERMINAL_OPERATION_STATES = {
     "completed", "candidate-finalized", "infrastructure-failure", "superseded", "cancelled"
 }
@@ -54,6 +54,47 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def merge_template(base: dict, delta: dict) -> dict:
+    result = dict(base)
+    for key, value in delta.items():
+        if key in {"baseTemplate"}:
+            continue
+        if isinstance(value, dict) and isinstance(result.get(key), dict):
+            result[key] = merge_template(result[key], value)
+        else:
+            result[key] = value
+    return result
+
+
+def load_templates(db: sqlite3.Connection) -> dict[str, dict]:
+    raw: dict[str, dict] = {}
+    for item in rows(db, "SELECT template_id,path,sha256 FROM operation_templates"):
+        path = resolve_path(item["path"])
+        if not path.is_file() or sha256(path) != item["sha256"]:
+            raise SystemExit(f"Operation template identity mismatch: {path}")
+        value = json.loads(path.read_text(encoding="utf-8"))
+        if value.get("templateId") != item["template_id"]:
+            raise SystemExit(f"Operation template ID mismatch: {path}")
+        raw[item["template_id"]] = value
+
+    resolved: dict[str, dict] = {}
+
+    def resolve(template_id: str, stack: tuple[str, ...] = ()) -> dict:
+        if template_id in resolved:
+            return resolved[template_id]
+        if template_id in stack or template_id not in raw:
+            raise SystemExit(f"Invalid operation template ancestry: {template_id}")
+        value = raw[template_id]
+        parent = value.get("baseTemplate")
+        result = merge_template(resolve(parent, stack + (template_id,)), value) if parent else dict(value)
+        resolved[template_id] = result
+        return result
+
+    for template_id in raw:
+        resolve(template_id)
+    return resolved
+
+
 def validate(db: sqlite3.Connection, *, verify_files: bool = True) -> dict:
     problems: list[str] = []
     version = db.execute("PRAGMA user_version").fetchone()[0]
@@ -66,8 +107,23 @@ def validate(db: sqlite3.Connection, *, verify_files: bool = True) -> dict:
     if foreign_keys:
         problems.append(f"foreign_key_check returned {len(foreign_keys)} row(s)")
     active = rows(db, "SELECT * FROM active_operation")
-    if len(active) > 1:
-        problems.append(f"multiple active operations: {[item['operation_id'] for item in active]}")
+    executable = rows(db, "SELECT operation_id,status FROM operations WHERE executable=1")
+    if len(executable) > 1:
+        problems.append(f"multiple executable operations: {[item['operation_id'] for item in executable]}")
+    if len(active) != len(executable):
+        problems.append("an executable operation has a non-active lifecycle status")
+    try:
+        templates = load_templates(db)
+    except SystemExit as error:
+        problems.append(str(error))
+        templates = {}
+    unbound = rows(
+        db,
+        "SELECT operation_id FROM operations WHERE operation_id NOT IN "
+        "(SELECT operation_id FROM operation_template_bindings)",
+    )
+    if unbound:
+        problems.append(f"operations lack immutable templates: {[item['operation_id'] for item in unbound]}")
     parents = {row["candidate_id"]: row["parent_candidate_id"] for row in rows(db, "SELECT candidate_id,parent_candidate_id FROM candidates")}
     for candidate_id in parents:
         seen = {candidate_id}
@@ -78,14 +134,57 @@ def validate(db: sqlite3.Connection, *, verify_files: bool = True) -> dict:
                 break
             seen.add(parent)
             parent = parents.get(parent)
+    allowed_statuses = {
+        "prepared", "runtime-planned", "uac-requested", "worker-started", "probe-started",
+        *TERMINAL_OPERATION_STATES,
+    }
+    for operation in rows(
+        db,
+        """SELECT o.operation_id,o.status,o.executable,count(d.disposition_id) disposition_count,
+                  max(d.disposition) disposition
+             FROM operations o LEFT JOIN operation_dispositions d USING(operation_id)
+            GROUP BY o.operation_id""",
+    ):
+        if operation["status"] not in allowed_statuses:
+            problems.append(f"unknown operation status: {operation['operation_id']}={operation['status']}")
+        terminal = operation["status"] in TERMINAL_OPERATION_STATES
+        if terminal and (operation["executable"] or operation["disposition_count"] != 1 or operation["disposition"] != operation["status"]):
+            problems.append(f"terminal operation lifecycle mismatch: {operation['operation_id']}")
+        if not terminal and operation["disposition_count"]:
+            problems.append(f"nonterminal operation has disposition: {operation['operation_id']}")
+    for result in rows(
+        db,
+        """SELECT r.trial_id,r.operation_id,o.status,o.trial_id intended_trial,o.first_probe_utc,b.template_id
+             FROM trial_operation_results r JOIN operations o USING(operation_id)
+             JOIN operation_template_bindings b USING(operation_id)""",
+    ):
+        missing_probe = not result["first_probe_utc"] and result["template_id"] != "legacy-migrated-runtime-v1"
+        if result["status"] != "candidate-finalized" or result["intended_trial"] != result["trial_id"] or missing_probe:
+            problems.append(f"trial-producing operation mismatch: {result['trial_id']}")
+    missing_results = rows(
+        db,
+        """SELECT operation_id FROM operations
+            WHERE status='candidate-finalized' AND operation_id NOT IN
+                  (SELECT operation_id FROM trial_operation_results)""",
+    )
+    if missing_results:
+        problems.append(f"finalized operations lack trial provenance: {[item['operation_id'] for item in missing_results]}")
     for operation in active:
         roles = {row[0] for row in db.execute("SELECT role FROM operation_artifacts WHERE operation_id=?", (operation["operation_id"],))}
-        required_roles = {
-            "controller", "runner", "manifest", "kernel", "kernel_config", "package", "probe", "rootfs", "wpr",
-            "broker", "broker_policy", "broker_installer", "broker_creator", "broker_launcher", "broker_client",
-        }
+        template = templates.get(operation["template_id"], {})
+        required_roles = set(template.get("requiredArtifactRoles", []))
         if roles != required_roles:
             problems.append(f"active operation artifact roles differ: missing={sorted(required_roles-roles)}, extra={sorted(roles-required_roles)}")
+        controller = db.execute(
+            "SELECT artifact_id FROM operation_artifacts WHERE operation_id=? AND role='controller'",
+            (operation["operation_id"],),
+        ).fetchone()
+        recorded = db.execute(
+            "SELECT controller_artifact_id FROM operations WHERE operation_id=?",
+            (operation["operation_id"],),
+        ).fetchone()[0]
+        if not controller or controller[0] != recorded:
+            problems.append(f"active operation controller role differs: {operation['operation_id']}")
     frozen = {
         "migrated_plan_sha256": ROOT / "control-plane/deferred-runtime-plan.v1.json",
         "migrated_configs_sha256": ROOT / "inventory/config-snapshots.v1.csv",
@@ -183,35 +282,94 @@ def link_artifact(db: sqlite3.Connection, record: dict, *, target: str) -> None:
         db.execute("INSERT INTO operation_artifacts VALUES (?,?,?)", (record["operation_id"], record["artifact_id"], record["role"]))
 
 
-def prepare_operation(db: sqlite3.Connection, record: dict) -> None:
-    require(record, ("operation_id", "kind", "status", "executable"))
-    if record["executable"] and db.execute("SELECT 1 FROM active_operation").fetchone():
+def ensure_no_active_operation(db: sqlite3.Connection) -> None:
+    if db.execute("SELECT 1 FROM operations WHERE executable=1").fetchone():
         raise SystemExit("An executable active operation already exists")
-    controller = record.get("controller_artifact_id")
+
+
+def derive_operation(db: sqlite3.Connection, record: dict) -> None:
+    require(record, ("operation_id", "parent_operation_id", "candidate_id", "trial_id", "rationale", "prepared_utc"))
+    ensure_no_active_operation(db)
+    forbidden = {"artifacts", "fixed_contract", "runtime_boundary", "controller_artifact_id"} & record.keys()
+    if forbidden:
+        raise SystemExit(f"Derived operations must reference inherited state, not respecify it: {sorted(forbidden)}")
+    parent = db.execute("SELECT * FROM operations WHERE operation_id=?", (record["parent_operation_id"],)).fetchone()
+    if not parent or parent["status"] not in TERMINAL_OPERATION_STATES:
+        raise SystemExit("A derived operation requires a terminal parent operation")
+    parent_template = db.execute(
+        "SELECT template_id FROM operation_template_bindings WHERE operation_id=?",
+        (record["parent_operation_id"],),
+    ).fetchone()
+    template_id = record.get("template_id", parent_template[0] if parent_template else None)
+    templates = load_templates(db)
+    if template_id not in templates:
+        raise SystemExit(f"Unknown operation template: {template_id}")
+    artifact_map = dict(db.execute(
+        "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id=?",
+        (record["parent_operation_id"],),
+    ))
+    replacements = record.get("replace_artifacts", {})
+    if not isinstance(replacements, dict):
+        raise SystemExit("replace_artifacts must be an object mapping roles to artifact IDs")
+    artifact_map.update({role: int(artifact_id) for role, artifact_id in replacements.items()})
+    required = set(templates[template_id].get("requiredArtifactRoles", []))
+    if set(artifact_map) != required:
+        raise SystemExit(
+            f"Derived artifact roles differ from template: missing={sorted(required-set(artifact_map))}, "
+            f"extra={sorted(set(artifact_map)-required)}"
+        )
+    controller = artifact_map.get("controller")
+    fixed_contract = json.dumps(templates[template_id].get("invariants", {}), sort_keys=True, separators=(",", ":"))
     db.execute(
         """INSERT INTO operations(
              operation_id,kind,candidate_id,trial_id,parent_operation_id,status,executable,
              controller_artifact_id,rationale,fixed_contract,runtime_boundary,prepared_utc)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+           VALUES (?,?,?,?,?,'runtime-planned',1,?,?,?,?,?)""",
         (
-            record["operation_id"], record["kind"], record.get("candidate_id"),
-            record.get("trial_id"), record.get("parent_operation_id"), record["status"],
-            int(bool(record["executable"])), controller, record.get("rationale", ""),
-            record.get("fixed_contract", ""), record.get("runtime_boundary", ""),
-            record.get("prepared_utc"),
+            record["operation_id"], templates[template_id]["kind"], record["candidate_id"],
+            record["trial_id"], record["parent_operation_id"], controller, record["rationale"],
+            fixed_contract, templates[template_id]["runtimeBoundary"], record["prepared_utc"],
         ),
     )
-    artifacts = record.get("artifacts", [])
-    if not isinstance(artifacts, list):
-        raise SystemExit("Operation artifacts must be a list")
-    for artifact in artifacts:
-        if not isinstance(artifact, dict):
-            raise SystemExit("Each operation artifact link must be an object")
-        link_artifact(
-            db,
-            {**artifact, "operation_id": record["operation_id"]},
-            target="operation",
-        )
+    db.execute("INSERT INTO operation_template_bindings VALUES (?,?)", (record["operation_id"], template_id))
+    db.executemany(
+        "INSERT INTO operation_artifacts VALUES (?,?,?)",
+        ((record["operation_id"], artifact_id, role) for role, artifact_id in sorted(artifact_map.items())),
+    )
+
+
+def retry_operation(db: sqlite3.Connection, record: dict) -> None:
+    require(record, ("operation_id", "after_operation_id", "reason", "prepared_utc"))
+    ensure_no_active_operation(db)
+    forbidden = {"artifacts", "replace_artifacts", "template_id", "candidate_id", "trial_id", "fixed_contract"} & record.keys()
+    if forbidden:
+        raise SystemExit(f"Retries may not reconstruct contract state: {sorted(forbidden)}")
+    source = db.execute("SELECT * FROM operations WHERE operation_id=?", (record["after_operation_id"],)).fetchone()
+    if not source or source["status"] not in {"infrastructure-failure", "cancelled"}:
+        raise SystemExit("A retry requires a failed or cancelled pre-result attempt")
+    template_id = db.execute(
+        "SELECT template_id FROM operation_template_bindings WHERE operation_id=?",
+        (record["after_operation_id"],),
+    ).fetchone()
+    if not template_id:
+        raise SystemExit("Retry source has no immutable operation template")
+    db.execute(
+        """INSERT INTO operations(
+             operation_id,kind,candidate_id,trial_id,parent_operation_id,status,executable,
+             controller_artifact_id,rationale,fixed_contract,runtime_boundary,prepared_utc)
+           VALUES (?,?,?,?,?,'runtime-planned',1,?,?,?,?,?)""",
+        (
+            record["operation_id"], source["kind"], source["candidate_id"], source["trial_id"],
+            source["operation_id"], source["controller_artifact_id"], record["reason"],
+            source["fixed_contract"], source["runtime_boundary"], record["prepared_utc"],
+        ),
+    )
+    db.execute("INSERT INTO operation_template_bindings VALUES (?,?)", (record["operation_id"], template_id[0]))
+    db.execute(
+        """INSERT INTO operation_artifacts(operation_id,artifact_id,role)
+           SELECT ?,artifact_id,role FROM operation_artifacts WHERE operation_id=?""",
+        (record["operation_id"], source["operation_id"]),
+    )
 
 
 def transition_operation(db: sqlite3.Connection, record: dict) -> None:
@@ -260,8 +418,18 @@ def finalize_runtime(db: sqlite3.Connection, record: dict) -> None:
         raise SystemExit("runtime-finalize requires trial and operation objects")
     if record["trial"].get("trial_id") != record["operation"].get("trial_id"):
         raise SystemExit("Runtime trial and operation trial IDs differ")
+    operation = db.execute(
+        "SELECT status,trial_id FROM operations WHERE operation_id=?",
+        (record["operation"].get("operation_id"),),
+    ).fetchone()
+    if not operation or operation["status"] != "probe-started" or operation["trial_id"] != record["trial"]["trial_id"]:
+        raise SystemExit("A runtime trial requires its producing operation at probe-started")
     finalize_trial(db, record["trial"])
     close_operation(db, record["operation"])
+    db.execute(
+        "INSERT INTO trial_operation_results VALUES (?,?)",
+        (record["trial"]["trial_id"], record["operation"]["operation_id"]),
+    )
 
 
 def close_operation(db: sqlite3.Connection, record: dict) -> None:
@@ -281,15 +449,56 @@ def close_operation(db: sqlite3.Connection, record: dict) -> None:
     )
 
 
+STATE_TABLES = (
+    ("metadata", ("key",)),
+    ("candidates", ("candidate_id",)),
+    ("artifacts", ("artifact_id",)),
+    ("candidate_artifacts", ("candidate_id", "role")),
+    ("operations", ("operation_id",)),
+    ("operation_artifacts", ("operation_id", "role")),
+    ("operation_templates", ("template_id",)),
+    ("operation_template_bindings", ("operation_id",)),
+    ("operation_dispositions", ("disposition_id",)),
+    ("trials", ("trial_id",)),
+    ("trial_operation_results", ("trial_id",)),
+    ("configs", ("name",)),
+)
+
+
 def logical_state(db: sqlite3.Connection) -> dict[str, list[dict]]:
     result = {}
-    for table, order in (
-        ("candidates", "candidate_id"), ("artifacts", "artifact_id"),
-        ("operations", "operation_id"), ("operation_dispositions", "disposition_id"),
-        ("trials", "trial_id"), ("configs", "name"),
-    ):
-        result[table] = rows(db, f"SELECT * FROM {table} ORDER BY {order}")
+    existing = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    for table, keys in STATE_TABLES:
+        result[table] = rows(db, f"SELECT * FROM {table} ORDER BY {','.join(keys)}") if table in existing else []
     return result
+
+
+def row_id(row: dict, keys: tuple[str, ...]) -> str:
+    return "|".join(str(row[key]) for key in keys)
+
+
+def logical_diff(before: dict[str, list[dict]], after: dict[str, list[dict]]) -> dict:
+    summary = {}
+    key_map = dict(STATE_TABLES)
+    for table, values in after.items():
+        keys = key_map[table]
+        old = {row_id(row, keys): row for row in before.get(table, [])}
+        new = {row_id(row, keys): row for row in values}
+        changed = {}
+        for identifier in sorted(old.keys() & new.keys()):
+            fields = {
+                field: {"before": old[identifier].get(field), "after": new[identifier].get(field)}
+                for field in sorted(old[identifier].keys() | new[identifier].keys())
+                if old[identifier].get(field) != new[identifier].get(field)
+            }
+            if fields:
+                changed[identifier] = fields
+        summary[table] = {
+            "added": sorted(new.keys() - old.keys()),
+            "removed": sorted(old.keys() - new.keys()),
+            "changed": changed,
+        }
+    return summary
 
 
 def diff_head(path: Path) -> dict:
@@ -303,14 +512,7 @@ def diff_head(path: Path) -> dict:
         cwd=ROOT, capture_output=True,
     )
     if process.returncode != 0:
-        keys = {
-            "candidates": "candidate_id", "artifacts": "artifact_id", "operations": "operation_id",
-            "operation_dispositions": "disposition_id", "trials": "trial_id", "configs": "name",
-        }
-        return {
-            table: {"added": [row[keys[table]] for row in values], "removed": [], "changed": []}
-            for table, values in after.items()
-        }
+        return logical_diff({table: [] for table in after}, after)
     with tempfile.TemporaryDirectory() as directory:
         previous_path = Path(directory) / "experiments.sqlite"
         previous_path.write_bytes(process.stdout)
@@ -319,22 +521,7 @@ def diff_head(path: Path) -> dict:
             before = logical_state(previous)
         finally:
             previous.close()
-    keys = {
-        "candidates": "candidate_id", "artifacts": "artifact_id", "operations": "operation_id",
-        "operation_dispositions": "disposition_id", "trials": "trial_id", "configs": "name",
-    }
-    summary = {}
-    for table, values in after.items():
-        key = keys[table]
-        old = {row[key]: row for row in before[table]}
-        new = {row[key]: row for row in values}
-        common = old.keys() & new.keys()
-        summary[table] = {
-            "added": sorted(new.keys() - old.keys()),
-            "removed": sorted(old.keys() - new.keys()),
-            "changed": sorted(identifier for identifier in common if old[identifier] != new[identifier]),
-        }
-    return summary
+    return logical_diff(before, after)
 
 
 def main() -> None:
@@ -355,7 +542,7 @@ def main() -> None:
     query.add_argument("sql")
     for name in (
         "artifact-add", "candidate-add", "config-add", "candidate-artifact-link",
-        "operation-artifact-link", "operation-prepare", "operation-transition",
+        "operation-derive", "operation-retry", "operation-transition",
         "operation-close", "trial-finalize", "runtime-finalize",
     ):
         item = commands.add_parser(name)
@@ -364,7 +551,7 @@ def main() -> None:
     path = Path(args.db).resolve()
     writable = args.command in {
         "artifact-add", "candidate-add", "config-add", "candidate-artifact-link",
-        "operation-artifact-link", "operation-prepare", "operation-transition",
+        "operation-derive", "operation-retry", "operation-transition",
         "operation-close", "trial-finalize", "runtime-finalize",
     }
     db = connect(path, writable=writable)
@@ -401,6 +588,7 @@ def main() -> None:
             operation = rows(db, "SELECT * FROM active_operation WHERE operation_id=?", (args.operation_id,))
             if len(operation) != 1:
                 raise SystemExit(f"Operation is not active: {args.operation_id}")
+            operation[0]["template"] = load_templates(db)[operation[0]["template_id"]]
             operation[0]["artifacts"] = rows(
                 db,
                 """SELECT oa.role,a.kind,a.location,a.path,a.sha256,a.bytes,a.product_code,a.signature_state
@@ -417,8 +605,8 @@ def main() -> None:
                     "candidate-add": add_candidate,
                     "config-add": add_config,
                     "candidate-artifact-link": lambda connection, value: link_artifact(connection, value, target="candidate"),
-                    "operation-artifact-link": lambda connection, value: link_artifact(connection, value, target="operation"),
-                    "operation-prepare": prepare_operation,
+                    "operation-derive": derive_operation,
+                    "operation-retry": retry_operation,
                     "operation-transition": transition_operation,
                     "operation-close": close_operation,
                     "trial-finalize": finalize_trial,

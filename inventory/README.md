@@ -17,9 +17,9 @@ Use only the repository CLI:
 
 ```powershell
 uv run python tools/experiment.py active
-uv run python tools/experiment.py show operation minimal-v6-k-overlay-pidns-runtime-013
-uv run python tools/experiment.py contract minimal-v6-k-overlay-pidns-runtime-013
-uv run python tools/experiment.py broker-command minimal-v6-k-overlay-pidns-runtime-013
+uv run python tools/experiment.py show operation <OPERATION_ID>
+uv run python tools/experiment.py contract <ACTIVE_OPERATION_ID>
+uv run python tools/experiment.py broker-command <ACTIVE_OPERATION_ID>
 uv run python tools/experiment.py query "SELECT * FROM trial_summary ORDER BY trial_id"
 uv run python tools/experiment.py validate
 uv run python tools/experiment.py diff-head
@@ -27,11 +27,26 @@ uv run python tools/experiment.py diff-head
 
 Write commands accept small reviewed JSON records and execute one checked transaction. Do not modify the canonical database with ad hoc SQL. Tests must copy it to a temporary path before mutation.
 
-Before commit, validation requires SQLite integrity and foreign-key checks, at most one executable operation, exact repository/host artifact identities, and no `-wal` or `-shm` sidecar. Terminal trials and operation dispositions are protected by database triggers. The binary is committed because this project has one active writer; `tools/experiment.py diff-head` provides the logical review surface Git cannot.
+Unchanging runtime policy lives in immutable, hash-bound files under `control-plane/contract-templates/`. Every operation references one template. Create a new comparison with `operation-derive`: it inherits the parent's artifact-role set and permits only explicit role replacements. Create another launch of an unchanged contract with `operation-retry`: it inherits the template, candidate, trial intent, controller, and every artifact link and rejects caller-supplied contract state. Do not use PowerShell or JSON to reconstruct an existing artifact set.
+
+Typical small records are:
+
+```json
+{"operation_id":"<NEW_ID>","parent_operation_id":"<TERMINAL_PARENT>","candidate_id":"<CANDIDATE>","trial_id":"<TRIAL>","rationale":"evidence-selected delta","prepared_utc":"<UTC>","replace_artifacts":{"runner":18,"controller":19}}
+```
+
+```powershell
+uv run python tools/experiment.py operation-derive --record <DERIVATION.json>
+uv run python tools/experiment.py operation-retry --record <RETRY.json>
+```
+
+A retry record contains only `operation_id`, `after_operation_id`, `reason`, and `prepared_utc`.
+
+Before commit, validation requires SQLite integrity and foreign-key checks, at most one executable operation, exact template and repository/host artifact identities, template-compatible active artifact roles, an immutable producing-operation link for every finalized runtime trial, and no `-wal` or `-shm` sidecar. Terminal trials, dispositions, templates, and template bindings are protected by database triggers. The binary is committed because this project has one active writer; `tools/experiment.py diff-head` shows all canonical tables, relationship changes, and field-level old/new values that Git cannot.
 
 Privileged execution never queries this normal-user-writable database. Preflight selects and validates the operation from SQL, then the protected broker snapshots the exact hash-bound controller. The controller carries the compact executable contract and does not trust mutable planning state.
 
-`control-plane/deferred-runtime-plan.v1.json`, `config-snapshots.v1.csv`, `trials.v1.csv`, and `trial-metadata.v1.csv` are frozen migration inputs. Never edit them. `tools/import_experiments.py --output <temporary-path>` reproduces the migration for verification; it refuses to replace the canonical database unless the exceptional `--replace-canonical` flag is explicit.
+`control-plane/deferred-runtime-plan.v1.json`, `config-snapshots.v1.csv`, `trials.v1.csv`, and `trial-metadata.v1.csv` are frozen migration inputs. Never edit them. `tools/import_experiments.py --output <temporary-path>` reproduces the migration for verification; it refuses to replace the canonical database unless the exceptional `--replace-canonical` flag is explicit. Reviewed schema changes are applied in order from `inventory/migrations/` through `tools/migrate_experiments.py`.
 
 ## Generated Kconfig query database
 

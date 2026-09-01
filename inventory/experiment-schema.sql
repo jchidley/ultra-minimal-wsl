@@ -67,6 +67,17 @@ CREATE TABLE operation_artifacts (
     PRIMARY KEY(operation_id, role)
 ) WITHOUT ROWID;
 
+CREATE TABLE operation_templates (
+    template_id TEXT PRIMARY KEY,
+    path TEXT NOT NULL UNIQUE,
+    sha256 TEXT NOT NULL CHECK(length(sha256) = 64)
+) WITHOUT ROWID;
+
+CREATE TABLE operation_template_bindings (
+    operation_id TEXT PRIMARY KEY REFERENCES operations(operation_id),
+    template_id TEXT NOT NULL REFERENCES operation_templates(template_id)
+) WITHOUT ROWID;
+
 CREATE TABLE operation_dispositions (
     disposition_id INTEGER PRIMARY KEY,
     operation_id TEXT NOT NULL REFERENCES operations(operation_id),
@@ -105,11 +116,17 @@ CREATE TABLE trials (
     ledger_notes TEXT NOT NULL
 ) WITHOUT ROWID;
 
+CREATE TABLE trial_operation_results (
+    trial_id TEXT PRIMARY KEY REFERENCES trials(trial_id),
+    operation_id TEXT NOT NULL UNIQUE REFERENCES operations(operation_id)
+) WITHOUT ROWID;
+
 CREATE VIEW active_operation AS
 SELECT o.operation_id,o.kind,o.candidate_id,o.trial_id,o.status,o.executable,
-       a.path AS controller_path,a.sha256 AS controller_sha256,
+       b.template_id,a.path AS controller_path,a.sha256 AS controller_sha256,
        o.rationale,o.fixed_contract,o.runtime_boundary
 FROM operations o
+LEFT JOIN operation_template_bindings b USING(operation_id)
 LEFT JOIN artifacts a ON a.artifact_id=o.controller_artifact_id
 WHERE o.executable=1 AND o.status IN ('prepared','runtime-planned','uac-requested','worker-started','probe-started');
 
@@ -139,5 +156,17 @@ CREATE TRIGGER dispositions_no_update BEFORE UPDATE ON operation_dispositions
 BEGIN SELECT RAISE(ABORT, 'operation dispositions are append-only'); END;
 CREATE TRIGGER dispositions_no_delete BEFORE DELETE ON operation_dispositions
 BEGIN SELECT RAISE(ABORT, 'operation dispositions are append-only'); END;
+CREATE TRIGGER templates_no_update BEFORE UPDATE ON operation_templates
+BEGIN SELECT RAISE(ABORT, 'operation templates are immutable'); END;
+CREATE TRIGGER templates_no_delete BEFORE DELETE ON operation_templates
+BEGIN SELECT RAISE(ABORT, 'operation templates are immutable'); END;
+CREATE TRIGGER template_bindings_no_update BEFORE UPDATE ON operation_template_bindings
+BEGIN SELECT RAISE(ABORT, 'operation template bindings are immutable'); END;
+CREATE TRIGGER template_bindings_no_delete BEFORE DELETE ON operation_template_bindings
+BEGIN SELECT RAISE(ABORT, 'operation template bindings are immutable'); END;
+CREATE TRIGGER trial_results_no_update BEFORE UPDATE ON trial_operation_results
+BEGIN SELECT RAISE(ABORT, 'trial-producing operations are immutable'); END;
+CREATE TRIGGER trial_results_no_delete BEFORE DELETE ON trial_operation_results
+BEGIN SELECT RAISE(ABORT, 'trial-producing operations are immutable'); END;
 
-PRAGMA user_version = 1;
+PRAGMA user_version = 2;

@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "templateId": "controlled-runtime-v1",
+  "kind": "runtime",
+  "requiredArtifactRoles": [
+    "broker",
+    "broker_client",
+    "broker_creator",
+    "broker_installer",
+    "broker_launcher",
+    "broker_policy",
+    "controller",
+    "kernel",
+    "kernel_config",
+    "manifest",
+    "package",
+    "probe",
+    "rootfs",
+    "runner",
+    "wpr"
+  ],
+  "runtimeBoundary": "One serial candidate interval. Failure before the first probe is infrastructure failure and creates no candidate result. Missing required evidence, exact restoration, stock B6-T recovery, or fixture Off prohibits finalization.",
+  "invariants": {
+    "probe": "fixed-toybox-smoke",
+    "processTimeoutSeconds": 45,
+    "instrumentation": ["WPR", "ETW", "events", "crash-artifacts"],
+    "packageTransaction": "candidate-then-exact-stock-restore",
+    "recovery": "independent-stock-B6-T",
+    "completion": ["evidence-manifest", "stock-recovery", "fixture-Off"]
+  }
+}

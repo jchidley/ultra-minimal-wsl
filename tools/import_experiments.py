@@ -20,6 +20,11 @@ CONFIG_PATH = INVENTORY / "config-snapshots.v1.csv"
 TRIAL_PATH = INVENTORY / "trials.v1.csv"
 METADATA_PATH = INVENTORY / "trial-metadata.v1.csv"
 CONTROLLER_PATH = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-state/minimal-v6-k-overlay-pidns-runtime-013/Run-ControlledTrial.ps1"
+TEMPLATES = {
+    "controlled-runtime-v1": ROOT / "control-plane/contract-templates/controlled-runtime.v1.json",
+    "debug-console-diagnostic-v1": ROOT / "control-plane/contract-templates/debug-console-diagnostic.v1.json",
+    "legacy-migrated-runtime-v1": ROOT / "control-plane/contract-templates/legacy-migrated-runtime.v1.json",
+}
 
 
 def sha256(path: Path) -> str:
@@ -67,7 +72,7 @@ def main() -> None:
 
     with db:
         for key, value in {
-            "schema": "1",
+            "schema": "2",
             "migrated_from_plan": "control-plane/deferred-runtime-plan.v1.json",
             "migrated_plan_sha256": sha256(PLAN_PATH),
             "migrated_configs_sha256": sha256(CONFIG_PATH),
@@ -75,6 +80,12 @@ def main() -> None:
             "migrated_trial_metadata_sha256": sha256(METADATA_PATH),
         }.items():
             db.execute("INSERT INTO metadata VALUES (?,?)", (key, value))
+
+        for template_id, path in TEMPLATES.items():
+            db.execute(
+                "INSERT INTO operation_templates VALUES (?,?,?)",
+                (template_id, path.relative_to(ROOT).as_posix(), sha256(path)),
+            )
 
         for row in config_rows:
             db.execute(
@@ -149,6 +160,10 @@ def main() -> None:
                  contract["fixed_contract"] if active else "",
                  contract["runtime_boundary"] if active else ""),
             )
+            db.execute(
+                "INSERT INTO operation_template_bindings VALUES (?,?)",
+                (operation_id, "controlled-runtime-v1" if active else "legacy-migrated-runtime-v1"),
+            )
         dispositions = (
             ("minimal-v6-k-pidns-runtime-008", "infrastructure-failure", "UAC ended before worker start; fixture untouched."),
             ("minimal-v6-k-pidns-runtime-009", "infrastructure-failure", "UAC ended before worker start; fixture untouched."),
@@ -184,6 +199,12 @@ def main() -> None:
                 meta["notes"], row["notes"],
             ]
             db.execute(f"INSERT INTO trials VALUES ({','.join('?' for _ in values)})", values)
+
+        if db.execute("SELECT 1 FROM trials WHERE trial_id='CP-MINIMAL-V6-K-PIDNS-001'").fetchone():
+            db.execute(
+                "INSERT INTO trial_operation_results VALUES (?,?)",
+                ("CP-MINIMAL-V6-K-PIDNS-001", "minimal-v6-k-pidns-runtime-012"),
+            )
 
     integrity = db.execute("PRAGMA integrity_check").fetchone()[0]
     if integrity != "ok":
