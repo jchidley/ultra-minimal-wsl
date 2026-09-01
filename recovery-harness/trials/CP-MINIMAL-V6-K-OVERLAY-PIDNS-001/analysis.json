@@ -1,0 +1,81 @@
+{
+  "trialId": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-001",
+  "purpose": "Compare K-OVERLAY-PIDNS-001 with K-PIDNS-001 under the unchanged minimal-v6 excluded-initialize control plane, fixed Toybox probe, and independent stock recovery contract.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The external kernel exchanged capabilities and configuration, dynamically associated the registered Toybox VHDX, and received LaunchInit. Overlay support removed the prior absent-overlay SIGSEGV signature, but WslCorePort closed before CreateInstanceResult."
+  },
+  "candidate": {
+    "id": "minimal-v6-k-overlay-pidns-001",
+    "kernelCandidate": "K-OVERLAY-PIDNS-001",
+    "kernelConfigParent": "k-overlay-001",
+    "controlPlaneParent": "minimal-v6-excluded-initialize",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
+    "kernelSha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
+    "explicitSymbols": ["CONFIG_PID_NS"],
+    "autoselectedSymbols": [],
+    "packageSha256": "1995a9f3b247e246bfdf8a6a3a566a7a20d0846ac70cc6ecc942bff35780a8df",
+    "candidateManifestSha256": "ca167d2f1efee2b0d542ce5eee106d203948df5085449de5f1f85393cbbf041a",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-01T04:35:24.1768622Z",
+    "finishedUtc": "2026-09-01T04:35:43.8947025Z",
+    "probeClassification": "UNRESOLVED-TRACE-REQUIRED",
+    "finalClassification": "B3",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "windowsError": "Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "failureSignature": "Overlay removed the prior SIGSEGV, then WslCorePort closed after LaunchInit without CreateInstanceResult or captured guest logs",
+    "shutdownTimedOut": false,
+    "manifestFilesVerified": 20,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 1037,
+    "recoveryRows": 4904,
+    "directEvidence": "Registered-distro association completed and LaunchInit was sent; the prior absent-overlay crash disappeared, but the guest channel closed before CreateInstanceResult and ETW captured no guest log records."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-001-RECOVERY",
+    "startedUtc": "2026-09-01T04:36:06.0208938Z",
+    "finishedUtc": "2026-09-01T04:36:14.1793919Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "a1fc932b2f19af74ac5af34fa846c0b55fa94091e3fc5ae82304e60f5859ce79",
+    "candidateArchiveSha256": "174d65c6d99014f9b644f7805c0569e8bafc0503b9fa1dc98cec6b12428e95eb",
+    "recoveryArchiveSha256": "b40df55dc5c75ff3491ae3b6906fcd4d79a84653b7b32cec00fc009b3b855354",
+    "operationResultSha256": "df334e4280b82dca061a08453a4e71fc32817736c90ab5a0317d645a99540732",
+    "brokerStatusSha256": "5ff3a18d0e96fec36d2362a8a62ffac49ba243cef83b0c329c9ae55f0026b38f"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChangedDuringCandidate": true,
+    "wslconfigRestoredAbsent": true
+  },
+  "comparison": {
+    "pidOnlyTrial": "CP-MINIMAL-V6-K-PIDNS-001",
+    "pidOnlyResult": "B3 with absent-overlay SIGSEGV",
+    "overlayPidResult": "B3 with guest channel closure and no SIGSEGV dump",
+    "decision": "Overlay changes the post-LaunchInit failure signature but does not establish B4 or select any unrelated kernel group."
+  },
+  "decision": "Finalize this combination at B3 without an unchanged rerun. Preserve overlay as unresolved within the reduced-kernel path. Because ETW captured no guest logs and selects no further Kconfig facility, prepare one bounded diagnostic sibling with transactional debugConsole capture before choosing another kernel or control-plane change."
+}

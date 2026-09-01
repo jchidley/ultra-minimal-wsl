@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1037,
+  "recoveryTraceRows": 4904,
+  "candidateGuestLogRecords": 0,
+  "recoveryGuestLogRecords": 146,
+  "candidateEvidence": [
+    "CreateVmEnd identified the external 6.18.40.1+ kernel",
+    "mini_init returned LxMiniInitMessageGuestCapabilities",
+    "the reduced host sent zero-feature EarlyConfig and InitialConfig",
+    "HCS dynamically attached C:\\WSL\\Toybox-Minimal\\ext4.vhdx and StorVspDeviceMountAndAssociateAdapter completed",
+    "the host sent LxMiniInitMessageLaunchInit for ext4 device 0",
+    "the prior absent-overlay _init signal-11 dump did not recur with CONFIG_OVERLAY_FS enabled",
+    "WslCorePort closed 0.35 seconds after LaunchInit without LxMiniInitMessageCreateInstanceResult",
+    "CreateInstanceEnd returned success=0 and error 0x8000FFFF",
+    "wsl.exe reported Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "candidateFatalEvidence": "The registered distro VHDX association succeeded and LaunchInit entered the distro root-transition path. Enabling overlay removed the prior absent-overlay SIGSEGV signature, but _init returned no CreateInstanceResult and emitted no captured GuestLog records before WslCorePort closed. ETW does not select a further kernel facility.",
+  "recoveryEvidence": [
+    "CreateVmEnd identified the packaged 6.18.33.2-microsoft-standard-WSL2 kernel",
+    "the registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceResult and CreateInstanceEnd returned success",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm completed after the successful recovery interval"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B3",
+    "basis": "The external kernel and retained host channel initialized, dynamic registered-distro storage association succeeded, and LaunchInit entered the distro mount/root-transition path. WslCorePort closed before CreateInstanceResult, so B4 and later gates are not supported. Independent stock recovery repeated B6-T."
+  },
+  "nextEvidenceAction": "Use a bounded diagnostic sibling of this finalized combination to capture the already-enabled kernel printk stream with transactional debugConsole instrumentation; do not add a Kconfig group from this trace."
+}

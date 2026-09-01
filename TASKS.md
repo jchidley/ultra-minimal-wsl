@@ -4,13 +4,13 @@
 
 ## Active action
 
-Run the prepared `minimal-v6-excluded-initialize` plus `K-OVERLAY-PIDNS-001` comparison selected by operation 012:
+Prepare one bounded diagnostic sibling of the finalized minimal-v6 plus `K-OVERLAY-PIDNS-001` comparison:
 
-1. create protected secure operation 013 with the reviewed overlay-plus-PID controller and one attended UAC;
-2. submit only the allowlisted workload, complete one fixed candidate interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
-3. finish with the exact fixture Off, then choose the following change solely from runtime evidence.
+1. keep the package, kernel, rootfs, command, timeouts, ETW, package transaction, recovery proof, and fixture broker unchanged;
+2. add only transactional `debugConsole=true` capture so the already-enabled kernel printk stream is recorded through `GuestLog`, with exact relay cleanup and `.wslconfig` restoration;
+3. run one protected diagnostic interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, finalize the SQLite ledger, and choose the next change only from the captured guest failure.
 
-Operation 012 is finalized at `B3`: dynamic registered-distro association succeeded and `LaunchInit` began, then `_init` crashed with signal 11 in the known absent-overlay path before `CreateInstanceResult`. Stock recovery passed `B6-T`, the fixture returned Off, and the ledger and immutable evidence are complete. The existing overlay-plus-PID kernel, unchanged minimal-v6 package, new manifest, guarded runner, controller, hashes, and operation-013 broker contract are prepared. Before launch, finish the committed experiment-database migration and independently validate operation 013 from SQL. Exact active identities and dispositions belong in `inventory/experiments.sqlite`; the former JSON plan remains frozen.
+Operation 013 is finalized at `B3`. Dynamic registered-distro association succeeded and `LaunchInit` began; overlay removed the prior absent-overlay signal-11 signature, but `WslCorePort` closed before `CreateInstanceResult` and ETW captured no guest log records. Stock recovery passed `B6-T`, all manifests verified, `.wslconfig` was absent, the fixture returned Off, and the ledger and immutable evidence are complete. This result selects diagnostic capture, not another Kconfig group or an unchanged candidate rerun.
 
 ## Blocked
 
