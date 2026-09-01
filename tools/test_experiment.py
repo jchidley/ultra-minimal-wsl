@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import os
 import shutil
 import sqlite3
 import subprocess
@@ -8,18 +10,22 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tools.generate_candidate_scripts import generate, render_text
 from tools.experiment import (
+    close_operation,
     connect,
     derive_operation,
     logical_diff,
     logical_state,
+    prepare_candidates,
+    request_uac,
     retry_operation,
     transition_operation,
     validate,
 )
 
 ROOT = Path(__file__).parents[1]
-DB = ROOT / "inventory/experiments.sqlite"
+DB = Path(os.environ.get("EXPERIMENT_TEST_DB", ROOT / "inventory/experiments.sqlite"))
 CONTROLLER = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-state/minimal-v6-k-overlay-pidns-runtime-013/Run-ControlledTrial.ps1"
 DIAGNOSTIC_CONTROLLER = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-state/minimal-v6-k-overlay-pidns-diagnostic-runtime-014/Run-ControlledTrial.ps1"
 
@@ -28,7 +34,17 @@ class ExperimentInventoryTests(unittest.TestCase):
     def temporary_database(self, directory: str) -> sqlite3.Connection:
         copy = Path(directory) / "experiments.sqlite"
         shutil.copy2(DB, copy)
-        return connect(copy, writable=True)
+        db = connect(copy, writable=True)
+        # Mutation tests create their own executable operation. Terminalize only the
+        # copied operation through the lifecycle API so canonical state cannot affect them.
+        active = db.execute("SELECT operation_id FROM operations WHERE executable=1").fetchone()
+        if active:
+            close_operation(db, {
+                "operation_id": active[0], "status": "cancelled", "disposition": "cancelled",
+                "reason": "test-local lifecycle isolation", "recorded_utc": "2026-09-01T00:00:00Z",
+            })
+            db.commit()
+        return db
 
     def test_canonical_database_invariants_do_not_depend_on_current_operation(self) -> None:
         db = connect(DB)
@@ -40,6 +56,40 @@ class ExperimentInventoryTests(unittest.TestCase):
             self.assertLessEqual(len(list(db.execute("SELECT * FROM active_operation"))), 1)
         finally:
             db.close()
+
+    @unittest.skipIf(os.environ.get("EXPERIMENT_PREFLIGHT_CHILD") == "1", "avoid recursive suite launch")
+    def test_complete_suite_is_independent_of_an_active_canonical_equivalent_operation(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            copy = Path(directory) / "active.sqlite"
+            shutil.copy2(DB, copy)
+            db = connect(copy, writable=True)
+            try:
+                active = db.execute("SELECT operation_id FROM operations WHERE executable=1").fetchone()
+                if active:
+                    operation_id = active[0]
+                else:
+                    operation_id = "active-suite-regression"
+                    derive_operation(db, {
+                        "operation_id": operation_id,
+                        "parent_operation_id": "minimal-v7-k-overlay-pidns-runtime-016",
+                        "candidate_id": "minimal-v7-k-overlay-pidns-001",
+                        "trial_id": "ACTIVE-SUITE-REGRESSION",
+                        "rationale": "canonical-equivalent active lifecycle regression",
+                        "prepared_utc": "2026-09-01T00:00:00Z",
+                        "replace_artifacts": {},
+                    })
+                    db.commit()
+                self.assertEqual(validate(db)["activeOperation"], operation_id)
+            finally:
+                db.close()
+            environment = dict(os.environ)
+            environment["EXPERIMENT_TEST_DB"] = str(copy)
+            environment["EXPERIMENT_PREFLIGHT_CHILD"] = "1"
+            result = subprocess.run(
+                ["uv", "run", "python", "-m", "unittest", "tools.test_experiment"],
+                cwd=ROOT, env=environment, capture_output=True, text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_versioned_templates_are_hash_bound_and_every_operation_uses_one(self) -> None:
         db = connect(DB)
@@ -164,25 +214,106 @@ class ExperimentInventoryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             db = self.temporary_database(directory)
             try:
-                db.execute(
-                    "INSERT INTO operations(operation_id,kind,status,executable,rationale,fixed_contract,runtime_boundary) "
-                    "VALUES ('lifecycle-test','runtime','runtime-planned',1,'test','test','test')"
-                )
+                derive_operation(db, {
+                    "operation_id": "lifecycle-test",
+                    "parent_operation_id": "minimal-v7-k-overlay-pidns-runtime-016",
+                    "candidate_id": "minimal-v7-k-overlay-pidns-001",
+                    "trial_id": "LIFECYCLE-TEST",
+                    "rationale": "lifecycle test",
+                    "prepared_utc": "2026-09-01T00:00:00Z",
+                    "replace_artifacts": {},
+                })
                 with self.assertRaises(SystemExit):
                     transition_operation(db, {
                         "operation_id": "lifecycle-test",
                         "status": "probe-started", "first_probe_utc": "2026-09-01T00:00:00Z",
                     })
-                transition_operation(db, {
+                uac = {
                     "operation_id": "lifecycle-test",
                     "status": "uac-requested", "uac_requested_utc": "2026-09-01T00:00:00Z",
-                })
+                }
+                with self.assertRaises(SystemExit):
+                    transition_operation(db, uac)
+                def red_suite(_path: Path) -> None:
+                    raise SystemExit("red suite")
+
+                with self.assertRaisesRegex(SystemExit, "red suite"):
+                    request_uac(db, uac, suite_runner=red_suite)
+                self.assertEqual(
+                    db.execute("SELECT status FROM operations WHERE operation_id='lifecycle-test'").fetchone()[0],
+                    "runtime-planned",
+                )
+                suites = []
+                request_uac(db, uac, suite_runner=lambda path: suites.append(path))
+                self.assertEqual(suites, [Path(db.execute("PRAGMA database_list").fetchone()[2])])
                 self.assertEqual(
                     db.execute("SELECT status FROM operations WHERE operation_id='lifecycle-test'").fetchone()[0],
                     "uac-requested",
                 )
             finally:
                 db.close()
+
+    def test_candidate_preparation_is_atomic_and_calculates_file_identity(self) -> None:
+        artifact_path = "tools/generate_candidate_scripts.py"
+        with tempfile.TemporaryDirectory() as directory:
+            db = self.temporary_database(directory)
+            try:
+                before = db.execute("SELECT count(*) FROM candidates").fetchone()[0]
+                record = {
+                    "candidates": [{
+                        "candidate_id": "atomic-preparation-test", "kind": "process-test",
+                        "status": "prepared", "rationale": "atomic test",
+                    }],
+                    "new_artifacts": [{
+                        "candidate_id": "atomic-preparation-test", "role": "generator",
+                        "kind": "process-generator", "location": "repository", "path": artifact_path,
+                    }],
+                    "existing_artifacts": [],
+                }
+                with db:
+                    prepare_candidates(db, record)
+                artifact = db.execute(
+                    "SELECT a.* FROM artifacts a JOIN candidate_artifacts ca USING(artifact_id) "
+                    "WHERE ca.candidate_id='atomic-preparation-test'"
+                ).fetchone()
+                path = ROOT / artifact_path
+                self.assertEqual(artifact["sha256"], hashlib.sha256(path.read_bytes()).hexdigest())
+                self.assertEqual(artifact["bytes"], path.stat().st_size)
+                self.assertEqual(db.execute("SELECT count(*) FROM candidates").fetchone()[0], before + 1)
+
+                failing = json.loads(json.dumps(record))
+                failing["candidates"][0]["candidate_id"] = "atomic-rollback-test"
+                failing["new_artifacts"][0].update({
+                    "candidate_id": "atomic-rollback-test", "path": "missing-candidate-artifact",
+                })
+                with self.assertRaises(SystemExit):
+                    with db:
+                        prepare_candidates(db, failing)
+                self.assertIsNone(db.execute(
+                    "SELECT 1 FROM candidates WHERE candidate_id='atomic-rollback-test'"
+                ).fetchone())
+            finally:
+                db.close()
+
+    def test_finalized_v7_scripts_are_exact_deterministic_generation_delta(self) -> None:
+        delta = generate(
+            ROOT / "control-plane/generation/minimal-v7-no-cross-distro-launch.v1.json",
+            write=False,
+        )
+        self.assertIn("Build-MinimalV7NoCrossDistroLaunch.ps1", delta)
+        self.assertIn("Invoke-MinimalV7KOverlayPidNsDiagnosticTrial.ps1", delta)
+        self.assertIn("minimal-v7-k-overlay-pidns-runtime-016", delta)
+        self.assertIn("0009-minimal-v7-no-cross-distro-launch.patch", delta)
+
+    def test_candidate_generation_rejects_duplicate_overlap_and_unresolved_values(self) -> None:
+        with self.assertRaisesRegex(ValueError, "occurs 2 times"):
+            render_text("token token", [{"old": "token", "new": "value"}])
+        with self.assertRaisesRegex(ValueError, "overlap"):
+            render_text("abcdef", [
+                {"old": "abcd", "new": "one"}, {"old": "cdef", "new": "two"},
+            ])
+        with self.assertRaisesRegex(ValueError, "unresolved"):
+            render_text("candidate=old", [{"old": "old", "new": "{{CANDIDATE}}"}])
 
     def test_logical_diff_includes_relationships_and_field_values(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

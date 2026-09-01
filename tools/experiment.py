@@ -9,6 +9,7 @@ import json
 import os
 import sqlite3
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -261,6 +262,82 @@ def add_candidate(db: sqlite3.Connection, record: dict) -> None:
     )
 
 
+def prepare_candidates(db: sqlite3.Connection, record: dict) -> None:
+    """Record candidate lineage, new file identities, and all role links atomically."""
+    require(record, ("candidates", "new_artifacts", "existing_artifacts"))
+    if set(record) != {"candidates", "new_artifacts", "existing_artifacts"}:
+        raise SystemExit("Candidate preparation accepts only candidates, new_artifacts, and existing_artifacts")
+    if not all(isinstance(record[name], list) for name in ("candidates", "new_artifacts", "existing_artifacts")):
+        raise SystemExit("Candidate preparation fields must be arrays")
+    if not record["candidates"]:
+        raise SystemExit("Candidate preparation requires at least one candidate")
+
+    candidate_ids = [item.get("candidate_id") for item in record["candidates"]]
+    if None in candidate_ids or len(candidate_ids) != len(set(candidate_ids)):
+        raise SystemExit("Candidate preparation contains missing or duplicate candidate IDs")
+    for candidate in record["candidates"]:
+        allowed = {"candidate_id", "kind", "parent_candidate_id", "status", "rationale"}
+        if set(candidate) - allowed:
+            raise SystemExit(f"Unexpected candidate fields: {sorted(set(candidate)-allowed)}")
+        add_candidate(db, candidate)
+
+    links: set[tuple[str, str]] = set()
+    for item in record["new_artifacts"]:
+        require(item, ("candidate_id", "role", "kind", "location", "path"))
+        if item["candidate_id"] not in candidate_ids:
+            raise SystemExit(f"Artifact references an unprepared candidate: {item['candidate_id']}")
+        allowed = {"candidate_id", "role", "kind", "location", "path", "product_code", "signature_state"}
+        if unexpected := set(item) - allowed:
+            raise SystemExit(f"Unexpected candidate artifact fields: {sorted(unexpected)}")
+        if item["location"] not in {"repository", "host"}:
+            raise SystemExit("New candidate artifacts must be accessible repository or host files")
+        if item["location"] == "repository":
+            supplied = Path(item["path"])
+            if supplied.is_absolute() or ".." in supplied.parts:
+                raise SystemExit("Repository artifact paths must be relative and remain under the repository root")
+        key = (item["candidate_id"], item["role"])
+        if key in links:
+            raise SystemExit(f"Duplicate candidate artifact role: {key}")
+        links.add(key)
+        path = resolve_path(item["path"])
+        if not path.is_file():
+            raise SystemExit(f"Candidate artifact is missing: {path}")
+        digest, size = sha256(path), path.stat().st_size
+        duplicate = db.execute(
+            "SELECT artifact_id,path FROM artifacts WHERE (location=? AND path=?) OR (sha256=? AND bytes=?)",
+            (item["location"], item["path"], digest, size),
+        ).fetchone()
+        if duplicate:
+            raise SystemExit(
+                f"Artifact is not genuinely new; reuse artifact {duplicate['artifact_id']} ({duplicate['path']})"
+            )
+        artifact = dict(item)
+        artifact.update({"sha256": digest, "bytes": size})
+        artifact.pop("candidate_id")
+        artifact.pop("role")
+        add_artifact(db, artifact)
+        artifact_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
+        db.execute(
+            "INSERT INTO candidate_artifacts VALUES (?,?,?)",
+            (item["candidate_id"], artifact_id, item["role"]),
+        )
+
+    for item in record["existing_artifacts"]:
+        require(item, ("candidate_id", "artifact_id", "role"))
+        if set(item) != {"candidate_id", "artifact_id", "role"}:
+            raise SystemExit("Existing candidate artifact links accept only candidate_id, artifact_id, and role")
+        if item["candidate_id"] not in candidate_ids:
+            raise SystemExit(f"Artifact references an unprepared candidate: {item['candidate_id']}")
+        key = (item["candidate_id"], item["role"])
+        if key in links:
+            raise SystemExit(f"Duplicate candidate artifact role: {key}")
+        links.add(key)
+        db.execute(
+            "INSERT INTO candidate_artifacts VALUES (?,?,?)",
+            (item["candidate_id"], item["artifact_id"], item["role"]),
+        )
+
+
 def add_config(db: sqlite3.Connection, record: dict) -> None:
     require(record, ("name", "path", "sha256"))
     path = resolve_path(record["path"])
@@ -372,7 +449,42 @@ def retry_operation(db: sqlite3.Connection, record: dict) -> None:
     )
 
 
-def transition_operation(db: sqlite3.Connection, record: dict) -> None:
+INVARIANT_TEST_MODULES = (
+    "tools.test_build_host_profile",
+    "tools.test_experiment",
+    "tools.test_inventory_records",
+    "tools.test_control_plane_protocol",
+    "tools.test_control_plane_records",
+    "tools.test_fixture_broker",
+)
+
+
+def run_invariant_suite(database_path: Path) -> None:
+    environment = dict(os.environ)
+    environment["EXPERIMENT_TEST_DB"] = str(database_path)
+    environment["EXPERIMENT_PREFLIGHT_CHILD"] = "1"
+    result = subprocess.run(
+        [sys.executable, "-m", "unittest", *INVARIANT_TEST_MODULES],
+        cwd=ROOT,
+        env=environment,
+    )
+    if result.returncode:
+        raise SystemExit("Invariant test suite failed; refusing UAC transition")
+
+
+def request_uac(
+    db: sqlite3.Connection,
+    record: dict,
+    *,
+    suite_runner=run_invariant_suite,
+) -> None:
+    database_path = Path(db.execute("PRAGMA database_list").fetchone()[2])
+    suite_runner(database_path)
+    validate(db)
+    transition_operation(db, record, preflight_passed=True)
+
+
+def transition_operation(db: sqlite3.Connection, record: dict, *, preflight_passed: bool = False) -> None:
     require(record, ("operation_id", "status"))
     transitions = {
         "runtime-planned": "uac-requested",
@@ -385,6 +497,8 @@ def transition_operation(db: sqlite3.Connection, record: dict) -> None:
         raise SystemExit(f"Unknown operation: {record['operation_id']}")
     if transitions.get(current[0]) != record["status"]:
         raise SystemExit(f"Invalid operation transition: {current[0]} -> {record['status']}")
+    if record["status"] == "uac-requested" and not preflight_passed:
+        raise SystemExit("Use operation-request-uac so the invariant suite runs immediately before transition")
     field = {
         "uac-requested": "uac_requested_utc",
         "worker-started": "worker_started_utc",
@@ -541,8 +655,8 @@ def main() -> None:
     query = commands.add_parser("query")
     query.add_argument("sql")
     for name in (
-        "artifact-add", "candidate-add", "config-add", "candidate-artifact-link",
-        "operation-derive", "operation-retry", "operation-transition",
+        "artifact-add", "candidate-add", "candidate-prepare", "config-add", "candidate-artifact-link",
+        "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
         "operation-close", "trial-finalize", "runtime-finalize",
     ):
         item = commands.add_parser(name)
@@ -550,8 +664,8 @@ def main() -> None:
     args = parser.parse_args()
     path = Path(args.db).resolve()
     writable = args.command in {
-        "artifact-add", "candidate-add", "config-add", "candidate-artifact-link",
-        "operation-derive", "operation-retry", "operation-transition",
+        "artifact-add", "candidate-add", "candidate-prepare", "config-add", "candidate-artifact-link",
+        "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
         "operation-close", "trial-finalize", "runtime-finalize",
     }
     db = connect(path, writable=writable)
@@ -603,11 +717,13 @@ def main() -> None:
                 actions = {
                     "artifact-add": add_artifact,
                     "candidate-add": add_candidate,
+                    "candidate-prepare": prepare_candidates,
                     "config-add": add_config,
                     "candidate-artifact-link": lambda connection, value: link_artifact(connection, value, target="candidate"),
                     "operation-derive": derive_operation,
                     "operation-retry": retry_operation,
                     "operation-transition": transition_operation,
+                    "operation-request-uac": request_uac,
                     "operation-close": close_operation,
                     "trial-finalize": finalize_trial,
                     "runtime-finalize": finalize_runtime,
