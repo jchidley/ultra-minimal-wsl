@@ -91,12 +91,27 @@ Assert-ProtectedAcl -Path $runRoot -UserSid $userSid | Out-Null
 Assert-ProtectedAcl -Path (Join-Path $runRoot 'private') -UserSid $userSid | Out-Null
 
 $broker = Join-Path $installRoot 'FixtureBroker.ps1'
-$process = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',$broker,'-RunRoot',$runRoot) -PassThru
+$launchPayload = [ordered]@{ broker=$broker; runRoot=$runRoot } | ConvertTo-Json -Compress
+$launchPayload64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($launchPayload))
+$launchBootstrap = @"
+`$ErrorActionPreference='Stop'
+try {
+    `$p=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$launchPayload64'))|ConvertFrom-Json
+    & ([string]`$p.broker) -RunRoot ([string]`$p.runRoot)
+} catch { Write-Error `$_; exit 1 }
+"@
+$launchEncoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($launchBootstrap))
+$brokerStdout = Join-Path $runRoot 'results\broker.stdout.log'
+$brokerStderr = Join-Path $runRoot 'results\broker.stderr.log'
+$process = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',$launchEncoded) -RedirectStandardOutput $brokerStdout -RedirectStandardError $brokerStderr -PassThru
 $statusPath = Join-Path $runRoot 'results\broker-status.json'
 $deadline = [DateTime]::UtcNow.AddSeconds(30)
 do {
     Start-Sleep -Milliseconds 250
-    if ($process.HasExited) { throw "Broker exited during startup with $($process.ExitCode)." }
+    if ($process.HasExited) {
+        $detail = if (Test-Path -LiteralPath $brokerStderr) { (Get-Content -LiteralPath $brokerStderr -Raw).Trim() } else { '' }
+        throw "Broker exited during startup with $($process.ExitCode): $detail"
+    }
 } while (-not (Test-Path -LiteralPath $statusPath) -and [DateTime]::UtcNow -lt $deadline)
 if (-not (Test-Path -LiteralPath $statusPath)) { throw 'Broker did not become ready.' }
 $status = Get-Content -LiteralPath $statusPath -Raw | ConvertFrom-Json

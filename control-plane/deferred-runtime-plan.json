@@ -1,7 +1,7 @@
 {
   "schema": 4,
   "plan_id": "CP-MINIMAL-V3-CANDIDATE-COMPARISON",
-  "status": "deferred-minimal-v6-k-pidns-runtime-ready-secure-broker-install-pending",
+  "status": "deferred-minimal-v6-k-pidns-runtime-ready-secure-broker-corrected-install-pending",
   "executable": false,
   "approval_carried_forward": false,
   "objective": "Compare WSL Linux candidates with one fixed Toybox probe and retain only evidence-proven configuration requirements.",
@@ -1454,11 +1454,11 @@
       "runner_path": "control-plane/controlled-package-offline/Invoke-MinimalV6KPidNsTrial.ps1",
       "runner_sha256": "85056c65c6fbcb7ca39feadcab1b523497b9c8797255e05cd9a7c022412d6f0d",
       "runner_local_validation": {"self_test_passed": true, "failure_paths_tested": 17, "psscriptanalyzer_findings": 0},
-      "runtime_controller_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\minimal-v6-k-pidns-runtime-011\\Run-ControlledTrial.ps1",
+      "runtime_controller_path": "%LOCALAPPDATA%\\ultra-minimal-wsl\\approval-state\\minimal-v6-k-pidns-runtime-012\\Run-ControlledTrial.ps1",
       "runtime_controller_sha256": "78d3c13ba5abd3ee68bdf0d798ddb33e9ed9268ecd3944c444e4c7251426dfe7",
       "secure_broker": {
         "required": true,
-        "run_id": "minimal-v6-k-pidns-runtime-011",
+        "run_id": "minimal-v6-k-pidns-runtime-012",
         "workload_id": "minimal-v6-k-pidns-runtime",
         "security_boundary": "One attended UAC creates an administrator-protected immutable workload snapshot and ephemeral broker. The hostile queue may select only that allowlisted workload; it cannot supply host code, paths, hashes, commands, or executables. Protected results and credentials remain outside user-writable approval-state paths, and finalization forces the exact fixture Off.",
         "broker_path": "tools/fixture-broker/FixtureBroker.ps1",
@@ -1468,7 +1468,7 @@
         "installer_path": "tools/fixture-broker/Install-FixtureBroker.ps1",
         "installer_sha256": "d1b65d287aa3b340b819ae933fa9713502fe276fbf1a92df2e9123c67cfd1b0f",
         "run_creator_path": "tools/fixture-broker/New-FixtureBrokerRun.ps1",
-        "run_creator_sha256": "d0f228eb5b4178fa6d1c9ed3463b1593daef21bf5d92b2b16b7456b742ee3884",
+        "run_creator_sha256": "5bc6847241fe09b0fdce6ceb17470d0d6c2b24e4162157d1ca73130b50076b70",
         "run_launcher_path": "tools/fixture-broker/Start-FixtureBrokerRun.ps1",
         "run_launcher_sha256": "7bae0629dcb7092d74e85594cad3c2edf2f7ebd583895854da0328cb6c935e81",
         "job_client_path": "tools/fixture-broker/Submit-FixtureBrokerJob.ps1",
@@ -1510,6 +1510,15 @@
         "fixture_touched": false,
         "candidate_result_created": false,
         "reason": "Independent host-security review rejected persistent or repeated elevation of a controller and output root stored under a normal-user-writable directory. Operation 011 preserves the exact candidate contract while moving the immutable controller, credential, queue processing, and results into the protected ephemeral broker boundary."
+      },
+      "runtime_attempt_011": {
+        "operation_id": "minimal-v6-k-pidns-runtime-011",
+        "disposition": "infrastructure-failure-before-broker-start",
+        "protected_snapshot_created": true,
+        "broker_started": false,
+        "fixture_touched": false,
+        "candidate_result_created": false,
+        "reason": "The protected run creator snapshot the exact allowlisted controller and credential, then its PowerShell child launch lost the spaced Program Files broker path and exited before broker execution. No broker status or job exists and no Hyper-V command ran. Operation 012 retains the unchanged candidate contract under the corrected encoded launch transport."
       },
       "runtime_boundary": "One serial candidate interval only. Failure before the first candidate probe process is infrastructure failure with no candidate result. Missing extraction, manifest verification, or stock recovery prohibits ledger finalization."
     },

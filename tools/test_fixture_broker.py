@@ -138,6 +138,10 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
         self.assertIn("[IO.FileShare]::None", creator)
         self.assertIn("$env:ProgramData", creator)
         self.assertNotIn("Invoke-Expression", creator)
+        broker_launch = next(line for line in creator.splitlines() if "$launchEncoded" in line and "Start-Process" in line)
+        self.assertIn("'-EncodedCommand',$launchEncoded", broker_launch)
+        self.assertNotIn("'-File',$broker", broker_launch)
+        self.assertIn("broker.stderr.log", creator)
 
     def test_run_launcher_uses_valid_elevation_parameter_set(self):
         launcher = (BROKER / "Start-FixtureBrokerRun.ps1").read_text(encoding="utf-8")

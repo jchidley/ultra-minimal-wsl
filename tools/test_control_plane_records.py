@@ -459,7 +459,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(v6["runtime_controller_sha256"], "78d3c13ba5abd3ee68bdf0d798ddb33e9ed9268ecd3944c444e4c7251426dfe7")
         secure_broker = v6["secure_broker"]
         self.assertTrue(secure_broker["required"])
-        self.assertEqual(secure_broker["run_id"], "minimal-v6-k-pidns-runtime-011")
+        self.assertEqual(secure_broker["run_id"], "minimal-v6-k-pidns-runtime-012")
         for path_key, hash_key in (
             ("broker_path", "broker_sha256"),
             ("policy_path", "policy_sha256"),

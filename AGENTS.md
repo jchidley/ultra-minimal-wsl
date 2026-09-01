@@ -31,7 +31,7 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 ## Current phase
 
 - Stock and the retained mount-plus-PID control plane pass `B6-T`; IPC and UTS remain omitted. The PID-enabled storage-floor and overlay-floor kernels both stop at `B2` after mini-init configuration, so overlay is not the missing facility.
-- The `minimal-v6-excluded-initialize` source layer, reproducible Linux builds, controlled package, and runtime contract are complete. Retest `K-PIDNS-001` only through the exact protected ephemeral fixture broker and operation 011. Do not add `CONFIG_INOTIFY_USER`, storage hotplug, PCI, networking, IPC namespaces, or UTS namespaces speculatively.
+- The `minimal-v6-excluded-initialize` source layer, reproducible Linux builds, controlled package, and runtime contract are complete. Retest `K-PIDNS-001` only through the exact protected ephemeral fixture broker and operation 012. Do not add `CONFIG_INOTIFY_USER`, storage hotplug, PCI, networking, IPC namespaces, or UTS namespaces speculatively.
 - Do not rerun finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidates unchanged. `STATUS.md` owns the complete verified boundary and `TASKS.md` the exact active action.
 
 Operations wholly confined to the dedicated disposable fixture are standing-authorized when they use pinned hash-verified offline inputs, preserve evidence, follow the recorded recovery path, and finish with independently verified fixture state. No standing authorization crosses into the physical host or a shared WSL instance. Record and plan-validate produced hashes and exact installation/restoration commands before runtime; these are agent-executed technical checks, not human approval points.
