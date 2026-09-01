@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V6-K-PIDNS-001",
+    "candidateId":  "minimal-v6-k-pidns-001",
+    "startedUtc":  "2026-09-01T03:07:43.7127813Z"
+}

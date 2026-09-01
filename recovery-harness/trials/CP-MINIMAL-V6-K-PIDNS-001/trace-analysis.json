@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V6-K-PIDNS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1046,
+  "recoveryTraceRows": 4882,
+  "candidateGuestLogRecords": 0,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the external 6.18.40.1+ kernel",
+    "mini_init returned LxMiniInitMessageGuestCapabilities",
+    "the reduced host sent zero-feature EarlyConfig and InitialConfig",
+    "HCS dynamically attached C:\\WSL\\Toybox-Minimal\\ext4.vhdx and StorVspDeviceMountAndAssociateAdapter returned STATUS_SUCCESS",
+    "the host sent LxMiniInitMessageLaunchInit for ext4 device 0",
+    "the captured _init SIGSEGV dump contains /dev/sda, /distro, the tmpfs-overlay paths, and the UtilMount overlay failure text",
+    "WslCorePort closed before LxMiniInitMessageCreateInstanceResult",
+    "wsl.exe reported Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "candidateFatalEvidence": "The registered distro VHDX association succeeded and LaunchInit began, advancing beyond the prior B2 storage-association failure. The guest _init process then exited with signal 11 while constructing the writable overlay over /distro; CONFIG_OVERLAY_FS is absent from K-PIDNS-001. No CreateInstanceResult was returned.",
+  "recoveryEvidence": [
+    "CreateVmEnd identified the packaged 6.18.33.2-microsoft-standard-WSL2 kernel",
+    "the registered Toybox ext4 filesystem mounted read-write",
+    "CreateInstanceResult and CreateInstanceEnd returned success",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "TerminateVm reported Status 0 and GracefulExit"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B3",
+    "basis": "The external kernel and retained host channel initialized, dynamic registered-distro storage association succeeded, and LaunchInit entered the distro mount/root-transition path. The init SIGSEGV occurred before CreateInstanceResult, so B4 and later gates are not supported. Independent stock recovery repeated B6-T."
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "trialId": "CP-MINIMAL-V6-K-PIDNS-001",
+  "purpose": "Retest K-PIDNS-001 with the minimal-v6 excluded-initialize control plane under the fixed Toybox probe and independent stock recovery contract.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The external kernel exchanged capabilities and configuration, dynamically associated the registered Toybox VHDX successfully, and received LaunchInit. Guest _init then crashed with SIGSEGV in the distro overlay path before CreateInstanceResult."
+  },
+  "candidate": {
+    "id": "minimal-v6-k-pidns-001",
+    "kernelCandidate": "K-PIDNS-001",
+    "kernelConfigParent": "k-storage-001",
+    "controlPlaneParent": "minimal-v6-excluded-initialize",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "explicitSymbols": ["CONFIG_PID_NS"],
+    "autoselectedSymbols": [],
+    "packageSha256": "1995a9f3b247e246bfdf8a6a3a566a7a20d0846ac70cc6ecc942bff35780a8df",
+    "candidateManifestSha256": "b5e0753fb760d7e5181a0db9fd26abb04ea668bf1602e1fe86ae5566942cd109",
+    "probeSha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsSha256": "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfileSha256": "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-01T03:07:43.7127813Z",
+    "finishedUtc": "2026-09-01T03:08:03.5926562Z",
+    "probeClassification": "UNRESOLVED-TRACE-REQUIRED",
+    "finalClassification": "B3",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "windowsError": "Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "failureSignature": "Registered-distro attachment succeeded, then _init crashed with SIGSEGV in the writable-overlay path before CreateInstanceResult",
+    "shutdownTimedOut": false,
+    "manifestFilesVerified": 21,
+    "evidencePath": "candidate"
+  },
+  "traceAnalysis": {
+    "path": "trace-analysis.json",
+    "candidateRows": 1046,
+    "recoveryRows": 4882,
+    "directEvidence": "StorVsp association returned STATUS_SUCCESS, LaunchInit was sent, and the _init signal-11 dump captured the absent-overlay failure path before WslCorePort closed."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V6-K-PIDNS-001-RECOVERY",
+    "startedUtc": "2026-09-01T03:08:26.6808939Z",
+    "finishedUtc": "2026-09-01T03:08:34.5702904Z",
+    "classification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxMarker": "toybox-ok",
+    "shutdownPassed": true,
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "evidencePath": "recovery"
+  },
+  "controller": {
+    "sha256": "78d3c13ba5abd3ee68bdf0d798ddb33e9ed9268ecd3944c444e4c7251426dfe7",
+    "candidateArchiveSha256": "77c11f292efd6ed578c44b32e9f23774bbd8b429761df887212e713b934c5b86",
+    "recoveryArchiveSha256": "915160db4ceaebd26ea9978916d4964c84527d4ed07a674f69b96bd08361491c",
+    "operationResultSha256": "84de6a9617ebf67957fa1d074bf8e80b403410731affb6866af0ac0c5f09f628",
+    "brokerStatusSha256": "366f2febd453042bbe99f220cfc1d9de8f4cc6405ba0cda82ae37f104d1101e1"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigChangedDuringCandidate": true,
+    "wslconfigRestoredAbsent": true
+  },
+  "decision": "Finalize this combination at B3 without rerun. The excluded-initialize reduction fixed the prior dynamic-storage-association boundary. The init crash dump now directly selects the existing K-OVERLAY-PIDNS-001 kernel as the next comparison under minimal-v6; do not add unrelated storage, PCI, networking, IPC, or UTS facilities."
+}

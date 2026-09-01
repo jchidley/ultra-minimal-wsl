@@ -4,13 +4,13 @@
 
 ## Active action
 
-Run the prepared `minimal-v6-excluded-initialize` plus finalized `K-PIDNS-001` comparison:
+Run the prepared `minimal-v6-excluded-initialize` plus `K-OVERLAY-PIDNS-001` comparison selected by operation 012:
 
-1. finish the corrected protected ephemeral fixture-broker validation, install its exact tested payload under administrator-protected Program Files ACLs, and create secure operation 012 with one attended UAC;
-2. submit only the protected allowlisted runtime workload, complete one fixed `K-PIDNS-001` candidate interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
-3. finish the broker so it returns the exact fixture Off, then continue only to the next decision selected by runtime evidence.
+1. create protected secure operation 013 with the reviewed overlay-plus-PID controller and one attended UAC;
+2. submit only the allowlisted workload, complete one fixed candidate interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
+3. finish with the exact fixture Off, then choose the following change solely from runtime evidence.
 
-The source-policy review, two byte-identical offline Linux builds, fixture capacity correction, controlled MSI, complete source diff, output manifest, ProductCode, unsigned signature state, candidate manifest, guarded runner, and local fault-matrix validation are complete. Runtime operations 008 and 009 stopped before worker start because UAC was unattended. Unlaunched operation 010 was superseded at the host-security boundary. Operation 011 securely snapshot the controller but failed before broker execution because its protected Program Files path was split during child launch. Operation 012 retains the exact candidate, probe, package, recovery, and classification contract with corrected encoded launch transport. Exact identities and dispositions are in `control-plane/deferred-runtime-plan.json`.
+Operation 012 is finalized at `B3`: dynamic registered-distro association succeeded and `LaunchInit` began, then `_init` crashed with signal 11 in the known absent-overlay path before `CreateInstanceResult`. Stock recovery passed `B6-T`, the fixture returned Off, and the ledger and immutable evidence are complete. The existing overlay-plus-PID kernel, unchanged minimal-v6 package, new manifest, guarded runner, controller, hashes, and operation-013 broker contract are prepared. Exact identities and dispositions are in `control-plane/deferred-runtime-plan.json`.
 
 ## Blocked
 

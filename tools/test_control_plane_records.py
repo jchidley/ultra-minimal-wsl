@@ -450,7 +450,8 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(retry["status"], "completed")
         self.assertEqual(retry["controller_sha256"], source_build["build_controller_sha256"])
         v6 = contract["minimal_v6_k_pidns_001"]
-        self.assertTrue(v6["executable"])
+        self.assertFalse(v6["executable"])
+        self.assertEqual(v6["status"], "runtime-finalized-fail-b3")
         self.assertEqual(v6["reserved_trial_id"], "CP-MINIMAL-V6-K-PIDNS-001")
         self.assertEqual(sha256(ROOT / v6["candidate_manifest_path"]), v6["candidate_manifest_sha256"])
         self.assertEqual(sha256(ROOT / v6["runner_path"]), v6["runner_sha256"])
@@ -473,6 +474,20 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertFalse(v6["runtime_attempt_009"]["worker_started"])
         self.assertEqual(v6["runtime_attempt_010"]["disposition"], "superseded-before-launch-security-hardening")
         self.assertFalse(v6["runtime_attempt_010"]["fixture_touched"])
+        self.assertEqual(v6["runtime_attempt_012"]["candidate_result"], "B3")
+        self.assertEqual(v6["runtime_attempt_012"]["recovery_result"], "B6-T")
+        self.assertTrue(v6["runtime_attempt_012"]["ledger_finalized"])
+
+        v6_overlay = contract["minimal_v6_k_overlay_pidns_001"]
+        self.assertTrue(v6_overlay["executable"])
+        self.assertEqual(v6_overlay["parent_trial"], "CP-MINIMAL-V6-K-PIDNS-001")
+        self.assertEqual(v6_overlay["kernel_config_parent"], "k-overlay-001")
+        self.assertEqual(sha256(ROOT / v6_overlay["candidate_manifest_path"]), v6_overlay["candidate_manifest_sha256"])
+        self.assertEqual(sha256(ROOT / v6_overlay["runner_path"]), v6_overlay["runner_sha256"])
+        self.assertEqual(v6_overlay["package_sha256"], source_build["package_sha256"])
+        self.assertEqual(v6_overlay["kernel_sha256"], contract["k_overlay_pidns_001"]["kernel_sha256"])
+        self.assertEqual(v6_overlay["runtime_controller_sha256"], "0c01991dbb813d655a8f0eaa930e1fb19163ba2ba413f041f4993df96cadbd4a")
+        self.assertEqual(v6_overlay["secure_broker"]["run_id"], "minimal-v6-k-overlay-pidns-runtime-013")
         v5 = contract["minimal_v5_mount_pid_ns"]
         self.assertFalse(v5["executable"])
         self.assertEqual(v5["status"], "runtime-finalized-pass-b6-t")
