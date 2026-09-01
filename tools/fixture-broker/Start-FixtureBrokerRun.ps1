@@ -26,11 +26,11 @@ Assert-BrokerId $WorkloadId 'workloadId' | Out-Null
 Assert-Sha256 $WorkloadSha256 | Out-Null
 $creator = Join-Path $installRoot 'New-FixtureBrokerRun.ps1'
 $arguments = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',$creator,'-RunId',$RunId,'-WorkloadId',$WorkloadId,'-WorkloadPath',(Get-CanonicalPath $WorkloadPath),'-WorkloadSha256',$WorkloadSha256,'-TimeoutSeconds',[string]$TimeoutSeconds)
-$stdout = Join-Path $env:TEMP ($RunId + '.broker-start.stdout')
-$stderr = Join-Path $env:TEMP ($RunId + '.broker-start.stderr')
-$process = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -Verb RunAs -ArgumentList $arguments -RedirectStandardOutput $stdout -RedirectStandardError $stderr -Wait -PassThru
-$out = if(Test-Path $stdout){Get-Content $stdout -Raw}else{''}
-$err = if(Test-Path $stderr){Get-Content $stderr -Raw}else{''}
-Remove-Item -LiteralPath $stdout,$stderr -Force -ErrorAction SilentlyContinue
-if ($process.ExitCode -ne 0) { throw "Secure run creation failed with $($process.ExitCode): $err" }
-$out
+$process = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -Verb RunAs -ArgumentList $arguments -Wait -PassThru
+if ($process.ExitCode -ne 0) { throw "Secure run creation failed with $($process.ExitCode)." }
+$runRoot = Join-Path $env:ProgramData ('UltraMinimalWslFixtureBroker\Runs\' + $RunId)
+$statusPath = Join-Path $runRoot 'results\broker-status.json'
+if (-not (Test-Path -LiteralPath $statusPath -PathType Leaf)) { throw 'Secure run was not created.' }
+$status = Get-Content -LiteralPath $statusPath -Raw | ConvertFrom-Json
+if ($status.state -ne 'ready') { throw "Secure broker did not become ready: $($status.state)" }
+[pscustomobject]@{ schema=1; runId=$RunId; workloadId=$WorkloadId; workloadSha256=$WorkloadSha256; brokerProcessId=$status.processId; runRoot=$runRoot; state=$status.state } | ConvertTo-Json -Compress

@@ -139,6 +139,13 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
         self.assertIn("$env:ProgramData", creator)
         self.assertNotIn("Invoke-Expression", creator)
 
+    def test_run_launcher_uses_valid_elevation_parameter_set(self):
+        launcher = (BROKER / "Start-FixtureBrokerRun.ps1").read_text(encoding="utf-8")
+        elevation = next(line for line in launcher.splitlines() if "-Verb RunAs" in line)
+        self.assertNotIn("-RedirectStandardOutput", elevation)
+        self.assertNotIn("-RedirectStandardError", elevation)
+        self.assertIn("broker-status.json", launcher)
+
 
 if __name__ == "__main__":
     unittest.main()
