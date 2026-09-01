@@ -55,7 +55,7 @@ Every candidate interval records:
 - a hash manifest for all evidence;
 - independent proof that the stock baseline was restored.
 
-Reuse `inventory/trials.csv`, `inventory/trial-metadata.csv`, and `recovery-harness/trials/<TRIAL_ID>/`. Detailed package identity and B0–B6-T reasoning belong in the trial's `analysis.json`.
+Finalize trial state transactionally in `inventory/experiments.sqlite` and preserve files under `recovery-harness/trials/<TRIAL_ID>/`. Detailed package identity and B0–B6-T reasoning belong in the trial's `analysis.json`.
 
 ## Recovery invariants
 

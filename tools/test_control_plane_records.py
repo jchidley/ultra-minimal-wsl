@@ -8,7 +8,7 @@ import unittest
 
 ROOT = Path(__file__).parents[1]
 CONTROL = ROOT / "control-plane"
-PLAN_PATH = CONTROL / "deferred-runtime-plan.json"
+PLAN_PATH = CONTROL / "deferred-runtime-plan.v1.json"
 
 
 def sha256(path):

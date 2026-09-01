@@ -86,7 +86,7 @@ else {
     $kernelPath = Join-Path $WslRoot 'tools\kernel'
     $initrdPath = Join-Path $WslRoot 'tools\initrd.img'
     $journalPath = Join-Path $ProjectRoot 'recovery-harness\active-kernel-trial.json'
-    $ledgerPath = Join-Path $ProjectRoot 'inventory\trials.csv'
+    $ledgerPath = Join-Path $ProjectRoot 'inventory\trials.v1.csv'
 
     $configHash = Get-Sha256OrNull $ConfigPath
     $kernelHash = Get-Sha256OrNull $kernelPath

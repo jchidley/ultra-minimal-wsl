@@ -54,11 +54,14 @@ param(
 
     [string]$StateRoot = (Join-Path (Split-Path -Parent $PSScriptRoot) 'recovery-harness'),
     [string]$WslRoot = 'C:\Program Files\WSL',
-    [string]$TrialLedger = (Join-Path (Split-Path -Parent $PSScriptRoot) 'inventory\trials.csv')
+    [string]$TrialLedger = (Join-Path (Split-Path -Parent $PSScriptRoot) 'inventory\trials.v1.csv')
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+if (($Execute -or $Recover) -and [IO.Path]::GetFileName($TrialLedger) -eq 'trials.v1.csv') {
+    throw 'The legacy CSV trial harness is read-only after the experiment-database migration; prepare new trials through tools/experiment.py and the controlled runner.'
+}
 
 $packagedKernel = Join-Path $WslRoot 'tools\kernel'
 $wslConfigPath = Join-Path $env:USERPROFILE '.wslconfig'

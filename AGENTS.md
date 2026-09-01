@@ -10,15 +10,16 @@ Networking, DNS, DrvFs, Windows interop, WSLg, systemd, containers, cgroup polic
 
 ## Read first
 
-Read `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, and `build-host/README.md`. Query `inventory/kconfig-dependencies.sqlite`; durable inputs are `inventory/annotations.csv`, `config-snapshots.csv`, `trials.csv`, and `trial-metadata.csv`.
+Read `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, and `build-host/README.md`. Query Kconfig relationships in generated `inventory/kconfig-dependencies.sqlite` and experiment state in committed `inventory/experiments.sqlite`; update the latter only through `tools/experiment.py`. `inventory/annotations.csv` remains the durable Kconfig-review input.
 
 ## Documentation and relay ownership
 
 - `STATUS.md` owns verified current facts; `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns durable strategy and acceptance criteria.
-- Exact preparation inputs, commands, hashes, failures, and execution blockers belong in `control-plane/deferred-runtime-plan.json`; immutable trial evidence belongs in the inventory and trial directories.
+- Exact candidates, artifacts, operations, dispositions, configs, and trials belong in committed `inventory/experiments.sqlite`; immutable trial evidence belongs in trial directories. `control-plane/deferred-runtime-plan.v1.json` and the `inventory/*.v1.csv` files are frozen migration inputs and must never be edited.
 - Keep `README.md` and `PROJECT-MODEL.md` explanatory. Do not copy transient blockers, hashes, or task detail into them.
 - `NEXT-SESSION.md` is Relay-owned generated output, not canonical truth. Use it only when it agrees with `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`; reconcile it through `/relay`, not ordinary edits.
 - Before relaying, update only canonical documents whose facts or tasks changed, validate them, and ensure the generated session name matches the bounded objective.
+- Keep one active writer and fixture operator for this checkout. Other concurrent sessions are read-only reviewers; they must not edit, commit, launch a broker, or operate the fixture.
 
 ## Local inputs
 
@@ -30,7 +31,7 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-- Stock and the retained mount-plus-PID control plane pass `B6-T`; IPC and UTS remain omitted. The PID-enabled storage-floor and overlay-floor kernels both stop at `B2` after mini-init configuration, so overlay is not the missing facility.
+- Stock and the retained mount-plus-PID control plane pass `B6-T`; IPC and UTS remain omitted. Under minimal v5, the PID-enabled storage-floor and overlay-floor kernels both stopped at `B2`. Under minimal v6, the storage-floor PID kernel reached `B3` and crashed in the absent writable-overlay path, selecting the new overlay-plus-PID comparison.
 - The `minimal-v6-excluded-initialize` source layer, reproducible Linux builds, controlled package, and runtime contract are complete. Test the evidence-selected minimal-v6 plus `K-OVERLAY-PIDNS-001` combination only through the exact protected ephemeral fixture broker and operation 013. Do not add `CONFIG_INOTIFY_USER`, storage hotplug, PCI, networking, IPC namespaces, or UTS namespaces speculatively.
 - Do not rerun finalized v3, v4, v5, or minimal-v6 plus `K-PIDNS-001` combinations unchanged. Operation 013 combines the existing overlay-plus-PID kernel with the changed minimal-v6 control plane and is therefore a new evidence-selected comparison, not an unchanged kernel/control-plane rerun. `STATUS.md` owns the complete verified boundary and `TASKS.md` the exact active action.
 
@@ -40,12 +41,12 @@ Operations wholly confined to the dedicated disposable fixture are standing-auth
 
 Before any kernel-candidate boot:
 
-1. Record the full config, parent, hash, and trial ID in `inventory/config-snapshots.csv`.
+1. Record the full config, parent, hash, and trial ID transactionally through `tools/experiment.py`.
 2. Review explicit and selected symbols with `tools/inventory.py`; update annotations only through `tools/inventory.py set`.
 
-Before any controlled-package trial, record the source parent/diff, output manifest, package hash, candidate manifest, and reserved trial ID. For every trial type, run `uv run python tools/inventory_records.py`, require integrity `ok`, and plan-validate the exact operation and recovery. Complete repository work and disposable-fixture work autonomously without asking the operator to review plans, approve stages, open gates, or confirm routine choices. Obtain explicit approval only if the operation can affect the physical host, a shared WSL instance, or another resource outside the disposable fixture envelope.
+Before any controlled-package trial, record the source parent/diff, output manifest, package hash, candidate manifest, and reserved trial ID through `tools/experiment.py`; require `tools/experiment.py validate` and inspect `tools/experiment.py diff-head`. For every trial type, also run `uv run python tools/inventory_records.py`, require integrity `ok`, and plan-validate the exact operation and recovery. Complete repository work and disposable-fixture work autonomously without asking the operator to review plans, approve stages, open gates, or confirm routine choices. Obtain explicit approval only if the operation can affect the physical host, a shared WSL instance, or another resource outside the disposable fixture envelope.
 
-After a trial, preserve the harness evidence, append metadata, and resynchronize SQLite. Never rewrite completed ledger rows or trial evidence.
+After a trial, preserve the harness evidence, finalize the operation and trial in one transactional CLI workflow, and resynchronize the generated Kconfig query database. Never rewrite terminal database rows or trial evidence.
 
 ## Safety
 
@@ -57,16 +58,21 @@ After a trial, preserve the harness evidence, append metadata, and resynchronize
 - A timeout does not prove a remote or elevated process stopped; verify durable state independently.
 - UAC cancellation or expiry before durable elevated-worker start is an infrastructure launch failure, not a build, package, or candidate failure. Record that no worker started and no fixture mutation occurred, then use a fresh operation ID for the unchanged hash-bound controller. An existing approval or standing fixture authorization remains applicable to that fresh launch when scope and controller content are unchanged; do not alter the experiment or diagnose a build problem solely because the operator was unavailable for UAC.
 - At the beginning of each attended runtime run, use `tools/fixture-broker/` to snapshot the independently reviewed controller into an administrator-protected, ephemeral allowlist. Never execute an elevated controller, credential, result, or evidence path from the normal-user-writable repository or `approval-state` tree. The broker queue is hostile input and may select only a preapproved workload; it must never accept host commands, script paths, hashes, executables, or arbitrary VM/storage identities.
+- Freeze the broker at the exact tested facility needed by the active trial. Change it only when a reproduced transport defect prevents that trial; do not add generalized fixture features. After two pre-probe failures with the same cause, stop retrying and make one bounded root-cause repair before another launch.
+- Before elevation, require AST parsing, PSScriptAnalyzer, exact hash and size binding, execution-domain path checks, evidence-root ordering, real `Start-Process` parameter/quoting validation, the runner fault matrix, inventory integrity, and recovery-plan validation. Describe state precisely: `prepared`, `UAC requested`, `worker started`, `first probe started`, or `candidate finalized`; never call a trial running before durable worker start or classify a candidate before the first probe starts.
 
 ## Commands
 
 From PowerShell:
 
 ```powershell
+uv run python tools/experiment.py active
+uv run python tools/experiment.py validate
+uv run python tools/experiment.py diff-head
 uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
-uv run python -m unittest tools.test_build_host_profile tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records tools.test_fixture_broker
+uv run python -m unittest tools.test_build_host_profile tools.test_experiment tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records tools.test_fixture_broker
 & ~/git/agent-skills/skills/windows-env/Invoke-PsLint.ps1 -Offline -Settings .PSScriptAnalyzerSettings.psd1 -Path tools,control-plane/controlled-package-offline
 ```
 

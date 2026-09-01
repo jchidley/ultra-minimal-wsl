@@ -4,8 +4,8 @@ The kernel harness uses only Microsoft’s external `kernel=` setting and never 
 
 - `expected-safe-state.json` records the recovery-validated WSL package baseline.
 - `trials/<TRIAL_ID>/` contains immutable result, analysis, extracted logs, and hashes. Controlled-package trials keep fixed-probe evidence under `candidate/` and independent stock proof under `recovery/`, with one final `SHA256SUMS`.
-- `inventory/trials.csv` is the append-only ledger.
-- `inventory/trial-metadata.csv` supplements historical rows.
+- `inventory/experiments.sqlite` is the transactional trial and operation ledger.
+- Terminal rows and dispositions are immutable; update them only through `tools/experiment.py`.
 
 Use:
 

@@ -33,4 +33,4 @@ Candidate directories preserve source, patch, profile, toolchain, size, artifact
 
 ## Result and stopping boundary
 
-The known source-only runtime-readiness blocker is removed, and replacement candidates are reproducible. The next evidence milestone is controlled Windows package compilation and runtime proof of B4/B5/B6-T, lifecycle, recovery, and namespace necessity. `STATUS.md` and `TASKS.md` own the preparation still required before that milestone. `deferred-runtime-plan.json` is non-executable and carries no approval forward.
+The known source-only runtime-readiness blocker is removed, and replacement candidates are reproducible. The next evidence milestone is controlled Windows package compilation and runtime proof of B4/B5/B6-T, lifecycle, recovery, and namespace necessity. `STATUS.md` and `TASKS.md` own the preparation still required before that milestone. The now-frozen `deferred-runtime-plan.v1.json` was non-executable and carried no approval forward.

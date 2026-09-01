@@ -12,7 +12,7 @@ $stateRoot = Join-Path $ProjectRoot 'recovery-harness'
 $candidate = Join-Path $ProjectRoot 'candidates\wsl-2.7.11-stock-kernel'
 $stock = Join-Path $WslRoot 'tools\kernel'
 $config = Join-Path $env:USERPROFILE '.wslconfig'
-$ledger = Join-Path $ProjectRoot 'inventory\trials.csv'
+$ledger = Join-Path $ProjectRoot 'inventory\trials.v1.csv'
 
 function Get-HashOrNull([string]$Path) {
     if (Test-Path -LiteralPath $Path -PathType Leaf) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
@@ -42,7 +42,7 @@ try {
     [IO.File]::WriteAllText((Join-Path $fixtureWslRoot 'tools\kernel'), 'kernel')
     [IO.File]::WriteAllText((Join-Path $fixtureWslRoot 'tools\initrd.img'), 'initrd')
     [IO.File]::WriteAllText($fixtureConfig, "[wsl2]`nkernel=C:/custom")
-    [IO.File]::WriteAllText((Join-Path $fixtureProject 'inventory\trials.csv'), "trial_id,status,stock_restore_verified`n")
+    [IO.File]::WriteAllText((Join-Path $fixtureProject 'inventory\trials.v1.csv'), "trial_id,status,stock_restore_verified`n")
     $fixtureOutput = & $safeStateVerifier -ProjectRoot $fixtureProject -WslRoot $fixtureWslRoot -ConfigPath $fixtureConfig `
         -ExpectedWslVersion 'fixture' -ExpectedConfigSha256 (Get-HashOrNull $fixtureConfig) `
         -ExpectedKernelSha256 (Get-HashOrNull (Join-Path $fixtureWslRoot 'tools\kernel')) `

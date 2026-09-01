@@ -9,6 +9,7 @@ import hashlib
 import json
 import re
 import sqlite3
+import tempfile
 from pathlib import Path
 
 CONFIG_FIELDS = ("name", "path", "parent", "sha256", "trial_id")
@@ -204,12 +205,58 @@ def sync_trials(
     )
 
 
+def export_experiment_records(experiments: Path, directory: Path) -> tuple[Path, Path, Path]:
+    """Materialize legacy-shaped inputs from the committed canonical database."""
+    source = sqlite3.connect(f"file:{experiments.resolve().as_posix()}?mode=ro", uri=True)
+    source.row_factory = sqlite3.Row
+    try:
+        configs = directory / "configs.csv"
+        trials = directory / "trials.csv"
+        metadata = directory / "trial-metadata.csv"
+        with configs.open("w", newline="", encoding="utf-8") as stream:
+            writer = csv.DictWriter(stream, fieldnames=CONFIG_FIELDS)
+            writer.writeheader()
+            for row in source.execute("SELECT name,path,coalesce(parent,'') parent,sha256,coalesce(trial_id,'') trial_id FROM configs ORDER BY name"):
+                writer.writerow(dict(row))
+        ledger_fields = [
+            "trial_id", "status", "started_utc", "finished_utc", "source_commit", "toolchain",
+            "kernel_config_path", "kernel_config_sha256", "parent_trial", "change_group",
+            "explicit_symbols", "autoselected_symbols", "kernel_image_path", "kernel_image_sha256",
+            "boot_level", "toybox_result", "alpine_result", "failure_signature", "windows_error",
+            "kernel_log_path", "crash_log_path", "classification", "stock_restore_verified", "notes",
+        ]
+        with trials.open("w", newline="", encoding="utf-8") as stream:
+            writer = csv.DictWriter(stream, fieldnames=ledger_fields)
+            writer.writeheader()
+            for row in source.execute("SELECT * FROM trials ORDER BY started_utc,trial_id"):
+                value = dict(row)
+                value["parent_trial"] = value["parent_trial"] or ""
+                value["notes"] = value.pop("ledger_notes")
+                for key in ("config_name", "analysis_path", "metadata_notes"):
+                    value.pop(key)
+                writer.writerow({key: value[key] for key in ledger_fields})
+        with metadata.open("w", newline="", encoding="utf-8") as stream:
+            writer = csv.DictWriter(stream, fieldnames=TRIAL_METADATA_FIELDS)
+            writer.writeheader()
+            for row in source.execute("SELECT * FROM trials ORDER BY started_utc,trial_id"):
+                value = dict(row)
+                writer.writerow({
+                    "trial_id": value["trial_id"], "parent_trial": value["parent_trial"] or "",
+                    "config_name": value["config_name"] or "", "change_group": value["change_group"],
+                    "explicit_symbols": value["explicit_symbols"],
+                    "autoselected_symbols": value["autoselected_symbols"],
+                    "boot_level": value["boot_level"], "analysis_path": value["analysis_path"],
+                    "notes": value["metadata_notes"],
+                })
+        return configs, trials, metadata
+    finally:
+        source.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", default="inventory/kconfig-dependencies.sqlite")
-    parser.add_argument("--configs", default="inventory/config-snapshots.csv")
-    parser.add_argument("--trials", default="inventory/trials.csv")
-    parser.add_argument("--trial-metadata", default="inventory/trial-metadata.csv")
+    parser.add_argument("--experiments", default="inventory/experiments.sqlite")
     parser.add_argument("--summary", default="inventory/summary.json")
     parser.add_argument("--project-root", default=".")
     args = parser.parse_args()
@@ -218,9 +265,11 @@ def main() -> None:
     db = sqlite3.connect(Path(args.db))
     try:
         db.execute("PRAGMA foreign_keys=ON")
-        with db:
-            sync_configs(db, Path(args.configs), root)
-            sync_trials(db, Path(args.trials), Path(args.trial_metadata), root)
+        with tempfile.TemporaryDirectory() as directory:
+            configs, trials, metadata = export_experiment_records(Path(args.experiments), Path(directory))
+            with db:
+                sync_configs(db, configs, root)
+                sync_trials(db, trials, metadata, root)
         integrity = db.execute("PRAGMA integrity_check").fetchone()[0]
         if integrity != "ok":
             raise SystemExit(f"SQLite integrity check failed: {integrity}")

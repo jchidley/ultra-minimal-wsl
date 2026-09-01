@@ -1,6 +1,6 @@
 # Project status
 
-This file contains verified present facts and the achieved boundary. `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns the experiment contract. Exact identities and immutable evidence live in `control-plane/deferred-runtime-plan.json`, the inventory ledgers, candidate records, and `recovery-harness/trials/`.
+This file contains verified present facts and the achieved boundary. `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns the experiment contract. Exact candidate, artifact, operation, disposition, config, and trial identities live in committed `inventory/experiments.sqlite`; immutable evidence lives in candidate records and `recovery-harness/trials/`.
 
 ## Safety state
 
@@ -25,14 +25,14 @@ This file contains verified present facts and the achieved boundary. `TASKS.md` 
 - The retained passing control-plane baseline is mount plus PID namespace semantics with IPC and UTS omitted.
 - The minimal-v6 plus `K-PIDNS-001` combination is finalized at `B3` and must not be rerun. Its crash dump directly selects the existing `K-OVERLAY-PIDNS-001` kernel for a new minimal-v6 comparison; this is not an unchanged rerun of the finalized minimal-v5 combination.
 - `minimal-v6-excluded-initialize` removes only the inotify, IP-loopback, and cross-distro/GNS-DNS setup selected by the retained `Initialize` review. Its reproducible controlled package fixed the prior dynamic VHDX-association boundary. Operation 012 restored stock, passed independent `B6-T` recovery, preserved complete evidence, and returned the fixture Off.
-- The disposable fixture disk was expanded from 100 GiB to 160 GiB after a recorded capacity inspection; C: has 60+ GiB free, the `clean-shell` checkpoint is preserved, and the fixture returned Off. Build operation 007 then completed after guarded cleanup of operation 003. Runtime operations 008 and 009 stopped at UAC before worker start and touched neither fixture nor candidate. Unlaunched operation 010 was superseded after host-security review found its controller and output root user-writable. Operation 011 created the protected controller snapshot but its broker child never executed because the Program Files path was not preserved as one argument; no Hyper-V command or candidate interval began. Operation 012 completed the candidate interval and recovery through the corrected protected broker. Operation 013 is reserved for the evidence-selected minimal-v6 plus overlay-and-PID comparison. Exact hashes and dispositions are in `control-plane/deferred-runtime-plan.json`.
+- The disposable fixture disk was expanded from 100 GiB to 160 GiB after a recorded capacity inspection; C: has 60+ GiB free, the `clean-shell` checkpoint is preserved, and the fixture returned Off. Build operation 007 then completed after guarded cleanup of operation 003. Runtime operations 008 and 009 stopped at UAC before worker start and touched neither fixture nor candidate. Unlaunched operation 010 was superseded after host-security review found its controller and output root user-writable. Operation 011 created the protected controller snapshot but its broker child never executed because the Program Files path was not preserved as one argument; no Hyper-V command or candidate interval began. Operation 012 completed the candidate interval and recovery through the corrected protected broker. Operation 013 is reserved for the evidence-selected minimal-v6 plus overlay-and-PID comparison. Exact active identities and dispositions are queried from `inventory/experiments.sqlite`; the former JSON plan is frozen migration history.
 - Do not add inotify, storage-hotplug, PCI, networking, IPC namespace, or UTS namespace support without new runtime evidence.
 
 ## Evidence ownership
 
 - Current work: `TASKS.md`.
 - Contract, gates, and completion criteria: `MINIMAL-BOOT-PLAN.md`.
-- Exact preparation inputs, candidate identities, and recovery operation: `control-plane/deferred-runtime-plan.json`.
-- Kconfig classifications and terminal trial ledger: `inventory/`.
+- Exact preparation inputs, candidate identities, operations, and terminal trials: `inventory/experiments.sqlite`.
+- Kconfig classifications and generated relationship queries: `inventory/annotations.csv` and `inventory/kconfig-dependencies.sqlite`.
 - Immutable runtime evidence and analysis: `recovery-harness/trials/<TRIAL_ID>/`.
 - Layer-specific source and reproducibility evidence: `control-plane/candidates/`, `control-plane/*-audit.md`, and `candidates/`.

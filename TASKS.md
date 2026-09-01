@@ -10,7 +10,7 @@ Run the prepared `minimal-v6-excluded-initialize` plus `K-OVERLAY-PIDNS-001` com
 2. submit only the allowlisted workload, complete one fixed candidate interval, restore stock, prove independent stock `B6-T` recovery, preserve evidence, and finalize the ledger;
 3. finish with the exact fixture Off, then choose the following change solely from runtime evidence.
 
-Operation 012 is finalized at `B3`: dynamic registered-distro association succeeded and `LaunchInit` began, then `_init` crashed with signal 11 in the known absent-overlay path before `CreateInstanceResult`. Stock recovery passed `B6-T`, the fixture returned Off, and the ledger and immutable evidence are complete. The existing overlay-plus-PID kernel, unchanged minimal-v6 package, new manifest, guarded runner, controller, hashes, and operation-013 broker contract are prepared. Exact identities and dispositions are in `control-plane/deferred-runtime-plan.json`.
+Operation 012 is finalized at `B3`: dynamic registered-distro association succeeded and `LaunchInit` began, then `_init` crashed with signal 11 in the known absent-overlay path before `CreateInstanceResult`. Stock recovery passed `B6-T`, the fixture returned Off, and the ledger and immutable evidence are complete. The existing overlay-plus-PID kernel, unchanged minimal-v6 package, new manifest, guarded runner, controller, hashes, and operation-013 broker contract are prepared. Before launch, finish the committed experiment-database migration and independently validate operation 013 from SQL. Exact active identities and dispositions belong in `inventory/experiments.sqlite`; the former JSON plan remains frozen.
 
 ## Blocked
 

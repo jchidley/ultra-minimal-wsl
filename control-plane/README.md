@@ -1,6 +1,6 @@
 # Reduced control-plane development
 
-This directory preserves layered reductions of WSL 2.7.12's Windows/guest command path. Source, tests, and reproducible builds establish candidate identity and fail-closed policy; only guarded runtime trials establish a `B` gate. Current facts belong in `../STATUS.md`, incomplete work in `../TASKS.md`, and exact build/runtime identities in `deferred-runtime-plan.json`.
+This directory preserves layered reductions of WSL 2.7.12's Windows/guest command path. Source, tests, and reproducible builds establish candidate identity and fail-closed policy; only guarded runtime trials establish a `B` gate. Current facts belong in `../STATUS.md`, incomplete work in `../TASKS.md`, and exact build/runtime identities in `../inventory/experiments.sqlite`.
 
 ## Pinned boundary
 
@@ -42,6 +42,6 @@ Linux control-plane builds use `tools/build-control-plane-linux.sh` with `OFFLIN
 
 ## Runtime boundary
 
-`deferred-runtime-plan.json` is a non-executable, hash-bound contract. It records pinned inputs, package and candidate identities, the fixed Toybox probe, recovery assertions, and stop conditions. A prepared plan grants no authority outside the dedicated disposable fixture.
+`../inventory/experiments.sqlite` is the transactional query source for candidates, artifacts, operations, dispositions, configs, and trials. Use `tools/experiment.py`; do not edit it with ad hoc SQL. `deferred-runtime-plan.v1.json` is frozen migration history, not active planning state. A prepared operation grants no authority outside the dedicated disposable fixture.
 
 The candidate interval begins with the first `wsl.exe` process in `tools/Invoke-WslCandidateProbe.ps1`. Fixture start, transport, package placement, and rollback are prerequisites; failure there is infrastructure failure and creates no candidate ledger row. A valid candidate result requires immutable interval evidence, stock restoration, independent recovery, and one terminal ledger row.
