@@ -8,22 +8,54 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.experiment import connect, transition_operation, validate
+from tools.experiment import connect, prepare_operation, transition_operation, validate
 
 ROOT = Path(__file__).parents[1]
 DB = ROOT / "inventory/experiments.sqlite"
 CONTROLLER = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-state/minimal-v6-k-overlay-pidns-runtime-013/Run-ControlledTrial.ps1"
+DIAGNOSTIC_CONTROLLER = Path.home() / "AppData/Local/ultra-minimal-wsl/approval-state/minimal-v6-k-overlay-pidns-diagnostic-runtime-014/Run-ControlledTrial.ps1"
 
 
 class ExperimentInventoryTests(unittest.TestCase):
-    def test_canonical_database_is_valid_and_has_no_active_operation(self) -> None:
+    def test_canonical_database_is_valid_and_has_one_diagnostic_operation(self) -> None:
         db = connect(DB)
         try:
             result = validate(db)
             self.assertEqual(result["integrity"], "ok")
             self.assertEqual(result["schemaVersion"], 1)
             self.assertEqual(result["trials"], 19)
-            self.assertIsNone(result["activeOperation"])
+            self.assertEqual(
+                result["activeOperation"],
+                "minimal-v6-k-overlay-pidns-diagnostic-runtime-014",
+            )
+        finally:
+            db.close()
+
+    def test_active_diagnostic_controller_is_hash_bound(self) -> None:
+        db = connect(DB)
+        try:
+            row = db.execute("SELECT controller_path,controller_sha256 FROM active_operation").fetchone()
+            self.assertEqual(Path(row["controller_path"]), DIAGNOSTIC_CONTROLLER)
+            self.assertEqual(
+                hashlib.sha256(DIAGNOSTIC_CONTROLLER.read_bytes()).hexdigest(),
+                row["controller_sha256"],
+            )
+            text = DIAGNOSTIC_CONTROLLER.read_text(encoding="utf-8")
+            self.assertIn("diagnosticDebugConsole", text)
+            self.assertIn("diagnosticRelayCount", text)
+            self.assertNotIn("deferred-runtime-plan", text)
+            runner = db.execute(
+                "SELECT a.path,a.sha256 FROM operation_artifacts oa "
+                "JOIN artifacts a USING(artifact_id) "
+                "WHERE oa.operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-014' "
+                "AND oa.role='runner'"
+            ).fetchone()
+            runner_path = ROOT / runner["path"]
+            self.assertEqual(hashlib.sha256(runner_path.read_bytes()).hexdigest(), runner["sha256"])
+            runner_text = runner_path.read_text(encoding="utf-8")
+            self.assertIn("debugConsole=true", runner_text)
+            self.assertIn("Clear-DiagnosticRelays", runner_text)
+            self.assertIn("diagnosticDebugConsole = $true", runner_text)
         finally:
             db.close()
 
@@ -59,12 +91,42 @@ class ExperimentInventoryTests(unittest.TestCase):
         finally:
             db.close()
 
+    def test_executable_operation_is_prepared_with_artifacts_atomically(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            copy = Path(directory) / "experiments.sqlite"
+            shutil.copy2(DB, copy)
+            db = connect(copy, writable=True)
+            try:
+                db.execute(
+                    "UPDATE operations SET status='cancelled',executable=0 "
+                    "WHERE operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-014'"
+                )
+                artifacts = [
+                    {"artifact_id": row[0], "role": row[1]}
+                    for row in db.execute(
+                        "SELECT artifact_id,role FROM operation_artifacts "
+                        "WHERE operation_id='minimal-v6-k-overlay-pidns-runtime-013'"
+                    )
+                ]
+                prepare_operation(db, {
+                    "operation_id": "atomic-prepare-test", "kind": "runtime",
+                    "status": "runtime-planned", "executable": True,
+                    "controller_artifact_id": 1, "artifacts": artifacts,
+                })
+                self.assertEqual(validate(db)["activeOperation"], "atomic-prepare-test")
+            finally:
+                db.close()
+
     def test_operation_lifecycle_cannot_skip_durable_worker_start(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             copy = Path(directory) / "experiments.sqlite"
             shutil.copy2(DB, copy)
             db = connect(copy, writable=True)
             try:
+                db.execute(
+                    "UPDATE operations SET status='cancelled',executable=0 "
+                    "WHERE operation_id='minimal-v6-k-overlay-pidns-diagnostic-runtime-014'"
+                )
                 db.execute(
                     "INSERT INTO operations(operation_id,kind,status,executable,rationale,fixed_contract,runtime_boundary) "
                     "VALUES ('lifecycle-test','runtime','runtime-planned',1,'test','test','test')"

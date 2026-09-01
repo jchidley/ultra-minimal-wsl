@@ -201,6 +201,17 @@ def prepare_operation(db: sqlite3.Connection, record: dict) -> None:
             record.get("prepared_utc"),
         ),
     )
+    artifacts = record.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        raise SystemExit("Operation artifacts must be a list")
+    for artifact in artifacts:
+        if not isinstance(artifact, dict):
+            raise SystemExit("Each operation artifact link must be an object")
+        link_artifact(
+            db,
+            {**artifact, "operation_id": record["operation_id"]},
+            target="operation",
+        )
 
 
 def transition_operation(db: sqlite3.Connection, record: dict) -> None:
