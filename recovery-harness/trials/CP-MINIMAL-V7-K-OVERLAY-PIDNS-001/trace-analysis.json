@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V7-K-OVERLAY-PIDNS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1277,
+  "recoveryTraceRows": 4900,
+  "candidateGuestLogRecords": 216,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the unchanged external 6.18.40.1+ kernel",
+    "mini_init returned LxMiniInitMessageGuestCapabilities and received the unchanged reduced configuration",
+    "the registered Toybox VHDX attached and ext4 mounted read-write",
+    "LxMiniInitMessageLaunchInit selected ext4 device 0",
+    "the prior CROSS_DISTRO_SHARE_PATH ENOENT, broad read-only catch, and temporary-overlay messages are absent",
+    "the guest reached the distro-init execution path, then WslCorePort closed before LxMiniInitMessageCreateInstanceResult",
+    "CreateInstanceEnd returned 0x8000FFFF and wsl.exe reported Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "ErrorExit cleanup later failed to read /proc/self/task/1/children, after the control path had already failed",
+    "the registered ext4 filesystem unmounted and the guest powered down without a panic, oops, or signal-11 dump"
+  ],
+  "candidateFatalEvidence": "Removing the excluded LaunchDistro cross-distro mount eliminated the diagnostic operation's ENOENT, misclassified read-only fallback, successful temporary overlay, and repeated mount failure. The unchanged kernel still reached only B3: after LaunchInit and read-write ext4 mount, the guest channel closed without CreateInstanceResult. The only subsequent GuestLog error is the ErrorExit cleanup read of /proc/self/task/1/children; its cleanup ordering does not identify the initiating failure or select CONFIG_PROC_CHILDREN.",
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 147 GuestLog records",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T",
+    "the candidate product was absent, .wslconfig was absent, diagnostic relay count was zero, and the fixture returned Off"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B3",
+    "basis": "Storage association, read-write ext4 mount, and LaunchInit succeeded. WslCorePort closed before CreateInstanceResult, so B4 and later gates are not supported. The source reduction changed the failure signature but did not advance the checkpoint."
+  },
+  "nextEvidenceAction": "Do not rerun this candidate or add CONFIG_PROC_CHILDREN from the secondary cleanup log. Review the retained distro-init startup path between LaunchInit's execle and its first CreateInstanceResult, then add only the smallest source diagnostic or reduction selected by that review while retaining the kernel and existing instrumentation."
+}

@@ -81,6 +81,28 @@ class ControlPlaneRecordTests(unittest.TestCase):
             self.assertNotIn(f"-{retained}", patch)
         self.assertNotIn("CONFIG_INOTIFY_USER", patch)
 
+    def test_v7_launch_layer_removes_only_cross_distro_temporary_mount_policy(self):
+        patch = (CONTROL / "patches/0009-minimal-v7-no-cross-distro-launch.patch").read_text(encoding="utf-8")
+        self.assertEqual(patch.count("diff --git "), 1)
+        self.assertIn("a/src/linux/init/main.cpp b/src/linux/init/main.cpp", patch)
+        for excluded in (
+            "AddTemporaryMount(LX_WSL2_CROSS_DISTRO_ENV, CROSS_DISTRO_SHARE_PATH",
+            "AddEnvironmentVariable(LX_WSL2_DISTRO_READ_ONLY_ENV, \"1\")",
+            "UtilMountOverlayFs(tmpfsTarget.c_str(), Target)",
+            "MS_REMOUNT | MS_RDONLY",
+        ):
+            self.assertIn(excluded, patch)
+            self.assertIsNone(re.search(r"^\+\s*" + re.escape(excluded), patch, re.MULTILINE))
+        for retained in (
+            "AddTemporaryMount(LX_WSL2_SYSTEM_DISTRO_SHARE_ENV, WSLG_PATH",
+            "AddTemporaryMount(ShareVariable.c_str(), SharePath.c_str(), MS_MOVE)",
+            "AddTemporaryMount(LX_WSL2_KERNEL_MODULES_MOUNT_ENV, Config.KernelModulesPath.c_str()",
+            "THROW_LAST_ERROR_IF(MountInit(Path.c_str()) < 0);",
+            "THROW_LAST_ERROR_IF(Chroot(Target) < 0);",
+        ):
+            self.assertIsNone(re.search(r"^-\s*" + re.escape(retained), patch, re.MULTILINE))
+        self.assertNotIn("a/src/windows/", patch)
+
     def test_v4_sender_explicitly_zeros_excluded_initial_configuration(self):
         patch = (CONTROL / "patches/0006-minimal-v4-zero-initial-config.patch").read_text(encoding="utf-8")
         self.assertEqual(patch.count("diff --git "), 1)
@@ -124,6 +146,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v4-mount-ns",
             "minimal-v5-mount-pid-ns",
             "minimal-v6-excluded-initialize",
+            "minimal-v7-no-cross-distro-launch",
         )
         for name in names:
             directory = CONTROL / "candidates" / name

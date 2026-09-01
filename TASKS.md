@@ -4,13 +4,13 @@
 
 ## Active action
 
-Create the evidence-selected control-plane layer after `minimal-v6-excluded-initialize`:
+Localize the retained distro-init startup failure after `minimal-v7-no-cross-distro-launch`:
 
-1. remove only the unconditional `LaunchDistro` cross-distro temporary-mount block that moves `CROSS_DISTRO_SHARE_PATH` and sets its environment variable;
-2. preserve all other minimal-v6 behavior, pass source-policy and mutation gates, and produce two byte-identical offline builds with complete hashes;
-3. prepare and run one SQLite-recorded comparison using the unchanged `K-OVERLAY-PIDNS-001` kernel, fixed Toybox probe, protected broker, and independent stock `B6-T` recovery.
+1. review the exact retained path from `ProcessLaunchInitMessage` through `LaunchInit`'s `execle` into distro-init startup and its first `CreateInstanceResult` response;
+2. correlate that path with the finalized trace and 216 `GuestLog` records, distinguishing the initiating failure from the later `ErrorExit` cleanup read of `/proc/self/task/1/children`;
+3. select at most one narrow source diagnostic or reduction that can expose or remove the earliest retained-contract blocker, while keeping `K-OVERLAY-PIDNS-001`, the fixed probe, timeouts, diagnostic instrumentation, broker, and recovery contract unchanged.
 
-The finalized diagnostic's 216 `GuestLog` records prove ext4 mounted read-write and overlay construction succeeded. `LaunchDistro` then attempted the intentionally absent cross-distro share, failed with ENOENT at `main.cpp:1676`, entered the broad read-only/full-filesystem catch, and failed the same mount again before `CreateInstanceResult`. Recovery verified both manifests, zero diagnostic relays, absent `.wslconfig`, stock `B6-T`, and fixture Off. This evidence selects source reduction, not a Kconfig addition or unchanged rerun. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
+The minimal-v7 comparison removed the prior cross-distro ENOENT, broad read-only catch, and temporary-overlay signature but again finalized at `B3`: ext4 mounted read-write, `LaunchInit` began, and `WslCorePort` closed without `CreateInstanceResult`. The `/proc/self/task/1/children` error is reached only during cleanup and does not select `CONFIG_PROC_CHILDREN`. Do not rerun minimal v7 unchanged or add a Kconfig facility from this evidence. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
 
 ## Blocked
 

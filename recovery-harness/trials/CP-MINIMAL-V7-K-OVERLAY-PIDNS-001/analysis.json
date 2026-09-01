@@ -1,0 +1,70 @@
+{
+  "trialId": "CP-MINIMAL-V7-K-OVERLAY-PIDNS-001",
+  "purpose": "Compare the evidence-selected LaunchDistro cross-distro source reduction with its terminal minimal-v6 diagnostic parent under the unchanged K-OVERLAY-PIDNS-001 kernel, diagnostic instrumentation, fixed Toybox probe, and stock recovery contract.",
+  "status": "FAIL",
+  "classification": {
+    "highestCheckpoint": "B3",
+    "confidence": "high",
+    "ledgerClassification": "UNRESOLVED",
+    "basis": "The candidate mounted the registered ext4 filesystem read-write and entered LaunchInit. The prior excluded cross-distro mount failure disappeared, but WslCorePort still closed before CreateInstanceResult."
+  },
+  "candidate": {
+    "id": "minimal-v7-k-overlay-pidns-001",
+    "kernelCandidate": "K-OVERLAY-PIDNS-001",
+    "controlPlaneParent": "minimal-v7-no-cross-distro-launch",
+    "controlPlaneSourceCommit": "beef18d4c0d1a4387aa1f03f734f0c6352655ead",
+    "controlPlaneCompleteDiffSha256": "d5426ad3b26d091207b511acede57e93d888edb98b27155810856ebdd5cfd214",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7",
+    "kernelSha256": "5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca",
+    "packageSha256": "30303de0cb090c543fb5aca941968939ff9af10e0133fe7d2cc82433e9ee958a",
+    "manifestSha256": "107832a7b8360449975b3d8eeea7e535756e2ae3dd499a058880cdf68dcd5ea2",
+    "runnerSha256": "9119674fd5e3e257ff3c4b5d2e0ef3b0a980846a0a54e9c20b5a8919bc97d2fc",
+    "experimentalDelta": "remove only the unconditional LaunchDistro CROSS_DISTRO_SHARE_PATH temporary-mount and associated read-only fallback block"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-01T14:02:26.8809733Z",
+    "finishedUtc": "2026-09-01T14:02:49.8692992Z",
+    "finalClassification": "B3",
+    "managementChecksPassed": true,
+    "toyboxResult": "FAIL",
+    "windowsError": "Wsl/Service/CreateInstance/E_UNEXPECTED",
+    "failureSignature": "The prior cross-distro ENOENT and temporary-overlay fallback disappeared; WslCorePort still closed after LaunchInit without CreateInstanceResult, followed only by a secondary ErrorExit cleanup read failure for /proc/self/task/1/children",
+    "manifestFilesVerified": 20,
+    "guestLogRecords": 216,
+    "guestLogPath": "guest-log-candidate.txt"
+  },
+  "comparison": {
+    "parentTrial": "CP-MINIMAL-V6-K-OVERLAY-PIDNS-DIAG-001",
+    "parentResult": "B3 with repeated excluded CROSS_DISTRO_SHARE_PATH ENOENT after successful temporary-overlay construction",
+    "candidateResult": "B3 without the cross-distro or temporary-overlay signature; channel closure remains before CreateInstanceResult",
+    "decision": "The source reduction removed its selected failure but did not establish B4. The later /proc/self/task/1/children error belongs to ErrorExit cleanup and does not select a Kconfig facility."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V7-K-OVERLAY-PIDNS-001-RECOVERY",
+    "startedUtc": "2026-09-01T14:03:15.3233983Z",
+    "finishedUtc": "2026-09-01T14:03:23.8203711Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "controller": {
+    "sha256": "9ab462ec69001dbb8f552eb7e4c9c4326432b8e0786cd516752bec763aedd996",
+    "candidateArchiveSha256": "0c7a835b66133260e020d609e848e540d118c883c15127a4fbcd65848fdfce8e",
+    "recoveryArchiveSha256": "c264ba5d6582ad74c8ae0d30f659cf6210ba9125280ac3a93bce348838086eb2",
+    "operationResultSha256": "a288e5b4827630db432e8e0ca88c81cf03dfee15a1cf0948496b8f20fc8caa97",
+    "brokerStatusSha256": "561dd72d2858b92d55624d8176cbbdc9cecc26986147c43f635dbc0c47f76e76"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigRestoredAbsent": true,
+    "diagnosticRelaysRemoved": true
+  },
+  "decision": "Finalize this evidence-selected comparison at B3 without rerun. Preserve the changed failure signature, retain K-OVERLAY-PIDNS-001 and existing instrumentation, and inspect the retained distro-init startup path before selecting one further source diagnostic or reduction. Do not add CONFIG_PROC_CHILDREN from the secondary cleanup error."
+}

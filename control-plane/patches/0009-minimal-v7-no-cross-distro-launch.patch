@@ -1,0 +1,60 @@
+diff --git a/src/linux/init/main.cpp b/src/linux/init/main.cpp
+index b61ea50..c64a5e7 100644
+--- a/src/linux/init/main.cpp
++++ b/src/linux/init/main.cpp
+@@ -1698,39 +1698,6 @@ try
+         THROW_LAST_ERROR_IF(SetCloseOnExec(SocketFd, false));
+     }
+ 
+-    //
+-    // Move the cross-distro shared mount to a temporary location. This mount
+-    // will be moved by the distro init.
+-    //
+-
+-    bool readOnly = false;
+-    try
+-    {
+-        AddTemporaryMount(LX_WSL2_CROSS_DISTRO_ENV, CROSS_DISTRO_SHARE_PATH, (MS_MOVE | MS_REC));
+-    }
+-    catch (...)
+-    {
+-        //
+-        // Creating the temporary mount can fail if:
+-        // - The distro VHD was mounted read-only (because a fsck is needed)
+-        // - The distro VHD is full
+-        //
+-        // Mount a writable overlay if that's the case so the distro can start.
+-        //
+-
+-        LOG_WARNING("Detected read-only or full filesystem. Adding a tmpfs overlay");
+-
+-        const std::string tmpfsTarget = std::format("{}-rw", Target);
+-        THROW_LAST_ERROR_IF(UtilMkdir(Target, 0755) < 0);
+-
+-        THROW_LAST_ERROR_IF(UtilMountOverlayFs(tmpfsTarget.c_str(), Target) < 0);
+-        THROW_LAST_ERROR_IF(mount(tmpfsTarget.c_str(), Target, NULL, MS_BIND, NULL) < 0);
+-
+-        AddTemporaryMount(LX_WSL2_CROSS_DISTRO_ENV, CROSS_DISTRO_SHARE_PATH, (MS_MOVE | MS_REC));
+-        readOnly = true;
+-        AddEnvironmentVariable(LX_WSL2_DISTRO_READ_ONLY_ENV, "1");
+-    }
+-
+     //
+     // If GUI support is enabled, move the WSLg shared mount to a temporary
+     // location. This mount will be moved by the distro init.
+@@ -1812,15 +1779,6 @@ try
+     auto Path = std::format("{}{}", Target, LX_INIT_PATH);
+     THROW_LAST_ERROR_IF(MountInit(Path.c_str()) < 0);
+ 
+-    if (readOnly)
+-    {
+-        //
+-        // If a rw overlay was added, mark it as read-only.
+-        //
+-
+-        THROW_LAST_ERROR_IF(mount(nullptr, Target, nullptr, MS_REMOUNT | MS_RDONLY, nullptr) < 0);
+-    }
+-
+     //
+     // Change the root of the calling process to the distro mountpoint.
+     //
