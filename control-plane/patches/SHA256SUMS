@@ -7,3 +7,4 @@ e68611ecc12ac556b8a8ffd84e7af9045ef552bf58cb6ddac2fe78a44825b981  0004-minimal-v
 1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a  0007-minimal-v5-mount-pid-ns.patch
 5b2f5dcc3c0ca2e8e24c19b6a6a1bee05c1140cf8e3561f7d0fb23edd63eeda0  0008-minimal-v6-excluded-initialize.patch
 353e609f69a9fddcfab944edba79a9ad0f73128defe86cce92d7e6e273719705  0009-minimal-v7-no-cross-distro-launch.patch
+eaa0e87767db9ba592c0065462254d3389598ad1978ded71913967218ee8ef15  0010-minimal-v8-no-binfmt-mount.patch

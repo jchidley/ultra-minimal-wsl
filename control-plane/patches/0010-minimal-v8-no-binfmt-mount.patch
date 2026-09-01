@@ -1,0 +1,12 @@
+diff --git a/src/linux/init/config.cpp b/src/linux/init/config.cpp
+index 5928eea..6d2cc69 100644
+--- a/src/linux/init/config.cpp
++++ b/src/linux/init/config.cpp
+@@ -213,7 +213,6 @@ const INIT_STARTUP_ANY LxssStartupCommon[] = {
+     INIT_ANY_SYMLINK("/bin/" WSLPATH_NAME, "/init"),
+     INIT_ANY_DIRECTORY("/sbin", ROOT_UID, ROOT_GID, S_IFDIR | 0755),
+     INIT_ANY_SYMLINK("/sbin/" MOUNT_DRVFS_NAME, "/init"),
+-    INIT_ANY_MOUNT_DEVICE(BINFMT_MISC_MOUNT_TARGET, "binfmt_misc", "binfmt_misc", MS_RELATIME),
+     INIT_ANY_DIRECTORY("/tmp", ROOT_UID, ROOT_GID, S_IFDIR | S_ISVTX | 0777)};
+ 
+ const INIT_STARTUP_ANY LxssStartupLoggingVmMode[] = {

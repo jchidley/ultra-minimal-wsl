@@ -4,13 +4,14 @@
 
 ## Active action
 
-Localize the retained distro-init startup failure after `minimal-v7-no-cross-distro-launch`:
+Build and test the prepared `minimal-v8-no-binfmt-mount` controlled comparison:
 
-1. review the exact retained path from `ProcessLaunchInitMessage` through `LaunchInit`'s `execle` into distro-init startup and its first `CreateInstanceResult` response;
-2. correlate that path with the finalized trace and 216 `GuestLog` records, distinguishing the initiating failure from the later `ErrorExit` cleanup read of `/proc/self/task/1/children`;
-3. select at most one narrow source diagnostic or reduction that can expose or remove the earliest retained-contract blocker, while keeping `K-OVERLAY-PIDNS-001`, the fixed probe, timeouts, diagnostic instrumentation, broker, and recovery contract unchanged.
+1. resolve the UAC launch boundary before another unchanged protected-broker attempt; two fresh launches ended before durable broker creation, with no worker or fixture mutation;
+2. complete the pinned offline controlled-package build and final generated runner/controller identities;
+3. atomically prepare the combined candidate and derive its runtime operation from the terminal minimal-v7 producing operation, replacing only genuinely changed artifact roles;
+4. run the unchanged `K-OVERLAY-PIDNS-001`, fixed probe, timeouts, diagnostic instrumentation, broker, package transaction, and recovery contract, then preserve and finalize all candidate and stock-recovery evidence.
 
-The minimal-v7 comparison removed the prior cross-distro ENOENT, broad read-only catch, and temporary-overlay signature but again finalized at `B3`: ext4 mounted read-write, `LaunchInit` began, and `WslCorePort` closed without `CreateInstanceResult`. The `/proc/self/task/1/children` error is reached only during cleanup and does not select `CONFIG_PROC_CHILDREN`. Do not rerun minimal v7 unchanged or add a Kconfig facility from this evidence. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
+Retained-path review is complete. The 216 minimal-v7 `GuestLog` records and source control flow show distro-init failing before its first `CreateInstanceResult`: `ConfigInitializeCommon` fatally mounts excluded Windows-interop `binfmt_misc`, then exits and closes the inherited channel. Root mini-init reaches the `/proc/self/task/1/children` read only afterward in `ErrorExit` cleanup. Minimal v8 removes only that startup mount; its two pinned offline LFS-Builder outputs are byte-identical and its exact generated build contract is prepared. No controlled package or runtime result exists yet. Do not rerun minimal v7, broaden the source delta, add `CONFIG_PROC_CHILDREN`, or add another Kconfig facility. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
 
 ## Blocked
 

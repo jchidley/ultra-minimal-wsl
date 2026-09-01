@@ -103,6 +103,24 @@ class ControlPlaneRecordTests(unittest.TestCase):
             self.assertIsNone(re.search(r"^-\s*" + re.escape(retained), patch, re.MULTILINE))
         self.assertNotIn("a/src/windows/", patch)
 
+    def test_v8_startup_layer_removes_only_excluded_binfmt_mount(self):
+        patch = (CONTROL / "patches/0010-minimal-v8-no-binfmt-mount.patch").read_text(encoding="utf-8")
+        self.assertEqual(patch.count("diff --git "), 1)
+        self.assertIn("a/src/linux/init/config.cpp b/src/linux/init/config.cpp", patch)
+        removed = 'INIT_ANY_MOUNT_DEVICE(BINFMT_MISC_MOUNT_TARGET, "binfmt_misc", "binfmt_misc", MS_RELATIME)'
+        self.assertRegex(patch, re.compile(r"^-\s*" + re.escape(removed), re.MULTILINE))
+        self.assertIsNone(re.search(r"^\+\s*" + re.escape(removed), patch, re.MULTILINE))
+        for retained in (
+            'INIT_ANY_MOUNT_DEVICE("/proc", "proc", "proc"',
+            'INIT_ANY_MOUNT_DEVICE("/sys", "sysfs", "sysfs"',
+            'INIT_ANY_MOUNT_DEVICE_OPTION("/dev/pts", "devpts", "devpts"',
+            'INIT_ANY_DIRECTORY("/tmp", ROOT_UID, ROOT_GID',
+        ):
+            self.assertIsNone(re.search(r"^-\s*" + re.escape(retained), patch, re.MULTILINE))
+        self.assertNotIn("CONFIG_PROC_CHILDREN", patch)
+        self.assertNotIn("a/src/linux/init/main.cpp", patch)
+        self.assertNotIn("a/src/windows/", patch)
+
     def test_v4_sender_explicitly_zeros_excluded_initial_configuration(self):
         patch = (CONTROL / "patches/0006-minimal-v4-zero-initial-config.patch").read_text(encoding="utf-8")
         self.assertEqual(patch.count("diff --git "), 1)
@@ -147,6 +165,7 @@ class ControlPlaneRecordTests(unittest.TestCase):
             "minimal-v5-mount-pid-ns",
             "minimal-v6-excluded-initialize",
             "minimal-v7-no-cross-distro-launch",
+            "minimal-v8-no-binfmt-mount",
         )
         for name in names:
             directory = CONTROL / "candidates" / name
