@@ -144,6 +144,8 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
         elevation = next(line for line in launcher.splitlines() if "-Verb RunAs" in line)
         self.assertNotIn("-RedirectStandardOutput", elevation)
         self.assertNotIn("-RedirectStandardError", elevation)
+        self.assertIn("'-EncodedCommand',$encoded", elevation)
+        self.assertNotIn("'-File',$creator", elevation)
         self.assertIn("broker-status.json", launcher)
 
 

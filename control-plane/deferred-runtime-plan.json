@@ -1470,7 +1470,7 @@
         "run_creator_path": "tools/fixture-broker/New-FixtureBrokerRun.ps1",
         "run_creator_sha256": "d0f228eb5b4178fa6d1c9ed3463b1593daef21bf5d92b2b16b7456b742ee3884",
         "run_launcher_path": "tools/fixture-broker/Start-FixtureBrokerRun.ps1",
-        "run_launcher_sha256": "d5759f94d705c95db5fb0d9b6a94386587d670d525f4b9c7d9e090538e4fa5eb",
+        "run_launcher_sha256": "7bae0629dcb7092d74e85594cad3c2edf2f7ebd583895854da0328cb6c935e81",
         "job_client_path": "tools/fixture-broker/Submit-FixtureBrokerJob.ps1",
         "job_client_sha256": "faa4ceb743f49b46a584e76095a3f09b7ed3c39cd4645b7c21babbfe48fc641d"
       },

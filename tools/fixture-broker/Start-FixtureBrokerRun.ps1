@@ -24,9 +24,25 @@ Assert-ProtectedAcl -Path $installRoot -UserSid $userSid | Out-Null
 Assert-BrokerId $RunId 'runId' | Out-Null
 Assert-BrokerId $WorkloadId 'workloadId' | Out-Null
 Assert-Sha256 $WorkloadSha256 | Out-Null
-$creator = Join-Path $installRoot 'New-FixtureBrokerRun.ps1'
-$arguments = @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',$creator,'-RunId',$RunId,'-WorkloadId',$WorkloadId,'-WorkloadPath',(Get-CanonicalPath $WorkloadPath),'-WorkloadSha256',$WorkloadSha256,'-TimeoutSeconds',[string]$TimeoutSeconds)
-$process = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -Verb RunAs -ArgumentList $arguments -Wait -PassThru
+$creator = Get-CanonicalPath (Join-Path $installRoot 'New-FixtureBrokerRun.ps1')
+$payload = [ordered]@{
+    creator = $creator
+    runId = $RunId
+    workloadId = $WorkloadId
+    workloadPath = Get-CanonicalPath $WorkloadPath
+    workloadSha256 = $WorkloadSha256
+    timeoutSeconds = $TimeoutSeconds
+} | ConvertTo-Json -Compress
+$payload64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($payload))
+$bootstrap = @"
+`$ErrorActionPreference='Stop'
+try {
+    `$p=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('$payload64'))|ConvertFrom-Json
+    & ([string]`$p.creator) -RunId ([string]`$p.runId) -WorkloadId ([string]`$p.workloadId) -WorkloadPath ([string]`$p.workloadPath) -WorkloadSha256 ([string]`$p.workloadSha256) -TimeoutSeconds ([int]`$p.timeoutSeconds)
+} catch { Write-Error `$_; exit 1 }
+"@
+$encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($bootstrap))
+$process = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -Verb RunAs -ArgumentList @('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',$encoded) -Wait -PassThru
 if ($process.ExitCode -ne 0) { throw "Secure run creation failed with $($process.ExitCode)." }
 $runRoot = Join-Path $env:ProgramData ('UltraMinimalWslFixtureBroker\Runs\' + $RunId)
 $statusPath = Join-Path $runRoot 'results\broker-status.json'
