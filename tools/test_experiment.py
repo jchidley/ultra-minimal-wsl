@@ -91,6 +91,36 @@ class ExperimentInventoryTests(unittest.TestCase):
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_broker_command_uses_the_operation_bound_launcher(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            db = self.temporary_database(directory)
+            copy = Path(directory) / "experiments.sqlite"
+            try:
+                launcher_id = db.execute(
+                    "SELECT artifact_id FROM artifacts WHERE path=?",
+                    ("tools/fixture-broker/Start-FixtureBrokerRunV2.ps1",),
+                ).fetchone()[0]
+                derive_operation(db, {
+                    "operation_id": "bound-launcher-regression",
+                    "parent_operation_id": "minimal-v8-k-pidns-runtime-018",
+                    "candidate_id": "minimal-v8-k-pidns-001",
+                    "trial_id": "BOUND-LAUNCHER-REGRESSION",
+                    "rationale": "verify broker command uses the operation artifact binding",
+                    "prepared_utc": "2026-09-02T00:00:00Z",
+                    "replace_artifacts": {"broker_launcher": launcher_id},
+                })
+                db.commit()
+            finally:
+                db.close()
+            result = subprocess.run(
+                ["uv", "run", "python", "tools/experiment.py", "--db", str(copy),
+                 "broker-command", "bound-launcher-regression"],
+                cwd=ROOT, capture_output=True, text=True,
+            )
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn("Start-FixtureBrokerRunV2.ps1", result.stdout)
+            self.assertNotIn("Start-FixtureBrokerRun.ps1", result.stdout)
+
     def test_versioned_templates_are_hash_bound_and_every_operation_uses_one(self) -> None:
         db = connect(DB)
         try:

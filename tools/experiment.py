@@ -683,9 +683,19 @@ def main() -> None:
             if len(operation) != 1:
                 raise SystemExit(f"Operation is not active: {args.operation_id}")
             value = operation[0]
+            launchers = rows(
+                db,
+                """SELECT a.path FROM operation_artifacts oa
+                   JOIN artifacts a USING(artifact_id)
+                   WHERE oa.operation_id=? AND oa.role='broker_launcher'""",
+                (args.operation_id,),
+            )
+            if len(launchers) != 1:
+                raise SystemExit(f"Operation must bind exactly one broker_launcher: {args.operation_id}")
+            launcher_path = launchers[0]["path"].replace("'", "''")
             workload_id = value["operation_id"].rsplit("-", 1)[0]
             print(
-                "& tools/fixture-broker/Start-FixtureBrokerRun.ps1 `\n"
+                f"& '{launcher_path}' `\n"
                 f"  -RunId {value['operation_id']} `\n"
                 f"  -WorkloadId {workload_id} `\n"
                 f"  -WorkloadPath '{value['controller_path']}' `\n"

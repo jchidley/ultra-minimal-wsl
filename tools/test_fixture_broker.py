@@ -144,12 +144,16 @@ class FixtureBrokerSecurityTests(unittest.TestCase):
         self.assertIn("broker.stderr.log", creator)
 
     def test_run_launcher_uses_valid_elevation_parameter_set(self):
-        launcher = (BROKER / "Start-FixtureBrokerRun.ps1").read_text(encoding="utf-8")
+        launcher = (BROKER / "Start-FixtureBrokerRunV2.ps1").read_text(encoding="utf-8")
         elevation = next(line for line in launcher.splitlines() if "-Verb RunAs" in line)
         self.assertNotIn("-RedirectStandardOutput", elevation)
         self.assertNotIn("-RedirectStandardError", elevation)
         self.assertIn("'-EncodedCommand',$encoded", elevation)
         self.assertNotIn("'-File',$creator", elevation)
+        self.assertNotIn("-Wait", elevation)
+        self.assertIn("-PassThru", elevation)
+        self.assertIn("$process.WaitForExit(60000)", launcher)
+        self.assertIn("inspect durable broker state before retrying", launcher)
         self.assertIn("broker-status.json", launcher)
 
 

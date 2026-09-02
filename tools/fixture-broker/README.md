@@ -26,6 +26,8 @@ The installer snapshots the broker into `%ProgramFiles%\UltraMinimalWslFixtureBr
 
 ## Start a bounded run
 
+Use the V2 launcher for new operations. It waits only for the elevated run creator and then verifies the protected `broker-status.json`; the original launcher remains unchanged because completed operations bind its historical hash.
+
 The workload must contain:
 
 ```powershell
@@ -35,7 +37,7 @@ The workload must contain:
 It must use `$env:ULTRAMINIMALWSL_SECURE_RUN_ROOT` for every host result and extracted-evidence path and `$env:ULTRAMINIMALWSL_SECURE_CREDENTIAL` for the fixture credential.
 
 ```powershell
-& tools/fixture-broker/Start-FixtureBrokerRun.ps1 `
+& tools/fixture-broker/Start-FixtureBrokerRunV2.ps1 `
   -RunId minimal-v6-k-pidns-runtime-012 `
   -WorkloadId minimal-v6-k-pidns-runtime `
   -WorkloadPath <reviewed-controller.ps1> `
