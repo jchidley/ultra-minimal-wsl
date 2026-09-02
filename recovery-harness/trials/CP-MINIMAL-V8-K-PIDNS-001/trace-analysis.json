@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-001",
+  "extractor": "tracerpt.exe plus tools/extract_guest_logs.py",
+  "candidateTraceRows": 1292,
+  "recoveryTraceRows": 4867,
+  "candidateGuestLogRecords": 217,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the preserved no-overlay 6.18.40.1+ K-PIDNS-001 kernel",
+    "mini_init returned guest capabilities and received the unchanged minimal-v8 reduced configuration",
+    "the registered Toybox VHDX attached and ext4 mounted read-write",
+    "the fixed Toybox command printed toybox-ok and exited zero",
+    "wsl.exe shutdown returned zero without timeout",
+    "the candidate interval reached B6-T without CONFIG_OVERLAY_FS"
+  ],
+  "candidateFatalEvidence": null,
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 147 GuestLog records",
+    "the independent fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T",
+    "the candidate product was absent, .wslconfig was absent, diagnostic relay count was zero, and the fixture returned Off"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-T",
+    "basis": "The exact fixed Toybox command printed toybox-ok and exited zero under K-PIDNS-001, followed by clean shutdown and independent stock B6-T recovery. The controlled no-overlay comparison therefore proves CONFIG_OVERLAY_FS is unnecessary for the retained minimal-v8 contract."
+  },
+  "nextEvidenceAction": "Retain minimal-v8 with K-PIDNS-001 as the Toybox-capable boundary; do not rerun either finalized sibling unchanged or add another Kconfig facility."
+}

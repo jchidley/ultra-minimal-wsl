@@ -1,0 +1,72 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-001",
+  "purpose": "Prove whether overlay remains necessary by comparing terminal minimal-v8 with the already-preserved K-PIDNS-001 sibling while retaining the exact package, probe, timeouts, diagnostics, broker, package transaction, and recovery contract.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-T",
+    "confidence": "high",
+    "ledgerClassification": "DEFERRED",
+    "basis": "The no-overlay candidate executed the fixed Toybox command, printed toybox-ok, relayed exit zero, and shut down cleanly. Exact stock restoration and independent stock B6-T recovery also passed."
+  },
+  "candidate": {
+    "id": "minimal-v8-k-pidns-001",
+    "kernelCandidate": "K-PIDNS-001",
+    "controlPlaneParent": "minimal-v8-no-binfmt-mount",
+    "controlPlaneSourceCommit": "fdbb13d9638b6bfc8bf4a32b51e59e04a09982e6",
+    "controlPlaneCompleteDiffSha256": "57c0b56e38685b03f4a4c6f32c0019a0665df6abf04187c2c9fa4cd48a5642f1",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "packageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+    "manifestSha256": "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+    "runnerSha256": "f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5",
+    "experimentalDelta": "replace only K-OVERLAY-PIDNS-001 and its full config with the preserved K-PIDNS-001 no-overlay sibling"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-02T03:01:06.2223566Z",
+    "finishedUtc": "2026-09-02T03:01:28.7073962Z",
+    "finalClassification": "B6-T",
+    "managementChecksPassed": true,
+    "toyboxResult": "PASS",
+    "toyboxMarker": "toybox-ok",
+    "windowsError": null,
+    "failureSignature": null,
+    "manifestFilesVerified": 20,
+    "guestLogRecords": 217,
+    "guestLogPath": "guest-log-candidate.txt"
+  },
+  "comparison": {
+    "parentTrial": "CP-MINIMAL-V8-K-OVERLAY-PIDNS-001",
+    "parentResult": "B6-T with K-OVERLAY-PIDNS-001",
+    "candidateResult": "B6-T with K-PIDNS-001 and CONFIG_OVERLAY_FS absent",
+    "decision": "Overlay is not necessary for the retained minimal-v8 Toybox contract. Retain minimal-v8 with K-PIDNS-001 and keep CONFIG_OVERLAY_FS deferred."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V8-K-PIDNS-001-RECOVERY",
+    "startedUtc": "2026-09-02T03:01:51.1007442Z",
+    "finishedUtc": "2026-09-02T03:01:59.1799930Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "controller": {
+    "sha256": "4ce89dc58ad445832b9236cf45de4f3bc1d9073eeaa869c2d14e4f177442e505",
+    "candidateArchiveSha256": "0cdceb31b59c3803c49170fcbcb73e8a651c9258eedbad51b6f98ced528968fa",
+    "recoveryArchiveSha256": "a5e6754371a9a975dd30a2e43422d6ebad932327f61f25bfe32f74aaaecf4265",
+    "operationResultSha256": "95d57729fa8e5511a10c151bd38dfa1379d3f874d66e846604dbcd9902b3bcb2",
+    "brokerStatusSha256": "da31754715c2bc2d9c135a9c9a75af011c8d6a4b5517db898a87009ff3152edf"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "wslconfigRestoredAbsent": true,
+    "diagnosticRelaysRemoved": true,
+    "brokerState": "completed"
+  },
+  "decision": "Finalize minimal-v8 plus K-PIDNS-001 at B6-T. Overlay is unnecessary for the bounded target and remains deferred; do not rerun either sibling unchanged."
+}

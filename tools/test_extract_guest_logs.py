@@ -23,6 +23,27 @@ class GuestLogExtractionTests(unittest.TestCase):
             self.assertEqual(result, {"rows": 3, "guestLogRecords": 2})
             self.assertEqual(output.read_bytes(), b"first, value\nsecond\n")
 
+    def test_accepts_tracerpt_provider_guid_after_guest_log_user_data(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source, output = root / "trace.csv", root / "guest.txt"
+            source.write_text(
+                "Event Name,Type,User Data\n"
+                "EventTrace,Header,provider,specific,fields\n"
+                "GuestLog,0,boot, record,{5ba01483-d92b-412d-a5a1-4014692f0511}\n",
+                encoding="utf-8-sig",
+            )
+            self.assertEqual(extract_guest_logs(source, output), {"rows": 2, "guestLogRecords": 1})
+            self.assertEqual(output.read_text(encoding="utf-8"), "boot, record\n")
+
+    def test_rejects_unrecognized_extra_guest_log_field(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "trace.csv"
+            source.write_text("Event Name,User Data\nGuestLog,record,unexpected\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "3 fields, expected 2"):
+                extract_guest_logs(source, root / "guest.txt")
+
     def test_accepts_utf16_tracerpt_output(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

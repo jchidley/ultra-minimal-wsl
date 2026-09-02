@@ -4,18 +4,18 @@
 
 ## Active action
 
-Prove whether overlay remains necessary under the passing `minimal-v8-no-binfmt-mount` control plane:
+Establish the remaining freeze-readiness evidence for the retained Toybox-capable boundary, `minimal-v8-no-binfmt-mount` plus `K-PIDNS-001`:
 
-1. derive a controlled comparison from terminal minimal-v8, replacing only the unchanged external kernel and kernel-config roles with the already-preserved `K-PIDNS-001` sibling;
-2. retain the exact minimal-v8 package, fixed probe, timeouts, diagnostic instrumentation, broker, package transaction, and recovery contract;
-3. run one serial candidate interval, preserve immutable candidate and stock-recovery evidence, and finalize transactionally.
+1. audit every non-mkroot enabled facility against the durable classifications and resolve only documentation/inventory gaps supported by completed runtime evidence;
+2. define one bounded acceptance operation for the required ten cold starts using the unchanged retained candidate, exact fixed Toybox probe per start, serial execution, unchanged timeouts/instrumentation, and exact stock recovery;
+3. preserve per-start evidence and finalize only if all ten starts, cleanup, stock recovery, and fixture-Off checks pass.
 
-Minimal v8 passed `B6-T`: the first `CreateInstanceResult` succeeded, the fixed command printed `toybox-ok` and exited zero, exact stock restoration and independent stock `B6-T` passed, `.wslconfig` was absent, relays were removed, and the fixture returned Off. The retained startup path no longer constructs the stock-only temporary overlay, so the existing `K-PIDNS-001` no-overlay sibling is now the narrow minimality comparison. Do not rerun minimal v8 with `K-OVERLAY-PIDNS-001`, rebuild either kernel, change the control-plane source, add `CONFIG_PROC_CHILDREN`, or add another Kconfig facility. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
+The no-overlay minimal-v8 comparison passed `B6-T`, proving `CONFIG_OVERLAY_FS` unnecessary for the retained Toybox contract. Both minimal-v8 kernel siblings are finalized and must not be rerun as ordinary candidate comparisons. Do not rebuild either kernel or the package, change control-plane source, add `CONFIG_PROC_CHILDREN`, or add another Kconfig facility. The ten-start acceptance is a distinct completion gate, not another minimality trial. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
 
 ## Blocked
 
 - Alpine, Arch, and Debian compatibility testing waits for a frozen Toybox-capable `minimal-viable-wsl-v1`.
-- No finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidate is eligible for an unchanged rerun.
+- No finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidate is eligible for an unchanged candidate-comparison rerun.
 - No speculative Kconfig group or replacement fixture infrastructure is queued.
 
 ## Constraints

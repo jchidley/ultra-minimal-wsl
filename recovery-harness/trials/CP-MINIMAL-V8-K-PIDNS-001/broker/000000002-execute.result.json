@@ -1,0 +1,1 @@
+{"schema":1,"id":"execute","sequence":2,"operation":"execute","success":true,"result":{"exitCode":0,"stdout":"minimal-v8-k-pidns-runtime.stdout.log","stderr":"minimal-v8-k-pidns-runtime.stderr.log"},"completedUtc":"2026-09-02T03:02:08.3539515Z"}

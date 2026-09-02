@@ -1,0 +1,149 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1",
+      "source_sha256": "fe127e76fa0c3d01f826b07c0e80ba97a60018342f6a861979bd7fea314fdb5b",
+      "output_sha256": "f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5",
+      "substitutions": [
+        {
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-OVERLAY-PIDNS-001'",
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-001'"
+        },
+        {
+          "old": "$CandidateManifest = Join-Path $InputRoot 'trial-manifests\\minimal-v8-k-overlay-pidns-001.json'",
+          "new": "$CandidateManifest = Join-Path $InputRoot 'trial-manifests\\minimal-v8-k-pidns-001.json'"
+        },
+        {
+          "old": "$CandidateKernel = Join-Path $InputRoot 'candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-kernel'",
+          "new": "$CandidateKernel = Join-Path $InputRoot 'candidate-kernels\\K-PIDNS-001\\linux-kernel'"
+        },
+        {
+          "old": "$CandidateKernelConfig = Join-Path $InputRoot 'candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-fullconfig'",
+          "new": "$CandidateKernelConfig = Join-Path $InputRoot 'candidate-kernels\\K-PIDNS-001\\linux-fullconfig'"
+        },
+        {
+          "old": "$CandidateManifestSha256 = 'dabad195aff274ca070e8698e42a6dcc13c2078d8f98dd70c91424dc93679b9f'",
+          "new": "$CandidateManifestSha256 = 'f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4'"
+        },
+        {
+          "old": "$CandidateKernelSha256 = '5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca'",
+          "new": "$CandidateKernelSha256 = '24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959'"
+        },
+        {
+          "old": "$CandidateKernelConfigSha256 = '22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7'",
+          "new": "$CandidateKernelConfigSha256 = 'e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563'"
+        },
+        {
+          "old": "$CandidateKernelBytes = 3781632",
+          "new": "$CandidateKernelBytes = 3720192"
+        },
+        {
+          "old": "    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v8-k-overlay-pidns-001' }",
+          "new": "    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v8-k-pidns-001' }"
+        },
+        {
+          "old": "    if ($manifest.candidate_id -ne 'minimal-v8-k-overlay-pidns-001' -or",
+          "new": "    if ($manifest.candidate_id -ne 'minimal-v8-k-pidns-001' -or"
+        },
+        {
+          "old": "        $manifest.kernel_candidate -ne 'K-OVERLAY-PIDNS-001' -or\n        $manifest.kernel_config_parent -ne 'k-overlay-001' -or",
+          "new": "        $manifest.kernel_candidate -ne 'K-PIDNS-001' -or\n        $manifest.kernel_config_parent -ne 'k-storage-001' -or"
+        },
+        {
+          "old": "    note = 'Fixture-local source comparison with unchanged diagnostic capture; the control-plane source layer is the sole experimental delta, and transport, extraction, and ledger finalization remain external prerequisites.'",
+          "new": "    note = 'Fixture-local kernel comparison with unchanged minimal-v8 control plane and diagnostic capture; the preserved no-overlay kernel/config pair is the sole experimental delta, and transport, extraction, and ledger finalization remain external prerequisites.'"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-overlay-pidns-runtime-017\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-runtime-018\\Run-ControlledTrial.ps1",
+      "source_sha256": "e3ab3c8cb9c2ddfd6fda99f3f900d007cbb17c9b1025e7278a1f415d79d164d5",
+      "output_sha256": "4ce89dc58ad445832b9236cf45de4f3bc1d9073eeaa869c2d14e4f177442e505",
+      "substitutions": [
+        {
+          "old": "$trial = 'CP-MINIMAL-V8-K-OVERLAY-PIDNS-001'",
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-001'"
+        },
+        {
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1'",
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1'"
+        },
+        {
+          "old": "$manifestSource = Join-Path $project 'control-plane\\trial-manifests\\minimal-v8-k-overlay-pidns-001.json'",
+          "new": "$manifestSource = Join-Path $project 'control-plane\\trial-manifests\\minimal-v8-k-pidns-001.json'"
+        },
+        {
+          "old": "$kernelSource = Join-Path $project 'candidates\\K-OVERLAY-PIDNS-001\\linux-kernel'",
+          "new": "$kernelSource = Join-Path $project 'candidates\\K-PIDNS-001\\linux-kernel'"
+        },
+        {
+          "old": "$configSource = Join-Path $project 'candidates\\K-OVERLAY-PIDNS-001\\linux-fullconfig'",
+          "new": "$configSource = Join-Path $project 'candidates\\K-PIDNS-001\\linux-fullconfig'"
+        },
+        {
+          "old": "$runnerHash = 'fe127e76fa0c3d01f826b07c0e80ba97a60018342f6a861979bd7fea314fdb5b'",
+          "new": "$runnerHash = 'f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5'"
+        },
+        {
+          "old": "$manifestHash = 'dabad195aff274ca070e8698e42a6dcc13c2078d8f98dd70c91424dc93679b9f'",
+          "new": "$manifestHash = 'f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4'"
+        },
+        {
+          "old": "$kernelHash = '5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca'",
+          "new": "$kernelHash = '24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959'"
+        },
+        {
+          "old": "$configHash = '22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7'",
+          "new": "$configHash = 'e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563'"
+        },
+        {
+          "old": "            'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001',",
+          "new": "            'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001',"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $runnerSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $runnerSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1' -Force"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $manifestSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v8-k-overlay-pidns-001.json' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $manifestSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v8-k-pidns-001.json' -Force"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $kernelSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-kernel' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $kernelSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-kernel' -Force"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $configSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-fullconfig' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $configSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-fullconfig' -Force"
+        },
+        {
+          "old": "            runner='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1'",
+          "new": "            runner='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1'"
+        },
+        {
+          "old": "            manifest='C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v8-k-overlay-pidns-001.json'",
+          "new": "            manifest='C:\\controlled-inputs\\ultra-minimal-wsl\\trial-manifests\\minimal-v8-k-pidns-001.json'"
+        },
+        {
+          "old": "            kernel='C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-kernel'",
+          "new": "            kernel='C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-kernel'"
+        },
+        {
+          "old": "            config='C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-OVERLAY-PIDNS-001\\linux-fullconfig'",
+          "new": "            config='C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-kernels\\K-PIDNS-001\\linux-fullconfig'"
+        },
+        {
+          "old": "        if ((Get-Item -LiteralPath $paths.kernel).Length -ne 3781632 -or",
+          "new": "        if ((Get-Item -LiteralPath $paths.kernel).Length -ne 3720192 -or"
+        }
+      ]
+    }
+  ]
+}
