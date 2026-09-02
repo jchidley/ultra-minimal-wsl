@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the three candidate-specific PowerShell scripts from a checked delta."""
+"""Generate phase-specific candidate PowerShell scripts from a checked delta."""
 
 from __future__ import annotations
 
@@ -82,13 +82,30 @@ def render_file(spec: dict) -> tuple[Path, str, str]:
     return output_path, rendered, delta
 
 
+def required_output_names(record: dict) -> set[str]:
+    if set(record) == {"schema", "generator", "files"} and record.get("schema") == 1 and record.get("generator") == "candidate-powershell-v1":
+        return {"build", "runner", "controller"}
+    if set(record) == {"schema", "generator", "phase", "files"} and record.get("schema") == 2 and record.get("generator") == "candidate-powershell-v2":
+        phases = {
+            "build": {"build", "controller"},
+            "runtime": {"runner", "controller"},
+        }
+        if record.get("phase") not in phases:
+            raise ValueError("candidate-powershell-v2 phase must be build or runtime")
+        return phases[record["phase"]]
+    raise ValueError("unsupported candidate generation delta")
+
+
 def generate(delta_path: Path, *, write: bool) -> str:
     record = json.loads(delta_path.read_text(encoding="utf-8"))
-    if set(record) != {"schema", "generator", "files"} or record["schema"] != 1 or record["generator"] != "candidate-powershell-v1":
-        raise ValueError("unsupported candidate generation delta")
-    if len(record["files"]) != 3 or {item.get("name") for item in record["files"]} != {"build", "runner", "controller"}:
-        raise ValueError("delta must define exactly build, runner, and controller outputs")
-    rendered = [render_file(spec) for spec in record["files"]]
+    required_names = required_output_names(record)
+    files = record.get("files")
+    if not isinstance(files, list) or not all(isinstance(item, dict) for item in files):
+        raise ValueError("generation files must be an array of objects")
+    actual_names = [item.get("name") for item in files]
+    if len(actual_names) != len(required_names) or set(actual_names) != required_names:
+        raise ValueError(f"generation outputs must be exactly {sorted(required_names)}")
+    rendered = [render_file(spec) for spec in files]
     for output_path, text, _ in rendered:
         if write:
             output_path.parent.mkdir(parents=True, exist_ok=True)

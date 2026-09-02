@@ -44,7 +44,7 @@ Before any kernel-candidate boot:
 1. Record the full config, parent, hash, and trial ID transactionally through `tools/experiment.py`.
 2. Review explicit and selected symbols with `tools/inventory.py`; update annotations only through `tools/inventory.py set`.
 
-Before any controlled-package trial, generate the controlled build script, trial runner, and protected controller from a versioned structured candidate delta; never copy and broadly replace a prior script. Record candidate lineage, genuinely new file identities, reused artifacts, and role links atomically through `candidate-prepare`; derive the operation from a terminal parent and an immutable template rather than reconstructing unchanged artifact roles or contract fields. Retries must reference the failed attempt through `operation-retry`. Require `tools/experiment.py validate` and inspect `tools/experiment.py diff-head`. For every trial type, also run `uv run python tools/inventory_records.py`, require integrity `ok`, and plan-validate the exact operation and recovery. Complete repository work and disposable-fixture work autonomously without asking the operator to review plans, approve stages, open gates, or confirm routine choices. Obtain explicit approval only if the operation can affect the physical host, a shared WSL instance, or another resource outside the disposable fixture envelope.
+Before any controlled-package trial, use phase-specific schema-v2 generation: the build phase creates only the controlled build script and build controller; after package identity exists, the runtime phase creates only the trial runner and runtime controller. Never create placeholder outputs, commit derived display `.diff` files, or copy and broadly replace a prior script. Record candidate lineage, genuinely new file identities, reused artifacts, and role links atomically through `candidate-prepare`; derive the operation from a terminal parent and an immutable template rather than reconstructing unchanged artifact roles or contract fields. Retries must reference the failed attempt through `operation-retry`. Require `tools/experiment.py validate` and inspect `tools/experiment.py diff-head`. For every trial type, also run `uv run python tools/inventory_records.py`, require integrity `ok`, and plan-validate the exact operation and recovery. Complete repository work and disposable-fixture work autonomously without asking the operator to review plans, approve stages, open gates, or confirm routine choices. Obtain explicit approval only if the operation can affect the physical host, a shared WSL instance, or another resource outside the disposable fixture envelope.
 
 After a trial, preserve the harness evidence, finalize the operation and trial in one transactional CLI workflow, and resynchronize the generated Kconfig query database. Never rewrite terminal database rows or trial evidence.
 
@@ -72,7 +72,8 @@ uv run python tools/experiment.py diff-head
 uv run python tools/inventory.py trial
 uv run python tools/inventory.py show CONFIG_<SYMBOL>
 uv run python tools/inventory_records.py
-uv run python -m unittest tools.test_build_host_profile tools.test_experiment tools.test_inventory_records tools.test_control_plane_protocol tools.test_control_plane_records tools.test_fixture_broker
+uv run python -m unittest tools.test_build_host_profile tools.test_experiment tools.test_inventory_records tools.test_extract_guest_logs tools.test_process_commit tools.test_control_plane_protocol tools.test_control_plane_records tools.test_fixture_broker
+& tools/Test-ProcessCommit.ps1
 & ~/git/agent-skills/skills/windows-env/Invoke-PsLint.ps1 -Offline -Settings .PSScriptAnalyzerSettings.psd1 -Path tools,control-plane/controlled-package-offline
 ```
 

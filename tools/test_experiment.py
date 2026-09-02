@@ -305,6 +305,48 @@ class ExperimentInventoryTests(unittest.TestCase):
         self.assertIn("minimal-v7-k-overlay-pidns-runtime-016", delta)
         self.assertIn("0009-minimal-v7-no-cross-distro-launch.patch", delta)
 
+    def test_candidate_generation_v2_has_fixed_build_and_runtime_phases(self) -> None:
+        phases = {
+            "build": ("build", "controller"),
+            "runtime": ("runner", "controller"),
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for phase, names in phases.items():
+                files = []
+                for name in names:
+                    source = root / f"{phase}-{name}.source.ps1"
+                    output = root / f"{phase}-{name}.output.ps1"
+                    source_text = f"{name}=old\n"
+                    output_text = f"{name}=new\n"
+                    source.write_text(source_text, encoding="utf-8", newline="")
+                    files.append({
+                        "name": name,
+                        "source": str(source),
+                        "output": str(output),
+                        "source_sha256": hashlib.sha256(source_text.encode()).hexdigest(),
+                        "output_sha256": hashlib.sha256(output_text.encode()).hexdigest(),
+                        "substitutions": [{"old": "=old", "new": "=new"}],
+                    })
+                record = {
+                    "schema": 2, "generator": "candidate-powershell-v2",
+                    "phase": phase, "files": files,
+                }
+                delta_path = root / f"{phase}.json"
+                delta_path.write_text(json.dumps(record), encoding="utf-8")
+                delta = generate(delta_path, write=True)
+                self.assertEqual({item["name"] for item in files}, set(names))
+                self.assertNotIn("PreBuild-DoNotExecute", delta)
+                for item in files:
+                    self.assertEqual(Path(item["output"]).read_text(encoding="utf-8"), f"{item['name']}=new\n")
+
+            invalid = json.loads((root / "build.json").read_text(encoding="utf-8"))
+            invalid["files"].append(dict(invalid["files"][0], name="runner"))
+            invalid_path = root / "invalid.json"
+            invalid_path.write_text(json.dumps(invalid), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "outputs must be exactly"):
+                generate(invalid_path, write=False)
+
     def test_candidate_generation_rejects_duplicate_overlap_and_unresolved_values(self) -> None:
         with self.assertRaisesRegex(ValueError, "occurs 2 times"):
             render_text("token token", [{"old": "token", "new": "value"}])

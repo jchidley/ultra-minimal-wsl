@@ -453,6 +453,8 @@ INVARIANT_TEST_MODULES = (
     "tools.test_build_host_profile",
     "tools.test_experiment",
     "tools.test_inventory_records",
+    "tools.test_extract_guest_logs",
+    "tools.test_process_commit",
     "tools.test_control_plane_protocol",
     "tools.test_control_plane_records",
     "tools.test_fixture_broker",
