@@ -1,0 +1,166 @@
+--- C:\Users\jackc\git\ultra-minimal-wsl\control-plane\controlled-package-offline\Build-MinimalV7NoCrossDistroLaunch.ps1
++++ C:\Users\jackc\git\ultra-minimal-wsl\control-plane\controlled-package-offline\Build-MinimalV8NoBinfmtMount.ps1
+@@ -5,15 +5,15 @@
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference = 'Stop'
+
+-$Candidate = 'minimal-v7-no-cross-distro-launch'
++$Candidate = 'minimal-v8-no-binfmt-mount'
+ $InputRoot = 'C:\controlled-inputs\ultra-minimal-wsl'
+ $ProcedureRoot = Join-Path $InputRoot 'procedure\controlled-package-offline'
+ $PatchRoot = Join-Path $InputRoot 'procedure\patches'
+ $SourceArchive = Join-Path $InputRoot 'controlled-inputs\wsl-source\WSL-2.7.12-68f601bba8eac1df20a0bbd403c6c87c92369ade.tar.gz'
+ $NugetRoot = Join-Path $InputRoot 'controlled-inputs\nuget'
+ $FetchRoot = Join-Path $InputRoot 'controlled-inputs\cmake-fetchcontent'
+-$SourceRoot = 'C:\controlled-package\source\minimal-v7-no-cross-distro-launch'
+-$BuildRoot = 'C:\controlled-package\build\minimal-v7-no-cross-distro-launch'
++$SourceRoot = 'C:\controlled-package\source\minimal-v8-no-binfmt-mount'
++$BuildRoot = 'C:\controlled-package\build\minimal-v8-no-binfmt-mount'
+ $DepsRoot = 'C:\controlled-package\deps'
+ $GslRoot = Join-Path $DepsRoot 'GSL-4.0.0'
+ $JsonRoot = Join-Path $DepsRoot 'nlohmann-json-3.12.0'
+@@ -26,7 +26,7 @@
+ $ExpectedGslSha256 = 'f0e32cb10654fea91ad56bde89170d78cfbf4363ee0b01d8f097de2ba49f6ce9'
+ $ExpectedJsonSha256 = '42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa'
+ $ExpectedOverlaySha256 = 'eb0b3cb4a6915a5c7221ca18a052afd5bfdd2d44dbaad40101f54bf9ccb92989'
+-$ExpectedCompleteDiffSha256 = 'd5426ad3b26d091207b511acede57e93d888edb98b27155810856ebdd5cfd214'
++$ExpectedCompleteDiffSha256 = '57c0b56e38685b03f4a4c6f32c0019a0665df6abf04187c2c9fa4cd48a5642f1'
+ $Patches = [ordered]@{
+     '0001-minimal-control-plane-v1.patch' = '3d54b4769fdb8c784f05387a9823af34fc0ee43f4a3533700d6eef2412f5381a'
+     '0002-minimal-v2-fail-closed.patch' = '47d57f86685e3adf00cf73866c1e27779b5195357c14eeda5fa441ce0e1934a0'
+@@ -35,6 +35,7 @@
+     '0007-minimal-v5-mount-pid-ns.patch' = '1658ae9c7a8c90d502f12963a593f6c93fbaaeb87b8c59290221db8df0fea02a'
+     '0008-minimal-v6-excluded-initialize.patch' = '5b2f5dcc3c0ca2e8e24c19b6a6a1bee05c1140cf8e3561f7d0fb23edd63eeda0'
+     '0009-minimal-v7-no-cross-distro-launch.patch' = '353e609f69a9fddcfab944edba79a9ad0f73128defe86cce92d7e6e273719705'
++    '0010-minimal-v8-no-binfmt-mount.patch' = 'eaa0e87767db9ba592c0065462254d3389598ad1978ded71913967218ee8ef15'
+ }
+ $ExpectedOutputs = @(
+     'bin/x64/Release/wsl.msi',
+
+--- C:\Users\jackc\git\ultra-minimal-wsl\control-plane\controlled-package-offline\Invoke-MinimalV7KOverlayPidNsDiagnosticTrial.ps1
++++ C:\Users\jackc\git\ultra-minimal-wsl\control-plane\controlled-package-offline\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1
+@@ -9,11 +9,11 @@
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference = 'Stop'
+
+-$TrialId = 'CP-MINIMAL-V7-K-OVERLAY-PIDNS-001'
++$TrialId = 'CP-MINIMAL-V8-K-OVERLAY-PIDNS-001'
+ $InputRoot = 'C:\controlled-inputs\ultra-minimal-wsl'
+ $EvidenceParent = 'C:\controlled-wsl-trials'
+-$CandidatePackage = Join-Path $InputRoot 'candidate-packages\minimal-v7-no-cross-distro-launch\wsl.msi'
+-$CandidateManifest = Join-Path $InputRoot 'trial-manifests\minimal-v7-k-overlay-pidns-001.json'
++$CandidatePackage = Join-Path $InputRoot 'candidate-packages\minimal-v8-no-binfmt-mount\wsl.msi'
++$CandidateManifest = Join-Path $InputRoot 'trial-manifests\minimal-v8-k-overlay-pidns-001.json'
+ $CandidateKernel = Join-Path $InputRoot 'candidate-kernels\K-OVERLAY-PIDNS-001\linux-kernel'
+ $CandidateKernelConfig = Join-Path $InputRoot 'candidate-kernels\K-OVERLAY-PIDNS-001\linux-fullconfig'
+ $WslConfig = Join-Path $env:USERPROFILE '.wslconfig'
+@@ -21,14 +21,14 @@
+ $Probe = Join-Path $InputRoot 'procedure\Invoke-WslCandidateProbe.ps1'
+ $Rootfs = Join-Path $InputRoot 'toybox-minimal-wsl-rootfs.tar.gz'
+ $WprProfile = Join-Path $InputRoot 'diagnostics\wsl.wprp'
+-$CandidateProductCode = '{6038ED30-C9C4-47F9-B555-3D81CE345D36}'
++$CandidateProductCode = '{65E3A12F-0AF8-4D54-A19A-29A07D5186E3}'
+ $StockProductCode = '{020F8AC8-A788-4E39-8E9B-8FECFA843632}'
+ $UpgradeCode = '{6D5B792B-1EDC-4DE9-8EAD-201B820F8E82}'
+ $ExpectedVersion = '2.7.12.0'
+ $CandidatePackageBytes = 174403584
+-$CandidatePackageSha256 = '30303de0cb090c543fb5aca941968939ff9af10e0133fe7d2cc82433e9ee958a'
+-$CandidateManifestSha256 = '107832a7b8360449975b3d8eeea7e535756e2ae3dd499a058880cdf68dcd5ea2'
+-$CompleteSourceDiffSha256 = 'd5426ad3b26d091207b511acede57e93d888edb98b27155810856ebdd5cfd214'
++$CandidatePackageSha256 = '8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765'
++$CandidateManifestSha256 = 'dabad195aff274ca070e8698e42a6dcc13c2078d8f98dd70c91424dc93679b9f'
++$CompleteSourceDiffSha256 = '57c0b56e38685b03f4a4c6f32c0019a0665df6abf04187c2c9fa4cd48a5642f1'
+ $CandidateKernelSha256 = '5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca'
+ $CandidateKernelConfigSha256 = '22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7'
+ $CandidateKernelBytes = 3781632
+@@ -192,7 +192,7 @@
+
+ function Invoke-FixedProbe([bool]$Recovery) {
+     $id = if ($Recovery) { "$TrialId-RECOVERY" } else { $TrialId }
+-    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v7-k-overlay-pidns-001' }
++    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v8-k-overlay-pidns-001' }
+     $manifest = if ($Recovery) { Join-Path $InputRoot 'trial-manifests\stock-wsl-2.7.12-calibration.json' } else { $CandidateManifest }
+     $manifestHash = if ($Recovery) { 'a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7' } else { $CandidateManifestSha256 }
+     $package = if ($Recovery) { $StockPackage } else { $CandidatePackage }
+@@ -222,9 +222,9 @@
+     $stockManifest = Join-Path $InputRoot 'trial-manifests\stock-wsl-2.7.12-calibration.json'
+     Assert-Hash $stockManifest 'a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7'
+     $manifest = Get-Content -LiteralPath $CandidateManifest -Raw | ConvertFrom-Json
+-    if ($manifest.candidate_id -ne 'minimal-v7-k-overlay-pidns-001' -or
++    if ($manifest.candidate_id -ne 'minimal-v8-k-overlay-pidns-001' -or
+         $manifest.wsl_version -ne $ExpectedVersion -or
+-        $manifest.control_plane_parent -ne 'minimal-v7-no-cross-distro-launch' -or
++        $manifest.control_plane_parent -ne 'minimal-v8-no-binfmt-mount' -or
+         $manifest.control_plane_complete_source_diff_sha256 -ne $CompleteSourceDiffSha256 -or
+         $manifest.package_path -ne $CandidatePackage -or
+         $manifest.package_bytes -ne $CandidatePackageBytes -or
+
+--- C:\Users\jackc\AppData\Local\ultra-minimal-wsl\approval-state\minimal-v7-k-overlay-pidns-runtime-016\Run-ControlledTrial.ps1
++++ C:\Users\jackc\AppData\Local\ultra-minimal-wsl\approval-state\minimal-v8-k-overlay-pidns-runtime-017\Run-ControlledTrial.ps1
+@@ -7,7 +7,7 @@
+ $vmName = 'ultra-minimal-wsl-dev'
+ $vmId = 'dcbf722c-0702-444e-9496-04a4623c3198'
+ $checkpoint = 'clean-shell'
+-$trial = 'CP-MINIMAL-V7-K-OVERLAY-PIDNS-001'
++$trial = 'CP-MINIMAL-V8-K-OVERLAY-PIDNS-001'
+ $recovery = "$trial-RECOVERY"
+ $project = 'C:\Users\jackc\git\ultra-minimal-wsl'
+ $root = [Environment]::GetEnvironmentVariable('ULTRAMINIMALWSL_SECURE_RUN_ROOT')
+@@ -19,16 +19,16 @@
+ $resultPath = Join-Path $root 'results\workload-operation-result.json'
+ $extract = Join-Path $root 'results\extracted'
+ $credential = Import-Clixml -LiteralPath $credentialPath
+-$runnerSource = Join-Path $project 'control-plane\controlled-package-offline\Invoke-MinimalV7KOverlayPidNsDiagnosticTrial.ps1'
+-$manifestSource = Join-Path $project 'control-plane\trial-manifests\minimal-v7-k-overlay-pidns-001.json'
++$runnerSource = Join-Path $project 'control-plane\controlled-package-offline\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1'
++$manifestSource = Join-Path $project 'control-plane\trial-manifests\minimal-v8-k-overlay-pidns-001.json'
+ $kernelSource = Join-Path $project 'candidates\K-OVERLAY-PIDNS-001\linux-kernel'
+ $configSource = Join-Path $project 'candidates\K-OVERLAY-PIDNS-001\linux-fullconfig'
+-$packageSource = 'C:\Users\jackc\AppData\Local\ultra-minimal-wsl\controlled-outputs\minimal-v7-no-cross-distro-launch\wsl.msi'
+-$runnerHash = '9119674fd5e3e257ff3c4b5d2e0ef3b0a980846a0a54e9c20b5a8919bc97d2fc'
+-$manifestHash = '107832a7b8360449975b3d8eeea7e535756e2ae3dd499a058880cdf68dcd5ea2'
++$packageSource = 'C:\Users\jackc\AppData\Local\ultra-minimal-wsl\controlled-outputs\minimal-v8-no-binfmt-mount\wsl.msi'
++$runnerHash = 'fe127e76fa0c3d01f826b07c0e80ba97a60018342f6a861979bd7fea314fdb5b'
++$manifestHash = 'dabad195aff274ca070e8698e42a6dcc13c2078d8f98dd70c91424dc93679b9f'
+ $kernelHash = '5e6e4fcf3bded61d96787ea8c46f1941f09099ef086b045a98e31652f97320ca'
+ $configHash = '22a8d81761cbe852cacc5d1d25890a3fb181a7d2f22fdf86f298c8f5366df1e7'
+-$packageHash = '30303de0cb090c543fb5aca941968939ff9af10e0133fe7d2cc82433e9ee958a'
++$packageHash = '8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765'
+ $probeHash = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'
+ $rootfsHash = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'
+ $wprHash = '3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2'
+@@ -63,15 +63,15 @@
+             'C:\controlled-inputs\ultra-minimal-wsl\procedure\controlled-package-offline',
+             'C:\controlled-inputs\ultra-minimal-wsl\trial-manifests',
+             'C:\controlled-inputs\ultra-minimal-wsl\candidate-kernels\K-OVERLAY-PIDNS-001',
+-            'C:\controlled-inputs\ultra-minimal-wsl\candidate-packages\minimal-v7-no-cross-distro-launch'
++            'C:\controlled-inputs\ultra-minimal-wsl\candidate-packages\minimal-v8-no-binfmt-mount'
+         )
+         foreach ($path in $paths) { [IO.Directory]::CreateDirectory($path) | Out-Null }
+     }
+-    Copy-Item -ToSession $session -LiteralPath $runnerSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\procedure\controlled-package-offline\Invoke-MinimalV7KOverlayPidNsDiagnosticTrial.ps1' -Force
+-    Copy-Item -ToSession $session -LiteralPath $manifestSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\trial-manifests\minimal-v7-k-overlay-pidns-001.json' -Force
++    Copy-Item -ToSession $session -LiteralPath $runnerSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\procedure\controlled-package-offline\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1' -Force
++    Copy-Item -ToSession $session -LiteralPath $manifestSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\trial-manifests\minimal-v8-k-overlay-pidns-001.json' -Force
+     Copy-Item -ToSession $session -LiteralPath $kernelSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\candidate-kernels\K-OVERLAY-PIDNS-001\linux-kernel' -Force
+     Copy-Item -ToSession $session -LiteralPath $configSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\candidate-kernels\K-OVERLAY-PIDNS-001\linux-fullconfig' -Force
+-    Copy-Item -ToSession $session -LiteralPath $packageSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\candidate-packages\minimal-v7-no-cross-distro-launch\wsl.msi' -Force
++    Copy-Item -ToSession $session -LiteralPath $packageSource -Destination 'C:\controlled-inputs\ultra-minimal-wsl\candidate-packages\minimal-v8-no-binfmt-mount\wsl.msi' -Force
+     $remote = Invoke-Command -Session $session -ScriptBlock {
+         param($Trial,$Recovery,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$RootfsHash,$WprHash)
+         Set-StrictMode -Version Latest
+@@ -90,11 +90,11 @@
+             @($manifest.files).Count + 1
+         }
+         $paths = [ordered]@{
+-            runner='C:\controlled-inputs\ultra-minimal-wsl\procedure\controlled-package-offline\Invoke-MinimalV7KOverlayPidNsDiagnosticTrial.ps1'
+-            manifest='C:\controlled-inputs\ultra-minimal-wsl\trial-manifests\minimal-v7-k-overlay-pidns-001.json'
++            runner='C:\controlled-inputs\ultra-minimal-wsl\procedure\controlled-package-offline\Invoke-MinimalV8KOverlayPidNsDiagnosticTrial.ps1'
++            manifest='C:\controlled-inputs\ultra-minimal-wsl\trial-manifests\minimal-v8-k-overlay-pidns-001.json'
+             kernel='C:\controlled-inputs\ultra-minimal-wsl\candidate-kernels\K-OVERLAY-PIDNS-001\linux-kernel'
+             config='C:\controlled-inputs\ultra-minimal-wsl\candidate-kernels\K-OVERLAY-PIDNS-001\linux-fullconfig'
+-            package='C:\controlled-inputs\ultra-minimal-wsl\candidate-packages\minimal-v7-no-cross-distro-launch\wsl.msi'
++            package='C:\controlled-inputs\ultra-minimal-wsl\candidate-packages\minimal-v8-no-binfmt-mount\wsl.msi'
+             probe='C:\controlled-inputs\ultra-minimal-wsl\procedure\Invoke-WslCandidateProbe.ps1'
+             rootfs='C:\controlled-inputs\ultra-minimal-wsl\toybox-minimal-wsl-rootfs.tar.gz'
+             wpr='C:\controlled-inputs\ultra-minimal-wsl\diagnostics\wsl.wprp'

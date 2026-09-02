@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-OVERLAY-PIDNS-001",
+  "extractor": "tracerpt.exe",
+  "candidateTraceRows": 1306,
+  "recoveryTraceRows": 4865,
+  "candidateGuestLogRecords": 217,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the unchanged external 6.18.40.1+ kernel",
+    "mini_init returned guest capabilities and received the unchanged reduced configuration",
+    "the registered Toybox VHDX attached and ext4 mounted read-write",
+    "LxMiniInitMessageLaunchInit selected ext4 device 0",
+    "WslCorePort received LxMiniInitMessageCreateInstanceResult with Result = 0 and Pid = 29",
+    "CreateInstanceEnd returned success",
+    "WslCorePort sent LxInitMessageCreateProcessUtilityVm for the fixed Toybox command",
+    "the process printed toybox-ok and exited zero",
+    "the registered ext4 filesystem unmounted and the guest powered down without panic, oops, signal 11, or ErrorExit cleanup"
+  ],
+  "candidateFatalEvidence": null,
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 147 GuestLog records",
+    "the fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T",
+    "the candidate product was absent, .wslconfig was absent, diagnostic relay count was zero, and the fixture returned Off"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-T",
+    "basis": "Successful CreateInstanceResult, process creation, exact Toybox marker, exit zero, and clean shutdown directly satisfy the retained Toybox contract."
+  },
+  "nextEvidenceAction": "Do not rerun minimal v8 with K-OVERLAY-PIDNS-001. Compare the same minimal-v8 package with the already-preserved K-PIDNS-001 sibling to prove whether overlay remains necessary after removing the stock-only overlay path."
+}

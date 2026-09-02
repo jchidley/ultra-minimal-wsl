@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V8-K-OVERLAY-PIDNS-001",
+    "candidateId":  "minimal-v8-k-overlay-pidns-001",
+    "startedUtc":  "2026-09-02T02:07:51.8532448Z"
+}

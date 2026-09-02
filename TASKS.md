@@ -4,14 +4,13 @@
 
 ## Active action
 
-Build and test the prepared `minimal-v8-no-binfmt-mount` controlled comparison:
+Prove whether overlay remains necessary under the passing `minimal-v8-no-binfmt-mount` control plane:
 
-1. resolve the UAC launch boundary before another unchanged protected-broker attempt; two fresh launches ended before durable broker creation, with no worker or fixture mutation;
-2. complete the pinned offline controlled-package build and final generated runner/controller identities;
-3. atomically prepare the combined candidate and derive its runtime operation from the terminal minimal-v7 producing operation, replacing only genuinely changed artifact roles;
-4. run the unchanged `K-OVERLAY-PIDNS-001`, fixed probe, timeouts, diagnostic instrumentation, broker, package transaction, and recovery contract, then preserve and finalize all candidate and stock-recovery evidence.
+1. derive a controlled comparison from terminal minimal-v8, replacing only the unchanged external kernel and kernel-config roles with the already-preserved `K-PIDNS-001` sibling;
+2. retain the exact minimal-v8 package, fixed probe, timeouts, diagnostic instrumentation, broker, package transaction, and recovery contract;
+3. run one serial candidate interval, preserve immutable candidate and stock-recovery evidence, and finalize transactionally.
 
-Retained-path review is complete. The 216 minimal-v7 `GuestLog` records and source control flow show distro-init failing before its first `CreateInstanceResult`: `ConfigInitializeCommon` fatally mounts excluded Windows-interop `binfmt_misc`, then exits and closes the inherited channel. Root mini-init reaches the `/proc/self/task/1/children` read only afterward in `ErrorExit` cleanup. Minimal v8 removes only that startup mount; its two pinned offline LFS-Builder outputs are byte-identical and its exact generated build contract is prepared. No controlled package or runtime result exists yet. Do not rerun minimal v7, broaden the source delta, add `CONFIG_PROC_CHILDREN`, or add another Kconfig facility. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
+Minimal v8 passed `B6-T`: the first `CreateInstanceResult` succeeded, the fixed command printed `toybox-ok` and exited zero, exact stock restoration and independent stock `B6-T` passed, `.wslconfig` was absent, relays were removed, and the fixture returned Off. The retained startup path no longer constructs the stock-only temporary overlay, so the existing `K-PIDNS-001` no-overlay sibling is now the narrow minimality comparison. Do not rerun minimal v8 with `K-OVERLAY-PIDNS-001`, rebuild either kernel, change the control-plane source, add `CONFIG_PROC_CHILDREN`, or add another Kconfig facility. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
 
 ## Blocked
 
