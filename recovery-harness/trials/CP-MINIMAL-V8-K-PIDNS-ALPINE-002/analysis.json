@@ -1,0 +1,26 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-002",
+  "operationId": "minimal-v8-k-pidns-alpine-runtime-022",
+  "status": "INFRASTRUCTURE_FAILURE",
+  "candidateResult": false,
+  "classification": "NOT-A-CANDIDATE-RESULT",
+  "reason": "The bounded stock-side Alpine import emitted WSL success output, but Windows PowerShell 5.1 exposed an empty Start-Process ExitCode and the controller rejected it before package mutation or any candidate probe. The compensating unregister emitted the same success output but hit the same false exit check.",
+  "candidateAttempt": {
+    "alpineSmokeStarted": false,
+    "packageMutationStarted": false,
+    "failureSignature": "Alpine import failed with exit ."
+  },
+  "inputIdentity": {
+    "alpineRootfsSha256": "de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89",
+    "controllerSha256": "0329d11f04274488d1d9507f41a5e2278ad56d7af52c194b66df92cf7b7c57db"
+  },
+  "cleanupEvidence": {
+    "importStdoutBytes": 80,
+    "importStderrBytes": 0,
+    "unregisterStdoutBytes": 80,
+    "unregisterStderrBytes": 0,
+    "fixtureFinalState": "Off",
+    "brokerState": "failed"
+  },
+  "nextAction": "Replace only the import/unregister Start-Process implementation with the fixed probe's explicit System.Diagnostics.Process pattern, retain the same 45-second timeout and all candidate, probe, rootfs, instrumentation, recovery, and broker identities, and require registration absence as the next precondition."
+}

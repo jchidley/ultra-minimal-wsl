@@ -1,0 +1,49 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial002.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial003.ps1",
+      "source_sha256": "05fba3bfbf3e21280db87b4786b2507e7162c665e5febd955ea0e73603de8da6",
+      "output_sha256": "4da8de3d51507a34f45e42492cfd6396f6706ee737bf6c4f9854b012bc584916",
+      "substitutions": [
+        {
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-002'",
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-003'"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-alpine-runtime-022\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-alpine-runtime-023\\Run-ControlledTrial.ps1",
+      "source_sha256": "0329d11f04274488d1d9507f41a5e2278ad56d7af52c194b66df92cf7b7c57db",
+      "output_sha256": "14440dfb95083787dbafa52fbe093b9590782244438884590c29fdb23918ee65",
+      "substitutions": [
+        {
+          "old": "$trial = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-002'",
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-003'"
+        },
+        {
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial002.ps1'",
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial003.ps1'"
+        },
+        {
+          "old": "$runnerHash = '05fba3bfbf3e21280db87b4786b2507e7162c665e5febd955ea0e73603de8da6'",
+          "new": "$runnerHash = '4da8de3d51507a34f45e42492cfd6396f6706ee737bf6c4f9854b012bc584916'"
+        },
+        {
+          "old": "        $stdout = Join-Path $evidence \"$Trial-alpine-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-alpine-import.stderr.log\"\n        $process = Start-Process -FilePath $wsl -ArgumentList @('--import',$name,$install,$rootfs,'--version','2') -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru\n        if (-not $process.WaitForExit(45000)) {\n            $killer = Start-Process -FilePath 'C:\\Windows\\System32\\taskkill.exe' -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden\n            $null = $process.WaitForExit(10000)\n            throw \"Alpine import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"\n        }\n        if ($process.ExitCode -ne 0) { throw \"Alpine import failed with exit $($process.ExitCode).\" }",
+          "new": "        $stdout = Join-Path $evidence \"$Trial-alpine-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-alpine-import.stderr.log\"\n        $info = [Diagnostics.ProcessStartInfo]::new()\n        $info.FileName = $wsl\n        $info.Arguments = \"--import $name $install $rootfs --version 2\"\n        $info.UseShellExecute = $false\n        $info.CreateNoWindow = $true\n        $info.RedirectStandardOutput = $true\n        $info.RedirectStandardError = $true\n        $process = [Diagnostics.Process]::new()\n        $process.StartInfo = $info\n        if (-not $process.Start()) { throw 'Failed to start Alpine import.' }\n        $stdoutTask = $process.StandardOutput.ReadToEndAsync()\n        $stderrTask = $process.StandardError.ReadToEndAsync()\n        if (-not $process.WaitForExit(45000)) {\n            $killer = Start-Process -FilePath 'C:\\Windows\\System32\\taskkill.exe' -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden\n            $null = $process.WaitForExit(10000)\n            throw \"Alpine import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"\n        }\n        $streamsCompleted = [Threading.Tasks.Task]::WaitAll(@($stdoutTask,$stderrTask),10000)\n        [IO.File]::WriteAllText($stdout, $(if($stdoutTask.IsCompleted){$stdoutTask.GetAwaiter().GetResult()}else{'<stdout collection timed out>'}), [Text.UTF8Encoding]::new($false))\n        [IO.File]::WriteAllText($stderr, $(if($stderrTask.IsCompleted){$stderrTask.GetAwaiter().GetResult()}else{'<stderr collection timed out>'}), [Text.UTF8Encoding]::new($false))\n        if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Alpine import failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }"
+        },
+        {
+          "old": "                    $stdout = Join-Path $evidence \"$Trial-alpine-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-alpine-unregister.stderr.log\"\n                    $process = Start-Process -FilePath $wsl -ArgumentList @('--unregister',$name) -RedirectStandardOutput $stdout -RedirectStandardError $stderr -PassThru\n                    if (-not $process.WaitForExit(45000)) {\n                        $killer = Start-Process -FilePath 'C:\\Windows\\System32\\taskkill.exe' -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden\n                        $null = $process.WaitForExit(10000)\n                        throw \"Alpine unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"\n                    }\n                    if ($process.ExitCode -ne 0) { throw \"Alpine unregister failed with exit $($process.ExitCode).\" }",
+          "new": "                    $stdout = Join-Path $evidence \"$Trial-alpine-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-alpine-unregister.stderr.log\"\n                    $info = [Diagnostics.ProcessStartInfo]::new()\n                    $info.FileName = $wsl\n                    $info.Arguments = \"--unregister $name\"\n                    $info.UseShellExecute = $false\n                    $info.CreateNoWindow = $true\n                    $info.RedirectStandardOutput = $true\n                    $info.RedirectStandardError = $true\n                    $process = [Diagnostics.Process]::new()\n                    $process.StartInfo = $info\n                    if (-not $process.Start()) { throw 'Failed to start Alpine unregister.' }\n                    $stdoutTask = $process.StandardOutput.ReadToEndAsync()\n                    $stderrTask = $process.StandardError.ReadToEndAsync()\n                    if (-not $process.WaitForExit(45000)) {\n                        $killer = Start-Process -FilePath 'C:\\Windows\\System32\\taskkill.exe' -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden\n                        $null = $process.WaitForExit(10000)\n                        throw \"Alpine unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"\n                    }\n                    $streamsCompleted = [Threading.Tasks.Task]::WaitAll(@($stdoutTask,$stderrTask),10000)\n                    [IO.File]::WriteAllText($stdout, $(if($stdoutTask.IsCompleted){$stdoutTask.GetAwaiter().GetResult()}else{'<stdout collection timed out>'}), [Text.UTF8Encoding]::new($false))\n                    [IO.File]::WriteAllText($stderr, $(if($stderrTask.IsCompleted){$stderrTask.GetAwaiter().GetResult()}else{'<stderr collection timed out>'}), [Text.UTF8Encoding]::new($false))\n                    if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Alpine unregister failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }"
+        }
+      ]
+    }
+  ]
+}

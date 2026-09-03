@@ -1,0 +1,22 @@
+{
+    "schema":  1,
+    "name":  "alpine-smoke",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Alpine-Minimal",
+                      "--exec",
+                      "/bin/sh",
+                      "-c",
+                      "/bin/busybox true \u0026\u0026 test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf alpine-ok"
+                  ],
+    "processId":  6108,
+    "startedUtc":  "2026-09-03T01:52:32.8749717Z",
+    "completedUtc":  "2026-09-03T01:52:50.6935383Z",
+    "timedOut":  false,
+    "streamsCompleted":  true,
+    "taskkillExitCode":  null,
+    "exitCode":  0,
+    "stdout":  "alpine-ok",
+    "stderr":  ""
+}

@@ -1,0 +1,36 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-001",
+  "operationId": "minimal-v8-k-pidns-alpine-runtime-021",
+  "purpose": "First Alpine compatibility attempt with the frozen minimal-v8-no-binfmt-mount plus K-PIDNS-001 baseline.",
+  "status": "INFRASTRUCTURE_FAILURE",
+  "candidateResult": false,
+  "classification": "NOT-A-CANDIDATE-RESULT",
+  "reason": "The controller staged and hash-verified Alpine 3.24.0, but did not register Alpine-Minimal before the fixed probe. Version, status, and list processes ran; list proved the required distro absent, so no Alpine command process started and no kernel compatibility conclusion is permitted.",
+  "inputs": {
+    "alpineVersion": "3.24.0",
+    "alpineRootfsSha256": "de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89",
+    "controllerSha256": "790275f629e939d0a64c17a7dd493972ba725327840eed03dce429aeae82f955",
+    "candidateKernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "candidatePackageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765"
+  },
+  "candidateAttempt": {
+    "firstProbeProcessStartedUtc": "2026-09-03T01:35:45.3852537Z",
+    "alpineSmokeStarted": false,
+    "managementChecksPassed": true,
+    "failureSignature": "Required registered distro 'Alpine-Minimal' is absent."
+  },
+  "recovery": {
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0,
+    "stockB6T": true,
+    "toyboxMarker": "toybox-ok"
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "brokerState": "failed"
+  },
+  "nextAction": "Use one fresh operation with a hash-bound controller that registers the pinned Alpine rootfs under stock WSL before the candidate interval, unregisters it in all outcomes, preserves the same probe, timeout, instrumentation, candidate artifacts, stock recovery, and fixture-Off contract, and uses a fresh immutable evidence ID."
+}

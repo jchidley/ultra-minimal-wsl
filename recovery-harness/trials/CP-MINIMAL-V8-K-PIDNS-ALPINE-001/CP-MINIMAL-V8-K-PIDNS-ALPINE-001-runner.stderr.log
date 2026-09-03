@@ -1,0 +1,8 @@
+Required registered distro 'Alpine-Minimal' is absent.
+At C:\controlled-inputs\ultra-minimal-wsl\procedure\Invoke-WslAlpineProbe.ps1:259 char:9
++         throw $infrastructureFailure
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Alpine-Minimal:String) [], InvalidOperationExcepti 
+   on
+    + FullyQualifiedErrorId : RequiredDistroAbsent
+ 

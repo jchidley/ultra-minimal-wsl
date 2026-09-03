@@ -298,6 +298,55 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(next_build["fixture_final_state"], "Off")
         self.assertNotIn("msiexec", next_script.read_text(encoding="utf-8").lower())
 
+    def test_alpine_compatibility_contract_is_bounded_and_keeps_toybox_recovery(self):
+        input_record = json.loads((CONTROL / "compatibility/alpine-3.24.0-x86_64.json").read_text(encoding="utf-8"))
+        self.assertEqual(input_record["sha256"], "de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89")
+        self.assertEqual(input_record["bytes"], 3717879)
+        self.assertIn("exact hash-and-size cache hit", input_record["offlinePolicy"])
+
+        probe = (ROOT / "tools/Invoke-WslAlpineProbe.ps1").read_text(encoding="utf-8")
+        smoke = "/bin/busybox true && test -r /proc/self/status && test -d /sys && test -c /dev/null && printf alpine-ok"
+        self.assertIn(f"$SmokeCommand = '{smoke}'", probe)
+        self.assertIn("Invoke-BoundedProcess 'alpine-smoke'", probe)
+        self.assertIn("{ 'B6-A' }", probe)
+        for forbidden in ("Start-VM", "Stop-VM", "Restore-VMSnapshot", "New-PSSession", "Invoke-Command", "msiexec"):
+            self.assertNotIn(forbidden, probe)
+
+        runner = (CONTROL / "controlled-package-offline/Invoke-MinimalV8KPidNsAlpineTrial.ps1").read_text(encoding="utf-8")
+        self.assertIn("if ($Recovery) { 'Toybox-Minimal' } else { 'Alpine-Minimal' }", runner)
+        self.assertIn("$RecoveryProbeSha256 = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'", runner)
+        self.assertIn("$RecoveryRootfsSha256 = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'", runner)
+        self.assertIn("-TimeoutSeconds 45 -Execute", runner)
+        self.assertIn("Invoke-Recovery $recoveryFailures", runner)
+
+        delta = json.loads((CONTROL / "generation/minimal-v8-k-pidns-alpine.runtime.v1.json").read_text(encoding="utf-8"))
+        self.assertEqual(delta["schema"], 2)
+        self.assertEqual(delta["phase"], "runtime")
+        self.assertEqual({item["name"] for item in delta["files"]}, {"runner", "controller"})
+        for item in delta["files"]:
+            self.assertEqual(sha256(Path(item["output"])), item["output_sha256"])
+
+        retry_delta = json.loads((CONTROL / "generation/minimal-v8-k-pidns-alpine-002.runtime.v1.json").read_text(encoding="utf-8"))
+        self.assertEqual({item["name"] for item in retry_delta["files"]}, {"runner", "controller"})
+        for item in retry_delta["files"]:
+            self.assertEqual(sha256(Path(item["output"])), item["output_sha256"])
+        controller = Path(next(item for item in retry_delta["files"] if item["name"] == "controller")["output"]).read_text(encoding="utf-8")
+        self.assertIn("@('--import',$name,$install,$rootfs,'--version','2')", controller)
+        self.assertIn("@('--unregister',$name)", controller)
+        self.assertIn("$process.WaitForExit(45000)", controller)
+        self.assertIn("installPathAbsent=$true", controller)
+        self.assertIn("finalVmState=[string]$final.State", controller)
+
+        final_delta = json.loads((CONTROL / "generation/minimal-v8-k-pidns-alpine-003.runtime.v1.json").read_text(encoding="utf-8"))
+        for item in final_delta["files"]:
+            self.assertEqual(sha256(Path(item["output"])), item["output_sha256"])
+        final_controller = Path(next(item for item in final_delta["files"] if item["name"] == "controller")["output"]).read_text(encoding="utf-8")
+        self.assertIn('$info.Arguments = "--import $name $install $rootfs --version 2"', final_controller)
+        self.assertIn('$info.Arguments = "--unregister $name"', final_controller)
+        self.assertEqual(final_controller.count("[Diagnostics.Process]::new()"), 2)
+        self.assertEqual(final_controller.count("WaitForExit(45000)"), 2)
+        self.assertEqual(final_controller.count("[Threading.Tasks.Task]::WaitAll"), 2)
+
     def test_fixed_probe_and_trial_contract_enforce_identical_comparison(self):
         plan = load_plan()
         contract = plan["candidate_trial_contract"]

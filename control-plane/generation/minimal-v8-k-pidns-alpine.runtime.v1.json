@@ -1,0 +1,97 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial.ps1",
+      "source_sha256": "f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5",
+      "output_sha256": "6175f45e9e0890d6f2d0f60c8537c9a825169d2daa38912f54df827933a748fd",
+      "substitutions": [
+        {
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-001'",
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-001'"
+        },
+        {
+          "new": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslAlpineProbe.ps1'\n$RecoveryProbe = Join-Path $InputRoot 'procedure\\Invoke-WslCandidateProbe.ps1'\n$CandidateRootfs = Join-Path $InputRoot 'alpine-minirootfs-3.24.0-x86_64.tar.gz'\n$RecoveryRootfs = Join-Path $InputRoot 'toybox-minimal-wsl-rootfs.tar.gz'",
+          "old": "$Probe = Join-Path $InputRoot 'procedure\\Invoke-WslCandidateProbe.ps1'\n$Rootfs = Join-Path $InputRoot 'toybox-minimal-wsl-rootfs.tar.gz'"
+        },
+        {
+          "new": "$CandidateProbeSha256 = '9f13a204e83d2f85f24100fbad8b757421d1e7892962885e6ff7628f1611fa5c'\n$RecoveryProbeSha256 = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'\n$CandidateRootfsSha256 = 'de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89'\n$RecoveryRootfsSha256 = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'",
+          "old": "$ProbeSha256 = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'\n$RootfsSha256 = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'"
+        },
+        {
+          "new": "    $probe = if ($Recovery) { $RecoveryProbe } else { $CandidateProbe }\n    $probeHash = if ($Recovery) { $RecoveryProbeSha256 } else { $CandidateProbeSha256 }\n    $distribution = if ($Recovery) { 'Toybox-Minimal' } else { 'Alpine-Minimal' }\n    $rootfs = if ($Recovery) { $RecoveryRootfs } else { $CandidateRootfs }\n    $rootfsHash = if ($Recovery) { $RecoveryRootfsSha256 } else { $CandidateRootfsSha256 }\n    Invoke-Fault $(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })\n    if ($script:TestState) { $script:Actions.Add($(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })) | Out-Null; return }\n    & $probe -TrialId $id -CandidateId $candidateId -CandidateManifestPath $manifest `\n        -ExpectedCandidateManifestSha256 $manifestHash -PackagePath $package `\n        -ExpectedPackageSha256 $packageHash -ExpectedProbeSha256 $probeHash `\n        -Distribution $distribution -ExpectedWslVersion $ExpectedVersion -RootfsPath $rootfs `\n        -ExpectedRootfsSha256 $rootfsHash -WprProfilePath $WprProfile `\n        -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n        -TimeoutSeconds 45 -Execute",
+          "old": "    Invoke-Fault $(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })\n    if ($script:TestState) { $script:Actions.Add($(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })) | Out-Null; return }\n    & $Probe -TrialId $id -CandidateId $candidateId -CandidateManifestPath $manifest `\n        -ExpectedCandidateManifestSha256 $manifestHash -PackagePath $package `\n        -ExpectedPackageSha256 $packageHash -ExpectedProbeSha256 $ProbeSha256 `\n        -Distribution Toybox-Minimal -ExpectedWslVersion $ExpectedVersion -RootfsPath $Rootfs `\n        -ExpectedRootfsSha256 $RootfsSha256 -WprProfilePath $WprProfile `\n        -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n        -TimeoutSeconds 45 -Execute"
+        },
+        {
+          "new": "    Assert-Hash $CandidateProbe $CandidateProbeSha256\n    Assert-Hash $RecoveryProbe $RecoveryProbeSha256\n    Assert-Hash $CandidateRootfs $CandidateRootfsSha256\n    if ((Get-Item -LiteralPath $CandidateRootfs).Length -ne 3717879) { throw 'Alpine rootfs size mismatch.' }\n    Assert-Hash $RecoveryRootfs $RecoveryRootfsSha256",
+          "old": "    Assert-Hash $Probe $ProbeSha256\n    Assert-Hash $Rootfs $RootfsSha256"
+        },
+        {
+          "new": "    processTimeoutSeconds = 45; shutdownTimeoutSeconds = 30; recoveryBaseline = 'CP-STOCK-2.7.12-003'\n    candidateGate = 'B6-A'; candidateDistribution = 'Alpine-Minimal'; candidateSmoke = '/bin/busybox true plus the plan-defined Alpine smoke contract'\n    recoveryGate = 'B6-T'; recoveryDistribution = 'Toybox-Minimal'; diagnosticDebugConsole = $true\n    note = 'One serial Alpine compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Alpine rootfs and plan-defined B6-A probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory.'",
+          "old": "    processTimeoutSeconds = 45; shutdownTimeoutSeconds = 30; recoveryBaseline = 'CP-STOCK-2.7.12-003'\n    diagnosticDebugConsole = $true\n    note = 'Fixture-local kernel comparison with unchanged minimal-v8 control plane and diagnostic capture; the preserved no-overlay kernel/config pair is the sole experimental delta, and transport, extraction, and ledger finalization remain external prerequisites.'"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-runtime-018\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-alpine-runtime-021\\Run-ControlledTrial.ps1",
+      "source_sha256": "4ce89dc58ad445832b9236cf45de4f3bc1d9073eeaa869c2d14e4f177442e505",
+      "output_sha256": "790275f629e939d0a64c17a7dd493972ba725327840eed03dce429aeae82f955",
+      "substitutions": [
+        {
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-001'",
+          "old": "$trial = 'CP-MINIMAL-V8-K-PIDNS-001'"
+        },
+        {
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial.ps1'",
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1'"
+        },
+        {
+          "new": "$packageSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\controlled-outputs\\minimal-v8-no-binfmt-mount\\wsl.msi'\n$probeSource = Join-Path $project 'tools\\Invoke-WslAlpineProbe.ps1'\n$rootfsSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\cache\\alpine\\v3.24\\alpine-minirootfs-3.24.0-x86_64.tar.gz'",
+          "old": "$packageSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\controlled-outputs\\minimal-v8-no-binfmt-mount\\wsl.msi'"
+        },
+        {
+          "new": "$runnerHash = '6175f45e9e0890d6f2d0f60c8537c9a825169d2daa38912f54df827933a748fd'",
+          "old": "$runnerHash = 'f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5'"
+        },
+        {
+          "new": "$probeHash = '9f13a204e83d2f85f24100fbad8b757421d1e7892962885e6ff7628f1611fa5c'\n$rootfsHash = 'de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89'\n$recoveryProbeHash = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'\n$recoveryRootfsHash = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'",
+          "old": "$probeHash = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'\n$rootfsHash = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'"
+        },
+        {
+          "new": "@(@($runnerSource,$runnerHash),@($manifestSource,$manifestHash),@($kernelSource,$kernelHash),@($configSource,$configHash),@($packageSource,$packageHash),@($probeSource,$probeHash),@($rootfsSource,$rootfsHash))",
+          "old": "@(@($runnerSource,$runnerHash),@($manifestSource,$manifestHash),@($kernelSource,$kernelHash),@($configSource,$configHash),@($packageSource,$packageHash))"
+        },
+        {
+          "new": "    Copy-Item -ToSession $session -LiteralPath $packageSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v8-no-binfmt-mount\\wsl.msi' -Force\n    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslAlpineProbe.ps1' -Force\n    Copy-Item -ToSession $session -LiteralPath $rootfsSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\alpine-minirootfs-3.24.0-x86_64.tar.gz' -Force",
+          "old": "    Copy-Item -ToSession $session -LiteralPath $packageSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v8-no-binfmt-mount\\wsl.msi' -Force"
+        },
+        {
+          "new": "param($Trial,$Recovery,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$RootfsHash,$RecoveryProbeHash,$RecoveryRootfsHash,$WprHash)",
+          "old": "param($Trial,$Recovery,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$RootfsHash,$WprHash)"
+        },
+        {
+          "new": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslAlpineProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\alpine-minirootfs-3.24.0-x86_64.tar.gz'\n            recoveryProbe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1'\n            recoveryRootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz'",
+          "old": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslCandidateProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz'"
+        },
+        {
+          "new": "$expected = [ordered]@{runner=$RunnerHash;manifest=$ManifestHash;kernel=$KernelHash;config=$ConfigHash;package=$PackageHash;probe=$ProbeHash;rootfs=$RootfsHash;recoveryProbe=$RecoveryProbeHash;recoveryRootfs=$RecoveryRootfsHash;wpr=$WprHash}",
+          "old": "$expected = [ordered]@{runner=$RunnerHash;manifest=$ManifestHash;kernel=$KernelHash;config=$ConfigHash;package=$PackageHash;probe=$ProbeHash;rootfs=$RootfsHash;wpr=$WprHash}"
+        },
+        {
+          "new": "} -ArgumentList $trial,$recovery,$runnerHash,$manifestHash,$kernelHash,$configHash,$packageHash,$probeHash,$rootfsHash,$recoveryProbeHash,$recoveryRootfsHash,$wprHash",
+          "old": "} -ArgumentList $trial,$recovery,$runnerHash,$manifestHash,$kernelHash,$configHash,$packageHash,$probeHash,$rootfsHash,$wprHash"
+        },
+        {
+          "new": "$candidateState = [RuntimeMsiState]::MsiQueryProductState('{65E3A12F-0AF8-4D54-A19A-29A07D5186E3}')",
+          "old": "$candidateState = [RuntimeMsiState]::MsiQueryProductState('{9185A489-303F-439F-A17B-DE95FACC71FC}')"
+        }
+      ]
+    }
+  ]
+}

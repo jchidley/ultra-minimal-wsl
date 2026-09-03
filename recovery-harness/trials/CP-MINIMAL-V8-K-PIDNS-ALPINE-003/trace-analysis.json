@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-003",
+  "extractor": "tracerpt.exe plus tools/extract_guest_logs.py",
+  "candidateTraceRows": 1294,
+  "recoveryTraceRows": 4159,
+  "candidateGuestLogRecords": 217,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the unchanged 6.18.40.1+ K-PIDNS-001 kernel",
+    "the registered Alpine VHDX attached and ext4 mounted read-write",
+    "the exact Alpine smoke command ran /bin/busybox true, verified /proc/self/status, /sys, and /dev/null, printed alpine-ok, and exited zero",
+    "wsl.exe shutdown returned zero without timeout",
+    "the 217-record GuestLog retained the accepted minimal-v8 signature; only distro identity, ext4 UUID, timing, and expected Alpine hosts/resolv warnings differed from the retained Toybox run"
+  ],
+  "candidateFatalEvidence": null,
+  "windowsEvents": {
+    "count": 226,
+    "nonInformationCount": 0
+  },
+  "newCrashArtifacts": 0,
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 147 GuestLog records",
+    "the independent fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T",
+    "the candidate product, .wslconfig, diagnostic relays, Alpine registration, and Alpine install path were absent before the fixture returned Off"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-A",
+    "basis": "Alpine passed the plan-defined smoke contract with the frozen package and kernel, so Alpine selects no additive kernel facility."
+  },
+  "nextEvidenceAction": "Retain the frozen minimal-v8 plus K-PIDNS-001 boundary unchanged and proceed to Arch compatibility testing."
+}

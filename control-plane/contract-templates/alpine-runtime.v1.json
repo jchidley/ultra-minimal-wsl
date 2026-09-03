@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "templateId": "alpine-runtime-v1",
+  "baseTemplate": "controlled-runtime-v1",
+  "kind": "compatibility-runtime",
+  "requiredArtifactRoles": [
+    "broker",
+    "broker_client",
+    "broker_creator",
+    "broker_installer",
+    "broker_launcher",
+    "broker_policy",
+    "controller",
+    "kernel",
+    "kernel_config",
+    "manifest",
+    "package",
+    "probe",
+    "recovery_probe",
+    "recovery_rootfs",
+    "rootfs",
+    "runner",
+    "wpr"
+  ],
+  "runtimeBoundary": "One serial Alpine compatibility interval using the frozen Toybox-capable candidate. Failure before the first Alpine probe is infrastructure failure and creates no compatibility result. Missing required evidence, exact restoration, independent stock B6-T recovery, or fixture Off prohibits finalization.",
+  "invariants": {
+    "probe": "plan-defined-alpine-smoke",
+    "recoveryProbe": "fixed-toybox-smoke",
+    "distribution": "Alpine-3.24.0-x86_64",
+    "processTimeoutSeconds": 45,
+    "execution": "serial",
+    "instrumentation": ["WPR", "ETW", "events", "crash-artifacts"],
+    "packageTransaction": "candidate-then-exact-stock-restore",
+    "recovery": "independent-stock-B6-T",
+    "completion": ["evidence-manifest", "stock-recovery", "fixture-Off"]
+  }
+}

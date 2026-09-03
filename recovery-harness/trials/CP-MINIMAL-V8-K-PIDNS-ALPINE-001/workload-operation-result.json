@@ -1,0 +1,282 @@
+{
+  "schema": 1,
+  "remote": {
+    "schema": 1,
+    "selfTestFailurePaths": 19,
+    "validation": {
+      "schema": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-001",
+      "execute": false,
+      "validated": true,
+      "candidatePackageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+      "candidateManifestSha256": "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+      "candidateKernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+      "candidateKernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+      "stockPackageSha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+      "stockProductCode": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}",
+      "candidateProductCode": "{65E3A12F-0AF8-4D54-A19A-29A07D5186E3}",
+      "processTimeoutSeconds": 45,
+      "shutdownTimeoutSeconds": 30,
+      "recoveryBaseline": "CP-STOCK-2.7.12-003",
+      "candidateGate": "B6-A",
+      "candidateDistribution": "Alpine-Minimal",
+      "candidateSmoke": "/bin/busybox true plus the plan-defined Alpine smoke contract",
+      "recoveryGate": "B6-T",
+      "recoveryDistribution": "Toybox-Minimal",
+      "diagnosticDebugConsole": true,
+      "note": "One serial Alpine compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Alpine rootfs and plan-defined B6-A probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory."
+    },
+    "runnerFailure": "Exact trial runner failed with exit 1.",
+    "runnerExitCode": 1,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0,
+    "candidateEvidenceExists": true,
+    "recoveryEvidenceExists": true,
+    "candidateManifestFilesVerified": 18,
+    "recoveryManifestFilesVerified": 20,
+    "candidateResult": {
+      "schema": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-001",
+      "candidateId": "minimal-v8-k-pidns-001",
+      "preparationStartedUtc": "2026-09-03T01:35:45.1449985Z",
+      "candidateStartedUtc": "2026-09-03T01:35:45.3606335Z",
+      "completedUtc": "2026-09-03T01:35:49.9828578Z",
+      "candidateResult": false,
+      "disposition": "infrastructure-failure",
+      "observedGate": "UNRESOLVED-TRACE-REQUIRED",
+      "classification": "NOT-A-CANDIDATE-RESULT",
+      "managementChecksPassed": true,
+      "passed": false,
+      "primaryFailure": "System.InvalidOperationException",
+      "infrastructureFailure": "System.InvalidOperationException",
+      "traceFailure": null,
+      "shutdownFailure": null,
+      "results": {
+        "version": {
+          "schema": 1,
+          "name": "wsl-version",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--version"
+          ],
+          "processId": 1440,
+          "startedUtc": "2026-09-03T01:35:45.3852537Z",
+          "completedUtc": "2026-09-03T01:35:45.9059776Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "W\u0000S\u0000L\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000.\u00007\u0000.\u00001\u00002\u0000.\u00000\u0000\r\u0000\n\u0000K\u0000e\u0000r\u0000n\u0000e\u0000l\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00006\u0000.\u00001\u00008\u0000.\u00003\u00003\u0000.\u00002\u0000-\u00002\u0000\r\u0000\n\u0000W\u0000S\u0000L\u0000g\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00000\u0000.\u00007\u00003\u0000.\u00002\u0000\r\u0000\n\u0000M\u0000S\u0000R\u0000D\u0000C\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00002\u0000.\u00007\u00002\u00001\u00004\u0000\r\u0000\n\u0000D\u0000i\u0000r\u0000e\u0000c\u0000t\u00003\u0000D\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00006\u00001\u00001\u0000.\u00001\u0000-\u00008\u00001\u00005\u00002\u00008\u00005\u00001\u00001\u0000\r\u0000\n\u0000D\u0000X\u0000C\u0000o\u0000r\u0000e\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00001\u00000\u00000\u0000.\u00001\u0000-\u00002\u00004\u00000\u00003\u00003\u00001\u0000-\u00001\u00004\u00003\u00005\u0000.\u0000g\u0000e\u0000-\u0000r\u0000e\u0000l\u0000e\u0000a\u0000s\u0000e\u0000\r\u0000\n\u0000W\u0000i\u0000n\u0000d\u0000o\u0000w\u0000s\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00002\u00000\u00000\u0000.\u00008\u00000\u00003\u00007\u0000\r\u0000\n\u0000M\u0000S\u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00009\u00004\u00004\u0000\r\u0000\n\u0000C\u0000o\u0000m\u0000m\u0000i\u0000t\u0000:\u0000 \u0000\r\u0000\n\u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000t\u0000i\u0000m\u0000e\u0000:\u0000 \u00000\u00002\u0000:\u00002\u00001\u0000:\u00004\u00002\u0000 \u0000S\u0000e\u0000p\u0000 \u0000 \u00002\u0000 \u00002\u00000\u00002\u00006\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "status": {
+          "schema": 1,
+          "name": "wsl-status",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--status"
+          ],
+          "processId": 2612,
+          "startedUtc": "2026-09-03T01:35:45.9562902Z",
+          "completedUtc": "2026-09-03T01:35:46.9792509Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000D\u0000i\u0000s\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000i\u0000o\u0000n\u0000:\u0000 \u0000T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000V\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "list": {
+          "schema": 1,
+          "name": "wsl-list-quiet",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--list",
+            "--quiet"
+          ],
+          "processId": 3132,
+          "startedUtc": "2026-09-03T01:35:46.9953047Z",
+          "completedUtc": "2026-09-03T01:35:47.0795395Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "shutdown": {
+          "schema": 1,
+          "name": "wsl-shutdown",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--shutdown"
+          ],
+          "processId": 5084,
+          "startedUtc": "2026-09-03T01:35:47.1116876Z",
+          "completedUtc": "2026-09-03T01:35:47.1915286Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    "recoveryResult": {
+      "schema": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-RECOVERY",
+      "candidateId": "stock-wsl-2.7.12-recovery",
+      "preparationStartedUtc": "2026-09-03T01:36:13.2610405Z",
+      "candidateStartedUtc": "2026-09-03T01:36:13.4613041Z",
+      "completedUtc": "2026-09-03T01:36:22.1816174Z",
+      "candidateResult": true,
+      "disposition": "candidate-pass",
+      "observedGate": "B6-T",
+      "classification": "B6-T",
+      "managementChecksPassed": true,
+      "passed": true,
+      "primaryFailure": null,
+      "infrastructureFailure": null,
+      "traceFailure": null,
+      "shutdownFailure": null,
+      "results": {
+        "version": {
+          "schema": 1,
+          "name": "wsl-version",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--version"
+          ],
+          "processId": 2544,
+          "startedUtc": "2026-09-03T01:36:13.4715213Z",
+          "completedUtc": "2026-09-03T01:36:13.7456005Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "W\u0000S\u0000L\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000.\u00007\u0000.\u00001\u00002\u0000.\u00000\u0000\r\u0000\n\u0000K\u0000e\u0000r\u0000n\u0000e\u0000l\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00006\u0000.\u00001\u00008\u0000.\u00003\u00003\u0000.\u00002\u0000-\u00002\u0000\r\u0000\n\u0000W\u0000S\u0000L\u0000g\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00000\u0000.\u00007\u00003\u0000.\u00002\u0000\r\u0000\n\u0000M\u0000S\u0000R\u0000D\u0000C\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00002\u0000.\u00007\u00002\u00001\u00004\u0000\r\u0000\n\u0000D\u0000i\u0000r\u0000e\u0000c\u0000t\u00003\u0000D\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00006\u00001\u00001\u0000.\u00001\u0000-\u00008\u00001\u00005\u00002\u00008\u00005\u00001\u00001\u0000\r\u0000\n\u0000D\u0000X\u0000C\u0000o\u0000r\u0000e\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00001\u00000\u00000\u0000.\u00001\u0000-\u00002\u00004\u00000\u00003\u00003\u00001\u0000-\u00001\u00004\u00003\u00005\u0000.\u0000g\u0000e\u0000-\u0000r\u0000e\u0000l\u0000e\u0000a\u0000s\u0000e\u0000\r\u0000\n\u0000W\u0000i\u0000n\u0000d\u0000o\u0000w\u0000s\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00002\u00000\u00000\u0000.\u00008\u00000\u00003\u00007\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "status": {
+          "schema": 1,
+          "name": "wsl-status",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--status"
+          ],
+          "processId": 3132,
+          "startedUtc": "2026-09-03T01:36:13.7538691Z",
+          "completedUtc": "2026-09-03T01:36:14.2656295Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000D\u0000i\u0000s\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000i\u0000o\u0000n\u0000:\u0000 \u0000T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000V\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "list": {
+          "schema": 1,
+          "name": "wsl-list-quiet",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--list",
+            "--quiet"
+          ],
+          "processId": 3148,
+          "startedUtc": "2026-09-03T01:36:14.2739231Z",
+          "completedUtc": "2026-09-03T01:36:14.3558026Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "smoke": {
+          "schema": 1,
+          "name": "toybox-smoke",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--distribution",
+            "Toybox-Minimal",
+            "--exec",
+            "/bin/sh",
+            "-c",
+            "test -r /proc/self/status && test -d /sys && test -c /dev/null && printf toybox-ok"
+          ],
+          "processId": 4732,
+          "startedUtc": "2026-09-03T01:36:14.3639602Z",
+          "completedUtc": "2026-09-03T01:36:20.1904065Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "toybox-ok",
+          "stderr": ""
+        },
+        "shutdown": {
+          "schema": 1,
+          "name": "wsl-shutdown",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--shutdown"
+          ],
+          "processId": 6572,
+          "startedUtc": "2026-09-03T01:36:20.2281991Z",
+          "completedUtc": "2026-09-03T01:36:20.9665379Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    "completedUtc": "2026-09-03T01:36:24.5787756Z",
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "9ab9b5a6-1f88-4416-b624-841c93c58402",
+    "PSShowComputerName": true
+  },
+  "outerFailure": null,
+  "extracted": {
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-candidate-install.log": {
+      "bytes": 277090,
+      "sha256": "3ce07d80bdf154b08c597a7f2bcc41afc10f2271699b8342447fb3d5c13d5204"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-candidate-remove.log": {
+      "bytes": 235134,
+      "sha256": "e0c07a92a43f1c4f554800b9dd0b7d1e20c4a8500bbeebcc17a282ed8d8064e1"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-RECOVERY.zip": {
+      "bytes": 195216,
+      "sha256": "aa0e7ca9ba78bcf31ac9ab2a236d395bcc844946dca8388ae59c41927f04b806"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-runner.stderr.log": {
+      "bytes": 388,
+      "sha256": "cbe45b6834ef0c8485b6073793d04ebc1f7cfdbb211ef2e5f16683d50b0bd924"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-runner.stdout.log": {
+      "bytes": 5605,
+      "sha256": "97caeaca61b78ffd5da59d6923584aae67e4f49c77cb9b70259d5e8a82f09c82"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-stock-remove.log": {
+      "bytes": 1303720,
+      "sha256": "3b47b753d06c25f3ac5837052b319b5fe3a4df5b57cd22a356a908c58f7ffa8c"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001-stock-restore.log": {
+      "bytes": 1561030,
+      "sha256": "531bee8efbfffe207eab3f3952d7b3ccf0bc98b774817208bce4fca8090cf05c"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-ALPINE-001.zip": {
+      "bytes": 24135,
+      "sha256": "d8035ca4db1a9189069296bf71c94e13aabc1a5398e83ffeadda0a8b4da95b91"
+    }
+  },
+  "finalVmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+  "finalVmState": "Off",
+  "completedUtc": "2026-09-03T01:36:31.8099376Z"
+}

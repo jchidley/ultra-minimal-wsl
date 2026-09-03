@@ -1,0 +1,57 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-003",
+  "operationId": "minimal-v8-k-pidns-alpine-runtime-023",
+  "purpose": "Establish the Alpine compatibility boundary from the frozen minimal-v8-no-binfmt-mount plus K-PIDNS-001 baseline without changing the Toybox candidate.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-A",
+    "confidence": "high",
+    "requirementClassification": "BASELINE",
+    "basis": "The exact Alpine smoke command ran /bin/busybox true, verified the plan-defined procfs, sysfs, and /dev/null contract, printed alpine-ok, and exited zero under the unchanged frozen package and kernel. No Alpine-specific compatibility addition is required."
+  },
+  "inputs": {
+    "alpineVersion": "3.24.0",
+    "alpineArchitecture": "x86_64",
+    "alpineRootfsSha256": "de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89",
+    "controllerSha256": "14440dfb95083787dbafa52fbe093b9590782244438884590c29fdb23918ee65",
+    "runnerSha256": "4da8de3d51507a34f45e42492cfd6396f6706ee737bf6c4f9854b012bc584916",
+    "probeSha256": "9f13a204e83d2f85f24100fbad8b757421d1e7892962885e6ff7628f1611fa5c",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "packageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-03T01:52:30.9286022Z",
+    "finishedUtc": "2026-09-03T01:52:53.4897883Z",
+    "classification": "B6-A",
+    "managementChecksPassed": true,
+    "alpineResult": "PASS",
+    "marker": "alpine-ok",
+    "exitCode": 0,
+    "timedOut": false,
+    "manifestFilesVerified": 20,
+    "guestLogRecords": 217,
+    "newCrashArtifacts": 0,
+    "nonInformationWindowsEvents": 0
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V8-K-PIDNS-ALPINE-003-RECOVERY",
+    "startedUtc": "2026-09-03T01:53:21.0922047Z",
+    "finishedUtc": "2026-09-03T01:53:28.7291424Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "infrastructureCleanup": {
+    "alpineRegisteredBeforeCandidate": true,
+    "alpineUnregisteredAfterRecovery": true,
+    "alpineInstallPathAbsent": true,
+    "brokerState": "completed",
+    "fixtureFinalState": "Off"
+  },
+  "decision": "Record that Alpine requires no compatibility addition. Keep minimal-v8-no-binfmt-mount plus K-PIDNS-001 unchanged and proceed to Arch next."
+}
