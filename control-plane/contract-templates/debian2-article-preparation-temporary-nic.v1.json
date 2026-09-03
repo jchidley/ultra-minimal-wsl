@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "templateId": "debian2-article-preparation-temporary-nic-v1",
+  "baseTemplate": "debian2-article-preparation-network-v1",
+  "runtimeBoundary": "One stock-WSL fixture preparation interval. Require the exact disposable VM to begin with zero network adapters, add one temporary adapter named debian2-construction on the existing internal Default Switch, create only the fresh Debian2 article from pinned inputs, apply the committed core dotfiles bootstrap without secrets, verify Pi and shell startup, remove fixture-wide .wslconfig, remove the temporary adapter, leave Debian2 registered, verify zero adapters, and return the exact fixture Off. Failure must remove a partial Debian2 registration and install path, remove the temporary adapter, and return Off.",
+  "invariants": {
+    "network": "one-temporary-debian2-construction-adapter-on-existing-Default-Switch",
+    "networkInitialState": "zero-adapters",
+    "networkRestoration": "remove-temporary-adapter-and-verify-zero",
+    "completion": [
+      "registered-Debian2",
+      "installed-version-manifest",
+      "shell-startup",
+      "pi-version",
+      "absent-fixture-wslconfig",
+      "article-vhdx-identity",
+      "zero-network-adapters-restored",
+      "fixture-Off"
+    ]
+  }
+}

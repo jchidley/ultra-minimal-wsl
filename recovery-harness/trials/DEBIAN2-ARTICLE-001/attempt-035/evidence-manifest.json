@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-035",
+  "classification": "fixture-has-zero-network-adapters",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 231,
+      "sha256": "52fd2cb1178936092f5ececac773f839ae76d38e929d272b9371241b1b741cba"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 1050,
+      "sha256": "20c966b2a9094001b365ee4f3fd0097d921f6fc5a94214a7ee65c3f0771ec2f9"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 602,
+      "sha256": "72972546431d27ad804eacbd05ecb768ada90fef8fc821fcecad99e9bf193ef7"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "017e92eba91d8ae670c0e3ae6f23378e12411305a520752c51020be5956f59c8"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "ca7b398e13719a4c038ae8acf1164e44c0cd43f7ffb9be576762eb47e8b65467"
+    }
+  ]
+}
