@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "templateId": "debian2-article-preparation-v1",
+  "kind": "test-article-preparation",
+  "requiredArtifactRoles": [
+    "agent_skills_bundle",
+    "ak_bundle",
+    "article_bootstrap",
+    "broker",
+    "broker_client",
+    "broker_creator",
+    "broker_installer",
+    "broker_launcher",
+    "broker_policy",
+    "controller",
+    "dotfiles_bundle",
+    "fnm_archive",
+    "input_manifest",
+    "mcfly_archive",
+    "node_archive",
+    "pi_archive",
+    "rootfs",
+    "tools_bundle"
+  ],
+  "runtimeBoundary": "One stock-WSL fixture preparation interval. Create only the fresh Debian2 article from pinned inputs, apply the committed core dotfiles bootstrap without secrets, verify Pi and shell startup, remove fixture-wide .wslconfig, leave Debian2 registered, and return the exact fixture Off. Failure must remove a partial Debian2 registration and install path.",
+  "invariants": {
+    "base": "fresh-Debian-13.5-rootfs",
+    "distribution": "Debian2",
+    "defaultUser": "jack",
+    "wslPackage": "stock-2.7.12",
+    "bootstrap": "committed-dotfiles-core",
+    "chezmoiApply": true,
+    "secrets": "none",
+    "network": "stock-WSL-construction-only",
+    "completion": [
+      "registered-Debian2",
+      "installed-version-manifest",
+      "shell-startup",
+      "pi-version",
+      "absent-fixture-wslconfig",
+      "article-vhdx-identity",
+      "fixture-Off"
+    ]
+  }
+}

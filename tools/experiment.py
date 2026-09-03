@@ -407,6 +407,13 @@ def derive_operation(db: sqlite3.Connection, record: dict) -> None:
         "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id=?",
         (record["parent_operation_id"],),
     ))
+    removals = record.get("remove_artifacts", [])
+    if not isinstance(removals, list) or any(not isinstance(role, str) for role in removals):
+        raise SystemExit("remove_artifacts must be an array of role names")
+    if len(removals) != len(set(removals)) or any(role not in artifact_map for role in removals):
+        raise SystemExit("remove_artifacts contains a duplicate or uninherited role")
+    for role in removals:
+        del artifact_map[role]
     replacements = record.get("replace_artifacts", {})
     if not isinstance(replacements, dict):
         raise SystemExit("replace_artifacts must be an object mapping roles to artifact IDs")
@@ -440,7 +447,7 @@ def derive_operation(db: sqlite3.Connection, record: dict) -> None:
 def retry_operation(db: sqlite3.Connection, record: dict) -> None:
     require(record, ("operation_id", "after_operation_id", "reason", "prepared_utc"))
     ensure_no_active_operation(db)
-    forbidden = {"artifacts", "replace_artifacts", "template_id", "candidate_id", "trial_id", "fixed_contract"} & record.keys()
+    forbidden = {"artifacts", "replace_artifacts", "remove_artifacts", "template_id", "candidate_id", "trial_id", "fixed_contract"} & record.keys()
     if forbidden:
         raise SystemExit(f"Retries may not reconstruct contract state: {sorted(forbidden)}")
     source = db.execute("SELECT * FROM operations WHERE operation_id=?", (record["after_operation_id"],)).fetchone()

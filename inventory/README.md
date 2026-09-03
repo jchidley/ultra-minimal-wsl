@@ -31,7 +31,7 @@ Register a new immutable operation template through the CLI before deriving the 
 uv run python tools/experiment.py operation-template-add --record <TEMPLATE-RECORD.json>
 ```
 
-The record contains only `template_id` and a repository-relative `path`; the CLI verifies the file's matching `templateId`, registered parent, and SHA-256 before recording it.
+The record contains only `template_id` and a repository-relative `path`; the CLI verifies the file's matching `templateId`, registered parent, and SHA-256 before recording it. When a new operation kind has a narrower artifact set than its terminal parent, `operation-derive` accepts an explicit `remove_artifacts` role list before applying `replace_artifacts`; it rejects duplicate or uninherited removals.
 
 Write commands accept small reviewed JSON records and execute one checked transaction. Do not modify the canonical database with ad hoc SQL. Tests must copy it to a temporary path before mutation and must remain independent of whether that copy contains an executable operation.
 
@@ -46,7 +46,7 @@ Unchanging runtime policy lives in immutable, hash-bound files under `control-pl
 Typical small records are:
 
 ```json
-{"operation_id":"<NEW_ID>","parent_operation_id":"<TERMINAL_PARENT>","candidate_id":"<CANDIDATE>","trial_id":"<TRIAL>","rationale":"evidence-selected delta","prepared_utc":"<UTC>","replace_artifacts":{"runner":18,"controller":19}}
+{"operation_id":"<NEW_ID>","parent_operation_id":"<TERMINAL_PARENT>","candidate_id":"<CANDIDATE>","trial_id":"<TRIAL>","rationale":"evidence-selected delta","prepared_utc":"<UTC>","remove_artifacts":[],"replace_artifacts":{"runner":18,"controller":19}}
 ```
 
 ```powershell

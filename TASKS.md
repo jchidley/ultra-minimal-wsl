@@ -4,7 +4,9 @@
 
 ## Active action
 
-None. Debian compatibility is complete, `ultra-minimal-wsl-v1` is frozen, and no follow-on work is authorized in this bounded action. `STATUS.md` owns the verified boundary and evidence summary.
+Prepare `Debian2` as the first practical-workload test article inside the dedicated disposable fixture. Import the pinned clean Debian 13.5 rootfs under stock WSL, create user `jack`, apply the committed core dotfiles/chezmoi bootstrap from immutable repository bundles, install fixed fnm, Node.js, McFly, and Pi inputs, verify shell startup and `pi --version`, remove any fixture-wide `.wslconfig` written by personal-machine dotfiles, record the resulting VHDX and installed-version identities, leave `Debian2` registered, and return the fixture Off.
+
+This preparation must copy no secret, credential, SSH key, history, or mutable working-tree content. On failure it must remove a partial `Debian2` registration and install path. It does not rerun or modify the frozen Toybox, Alpine, Arch, or Debian compatibility candidates. After preparation, a separate bounded action may boot this article under the frozen reduced WSL baseline to identify the first practical-workload failure.
 
 ## Blocked
 
@@ -13,7 +15,7 @@ None. Debian compatibility is complete, `ultra-minimal-wsl-v1` is frozen, and no
 
 ## Constraints
 
-- Keep the frozen Toybox baseline, completed Alpine and Arch evidence, and plan-defined Debian smoke command, timeouts, instrumentation, classification rules, and recovery proof unchanged.
+- Keep the frozen Toybox baseline and all completed Toybox, Alpine, Arch, and Debian evidence unchanged.
 - A failure before the first probe `wsl.exe` process is infrastructure failure and creates no candidate result.
 - Preserve completed candidate records, terminal ledger rows, and trial evidence.
 - Keep Linux builds on `LFS-Builder` ext4 and use only pinned, hash-verified offline inputs.

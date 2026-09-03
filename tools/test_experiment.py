@@ -193,6 +193,60 @@ class ExperimentInventoryTests(unittest.TestCase):
             finally:
                 db.close()
 
+    def test_derived_operation_can_explicitly_narrow_artifacts_for_new_kind(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            db = self.temporary_database(directory)
+            try:
+                template_path = ROOT / "control-plane/contract-templates/debian2-article-preparation.v1.json"
+                db.execute(
+                    "INSERT OR IGNORE INTO operation_templates VALUES (?,?,?)",
+                    ("debian2-article-preparation-v1", str(template_path.relative_to(ROOT)).replace("\\", "/"), hashlib.sha256(template_path.read_bytes()).hexdigest()),
+                )
+                parent_roles = dict(db.execute(
+                    "SELECT role,artifact_id FROM operation_artifacts WHERE operation_id=?",
+                    ("minimal-v6-k-overlay-pidns-runtime-013",),
+                ))
+                required = json.loads(template_path.read_text(encoding="utf-8"))["requiredArtifactRoles"]
+                fallback_id = next(iter(parent_roles.values()))
+                replacements = {role: parent_roles.get(role, fallback_id) for role in required}
+                derive_operation(db, {
+                    "operation_id": "narrow-derived-test",
+                    "parent_operation_id": "minimal-v6-k-overlay-pidns-runtime-013",
+                    "candidate_id": "minimal-v6-k-overlay-pidns-001",
+                    "trial_id": "NARROW-DERIVED-TEST",
+                    "rationale": "test explicit narrowing",
+                    "prepared_utc": "2026-09-01T00:00:00Z",
+                    "template_id": "debian2-article-preparation-v1",
+                    "remove_artifacts": sorted(parent_roles),
+                    "replace_artifacts": replacements,
+                })
+                actual = {row[0] for row in db.execute(
+                    "SELECT role FROM operation_artifacts WHERE operation_id='narrow-derived-test'"
+                )}
+                self.assertEqual(actual, set(required))
+                self.assertEqual(validate(db)["activeOperation"], "narrow-derived-test")
+            finally:
+                db.close()
+
+    def test_derived_operation_rejects_duplicate_or_uninherited_removals(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            for removals in (["wpr", "wpr"], ["not-a-role"]):
+                db = self.temporary_database(directory)
+                try:
+                    with self.assertRaises(SystemExit):
+                        derive_operation(db, {
+                            "operation_id": "bad-removal-test",
+                            "parent_operation_id": "minimal-v6-k-overlay-pidns-runtime-013",
+                            "candidate_id": "minimal-v6-k-overlay-pidns-001",
+                            "trial_id": "BAD-REMOVAL-TEST",
+                            "rationale": "bad removal",
+                            "prepared_utc": "2026-09-01T00:00:00Z",
+                            "remove_artifacts": removals,
+                            "replace_artifacts": {},
+                        })
+                finally:
+                    db.close()
+
     def test_derived_operation_rejects_reconstructed_artifact_lists(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             db = self.temporary_database(directory)
