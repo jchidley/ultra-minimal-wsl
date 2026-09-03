@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-031",
+  "classification": "stock-construction-dns-failure",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 231,
+      "sha256": "aa9cb96ec7b08d49937beea70827d6e798d35c7e4b00fadb11bab951180f779c"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 584,
+      "sha256": "193f030a29c9a4b5f4cf3893666af75bec1c60f49ca15108294a073d4635738b"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 299,
+      "sha256": "6413d17016e588b3704041ace526222b84e9d56e6da489ae33f0d902b953fd62"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 409,
+      "sha256": "f29971583238177efa9aab1f771c7717c0330d2ab86be1e1fbf08123db8b1669"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "cecb817b8bbfd4304533955b338c1d52497986a07cae07a3210c3e28b3601fe2"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "3ed0e4cd72b00bfa777677c7f4ecfcfe8ce2b541efb75666d1d4cf0493a9df57"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 418,
+      "sha256": "24e943e86ec5b8efb6cf48126126ec3259821720a18715fd9c6f356997daa914"
+    }
+  ]
+}
