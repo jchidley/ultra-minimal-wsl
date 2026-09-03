@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-040",
+  "classification": "fnm-inherited-root-xdg-runtime-dir",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 231,
+      "sha256": "e6354f5e545928ff141c0475a6a09586b431e0714584cf76ecde4531503a2786"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 1050,
+      "sha256": "20c966b2a9094001b365ee4f3fd0097d921f6fc5a94214a7ee65c3f0771ec2f9"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 584,
+      "sha256": "659a3244f7024be1441aa8e3b0cfafb75fc8a3c893d48a9d6e343e3b1be24436"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 2907,
+      "sha256": "6cebbf05c38c4ccbfaa5425b3b0af0f3936d6cf341b090b827f9e8b86313ede8"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 34686,
+      "sha256": "8f7f59a3de40aef5fcac8bc0a5cc511dbef372e695a42890488d72cddb080302"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "12ed23c1cff3276b4d86e0bb5e859a46d194295a0880097d39a4272faa89186f"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "7d274b63b5da489636240ac1c076690d946558a012e9d7846a7c6cd44d1893e9"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 418,
+      "sha256": "f115686e6e5a4c91dad9bbe66463d990b46507eda4d471e7fe2b8b30891ab971"
+    }
+  ]
+}
