@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001",
+  "candidateStarts": 10,
+  "candidateGuestLogRecords": 2170,
+  "recoveryGuestLogRecords": 147,
+  "candidateWarningSignatureSets": 1,
+  "candidateWindowsEvents": 310,
+  "candidateNonInformationWindowsEvents": 0,
+  "oops": 0,
+  "panics": 0,
+  "bugs": 0,
+  "callTraces": 0,
+  "signal11OrInitCrashes": 0,
+  "newCrashArtifacts": 0,
+  "assessment": "PASS; all candidate log warnings/errors are identical to the previously accepted single-start candidate signature and no unexpected warning or crash signature appeared."
+}

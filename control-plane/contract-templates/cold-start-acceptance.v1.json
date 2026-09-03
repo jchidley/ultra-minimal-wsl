@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "templateId": "cold-start-acceptance-v1",
+  "baseTemplate": "controlled-runtime-v1",
+  "kind": "acceptance",
+  "runtimeBoundary": "One serial ten-cold-start acceptance interval using the unchanged retained candidate. Failure before the first probe is infrastructure failure and creates no acceptance result. Missing any start, evidence manifest, exact cleanup, stock B6-T recovery, or fixture Off prohibits finalization.",
+  "invariants": {
+    "coldStartCount": 10,
+    "execution": "serial",
+    "candidate": "unchanged-minimal-v8-k-pidns-001",
+    "perStartProbe": "fixed-toybox-smoke",
+    "perStartShutdown": true,
+    "immutablePerStartEvidence": true
+  }
+}

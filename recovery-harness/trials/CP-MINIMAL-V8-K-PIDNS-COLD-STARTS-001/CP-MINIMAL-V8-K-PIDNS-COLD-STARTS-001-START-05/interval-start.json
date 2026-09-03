@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-05",
+    "candidateId":  "minimal-v8-k-pidns-001",
+    "startedUtc":  "2026-09-03T01:00:47.6216593Z"
+}

@@ -102,6 +102,18 @@ The retained `LxMiniInitMessageEarlyConfig` handler calls `Initialize` before re
 
 The resulting `minimal-v6-excluded-initialize` layer changes only `src/linux/init/main.cpp`, preserves mount-plus-PID launch semantics, and does not weaken inbound protocol rejection. Runtime remains required before this source layer can establish a later gate.
 
+## Retained-candidate freeze audit
+
+The finalized `K-PIDNS-001` config enables exactly 30 symbols that mkroot does not. The freeze audit checked both Kconfig relationship directions, durable annotation fields, candidate lineage, and completed runtime evidence for every one. All 30 now have `REVIEWED`, `checked=yes`, documentation, layer, feature-group, rationale, and evidence-source fields:
+
+| Durable classification | Symbols | Audit finding |
+|---|---|---|
+| `PROVEN_WSL_REQUIRED` | `CONFIG_PID_NS` | The controlled mount-only failure and mount-plus-PID restored success isolate PID namespace semantics. |
+| `UNRESOLVED` | `CONFIG_ACPI`, `CONFIG_HYPERV`, `CONFIG_HYPERVISOR_GUEST`, `CONFIG_HYPERV_STORAGE`, `CONFIG_HYPERV_VSOCKETS`, `CONFIG_VSOCKETS` | These are the six explicit evidence-selected platform/transport/storage facilities. Completed additive trials prove the bundle boundaries but do not isolate each member sufficiently for a stronger requirement claim. |
+| `TRANSITIVE` | `CONFIG_ACPI_HOTPLUG_IOAPIC`, `CONFIG_ACPI_LEGACY_TABLES_LOOKUP`, `CONFIG_ACPI_LPIT`, `CONFIG_ACPI_MRRM`, `CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT`, `CONFIG_ARCH_HAS_ACPI_TABLE_UPGRADE`, `CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC`, `CONFIG_FIRMWARE_TABLE`, `CONFIG_GENERIC_MSI_IRQ`, `CONFIG_HAVE_ACPI_APEI`, `CONFIG_HAVE_ACPI_APEI_NMI`, `CONFIG_HYPERV_TIMER`, `CONFIG_HYPERV_VMBUS`, `CONFIG_IRQ_MSI_LIB`, `CONFIG_PARAVIRT`, `CONFIG_PNP`, `CONFIG_PNPACPI`, `CONFIG_PNP_DEBUG_MESSAGES`, `CONFIG_SCSI_LOWLEVEL`, `CONFIG_SERIAL_8250_PNP`, `CONFIG_X86_HV_CALLBACK_VECTOR`, `CONFIG_X86_PM_TIMER`, `CONFIG_X86_X2APIC` | Generated Kconfig closure, not independently requested facilities. The final three previously missing durable reviews were resolved from the inspected relationships: Hyper-V selects `IRQ_MSI_LIB`, which selects `GENERIC_MSI_IRQ`; enabling the x86-64 hypervisor-guest path defaults `X86_X2APIC` on. |
+
+`UNRESOLVED` is intentional here: it preserves the evidence limit instead of promoting a successful bundle member to `PROVEN_WSL_REQUIRED`. There are no missing or unchecked non-mkroot facilities, and this audit changed no config or candidate artifact.
+
 ## Conclusions
 
 - The retained Hyper-V/VSOCK/storage additions remain the only evidence-selected WSL kernel bundles.
@@ -112,3 +124,5 @@ The resulting `minimal-v6-excluded-initialize` layer changes only `src/linux/ini
 - Source ordering selects mini-init `Initialize`: it hard-fails on `/proc/sys/fs/inotify/max_user_watches` even though every reduced kernel has `CONFIG_INOTIFY_USER=n`, and its own comment ties the setting to excluded Visual Studio Code Remote integration. Remove that hard-fail in the next source layer rather than adding the kernel symbol.
 - Networking remains excluded even though `CONFIG_HYPERV_VSOCKETS` has a Kconfig dependency on `CONFIG_NET`; that dependency is transport plumbing, not approval for IP networking, GNS, or DNS.
 - Completed excluded-feature classifications and their supporting evidence are recorded in the sections above and in `inventory/annotations.csv`; none changed a candidate config.
+- The retained `K-PIDNS-001` non-mkroot delta is fully audited: 1 symbol is proven, 23 are transitive, and 6 remain explicitly unresolved at the evidence limit; no annotation gap remains.
+- `CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001` then passed all ten serial cold starts with the fixed probe and instrumentation. Every start reached `B6-T`, produced 217 GuestLog records with only the previously accepted signature, had only Information-level Windows events, shut down cleanly, and produced no oops, panic, init crash, or new crash artifact. Exact stock recovery and fixture-Off checks also passed.

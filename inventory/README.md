@@ -25,6 +25,14 @@ uv run python tools/experiment.py validate
 uv run python tools/experiment.py diff-head
 ```
 
+Register a new immutable operation template through the CLI before deriving the first operation that uses it:
+
+```powershell
+uv run python tools/experiment.py operation-template-add --record <TEMPLATE-RECORD.json>
+```
+
+The record contains only `template_id` and a repository-relative `path`; the CLI verifies the file's matching `templateId`, registered parent, and SHA-256 before recording it.
+
 Write commands accept small reviewed JSON records and execute one checked transaction. Do not modify the canonical database with ad hoc SQL. Tests must copy it to a temporary path before mutation and must remain independent of whether that copy contains an executable operation.
 
 Prepare candidate lineage, genuinely new artifacts, reused artifact links, and all candidate roles with one `candidate-prepare` record and one checked transaction. `new_artifacts` entries name `candidate_id`, `role`, `kind`, `location`, and `path`; the CLI reads every file and calculates its SHA-256 and size. It rejects supplied hash/size duplication and artifacts whose existing identity should be reused. `existing_artifacts` entries name the existing `artifact_id` instead. Do not issue separate candidate/artifact/link transactions for a candidate generation.

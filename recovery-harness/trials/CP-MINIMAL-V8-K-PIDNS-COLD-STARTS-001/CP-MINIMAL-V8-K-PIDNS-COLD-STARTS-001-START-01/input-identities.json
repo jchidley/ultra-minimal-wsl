@@ -1,0 +1,18 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-01",
+    "candidateId":  "minimal-v8-k-pidns-001",
+    "candidateManifestSha256":  "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+    "packagePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v8-no-binfmt-mount\\wsl.msi",
+    "packageSha256":  "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+    "probeSha256":  "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb",
+    "rootfsPath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\toybox-minimal-wsl-rootfs.tar.gz",
+    "rootfsSha256":  "a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4",
+    "wprProfilePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "expectedWslVersion":  "2.7.12.0",
+    "distribution":  "Toybox-Minimal",
+    "timeoutSeconds":  45,
+    "smokeCommand":  "test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf toybox-ok",
+    "debugConsoleCapture":  "disabled-for-fixed-comparison"
+}

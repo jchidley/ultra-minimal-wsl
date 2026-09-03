@@ -1,0 +1,117 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsColdStartAcceptance.ps1",
+      "source_sha256": "f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5",
+      "output_sha256": "24715a6a70dde421be66290596d2ae1c1e0def29f9bd71c7be75daebcc1f55db",
+      "substitutions": [
+        {
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-001'",
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001'\n$ColdStartCount = 10"
+        },
+        {
+          "old": "function Invoke-FixedProbe([bool]$Recovery) {\n    $id = if ($Recovery) { \"$TrialId-RECOVERY\" } else { $TrialId }\n    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v8-k-pidns-001' }\n    $manifest = if ($Recovery) { Join-Path $InputRoot 'trial-manifests\\stock-wsl-2.7.12-calibration.json' } else { $CandidateManifest }\n    $manifestHash = if ($Recovery) { 'a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7' } else { $CandidateManifestSha256 }\n    $package = if ($Recovery) { $StockPackage } else { $CandidatePackage }\n    $packageHash = if ($Recovery) { $StockPackageSha256 } else { $CandidatePackageSha256 }\n    Invoke-Fault $(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })\n    if ($script:TestState) { $script:Actions.Add($(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })) | Out-Null; return }\n    & $Probe -TrialId $id -CandidateId $candidateId -CandidateManifestPath $manifest `\n        -ExpectedCandidateManifestSha256 $manifestHash -PackagePath $package `\n        -ExpectedPackageSha256 $packageHash -ExpectedProbeSha256 $ProbeSha256 `\n        -Distribution Toybox-Minimal -ExpectedWslVersion $ExpectedVersion -RootfsPath $Rootfs `\n        -ExpectedRootfsSha256 $RootfsSha256 -WprProfilePath $WprProfile `\n        -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n        -TimeoutSeconds 45 -Execute\n}",
+          "new": "function Invoke-FixedProbe([bool]$Recovery, [int]$StartNumber = 0) {\n    if ($Recovery -and $StartNumber -ne 0) { throw 'Recovery probe cannot have a start number.' }\n    if (-not $Recovery -and ($StartNumber -lt 1 -or $StartNumber -gt $ColdStartCount)) { throw 'Candidate start number is outside the fixed acceptance range.' }\n    $id = if ($Recovery) { \"$TrialId-RECOVERY\" } else { '{0}-START-{1:D2}' -f $TrialId,$StartNumber }\n    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v8-k-pidns-001' }\n    $manifest = if ($Recovery) { Join-Path $InputRoot 'trial-manifests\\stock-wsl-2.7.12-calibration.json' } else { $CandidateManifest }\n    $manifestHash = if ($Recovery) { 'a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7' } else { $CandidateManifestSha256 }\n    $package = if ($Recovery) { $StockPackage } else { $CandidatePackage }\n    $packageHash = if ($Recovery) { $StockPackageSha256 } else { $CandidatePackageSha256 }\n    Invoke-Fault $(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })\n    if ($script:TestState) { $script:Actions.Add($(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })) | Out-Null; return }\n    & $Probe -TrialId $id -CandidateId $candidateId -CandidateManifestPath $manifest `\n        -ExpectedCandidateManifestSha256 $manifestHash -PackagePath $package `\n        -ExpectedPackageSha256 $packageHash -ExpectedProbeSha256 $ProbeSha256 `\n        -Distribution Toybox-Minimal -ExpectedWslVersion $ExpectedVersion -RootfsPath $Rootfs `\n        -ExpectedRootfsSha256 $RootfsSha256 -WprProfilePath $WprProfile `\n        -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n        -TimeoutSeconds 45 -Execute\n}"
+        },
+        {
+          "old": "        Invoke-FixedProbe $false",
+          "new": "        for ($start = 1; $start -le $ColdStartCount; $start++) { Invoke-FixedProbe $false $start }"
+        },
+        {
+          "old": "    $script:TestState = $null\n    [pscustomobject][ordered]@{ schema = 1; selfTest = $true; passed = $true; failurePaths = $results } | ConvertTo-Json -Depth 6 -Compress",
+          "new": "    $script:TestState = @{ $StockProductCode = $true; $CandidateProductCode = $false; WslConfig = $false; WslDebugConsole = $false }\n    $script:Actions = [Collections.Generic.List[string]]::new()\n    $script:FailAt = $null\n    Invoke-Transaction\n    $candidateProbeCount = @($script:Actions | Where-Object { $_ -eq 'candidate-probe' }).Count\n    if ($candidateProbeCount -ne $ColdStartCount -or @($script:Actions | Where-Object { $_ -eq 'recovery-probe' }).Count -ne 1) { throw 'Self-test did not execute exactly ten candidate probes and one recovery probe.' }\n    $script:TestState = $null\n    [pscustomobject][ordered]@{ schema = 1; selfTest = $true; passed = $true; coldStarts = $candidateProbeCount; failurePaths = $results } | ConvertTo-Json -Depth 6 -Compress"
+        },
+        {
+          "old": "    schema = 1; trialId = $TrialId; execute = [bool]$Execute; validated = $true",
+          "new": "    schema = 1; trialId = $TrialId; execute = [bool]$Execute; validated = $true; coldStartCount = $ColdStartCount"
+        },
+        {
+          "old": "    note = 'Fixture-local kernel comparison with unchanged minimal-v8 control plane and diagnostic capture; the preserved no-overlay kernel/config pair is the sole experimental delta, and transport, extraction, and ledger finalization remain external prerequisites.'",
+          "new": "    note = 'Fixture-local ten-cold-start acceptance of the unchanged retained candidate. Each serial start uses the exact fixed Toybox probe, 45-second process timeout, diagnostic instrumentation, and shutdown; exact stock recovery remains mandatory.'"
+        },
+        {
+          "old": "if (Test-Path -LiteralPath (Join-Path $EvidenceParent $TrialId)) { throw \"Candidate evidence root already exists for $TrialId.\" }",
+          "new": "for ($start = 1; $start -le $ColdStartCount; $start++) {\n    $startId = '{0}-START-{1:D2}' -f $TrialId,$start\n    if (Test-Path -LiteralPath (Join-Path $EvidenceParent $startId)) { throw \"Candidate evidence root already exists for $startId.\" }\n}"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-runtime-018\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-cold-starts-020\\Run-ControlledTrial.ps1",
+      "source_sha256": "4ce89dc58ad445832b9236cf45de4f3bc1d9073eeaa869c2d14e4f177442e505",
+      "output_sha256": "9563cc5fc86b7c57737368c51aaef29e16a6c2275ec2e4ae43732d5e464ba01c",
+      "substitutions": [
+        {
+          "old": "$trial = 'CP-MINIMAL-V8-K-PIDNS-001'",
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001'\n$startIds = @(1..10 | ForEach-Object { '{0}-START-{1:D2}' -f $trial,$_ })"
+        },
+        {
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1'",
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsColdStartAcceptance.ps1'"
+        },
+        {
+          "old": "$runnerHash = 'f4e90b070ad80ffb422545cf25dc8aff09f70315643438deeba03807340f34c5'",
+          "new": "$runnerHash = '24715a6a70dde421be66290596d2ae1c1e0def29f9bd71c7be75daebcc1f55db'"
+        },
+        {
+          "old": "Copy-Item -ToSession $session -LiteralPath $runnerSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1' -Force",
+          "new": "Copy-Item -ToSession $session -LiteralPath $runnerSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KPidNsColdStartAcceptance.ps1' -Force"
+        },
+        {
+          "old": "param($Trial,$Recovery,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$RootfsHash,$WprHash)",
+          "new": "param($Trial,$Recovery,$StartIds,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$RootfsHash,$WprHash)"
+        },
+        {
+          "old": "runner='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KPidNsDiagnosticTrial.ps1'",
+          "new": "runner='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\controlled-package-offline\\Invoke-MinimalV8KPidNsColdStartAcceptance.ps1'"
+        },
+        {
+          "old": "foreach ($path in @((Join-Path $evidenceParent $Trial),(Join-Path $evidenceParent $Recovery))) { if (Test-Path -LiteralPath $path) { throw \"Reserved evidence path exists: $path\" } }",
+          "new": "foreach ($id in @($StartIds) + @($Recovery)) { $path = Join-Path $evidenceParent $id; if (Test-Path -LiteralPath $path) { throw \"Reserved evidence path exists: $path\" } }"
+        },
+        {
+          "old": "if (-not $selfTest.passed -or @($selfTest.failurePaths).Count -ne 19) { throw 'Runner fault matrix failed.' }",
+          "new": "if (-not $selfTest.passed -or $selfTest.coldStarts -ne 10 -or @($selfTest.failurePaths).Count -ne 19) { throw 'Runner fault matrix or cold-start cardinality self-test failed.' }"
+        },
+        {
+          "old": "if (-not $validation.validated -or $validation.execute -or -not $validation.diagnosticDebugConsole) { throw 'Runner diagnostic validation failed.' }",
+          "new": "if (-not $validation.validated -or $validation.execute -or -not $validation.diagnosticDebugConsole -or $validation.coldStartCount -ne 10) { throw 'Runner diagnostic acceptance validation failed.' }"
+        },
+        {
+          "old": "        $candidatePath = Join-Path $evidenceParent $Trial\n        $recoveryPath = Join-Path $evidenceParent $Recovery\n        $candidateResult = if (Test-Path -LiteralPath (Join-Path $candidatePath 'result.json')) { Get-Content -LiteralPath (Join-Path $candidatePath 'result.json') -Raw | ConvertFrom-Json } else { $null }\n        $recoveryResult = if (Test-Path -LiteralPath (Join-Path $recoveryPath 'result.json')) { Get-Content -LiteralPath (Join-Path $recoveryPath 'result.json') -Raw | ConvertFrom-Json } else { $null }\n        $candidateFiles = if ($candidateResult) { Verify-Manifest $candidatePath } else { 0 }\n        $recoveryFiles = if ($recoveryResult) { Verify-Manifest $recoveryPath } else { 0 }",
+          "new": "        $candidateResults = @()\n        foreach ($startId in $StartIds) {\n            $candidatePath = Join-Path $evidenceParent $startId\n            $candidateResult = if (Test-Path -LiteralPath (Join-Path $candidatePath 'result.json')) { Get-Content -LiteralPath (Join-Path $candidatePath 'result.json') -Raw | ConvertFrom-Json } else { $null }\n            $candidateFiles = if ($candidateResult) { Verify-Manifest $candidatePath } else { 0 }\n            $candidateResults += [pscustomobject][ordered]@{trialId=$startId;manifestFilesVerified=$candidateFiles;result=$candidateResult}\n        }\n        $recoveryPath = Join-Path $evidenceParent $Recovery\n        $recoveryResult = if (Test-Path -LiteralPath (Join-Path $recoveryPath 'result.json')) { Get-Content -LiteralPath (Join-Path $recoveryPath 'result.json') -Raw | ConvertFrom-Json } else { $null }\n        $recoveryFiles = if ($recoveryResult) { Verify-Manifest $recoveryPath } else { 0 }"
+        },
+        {
+          "old": "foreach ($id in @($Trial,$Recovery)) {",
+          "new": "foreach ($id in @($StartIds) + @($Recovery)) {"
+        },
+        {
+          "old": "[pscustomobject][ordered]@{schema=1;selfTestFailurePaths=@($selfTest.failurePaths).Count;validation=$validation;runnerFailure=$runnerFailure;runnerExitCode=if($process){$process.ExitCode}else{$null};stockProductState=$stockState;candidateProductState=$candidateState;wslconfigExists=$false;diagnosticRelayCount=$diagnosticRelayCount;candidateEvidenceExists=[bool]$candidateResult;recoveryEvidenceExists=[bool]$recoveryResult;candidateManifestFilesVerified=$candidateFiles;recoveryManifestFilesVerified=$recoveryFiles;candidateResult=$candidateResult;recoveryResult=$recoveryResult;completedUtc=[DateTime]::UtcNow.ToString('o')}",
+          "new": "[pscustomobject][ordered]@{schema=1;selfTestFailurePaths=@($selfTest.failurePaths).Count;validation=$validation;runnerFailure=$runnerFailure;runnerExitCode=if($process){$process.ExitCode}else{$null};stockProductState=$stockState;candidateProductState=$candidateState;wslconfigExists=$false;diagnosticRelayCount=$diagnosticRelayCount;coldStartCount=@($candidateResults).Count;candidateResults=$candidateResults;recoveryEvidenceExists=[bool]$recoveryResult;recoveryManifestFilesVerified=$recoveryFiles;recoveryResult=$recoveryResult;completedUtc=[DateTime]::UtcNow.ToString('o')}"
+        },
+        {
+          "old": "} -ArgumentList $trial,$recovery,$runnerHash,$manifestHash,$kernelHash,$configHash,$packageHash,$probeHash,$rootfsHash,$wprHash",
+          "new": "} -ArgumentList $trial,$recovery,$startIds,$runnerHash,$manifestHash,$kernelHash,$configHash,$packageHash,$probeHash,$rootfsHash,$wprHash"
+        },
+        {
+          "old": "foreach ($name in @(\"$trial.zip\",\"$recovery.zip\",\"$trial-stock-remove.log\",\"$trial-candidate-install.log\",\"$trial-candidate-remove.log\",\"$trial-stock-restore.log\",\"$trial-runner.stdout.log\",\"$trial-runner.stderr.log\")) {",
+          "new": "foreach ($name in @($startIds | ForEach-Object { \"$_.zip\" }) + @(\"$recovery.zip\",\"$trial-stock-remove.log\",\"$trial-candidate-install.log\",\"$trial-candidate-remove.log\",\"$trial-stock-restore.log\",\"$trial-runner.stdout.log\",\"$trial-runner.stderr.log\")) {"
+        },
+        {
+          "old": "if ($remote.stockProductState -ne 5 -or $remote.candidateProductState -eq 5 -or $remote.wslconfigExists -or $remote.diagnosticRelayCount -ne 0 -or -not $remote.recoveryResult -or -not $remote.recoveryResult.passed) { throw 'Independent stock recovery and diagnostic cleanup requirement failed.' }",
+          "new": "if ($remote.stockProductState -ne 5 -or $remote.candidateProductState -eq 5 -or $remote.wslconfigExists -or $remote.diagnosticRelayCount -ne 0 -or $remote.coldStartCount -ne 10 -or @($remote.candidateResults | Where-Object { -not $_.result -or -not $_.result.passed }).Count -ne 0 -or -not $remote.recoveryResult -or -not $remote.recoveryResult.passed) { throw 'Ten-start acceptance, independent stock recovery, or diagnostic cleanup requirement failed.' }"
+        },
+        {
+          "old": "$candidateState = [RuntimeMsiState]::MsiQueryProductState('{9185A489-303F-439F-A17B-DE95FACC71FC}')",
+          "new": "$candidateState = [RuntimeMsiState]::MsiQueryProductState('{65E3A12F-0AF8-4D54-A19A-29A07D5186E3}')"
+        }
+      ]
+    }
+  ]
+}

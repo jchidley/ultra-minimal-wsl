@@ -262,6 +262,28 @@ def add_candidate(db: sqlite3.Connection, record: dict) -> None:
     )
 
 
+def add_operation_template(db: sqlite3.Connection, record: dict) -> None:
+    require(record, ("template_id", "path"))
+    if set(record) != {"template_id", "path"}:
+        raise SystemExit("Operation template records accept only template_id and path")
+    supplied = Path(record["path"])
+    if supplied.is_absolute() or ".." in supplied.parts:
+        raise SystemExit("Operation template paths must be relative and remain under the repository root")
+    path = resolve_path(record["path"])
+    if not path.is_file():
+        raise SystemExit(f"Operation template is missing: {path}")
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if value.get("templateId") != record["template_id"]:
+        raise SystemExit(f"Operation template ID mismatch: {path}")
+    parent = value.get("baseTemplate")
+    if parent and not db.execute("SELECT 1 FROM operation_templates WHERE template_id=?", (parent,)).fetchone():
+        raise SystemExit(f"Operation template parent is not registered: {parent}")
+    db.execute(
+        "INSERT INTO operation_templates(template_id,path,sha256) VALUES (?,?,?)",
+        (record["template_id"], record["path"], sha256(path)),
+    )
+
+
 def prepare_candidates(db: sqlite3.Connection, record: dict) -> None:
     """Record candidate lineage, new file identities, and all role links atomically."""
     require(record, ("candidates", "new_artifacts", "existing_artifacts"))
@@ -658,7 +680,7 @@ def main() -> None:
     query.add_argument("sql")
     for name in (
         "artifact-add", "candidate-add", "candidate-prepare", "config-add", "candidate-artifact-link",
-        "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
+        "operation-template-add", "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
         "operation-close", "trial-finalize", "runtime-finalize",
     ):
         item = commands.add_parser(name)
@@ -667,7 +689,7 @@ def main() -> None:
     path = Path(args.db).resolve()
     writable = args.command in {
         "artifact-add", "candidate-add", "candidate-prepare", "config-add", "candidate-artifact-link",
-        "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
+        "operation-template-add", "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
         "operation-close", "trial-finalize", "runtime-finalize",
     }
     db = connect(path, writable=writable)
@@ -732,6 +754,7 @@ def main() -> None:
                     "candidate-prepare": prepare_candidates,
                     "config-add": add_config,
                     "candidate-artifact-link": lambda connection, value: link_artifact(connection, value, target="candidate"),
+                    "operation-template-add": add_operation_template,
                     "operation-derive": derive_operation,
                     "operation-retry": retry_operation,
                     "operation-transition": transition_operation,

@@ -4,23 +4,23 @@
 
 ## Active action
 
-Establish the remaining freeze-readiness evidence for the retained Toybox-capable boundary, `minimal-v8-no-binfmt-mount` plus `K-PIDNS-001`:
+Establish the Alpine compatibility boundary from the frozen `minimal-viable-wsl-v1` baseline:
 
-1. audit every non-mkroot enabled facility against the durable classifications and resolve only documentation/inventory gaps supported by completed runtime evidence;
-2. define one bounded acceptance operation for the required ten cold starts using the unchanged retained candidate, the registered `Start-FixtureBrokerRunV2.ps1` launcher, exact fixed Toybox probe per start, serial execution, unchanged timeouts/instrumentation, and exact stock recovery;
-3. preserve per-start evidence and finalize only if all ten starts, cleanup, stock recovery, and fixture-Off checks pass.
+1. preserve the frozen `minimal-v8-no-binfmt-mount` plus `K-PIDNS-001` Toybox baseline unchanged;
+2. prepare the pinned Alpine rootfs and one bounded `B6-A` operation using the defined Alpine smoke contract, registered V2 broker launcher, unchanged timeouts/instrumentation, serial execution, and exact stock recovery;
+3. if Alpine exposes a missing facility, attribute it as `PROVEN_ALPINE_REQUIRED` only through an evidence-selected additive candidate and controlled ablation; otherwise record that no compatibility addition is needed.
 
-The no-overlay minimal-v8 comparison passed `B6-T`, proving `CONFIG_OVERLAY_FS` unnecessary for the retained Toybox contract. Both minimal-v8 kernel siblings are finalized and must not be rerun as ordinary candidate comparisons. Do not rebuild either kernel or the package, change control-plane source, add `CONFIG_PROC_CHILDREN`, or add another Kconfig facility. The ten-start acceptance is a distinct completion gate, not another minimality trial. Query `tools/experiment.py active` for exact executable operation state; this file does not own attempt identities.
+The complete non-mkroot audit and ten-cold-start acceptance are finalized in `CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001`; `STATUS.md` owns the frozen boundary and exact evidence summary. Do not reopen Toybox minimality, rebuild the frozen package or kernel without a changed compatibility candidate, or fold Alpine-specific support into the generic WSL classification.
 
 ## Blocked
 
-- Alpine, Arch, and Debian compatibility testing waits for a frozen Toybox-capable `minimal-viable-wsl-v1`.
+- Arch and Debian compatibility testing wait for the preceding compatibility targets in the required Alpine → Arch → Debian sequence.
 - No finalized v3, v4, v5, `K-PIDNS-001`, or `K-OVERLAY-PIDNS-001` candidate is eligible for an unchanged candidate-comparison rerun.
 - No speculative Kconfig group or replacement fixture infrastructure is queued.
 
 ## Constraints
 
-- Keep the fixed Toybox smoke command, timeouts, instrumentation, classification rules, and recovery proof unchanged.
+- Keep the frozen Toybox baseline and the plan-defined Alpine smoke command, timeouts, instrumentation, classification rules, and recovery proof unchanged.
 - A failure before the first probe `wsl.exe` process is infrastructure failure and creates no candidate result.
 - Preserve completed candidate records, terminal ledger rows, and trial evidence.
 - Keep Linux builds on `LFS-Builder` ext4 and use only pinned, hash-verified offline inputs.

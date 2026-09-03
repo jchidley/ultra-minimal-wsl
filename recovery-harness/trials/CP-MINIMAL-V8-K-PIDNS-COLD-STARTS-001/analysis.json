@@ -1,0 +1,298 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001",
+  "purpose": "Freeze-readiness acceptance of the unchanged retained minimal-v8-no-binfmt-mount plus K-PIDNS-001 boundary across ten serial cold starts.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-T",
+    "confidence": "high",
+    "ledgerClassification": "BASELINE",
+    "basis": "All ten starts used the exact fixed Toybox probe, printed toybox-ok, exited zero, and completed bounded shutdown. Per-start ETW and events contained no oops, panic, BUG, call trace, signal-11/init crash, non-information Windows event, or new crash artifact."
+  },
+  "candidate": {
+    "id": "minimal-v8-k-pidns-001",
+    "kernelCandidate": "K-PIDNS-001",
+    "controlPlaneParent": "minimal-v8-no-binfmt-mount",
+    "kernelSourceCommit": "14794180686c2fb6307fbe359c359bec765249f3",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "packageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+    "manifestSha256": "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+    "experimentalDelta": "none; acceptance repetition of the unchanged retained candidate"
+  },
+  "contract": {
+    "coldStartCount": 10,
+    "execution": "serial",
+    "probe": "test -r /proc/self/status && test -d /sys && test -c /dev/null && printf toybox-ok",
+    "processTimeoutSeconds": 45,
+    "instrumentation": [
+      "WPR",
+      "ETW",
+      "events",
+      "crash-artifacts",
+      "debug-console GuestLog"
+    ],
+    "perStartShutdown": true,
+    "packageTransaction": "candidate-then-exact-stock-restore"
+  },
+  "starts": [
+    {
+      "start": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-01",
+      "startedUtc": "2026-09-03T00:59:27.9748152Z",
+      "finishedUtc": "2026-09-03T00:59:49.7116900Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "dee71af7be6ed68f02193ee9cc583bb3220d7707e81c6b1bbbf9ea61bf970e4e",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 2,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-02",
+      "startedUtc": "2026-09-03T00:59:50.2919564Z",
+      "finishedUtc": "2026-09-03T01:00:08.8064359Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "e1adfc6a78a73695f582476c2e781fa5f2f30b905196e8a596bd89f80e0c53d3",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 3,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-03",
+      "startedUtc": "2026-09-03T01:00:09.5515020Z",
+      "finishedUtc": "2026-09-03T01:00:28.3376196Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "2252921da51d132cae27bae41e24b3563ccfbfec8f33839ae2a8b4bb1badf36f",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 4,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-04",
+      "startedUtc": "2026-09-03T01:00:28.8703659Z",
+      "finishedUtc": "2026-09-03T01:00:47.0754747Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "5d2be287c4f24e68d262b65f5f8726af918fe19c020664981fc69229402ef4f5",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 5,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-05",
+      "startedUtc": "2026-09-03T01:00:47.6216593Z",
+      "finishedUtc": "2026-09-03T01:01:05.8124771Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "fb8665caabffda66869fdfaadc341d85ed5fd40f5be8ddafbffd16ec89085abb",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 6,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-06",
+      "startedUtc": "2026-09-03T01:01:06.3463796Z",
+      "finishedUtc": "2026-09-03T01:01:24.6247116Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "0c664261773a0c57a404b786d4245d5460511babf067d473e49ddcd078d2a154",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 7,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-07",
+      "startedUtc": "2026-09-03T01:01:25.1583129Z",
+      "finishedUtc": "2026-09-03T01:01:43.3250564Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "f5e1b1dc8fbd579d749ec4d630905cb71ff9ec0624243254909f4002853a1c80",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 8,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-08",
+      "startedUtc": "2026-09-03T01:01:43.8578870Z",
+      "finishedUtc": "2026-09-03T01:02:02.0471885Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "e79c954346485b0c2b2092672e770de9e6ca47b604062b24ea6260aeb8d60280",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 9,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-09",
+      "startedUtc": "2026-09-03T01:02:02.5788008Z",
+      "finishedUtc": "2026-09-03T01:02:20.9021088Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "0c13c7d1c75a4b7418b50c819834f998a00f25dbf77252f63e1aeb45e560a8f1",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    },
+    {
+      "start": 10,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-START-10",
+      "startedUtc": "2026-09-03T01:02:21.4445896Z",
+      "finishedUtc": "2026-09-03T01:02:39.6854541Z",
+      "checkpoint": "B6-T",
+      "passed": true,
+      "managementChecksPassed": true,
+      "toyboxMarker": "toybox-ok",
+      "toyboxExitCode": 0,
+      "smokeTimedOut": false,
+      "shutdownExitCode": 0,
+      "shutdownTimedOut": false,
+      "manifestFilesVerified": 20,
+      "guestLogRecords": 217,
+      "guestLogSha256": "c6b725d9bf2be9a972510f00c5d14cbd10b3ed649ba5b4cfc988d27569e42d58",
+      "eventLevels": {
+        "Information": 31
+      },
+      "newCrashArtifacts": 0
+    }
+  ],
+  "logReview": {
+    "candidateGuestLogRecordsEach": 217,
+    "warningAndErrorSignaturesIdenticalAcrossStarts": true,
+    "knownSignatures": [
+      "Failed to register legacy timer interrupt",
+      "Warning: unable to open an initial console.",
+      "WSL (1 - ) ERROR: InitializeLogging:1561: open(/dev/hvc1) failed 2",
+      "WSL (1 - ) ERROR: main:3833: /init was started without /dev/console",
+      "WSL (1 - ) ERROR: UtilMkdir:1643: mkdir(/sys/fs/cgroup, 755) failed 1",
+      "WSL (1 - ) ERROR: InitializeLogging:1561: open(/dev/hvc1) failed 2",
+      "WSL (1 - init(Toybox-Minimal)) WARNING: /etc/hosts updating disabled in /etc/wsl.conf",
+      "WSL (1 - init(Toybox-Minimal)) WARNING: /etc/resolv.conf updating disabled in /etc/wsl.conf",
+      "WSL (1) ERROR: No such file or directory @C:/controlled-package/source/minimal-v8-no-binfmt-mount/src/shared/inc\\stringshared.h:563 (ReadFile)"
+    ],
+    "comparison": "The complete signature set matches the previously finalized CP-MINIMAL-V8-K-PIDNS-001 passing candidate log. These are unchanged reduced-kernel/debug-console and excluded-policy messages; no unexpected warning appeared.",
+    "oopsOrPanic": false,
+    "initCrash": false,
+    "newCrashArtifacts": 0,
+    "windowsEvents": "31 Information events per candidate interval; no Warning, Error, or Critical event."
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V8-K-PIDNS-COLD-STARTS-001-RECOVERY",
+    "startedUtc": "2026-09-03T01:03:02.0596201Z",
+    "finishedUtc": "2026-09-03T01:03:10.9901412Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "manifestFilesVerified": 20,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "fixture": {
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "finalState": "Off",
+    "brokerState": "completed",
+    "outerFailure": null,
+    "runnerFailure": null,
+    "runnerExitCode": 0
+  },
+  "operation": {
+    "id": "minimal-v8-k-pidns-cold-starts-020",
+    "controllerSha256": "9563cc5fc86b7c57737368c51aaef29e16a6c2275ec2e4ae43732d5e464ba01c",
+    "runnerSha256": "24715a6a70dde421be66290596d2ae1c1e0def29f9bd71c7be75daebcc1f55db",
+    "brokerLauncher": "tools/fixture-broker/Start-FixtureBrokerRunV2.ps1",
+    "brokerLauncherSha256": "d8fe32b29aee5cd712aec7c52194c7d3f2285778bbd92c1b3dd2ea0cc57da528"
+  },
+  "decision": "The ten-cold-start completion gate passes. Together with the complete non-mkroot facility audit, the retained Toybox-capable minimal-v8 plus K-PIDNS-001 boundary is freeze-ready for compatibility testing."
+}
