@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "templateId": "debian2-article-manifest-repair-v1",
+  "kind": "test-article-repair",
+  "requiredArtifactRoles": [
+    "article_repair",
+    "broker",
+    "broker_client",
+    "broker_creator",
+    "broker_installer",
+    "broker_launcher",
+    "broker_policy",
+    "controller"
+  ],
+  "runtimeBoundary": "One offline manifest-only repair of the retained Debian2 article under exact stock WSL. Require the recorded pre-repair VHDX identity, update only empty npm and Pi version fields atomically, verify interactive Pi 0.84.4 and the agent-skills package, preserve absent .wslconfig and zero network adapters, record the new VHDX identity, and return the fixture Off. Restore the prior manifest if repair fails before acceptance.",
+  "invariants": {
+    "distribution": "Debian2",
+    "network": "zero-adapters-offline",
+    "mutation": "article-manifest-version-fields-only",
+    "preRepairVhdxSha256": "c210ba2def3877a1ed6ffd4f1f93195482075aeb3bf341d2538dfd6ef1db2d2e",
+    "pi": "0.84.4",
+    "completion": [
+      "nonempty-npm-version",
+      "pi-0.84.4",
+      "agent-skills-package",
+      "corrected-manifest",
+      "new-vhdx-identity",
+      "absent-fixture-wslconfig",
+      "zero-network-adapters",
+      "fixture-Off"
+    ]
+  }
+}

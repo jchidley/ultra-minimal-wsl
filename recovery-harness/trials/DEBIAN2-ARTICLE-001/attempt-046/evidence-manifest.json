@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-046",
+  "classification": "article-created-manifest-version-fields-require-correction",
+  "articleVhdxSha256": "c210ba2def3877a1ed6ffd4f1f93195482075aeb3bf341d2538dfd6ef1db2d2e",
+  "files": [
+    {
+      "path": "000000001-execute.result.json",
+      "bytes": 247,
+      "sha256": "51701cf58d3dd5a88fda5aa811a388bc542b3f1feeddc8834a06f5c976916c40"
+    },
+    {
+      "path": "000000002-finish.result.json",
+      "bytes": 153,
+      "sha256": "0b435c3450de6598c547f0b37bee687df3994547ddab1906eaaa389d62abf18f"
+    },
+    {
+      "path": "broker-status.json",
+      "bytes": 204,
+      "sha256": "876e28177087c255b668367f3c3d73018f883363cab37999c066c02901c24f27"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 361,
+      "sha256": "56dfd4826eedf621d6f80e3c2281e3c3f2e777e53be9d09e5ee9992cc2f50379"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\article-manifest.json",
+      "bytes": 8359,
+      "sha256": "7ca2cfb7139e52ec849e1888ad6ff90c492d4d8bc348dcc9f084b61e0d23e3dd"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 2991,
+      "sha256": "b55a248020bae286dedd87de78a436c24c487f1afb3baa10c0524199721a89cd"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 45716,
+      "sha256": "6220e669067ee272294121f86ef0cac934d92e9417210d1ad8ca6256198ac697"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 334,
+      "sha256": "701c2faae443a388e375e9a8e7f97811467e62c7db4c20acda749df5e222f48b"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 10983,
+      "sha256": "1a17cd95889c708709482216d762518ccf1ae94f150a5f68b4c1be7ad4501be4"
+    }
+  ]
+}
