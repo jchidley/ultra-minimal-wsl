@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-045",
+  "failure": "bootstrap failed: timeout=False streams=True exit=1.",
+  "cleanup": {
+    "partialArticleRemoved": true,
+    "wslconfigAbsent": true,
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "5dee1631-3677-4231-bec4-c76f63cbe714",
+    "PSShowComputerName": true
+  },
+  "completedUtc": "2026-09-03T17:31:52.6702611Z"
+}

@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-045",
+  "classification": "post-bootstrap-shell-verifier-not-interactive",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 231,
+      "sha256": "f49ba8086a491c75ec558f06836ba681886c14a154ad50a6ffbcb35ba9dac2c4"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 787,
+      "sha256": "b8cbd9599a3e59bd98ea5b125da9df8e35ae4ed6bb827db0ff569fec2707dd5e"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 584,
+      "sha256": "b1605b0a2c901ebd733af4e2f987205647238742c9beaf6d0a16c01994e7b537"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 2893,
+      "sha256": "8e403eddeb2228fadb32ec4c1995f2b73b1e5c044401e86fe5b0abbf6e0ca2a4"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 37237,
+      "sha256": "7b095425ab8f432e425b46c92fb462a6f8127eb050ecafe3a1a75b8f2d611998"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "d3dcf488903e0b12b63508c7aef7da04334b70e20fdf841ec6445e203003b8b3"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "b689167f26de5fc62b7776b913245a5d6368fbaaefd99f7879e1ae4cf74d3eb4"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 418,
+      "sha256": "c003cc32adbc5c1d23d3b517e1994f2bb4240a2be79d0006932bbaf57e5dd0e5"
+    }
+  ]
+}
