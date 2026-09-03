@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-050",
+  "classification": "completed-read-only-reconciliation",
+  "articleId": "debian2-stock-bootstrap-v10",
+  "node": "v22.19.0",
+  "npm": "10.9.3",
+  "pi": "0.84.4",
+  "agentSkillsPackage": "/home/jack/git/agent-skills",
+  "vhdxBytes": 1473249280,
+  "vhdxSha256": "0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388",
+  "wslconfigAbsent": true,
+  "networkAdapterCount": 0,
+  "fixtureState": "Off",
+  "brokerTerminated": true,
+  "recordedUtc": "2026-09-03T18:09:53.7326121Z"
+}

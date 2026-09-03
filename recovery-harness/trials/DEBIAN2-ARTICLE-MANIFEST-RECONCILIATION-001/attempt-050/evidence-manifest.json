@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-050",
+  "files": [
+    {
+      "path": "000000001-execute.result.json",
+      "bytes": 271,
+      "sha256": "6a06a889492d9e11bdec13f590b851f2332ea9e2e18853c98f1e03f28832673d"
+    },
+    {
+      "path": "000000002-finish.result.json",
+      "bytes": 153,
+      "sha256": "54ab2004d8318222ccbe2a8b6df9232ca95f54e592482610b240a65f657af313"
+    },
+    {
+      "path": "analysis.json",
+      "bytes": 581,
+      "sha256": "cdbabf32605897b113c29d018fc9534b0d42ecfa9c58d00ae425055c3ba5abb0"
+    },
+    {
+      "path": "broker-status.json",
+      "bytes": 217,
+      "sha256": "c17e4b03399ad77f0a0b7081dc49f57c5d54c3f252d09a1814cbbef273b2dc88"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 554,
+      "sha256": "294645e76e1f77ac91901ae85c2095e44dd8bbc0598d71f08771941e87232bb4"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-manifest-reconciliation.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-manifest-reconciliation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2/article-manifest.json",
+      "bytes": 8421,
+      "sha256": "5a85c5aea91d13ffc4c5ca796992194625d0b155803cf8389ccba52d7a289572"
+    },
+    {
+      "path": "debian2/interactive-pi.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2/interactive-pi.stdout.log",
+      "bytes": 32,
+      "sha256": "4c8f3d1ca1010b4e38f564f34b4376e8c7d7fffc63fe9186e74ef0ac4723795d"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 334,
+      "sha256": "37e49d0d53efb596da81edb9ec0a075c819b3437c764e0f675c4c424c5a5a15f"
+    },
+    {
+      "path": "reviewed-controller-source.ps1",
+      "bytes": 8917,
+      "sha256": "e80c94a3a1fabcdfbe1cc4ddb7a287a9f220cd654242536ace1f09a412ba67c1"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 737,
+      "sha256": "7d9d5f73337cb0fb0873ac16213ef3be2d9ac4d44530c3983fdb73fca48aa1e6"
+    }
+  ]
+}

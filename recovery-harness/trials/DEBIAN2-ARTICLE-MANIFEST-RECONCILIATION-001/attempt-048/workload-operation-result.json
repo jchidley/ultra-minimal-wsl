@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-048",
+  "failure": "Interactive Pi or agent-skills package verification failed.",
+  "completedUtc": "2026-09-03T17:58:56.4988312Z"
+}

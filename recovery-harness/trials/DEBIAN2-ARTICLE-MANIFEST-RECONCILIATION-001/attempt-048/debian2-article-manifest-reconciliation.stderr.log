@@ -1,0 +1,5 @@
+[31;1mException: [0mC:\ProgramData\UltraMinimalWslFixtureBroker\Runs\debian2-article-manifest-reconciliation-048\private\workloads\debian2-article-manifest-reconciliation.ps1:43[0m
+[31;1m[0m[36;1mLine |[0m
+[31;1m[0m[36;1m[36;1m  43 | [0m     [36;1m$remote = Invoke-Command -Session $session -ScriptBlock {[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mInteractive Pi or agent-skills package verification failed.[0m

@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-049",
+  "classification": "infrastructure-failure-native-argument-transport",
+  "failure": "PowerShell native argument reconstruction corrupted the Bash command substitution before interactive verification.",
+  "articleMutation": "none",
+  "fixtureOffVerified": true,
+  "brokerTerminationVerified": true,
+  "recordedUtc": "2026-09-03T18:04:58.2165474Z"
+}

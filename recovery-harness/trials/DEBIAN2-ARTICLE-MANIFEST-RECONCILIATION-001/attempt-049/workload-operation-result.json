@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-049",
+  "failure": "agent-skills: unexpected EOF while looking for matching `)'",
+  "completedUtc": "2026-09-03T18:04:19.7485374Z"
+}

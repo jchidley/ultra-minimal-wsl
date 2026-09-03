@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-048",
+  "classification": "infrastructure-failure-output-assertion",
+  "failure": "Corrected manifest validation passed; the combined interactive output assertion failed before evidence copy.",
+  "articleMutation": "none",
+  "fixtureOffVerified": true,
+  "brokerTerminationVerified": true,
+  "recordedUtc": "2026-09-03T17:59:55.0116778Z"
+}

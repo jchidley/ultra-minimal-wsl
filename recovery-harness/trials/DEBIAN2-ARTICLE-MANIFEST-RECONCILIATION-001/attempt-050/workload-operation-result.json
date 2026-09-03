@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-050",
+  "reconciliation": {
+    "distribution": "Debian2",
+    "articleId": "debian2-stock-bootstrap-v10",
+    "defaultUser": "jack",
+    "node": "v22.19.0",
+    "npm": "10.9.3",
+    "pi": "0.84.4",
+    "manifestCorrectedUtc": "2026-09-03T17:50:42Z",
+    "vhdxBytes": 1473249280,
+    "vhdxSha256": "0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388",
+    "wslconfigAbsent": true,
+    "interactivePi": "    /home/jack/git/agent-skills\n",
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "b06a3c5d-e7a1-4b22-a5d6-88278e54acb2",
+    "PSShowComputerName": true
+  },
+  "completedUtc": "2026-09-03T18:09:00.2352330Z"
+}

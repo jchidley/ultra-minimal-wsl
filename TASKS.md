@@ -4,9 +4,9 @@
 
 ## Active action
 
-Prepare `Debian2` as the first practical-workload test article inside the dedicated disposable fixture. Import the pinned clean Debian 13.5 rootfs under stock WSL, create user `jack`, apply the committed core dotfiles/chezmoi bootstrap from immutable repository bundles, install fixed fnm, Node.js, McFly, and Pi inputs, verify shell startup and `pi --version`, remove any fixture-wide `.wslconfig` written by personal-machine dotfiles, record the resulting VHDX and installed-version identities, leave `Debian2` registered, and return the fixture Off.
+Test the retained `Debian2` practical-workload article under the frozen `ultra-minimal-wsl-v1` baseline in the dedicated disposable fixture. Preserve the article and all frozen Toybox, Alpine, Arch, and Debian candidates unchanged; run one bounded offline comparison that establishes the earliest practical-workload checkpoint or failure, captures exact package/kernel/article identities and diagnostics, restores pinned stock WSL, verifies the retained article remains usable under stock, and returns the fixture Off with absent `.wslconfig` and zero adapters.
 
-This preparation must copy no secret, credential, SSH key, history, or mutable working-tree content. On failure it must remove a partial `Debian2` registration and install path. It does not rerun or modify the frozen Toybox, Alpine, Arch, or Debian compatibility candidates. After preparation, a separate bounded action may boot this article under the frozen reduced WSL baseline to identify the first practical-workload failure.
+The comparison must not copy secrets, credentials, SSH keys, or history, and must not promote any facility without narrow runtime evidence from the practical workload.
 
 ## Blocked
 

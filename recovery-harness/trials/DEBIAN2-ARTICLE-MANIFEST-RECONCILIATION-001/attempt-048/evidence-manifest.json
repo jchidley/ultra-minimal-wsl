@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-reconciliation-048",
+  "files": [
+    {
+      "path": "analysis.json",
+      "bytes": 421,
+      "sha256": "a85c64c38950f3658a63694be526b97bbaf6cd85d2f638558bf8851234b31ea8"
+    },
+    {
+      "path": "broker-status.json",
+      "bytes": 243,
+      "sha256": "e409ce90019c02b1431b6067956b2269e7c0803374079efb2cba78bee5f86d38"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 787,
+      "sha256": "b8cbd9599a3e59bd98ea5b125da9df8e35ae4ed6bb827db0ff569fec2707dd5e"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-manifest-reconciliation.stderr.log",
+      "bytes": 602,
+      "sha256": "392232622df30fe0c52a4dfd612292d67fcc3a5c48f4466897101fbec695d1c9"
+    },
+    {
+      "path": "debian2-article-manifest-reconciliation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "befd776e2e278b8927c2ccee214eac730684844021a41fac5b409f7437dc1235"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "be77e1a3767373907a6f3e6dd49d4e416883a139f5d47eb0321845381a314562"
+    },
+    {
+      "path": "reviewed-controller-source.ps1",
+      "bytes": 6877,
+      "sha256": "1056f075793525b0d6d4b5b86d931b2b6c13f1f71618ccfa4a1da655fdc27273"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 210,
+      "sha256": "15f49b1dabac98da0e8065d46304fe601a2d3b141dc872f3c02fa1d99190a734"
+    }
+  ]
+}

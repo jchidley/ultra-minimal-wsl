@@ -10,6 +10,8 @@ recovery-harness/trials/**/guest-log-*.txt binary
 recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-ALPINE-*/** -text
 recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-ARCH-*/** -text
 recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-DEBIAN-*/** -text
+recovery-harness/trials/DEBIAN2-ARTICLE-MANIFEST-REPAIR-*/** -text
+recovery-harness/trials/DEBIAN2-ARTICLE-MANIFEST-RECONCILIATION-*/** -text
 recovery-harness/trials/K-OVERLAY-DIAG-001/** -text
 recovery-harness/trials/CP-MINIMAL-V5-MOUNT-PID-NS-001/** -text
 recovery-harness/trials/CP-MINIMAL-V7-K-OVERLAY-PIDNS-001/** -text

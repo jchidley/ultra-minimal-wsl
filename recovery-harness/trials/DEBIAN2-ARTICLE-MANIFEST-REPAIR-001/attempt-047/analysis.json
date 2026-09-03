@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-manifest-repair-047",
+  "classification": "infrastructure-failure-after-guest-mutation-before-evidence-acceptance",
+  "failure": "Controller attempted ConvertFrom-Json on mixed command stdout after the guest script had set success=1.",
+  "rollbackVerified": false,
+  "rollbackFinding": "Source and durable failure location prove the guest script completed its mutation and removed its backup before controller-side JSON parsing failed; rollback did not occur.",
+  "fixtureOffEvidence": "Protected broker reached terminal failed state without a finalization suffix, which means Stop-ExactFixture completed successfully; no matching vmwp process exists.",
+  "zeroAdapterEvidence": "Protected controller verified zero adapters before startup and contains no adapter mutation path.",
+  "brokerTerminationVerified": true,
+  "matchingVmWorkerCount": 0,
+  "brokerStatus": {
+    "schema": 1,
+    "runId": "debian2-article-manifest-repair-047",
+    "state": "failed",
+    "detail": "Allowlisted workload failed with exit 1.",
+    "processId": 21976,
+    "vmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "updatedUtc": "2026-09-03T17:50:55.6671639Z"
+  },
+  "recordedUtc": "2026-09-03T17:53:42.8460072Z"
+}
