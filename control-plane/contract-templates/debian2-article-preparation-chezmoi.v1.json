@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "templateId": "debian2-article-preparation-chezmoi-v1",
+  "baseTemplate": "debian2-article-preparation-temporary-nic-v1",
+  "requiredArtifactRoles": [
+    "agent_skills_bundle",
+    "ak_bundle",
+    "article_bootstrap",
+    "broker",
+    "broker_client",
+    "broker_creator",
+    "broker_installer",
+    "broker_launcher",
+    "broker_policy",
+    "chezmoi_archive",
+    "controller",
+    "dotfiles_bundle",
+    "fnm_archive",
+    "input_manifest",
+    "mcfly_archive",
+    "node_archive",
+    "pi_archive",
+    "rootfs",
+    "tools_bundle"
+  ],
+  "runtimeBoundary": "One stock-WSL fixture preparation interval. Require zero initial network adapters, add one temporary adapter on the existing internal Default Switch, create fresh Debian2 from pinned inputs including the fixed upstream chezmoi archive absent from Debian, apply the committed core bootstrap without secrets, verify Pi and shell startup, remove fixture-wide .wslconfig, remove the temporary adapter, leave Debian2 registered, verify zero adapters, and return Off. Failure must remove partial article and adapter state.",
+  "invariants": {
+    "chezmoi": "fixed-upstream-2.69.4",
+    "completion": [
+      "registered-Debian2",
+      "installed-version-manifest",
+      "chezmoi-version",
+      "shell-startup",
+      "pi-version",
+      "absent-fixture-wslconfig",
+      "article-vhdx-identity",
+      "zero-network-adapters-restored",
+      "fixture-Off"
+    ]
+  }
+}

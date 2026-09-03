@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "articleId": "debian2-stock-bootstrap-v4",
+  "distribution": "Debian2",
+  "user": "jack",
+  "debianSnapshot": {
+    "timestamp": "20260712T000000Z",
+    "suite": "trixie",
+    "inReleaseSha256": "98b25b5cd185c59d34aa6e4c3e9b5b8f01bbe9d104fe2dcfbcd30dc0a14a59ed"
+  },
+  "inputs": [
+    {
+      "name": "rootfs",
+      "file": "debian-13.5-amd64-wsl-rootfs.tar.gz",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian\\13.5-store-1.26.0.0\\debian-13.5-amd64-wsl-rootfs.tar.gz",
+      "bytes": 89228801,
+      "sha256": "5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f"
+    },
+    {
+      "name": "dotfiles",
+      "file": "dotfiles.bundle",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\dotfiles-05710eae9b09e645f7ab63cb211c740f1aa75c8f.bundle",
+      "bytes": 2148037,
+      "sha256": "d44ca89163962b05db17e0d47a25bd90ff5eb568e038972d8e7806bde94a616d",
+      "commit": "05710eae9b09e645f7ab63cb211c740f1aa75c8f"
+    },
+    {
+      "name": "agent-skills",
+      "file": "agent-skills.bundle",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\agent-skills-4dd2f4befbf41910967a41cc43b4e18916c8a262.bundle",
+      "bytes": 2108639,
+      "sha256": "3073c6b1b2cbdb1e55d59ef2c8e148b98b3f2cd17b39b12ae10c93ee927a439a",
+      "commit": "4dd2f4befbf41910967a41cc43b4e18916c8a262"
+    },
+    {
+      "name": "ak",
+      "file": "ak.bundle",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\ak-7c53208f1b48109d8db1b6ed191131d00872c18f.bundle",
+      "bytes": 48885,
+      "sha256": "c55ce3825f1c1d38126c0ec8676674490614171267b9d740fdb9cdcfb839cbd5",
+      "commit": "7c53208f1b48109d8db1b6ed191131d00872c18f"
+    },
+    {
+      "name": "tools",
+      "file": "tools.bundle",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\tools-42c10893f78ea81d2ad5b57248cbb864b73cc257.bundle",
+      "bytes": 1230990,
+      "sha256": "1f9dfe8999b31802030e0c3178e89f0e5277e1e65af80198937fcc1374ae8844",
+      "commit": "42c10893f78ea81d2ad5b57248cbb864b73cc257"
+    },
+    {
+      "name": "chezmoi",
+      "file": "chezmoi_2.69.4_linux_amd64.tar.gz",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\chezmoi_2.69.4_linux_amd64.tar.gz",
+      "bytes": 13446382,
+      "sha256": "5054cf09cb2993725f525c8bb6ec3ff8625489ecfc061e019c17e737e7c7057b",
+      "version": "2.69.4"
+    },
+    {
+      "name": "fnm",
+      "file": "fnm-linux-v1.38.1.zip",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\fnm-linux-v1.38.1.zip",
+      "bytes": 3345149,
+      "sha256": "b69e5c9a05c1e17e4a7de9a17df14ba430d049f2591af791a6f850a170296069",
+      "version": "1.38.1"
+    },
+    {
+      "name": "node",
+      "file": "node-v22.19.0-linux-x64.tar.xz",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\node-v22.19.0-linux-x64.tar.xz",
+      "bytes": 30479988,
+      "sha256": "c0649af18e6a24f6fe5535a3e86b341dd49a8e71117c8b68bde973ef834f16f2",
+      "version": "22.19.0"
+    },
+    {
+      "name": "mcfly",
+      "file": "mcfly-v0.9.4-x86_64-unknown-linux-musl.tar.gz",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\mcfly-v0.9.4-x86_64-unknown-linux-musl.tar.gz",
+      "bytes": 2488171,
+      "sha256": "72d2c6fdaa111ac96c2cf725fc40e313e2856643482be58608911a09440313f1",
+      "version": "0.9.4"
+    },
+    {
+      "name": "pi",
+      "file": "earendil-works-pi-coding-agent-0.84.4.tgz",
+      "source": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\debian2\\v1\\npm-pack\\earendil-works-pi-coding-agent-0.84.4.tgz",
+      "bytes": 6882502,
+      "sha256": "5bce766d19c3ceba18f3fbaad91c449c9f9d73981f9e3400ecef932006f06968",
+      "version": "0.84.4"
+    }
+  ],
+  "secrets": "none"
+}
