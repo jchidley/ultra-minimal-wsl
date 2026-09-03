@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-037",
+  "classification": "controller-hyper-v-parameter-error",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 230,
+      "sha256": "0a5d771ea137002c3056c4949dd14edde5500a1a73187af9e3dd1082201e9537"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 787,
+      "sha256": "b8cbd9599a3e59bd98ea5b125da9df8e35ae4ed6bb827db0ff569fec2707dd5e"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 604,
+      "sha256": "fd18ddc789fd7043fb43c79608635d359dc0e7c4b77d243bfb06b3ab93d3ea4e"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "0410b2a3dd9b78e5f26503a26bd40ef13408fbecf15e165914f47ab9b4f4aa53"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "a1f9d9f81f67dc186061830b063d8ad5c68daefdd1ed1d7e9d5603938f337e40"
+    }
+  ]
+}
