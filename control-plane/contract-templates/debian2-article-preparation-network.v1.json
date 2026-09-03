@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "templateId": "debian2-article-preparation-network-v1",
+  "baseTemplate": "debian2-article-preparation-v1",
+  "runtimeBoundary": "One stock-WSL fixture preparation interval. Temporarily connect the exact disposable VM's sole adapter to the existing internal Default Switch, create only the fresh Debian2 article from pinned inputs, apply the committed core dotfiles bootstrap without secrets, verify Pi and shell startup, remove fixture-wide .wslconfig, restore the adapter's exact original switch state, leave Debian2 registered, and return the exact fixture Off. Failure must remove a partial Debian2 registration and install path and restore network state.",
+  "invariants": {
+    "network": "temporary-existing-Default-Switch-for-stock-construction",
+    "networkRestoration": "exact-original-switch-state",
+    "completion": [
+      "registered-Debian2",
+      "installed-version-manifest",
+      "shell-startup",
+      "pi-version",
+      "absent-fixture-wslconfig",
+      "article-vhdx-identity",
+      "network-adapter-restored",
+      "fixture-Off"
+    ]
+  }
+}

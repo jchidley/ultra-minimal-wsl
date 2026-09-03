@@ -1,0 +1,5 @@
+[31;1mException: [0mC:\ProgramData\UltraMinimalWslFixtureBroker\Runs\debian2-article-preparation-032\private\workloads\debian2-article-preparation.ps1:108[0m
+[31;1m[0m[36;1mLine |[0m
+[31;1m[0m[36;1m[36;1m 108 | [0m     [36;1m$remoteResult = Invoke-Command -Session $session -ScriptBlock {[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mThe Windows fixture has no configured IPv4 DNS server for stock WSL construction.[0m

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-032",
+  "failure": "The Windows fixture has no configured IPv4 DNS server for stock WSL construction.",
+  "cleanup": {
+    "partialArticleRemoved": true,
+    "wslconfigAbsent": true,
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "62c5928a-ffce-4576-aa9e-b9460e3ad9e2",
+    "PSShowComputerName": true
+  },
+  "completedUtc": "2026-09-03T16:16:27.7429882Z"
+}
