@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN-001",
+  "extractor": "tracerpt.exe plus tools/extract_guest_logs.py",
+  "candidateTraceRows": 1835,
+  "recoveryTraceRows": 4158,
+  "candidateGuestLogRecords": 217,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the unchanged 6.18.40.1+ K-PIDNS-001 kernel",
+    "the registered Debian VHDX attached and ext4 mounted read-write",
+    "the exact Debian smoke command ran /bin/true, verified /proc/self/status, /sys, and /dev/null, printed debian-ok, and exited zero",
+    "wsl.exe shutdown returned zero without timeout",
+    "the 217-record GuestLog retained the accepted minimal-v8 signature; only distro identity, ext4 UUID, and timing differed from the completed Arch comparison"
+  ],
+  "candidateFatalEvidence": null,
+  "windowsEvents": {
+    "count": 59,
+    "nonInformationCount": 0
+  },
+  "newCrashArtifacts": 0,
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 147 GuestLog records",
+    "the independent fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T",
+    "the candidate product, .wslconfig, diagnostic relays, Debian registration, and Debian install path were absent before the fixture returned Off"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-D",
+    "basis": "Debian passed the plan-defined smoke contract with the frozen package and kernel, so Debian selects no additive kernel facility."
+  },
+  "nextEvidenceAction": "Freeze the unchanged minimal-v8 plus K-PIDNS-001 boundary as ultra-minimal-wsl-v1; do not begin follow-on work in this operation."
+}

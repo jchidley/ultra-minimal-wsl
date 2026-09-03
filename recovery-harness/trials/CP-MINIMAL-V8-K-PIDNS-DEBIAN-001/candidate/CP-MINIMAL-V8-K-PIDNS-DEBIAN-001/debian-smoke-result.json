@@ -1,0 +1,22 @@
+{
+    "schema":  1,
+    "name":  "debian-smoke",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Debian-Minimal",
+                      "--exec",
+                      "/bin/sh",
+                      "-c",
+                      "/bin/true \u0026\u0026 test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf debian-ok"
+                  ],
+    "processId":  5972,
+    "startedUtc":  "2026-09-03T05:15:18.9557426Z",
+    "completedUtc":  "2026-09-03T05:15:36.7993947Z",
+    "timedOut":  false,
+    "streamsCompleted":  true,
+    "taskkillExitCode":  null,
+    "exitCode":  0,
+    "stdout":  "debian-ok",
+    "stderr":  ""
+}

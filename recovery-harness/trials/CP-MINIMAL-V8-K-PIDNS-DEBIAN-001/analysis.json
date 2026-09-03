@@ -1,0 +1,58 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN-001",
+  "operationId": "minimal-v8-k-pidns-debian-runtime-027",
+  "purpose": "Establish the Debian compatibility boundary from the frozen minimal-v8-no-binfmt-mount plus K-PIDNS-001 baseline without changing the Toybox, Alpine, or Arch results.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-D",
+    "confidence": "high",
+    "requirementClassification": "BASELINE",
+    "basis": "The exact Debian smoke command ran /bin/true, verified the plan-defined procfs, sysfs, and /dev/null contract, printed debian-ok, and exited zero under the unchanged frozen package and kernel. No Debian-specific compatibility addition is required."
+  },
+  "inputs": {
+    "debianRelease": "13.5",
+    "debianArchitecture": "amd64",
+    "debianSourcePackage": "TheDebianProject.DebianGNULinux_1.26.0.0_x64__76v4gfsz19hv4",
+    "debianRootfsSha256": "5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f",
+    "controllerSha256": "1408942f7f75d7fc8679cce7133b85a1483570b87d804f19a82f2f5dc65d961d",
+    "runnerSha256": "4f40c9bc07dd1d2a08bbea397f3b37bbde534283a33cbc83a795c6fc0090ce62",
+    "probeSha256": "8ccaaed1324a05d9eb83f970ca89ab7bd56902c66260cb3efd4ce60057548f50",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "packageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-03T05:15:17.1710778Z",
+    "finishedUtc": "2026-09-03T05:15:39.3591361Z",
+    "classification": "B6-D",
+    "managementChecksPassed": true,
+    "debianResult": "PASS",
+    "marker": "debian-ok",
+    "exitCode": 0,
+    "timedOut": false,
+    "manifestFilesVerified": 20,
+    "guestLogRecords": 217,
+    "newCrashArtifacts": 0,
+    "nonInformationWindowsEvents": 0
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN-001-RECOVERY",
+    "startedUtc": "2026-09-03T05:16:01.8404694Z",
+    "finishedUtc": "2026-09-03T05:16:08.7018580Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "infrastructureCleanup": {
+    "debianRegisteredBeforeCandidate": true,
+    "debianUnregisteredAfterRecovery": true,
+    "debianInstallPathAbsent": true,
+    "brokerState": "completed",
+    "fixtureFinalState": "Off"
+  },
+  "decision": "Record that Debian requires no compatibility addition. Freeze ultra-minimal-wsl-v1 as minimal-v8-no-binfmt-mount plus K-PIDNS-001; Alpine, Arch, and Debian all pass unchanged."
+}

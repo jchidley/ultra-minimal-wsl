@@ -1,0 +1,102 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-DEBIAN-001-RECOVERY",
+    "candidateId":  "stock-wsl-2.7.12-recovery",
+    "files":  [
+                  {
+                      "path":  "candidate-manifest.json",
+                      "bytes":  562,
+                      "sha256":  "a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7"
+                  },
+                  {
+                      "path":  "input-identities.json",
+                      "bytes":  1194,
+                      "sha256":  "30e01007cb84e6541d355090e942bb941a7257347a064b60dca870b4c10063ed"
+                  },
+                  {
+                      "path":  "interval-start.json",
+                      "bytes":  230,
+                      "sha256":  "e6ad8e02697a12ae87185f5d6676136821aaae55d21ec044f3d737d6e171b2ed"
+                  },
+                  {
+                      "path":  "Invoke-WslCandidateProbe.ps1",
+                      "bytes":  18716,
+                      "sha256":  "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb"
+                  },
+                  {
+                      "path":  "result.json",
+                      "bytes":  8332,
+                      "sha256":  "136ebde39952f4124207ba3242bbd0f800e95cb2d93db86a20fc77855301b8eb"
+                  },
+                  {
+                      "path":  "toybox-smoke-attempt.json",
+                      "bytes":  513,
+                      "sha256":  "88a008b20a98f7d32545b15d00f2081e554c039041648deac3daaf9c296fc4b1"
+                  },
+                  {
+                      "path":  "toybox-smoke-result.json",
+                      "bytes":  749,
+                      "sha256":  "71ec7837288b69ef4b8bde07277ff51a9ff4b4f3c00abafc800ad444d61b7e74"
+                  },
+                  {
+                      "path":  "windows-events.json",
+                      "bytes":  32067,
+                      "sha256":  "58f501fee985cf56f58167bd98f3e1a38ce63fbc697f2232f651859c9e8c29ed"
+                  },
+                  {
+                      "path":  "windows-wsl.etl",
+                      "bytes":  2621440,
+                      "sha256":  "d02b09a32e1d361b9365ab89646f16060643bf3a4cfaf7b86be4e8412b709918"
+                  },
+                  {
+                      "path":  "wpr-start.log",
+                      "bytes":  0,
+                      "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                  },
+                  {
+                      "path":  "wpr-stop.log",
+                      "bytes":  79,
+                      "sha256":  "56f7594e4d60953c950db6c9a06253129b7d11f145d55c129ff61fe31f466486"
+                  },
+                  {
+                      "path":  "wsl-list-quiet-attempt.json",
+                      "bytes":  265,
+                      "sha256":  "c3b9fd9b7e8a8e4f04ec576b0ddd196c1c724cf0837c34541b4f5a58f52e8a4b"
+                  },
+                  {
+                      "path":  "wsl-list-quiet-result.json",
+                      "bytes":  720,
+                      "sha256":  "70e5b900170332f18c8b89b9df0ca203c6b37e52849d3dc6e1274ce58bb3cb70"
+                  },
+                  {
+                      "path":  "wsl-shutdown-attempt.json",
+                      "bytes":  233,
+                      "sha256":  "577291b48d30b583f337f57188fb085c427a7fdc4443ceb2054d4128fba70c87"
+                  },
+                  {
+                      "path":  "wsl-shutdown-result.json",
+                      "bytes":  460,
+                      "sha256":  "a7a62f899bc71f061e89346e74b557df80fdb2760ac099af8928df946a42e955"
+                  },
+                  {
+                      "path":  "wsl-status-attempt.json",
+                      "bytes":  229,
+                      "sha256":  "57f7ad1ae63fa84a5a36f4378d2b5c4200a9cd9ed03541e0aa3a87f2eff2b371"
+                  },
+                  {
+                      "path":  "wsl-status-result.json",
+                      "bytes":  866,
+                      "sha256":  "49bb4da9273c508ad4b1c16998376079d7feb69b4bf3c3e89c5f8e9dfcd78410"
+                  },
+                  {
+                      "path":  "wsl-version-attempt.json",
+                      "bytes":  231,
+                      "sha256":  "3345ae39816a4161bc5b7c629db4813a80354ecb0be932198f9c2387ca6eb51d"
+                  },
+                  {
+                      "path":  "wsl-version-result.json",
+                      "bytes":  2040,
+                      "sha256":  "b2f6c0fb92fb08e5c70196d4100c8539aadf882dbc39845df62d64e586ed76d4"
+                  }
+              ]
+}

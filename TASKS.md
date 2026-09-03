@@ -4,13 +4,7 @@
 
 ## Active action
 
-Establish the Debian compatibility boundary from the unchanged frozen `minimal-viable-wsl-v1` baseline:
-
-1. preserve `minimal-v8-no-binfmt-mount` plus `K-PIDNS-001` and the completed Alpine and Arch results unchanged;
-2. extend the durable trial schema for Debian, then prepare only pinned hash-verified offline Debian inputs and one bounded `B6-D` operation using the defined Debian smoke contract, registered V2 broker launcher, unchanged timeouts/instrumentation, serial execution, and exact stock recovery;
-3. if Debian exposes a missing facility, attribute it as `PROVEN_DEBIAN_REQUIRED` only through an evidence-selected additive candidate and controlled ablation; otherwise record that no compatibility addition is needed.
-
-Alpine 3.24.0 passed `B6-A` in `CP-MINIMAL-V8-K-PIDNS-ALPINE-003`, and Arch Linux 2026.07.01 passed `B6-ARCH` in `CP-MINIMAL-V8-K-PIDNS-ARCH-001`, both without a kernel change. No `PROVEN_ALPINE_REQUIRED` or `PROVEN_ARCH_REQUIRED` addition exists. `STATUS.md` owns the frozen boundary and exact evidence summaries. Debian work was not begun in the Arch session.
+None. Debian compatibility is complete, `ultra-minimal-wsl-v1` is frozen, and no follow-on work is authorized in this bounded action. `STATUS.md` owns the verified boundary and evidence summary.
 
 ## Blocked
 
