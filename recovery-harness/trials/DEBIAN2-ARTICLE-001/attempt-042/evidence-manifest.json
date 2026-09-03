@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-042",
+  "classification": "committed-bootstrap-incompatible-with-fnm-1.38.1-cli",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 231,
+      "sha256": "0a09ef4a239efb4cf94df0bd28e3b2ab5e852214e78a2fca1c733d815f476862"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 1050,
+      "sha256": "20c966b2a9094001b365ee4f3fd0097d921f6fc5a94214a7ee65c3f0771ec2f9"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 584,
+      "sha256": "17e73e52f05eeacbcec046294b41eb021d15463ae7e89333da66f539adddc50f"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 3089,
+      "sha256": "7eca6f4029f9db7cd2b73296ace4a9f011a62c5fd2047537ead48cd5bb5c93d3"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 36043,
+      "sha256": "c17026850413f9b97779cbcea9eb9b2fb3c0c6b3ac5834b855f06737745e391f"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "07b51435dd689e3091cb35d042b99a20f6ca2f445bb75b6d47d0d42c241eb1d5"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "77016442c3f7743ae03b2304c6a7fdfbbc3de5a513bb406341bb47778f68c5f3"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 418,
+      "sha256": "d28306810350137a366e45454ef884e55768c8d7d39daa2886c5a0677f501779"
+    }
+  ]
+}
