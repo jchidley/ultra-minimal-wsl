@@ -298,6 +298,35 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(next_build["fixture_final_state"], "Off")
         self.assertNotIn("msiexec", next_script.read_text(encoding="utf-8").lower())
 
+    def test_debian_compatibility_contract_is_bounded_and_keeps_toybox_recovery(self):
+        input_record = json.loads((CONTROL / "compatibility/debian-13.5-amd64.json").read_text(encoding="utf-8"))
+        self.assertEqual(input_record["sourcePackage"], "TheDebianProject.DebianGNULinux_1.26.0.0_x64__76v4gfsz19hv4")
+        self.assertEqual(input_record["sha256"], "5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f")
+        self.assertEqual(input_record["bytes"], 89228801)
+        self.assertIn("exact hash-and-size cache hit", input_record["offlinePolicy"])
+
+        probe = (ROOT / "tools/Invoke-WslDebianProbe.ps1").read_text(encoding="utf-8")
+        smoke = "/bin/true && test -r /proc/self/status && test -d /sys && test -c /dev/null && printf debian-ok"
+        self.assertIn(f"$SmokeCommand = '{smoke}'", probe)
+        self.assertIn("Invoke-BoundedProcess 'debian-smoke'", probe)
+        self.assertIn("{ 'B6-D' }", probe)
+        for forbidden in ("Start-VM", "Stop-VM", "Restore-VMSnapshot", "New-PSSession", "Invoke-Command", "msiexec"):
+            self.assertNotIn(forbidden, probe)
+
+        runner = (CONTROL / "controlled-package-offline/Invoke-MinimalV8KPidNsDebianTrial.ps1").read_text(encoding="utf-8")
+        self.assertIn("if ($Recovery) { 'Toybox-Minimal' } else { 'Debian-Minimal' }", runner)
+        self.assertIn("$RecoveryProbeSha256 = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'", runner)
+        self.assertIn("$RecoveryRootfsSha256 = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'", runner)
+        self.assertIn("-TimeoutSeconds 45 -Execute", runner)
+        self.assertIn("Invoke-Recovery $recoveryFailures", runner)
+
+        delta = json.loads((CONTROL / "generation/minimal-v8-k-pidns-debian.runtime.v1.json").read_text(encoding="utf-8"))
+        self.assertEqual(delta["schema"], 2)
+        self.assertEqual(delta["phase"], "runtime")
+        self.assertEqual({item["name"] for item in delta["files"]}, {"runner", "controller"})
+        for item in delta["files"]:
+            self.assertEqual(sha256(Path(item["output"])), item["output_sha256"])
+
     def test_arch_compatibility_contract_is_bounded_and_keeps_toybox_recovery(self):
         input_record = json.loads((CONTROL / "compatibility/arch-2026.07.01-x86_64.json").read_text(encoding="utf-8"))
         self.assertEqual(input_record["sourceSha256"], "9cadf82e389427fb61739ad3b0c213b2abd331354fab6460972e4e52bb8ff9e8")

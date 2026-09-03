@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 DEFAULT_DB = ROOT / "inventory/experiments.sqlite"
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 TERMINAL_OPERATION_STATES = {
     "completed", "candidate-finalized", "infrastructure-failure", "superseded", "cancelled"
 }
@@ -537,7 +537,7 @@ def finalize_trial(db: sqlite3.Connection, record: dict) -> None:
         "trial_id", "status", "started_utc", "finished_utc", "source_commit", "toolchain",
         "kernel_config_path", "kernel_config_sha256", "parent_trial", "config_name", "change_group",
         "explicit_symbols", "autoselected_symbols", "kernel_image_path", "kernel_image_sha256",
-        "boot_level", "toybox_result", "alpine_result", "arch_result", "failure_signature", "windows_error",
+        "boot_level", "toybox_result", "alpine_result", "arch_result", "debian_result", "failure_signature", "windows_error",
         "kernel_log_path", "crash_log_path", "classification", "stock_restore_verified",
         "analysis_path", "metadata_notes", "ledger_notes",
     )

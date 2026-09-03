@@ -1,0 +1,165 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsArchTrial.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDebianTrial.ps1",
+      "source_sha256": "48b9fbfa353d944857750a92c4fb222350fb9b8e1f2b6791f1ae6530ab8149f7",
+      "output_sha256": "4f40c9bc07dd1d2a08bbea397f3b37bbde534283a33cbc83a795c6fc0090ce62",
+      "substitutions": [
+        {
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-ARCH-001'",
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-DEBIAN-001'"
+        },
+        {
+          "old": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslArchProbe.ps1'",
+          "new": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslDebianProbe.ps1'"
+        },
+        {
+          "old": "$CandidateRootfs = Join-Path $InputRoot 'archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'",
+          "new": "$CandidateRootfs = Join-Path $InputRoot 'debian-13.5-amd64-wsl-rootfs.tar.gz'"
+        },
+        {
+          "old": "$CandidateProbeSha256 = '7d30d7473c3b849ff2e0539d487f6bf01a3ab25bfb6e7df011e645be8546889d'",
+          "new": "$CandidateProbeSha256 = '8ccaaed1324a05d9eb83f970ca89ab7bd56902c66260cb3efd4ce60057548f50'"
+        },
+        {
+          "old": "$CandidateRootfsSha256 = 'c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176'",
+          "new": "$CandidateRootfsSha256 = '5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f'"
+        },
+        {
+          "old": "    $distribution = if ($Recovery) { 'Toybox-Minimal' } else { 'Arch-Minimal' }",
+          "new": "    $distribution = if ($Recovery) { 'Toybox-Minimal' } else { 'Debian-Minimal' }"
+        },
+        {
+          "old": "    if ((Get-Item -LiteralPath $CandidateRootfs).Length -ne 214122848) { throw 'Arch rootfs size mismatch.' }",
+          "new": "    if ((Get-Item -LiteralPath $CandidateRootfs).Length -ne 89228801) { throw 'Debian rootfs size mismatch.' }"
+        },
+        {
+          "old": "    candidateGate = 'B6-ARCH'; candidateDistribution = 'Arch-Minimal'; candidateSmoke = '/bin/true plus the plan-defined Arch smoke contract'\n    recoveryGate = 'B6-T'; recoveryDistribution = 'Toybox-Minimal'; diagnosticDebugConsole = $true\n    note = 'One serial Arch compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Arch rootfs and plan-defined B6-ARCH probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory.'",
+          "new": "    candidateGate = 'B6-D'; candidateDistribution = 'Debian-Minimal'; candidateSmoke = '/bin/true plus the plan-defined Debian smoke contract'\n    recoveryGate = 'B6-T'; recoveryDistribution = 'Toybox-Minimal'; diagnosticDebugConsole = $true\n    note = 'One serial Debian compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Debian rootfs and plan-defined B6-D probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory.'"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-arch-runtime-024\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-debian-runtime-025\\Run-ControlledTrial.ps1",
+      "source_sha256": "0ecc83563b54e2abd1e8d86de39959004b3faa30d66ed3368e90f7f79ed3e060",
+      "output_sha256": "1408942f7f75d7fc8679cce7133b85a1483570b87d804f19a82f2f5dc65d961d",
+      "substitutions": [
+        {
+          "old": "$trial = 'CP-MINIMAL-V8-K-PIDNS-ARCH-001'",
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-DEBIAN-001'"
+        },
+        {
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsArchTrial.ps1'",
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDebianTrial.ps1'"
+        },
+        {
+          "old": "$probeSource = Join-Path $project 'tools\\Invoke-WslArchProbe.ps1'",
+          "new": "$probeSource = Join-Path $project 'tools\\Invoke-WslDebianProbe.ps1'"
+        },
+        {
+          "old": "$rootfsSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\cache\\arch\\2026.07.01\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'",
+          "new": "$rootfsSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\cache\\debian\\13.5-store-1.26.0.0\\debian-13.5-amd64-wsl-rootfs.tar.gz'"
+        },
+        {
+          "old": "$runnerHash = '48b9fbfa353d944857750a92c4fb222350fb9b8e1f2b6791f1ae6530ab8149f7'",
+          "new": "$runnerHash = '4f40c9bc07dd1d2a08bbea397f3b37bbde534283a33cbc83a795c6fc0090ce62'"
+        },
+        {
+          "old": "$probeHash = '7d30d7473c3b849ff2e0539d487f6bf01a3ab25bfb6e7df011e645be8546889d'",
+          "new": "$probeHash = '8ccaaed1324a05d9eb83f970ca89ab7bd56902c66260cb3efd4ce60057548f50'"
+        },
+        {
+          "old": "$rootfsHash = 'c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176'",
+          "new": "$rootfsHash = '5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f'"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslArchProbe.ps1' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslDebianProbe.ps1' -Force"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $rootfsSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $rootfsSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\debian-13.5-amd64-wsl-rootfs.tar.gz' -Force"
+        },
+        {
+          "old": "        $name = 'Arch-Minimal'\n        $rootfs = 'C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'\n        $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Arch-Minimal'",
+          "new": "        $name = 'Debian-Minimal'\n        $rootfs = 'C:\\controlled-inputs\\ultra-minimal-wsl\\debian-13.5-amd64-wsl-rootfs.tar.gz'\n        $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian-Minimal'"
+        },
+        {
+          "old": "        if ($LASTEXITCODE -ne 0 -or $listed -contains $name) { throw 'Arch infrastructure precondition failed: distro is already registered or list failed.' }",
+          "new": "        if ($LASTEXITCODE -ne 0 -or $listed -contains $name) { throw 'Debian infrastructure precondition failed: distro is already registered or list failed.' }"
+        },
+        {
+          "old": "        if (Test-Path -LiteralPath $install) { throw 'Arch infrastructure install path already exists.' }",
+          "new": "        if (Test-Path -LiteralPath $install) { throw 'Debian infrastructure install path already exists.' }"
+        },
+        {
+          "old": "        $stdout = Join-Path $evidence \"$Trial-arch-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-arch-import.stderr.log\"",
+          "new": "        $stdout = Join-Path $evidence \"$Trial-debian-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-debian-import.stderr.log\""
+        },
+        {
+          "old": "        if (-not $process.Start()) { throw 'Failed to start Arch import.' }",
+          "new": "        if (-not $process.Start()) { throw 'Failed to start Debian import.' }"
+        },
+        {
+          "old": "            throw \"Arch import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"",
+          "new": "            throw \"Debian import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\""
+        },
+        {
+          "old": "        if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Arch import failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }",
+          "new": "        if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Debian import failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }"
+        },
+        {
+          "old": "        if ($LASTEXITCODE -ne 0 -or $listed -notcontains $name) { throw 'Arch import did not create the required registered distro.' }",
+          "new": "        if ($LASTEXITCODE -ne 0 -or $listed -notcontains $name) { throw 'Debian import did not create the required registered distro.' }"
+        },
+        {
+          "old": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslArchProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'",
+          "new": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslDebianProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\debian-13.5-amd64-wsl-rootfs.tar.gz'"
+        },
+        {
+          "old": "    foreach ($name in @(\"$trial.zip\",\"$recovery.zip\",\"$trial-stock-remove.log\",\"$trial-candidate-install.log\",\"$trial-candidate-remove.log\",\"$trial-stock-restore.log\",\"$trial-runner.stdout.log\",\"$trial-runner.stderr.log\",\"$trial-arch-import.stdout.log\",\"$trial-arch-import.stderr.log\",\"$trial-arch-unregister.stdout.log\",\"$trial-arch-unregister.stderr.log\")) {",
+          "new": "    foreach ($name in @(\"$trial.zip\",\"$recovery.zip\",\"$trial-stock-remove.log\",\"$trial-candidate-install.log\",\"$trial-candidate-remove.log\",\"$trial-stock-restore.log\",\"$trial-runner.stdout.log\",\"$trial-runner.stderr.log\",\"$trial-debian-import.stdout.log\",\"$trial-debian-import.stderr.log\",\"$trial-debian-unregister.stdout.log\",\"$trial-debian-unregister.stderr.log\")) {"
+        },
+        {
+          "old": "                $name = 'Arch-Minimal'\n                $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Arch-Minimal'",
+          "new": "                $name = 'Debian-Minimal'\n                $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian-Minimal'"
+        },
+        {
+          "old": "                    $stdout = Join-Path $evidence \"$Trial-arch-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-arch-unregister.stderr.log\"",
+          "new": "                    $stdout = Join-Path $evidence \"$Trial-debian-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-debian-unregister.stderr.log\""
+        },
+        {
+          "old": "                    if (-not $process.Start()) { throw 'Failed to start Arch unregister.' }",
+          "new": "                    if (-not $process.Start()) { throw 'Failed to start Debian unregister.' }"
+        },
+        {
+          "old": "                        throw \"Arch unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"",
+          "new": "                        throw \"Debian unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\""
+        },
+        {
+          "old": "                    if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Arch unregister failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }",
+          "new": "                    if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Debian unregister failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }"
+        },
+        {
+          "old": "                if ($LASTEXITCODE -ne 0 -or $listed -contains $name -or (Test-Path -LiteralPath $install)) { throw 'Arch infrastructure cleanup verification failed.' }",
+          "new": "                if ($LASTEXITCODE -ne 0 -or $listed -contains $name -or (Test-Path -LiteralPath $install)) { throw 'Debian infrastructure cleanup verification failed.' }"
+        },
+        {
+          "old": "        foreach ($name in @(\"$trial-arch-import.stdout.log\",\"$trial-arch-import.stderr.log\",\"$trial-arch-unregister.stdout.log\",\"$trial-arch-unregister.stderr.log\")) {",
+          "new": "        foreach ($name in @(\"$trial-debian-import.stdout.log\",\"$trial-debian-import.stderr.log\",\"$trial-debian-unregister.stdout.log\",\"$trial-debian-unregister.stderr.log\")) {"
+        },
+        {
+          "old": "if (-not $registration.registered -or -not $cleanup.unregistered -or -not $cleanup.installPathAbsent) { throw 'Arch registration lifecycle requirement failed.' }",
+          "new": "if (-not $registration.registered -or -not $cleanup.unregistered -or -not $cleanup.installPathAbsent) { throw 'Debian registration lifecycle requirement failed.' }"
+        }
+      ]
+    }
+  ]
+}

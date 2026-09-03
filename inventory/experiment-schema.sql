@@ -106,6 +106,7 @@ CREATE TABLE trials (
     toybox_result TEXT NOT NULL,
     alpine_result TEXT NOT NULL,
     arch_result TEXT NOT NULL,
+    debian_result TEXT NOT NULL,
     failure_signature TEXT NOT NULL,
     windows_error TEXT NOT NULL,
     kernel_log_path TEXT NOT NULL,
@@ -132,7 +133,7 @@ LEFT JOIN artifacts a ON a.artifact_id=o.controller_artifact_id
 WHERE o.executable=1 AND o.status IN ('prepared','runtime-planned','uac-requested','worker-started','probe-started');
 
 CREATE VIEW trial_summary AS
-SELECT trial_id,parent_trial,status,boot_level,toybox_result,alpine_result,arch_result,
+SELECT trial_id,parent_trial,status,boot_level,toybox_result,alpine_result,arch_result,debian_result,
        failure_signature,windows_error,stock_restore_verified,analysis_path
 FROM trials;
 
@@ -170,4 +171,4 @@ BEGIN SELECT RAISE(ABORT, 'trial-producing operations are immutable'); END;
 CREATE TRIGGER trial_results_no_delete BEFORE DELETE ON trial_operation_results
 BEGIN SELECT RAISE(ABORT, 'trial-producing operations are immutable'); END;
 
-PRAGMA user_version = 3;
+PRAGMA user_version = 4;
