@@ -1,0 +1,3 @@
+{"utc":"2026-09-03T02:56:42.3680878Z","event":"broker-ready","data":{"expectedSequence":1}}
+{"utc":"2026-09-03T03:00:45.8365110Z","event":"job-completed","data":{"operation":"execute","id":"execute","sequence":1}}
+{"utc":"2026-09-03T03:00:57.9268510Z","event":"job-completed","data":{"operation":"finish","id":"finish","sequence":2}}

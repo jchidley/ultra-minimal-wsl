@@ -1,0 +1,58 @@
+{
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-ARCH-001",
+  "operationId": "minimal-v8-k-pidns-arch-runtime-024",
+  "purpose": "Establish the Arch compatibility boundary from the frozen minimal-v8-no-binfmt-mount plus K-PIDNS-001 baseline without changing the Toybox or Alpine result.",
+  "status": "PASS",
+  "classification": {
+    "highestCheckpoint": "B6-ARCH",
+    "confidence": "high",
+    "requirementClassification": "BASELINE",
+    "basis": "The exact Arch smoke command ran /bin/true, verified the plan-defined procfs, sysfs, and /dev/null contract, printed arch-ok, and exited zero under the unchanged frozen package and kernel. No Arch-specific compatibility addition is required."
+  },
+  "inputs": {
+    "archRelease": "2026.07.01",
+    "archArchitecture": "x86_64",
+    "archSourceSha256": "9cadf82e389427fb61739ad3b0c213b2abd331354fab6460972e4e52bb8ff9e8",
+    "archRootfsSha256": "c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176",
+    "controllerSha256": "0ecc83563b54e2abd1e8d86de39959004b3faa30d66ed3368e90f7f79ed3e060",
+    "runnerSha256": "48b9fbfa353d944857750a92c4fb222350fb9b8e1f2b6791f1ae6530ab8149f7",
+    "probeSha256": "7d30d7473c3b849ff2e0539d487f6bf01a3ab25bfb6e7df011e645be8546889d",
+    "kernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+    "kernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+    "packageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765"
+  },
+  "candidateInterval": {
+    "startedUtc": "2026-09-03T02:59:40.1577981Z",
+    "finishedUtc": "2026-09-03T03:00:02.9252308Z",
+    "classification": "B6-ARCH",
+    "managementChecksPassed": true,
+    "archResult": "PASS",
+    "marker": "arch-ok",
+    "exitCode": 0,
+    "timedOut": false,
+    "manifestFilesVerified": 20,
+    "guestLogRecords": 217,
+    "newCrashArtifacts": 0,
+    "nonInformationWindowsEvents": 0
+  },
+  "stockRecovery": {
+    "verified": true,
+    "trialId": "CP-MINIMAL-V8-K-PIDNS-ARCH-001-RECOVERY",
+    "startedUtc": "2026-09-03T03:00:28.4995766Z",
+    "finishedUtc": "2026-09-03T03:00:36.2134800Z",
+    "classification": "B6-T",
+    "toyboxMarker": "toybox-ok",
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0
+  },
+  "infrastructureCleanup": {
+    "archRegisteredBeforeCandidate": true,
+    "archUnregisteredAfterRecovery": true,
+    "archInstallPathAbsent": true,
+    "brokerState": "completed",
+    "fixtureFinalState": "Off"
+  },
+  "decision": "Record that Arch requires no compatibility addition. Keep minimal-v8-no-binfmt-mount plus K-PIDNS-001 and the Alpine boundary unchanged; Debian is the next compatibility target."
+}

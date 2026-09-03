@@ -1,0 +1,14 @@
+{
+    "schema":  1,
+    "name":  "arch-smoke",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Arch-Minimal",
+                      "--exec",
+                      "/bin/sh",
+                      "-c",
+                      "/bin/true \u0026\u0026 test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf arch-ok"
+                  ],
+    "attemptedUtc":  "2026-09-03T02:59:42.2488583Z"
+}

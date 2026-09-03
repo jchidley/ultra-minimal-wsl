@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-ARCH-001",
+  "extractor": "tracerpt.exe plus tools/extract_guest_logs.py",
+  "candidateTraceRows": 1330,
+  "recoveryTraceRows": 4165,
+  "candidateGuestLogRecords": 217,
+  "recoveryGuestLogRecords": 147,
+  "candidateEvidence": [
+    "CreateVmEnd identified the unchanged 6.18.40.1+ K-PIDNS-001 kernel",
+    "the registered Arch VHDX attached and ext4 mounted read-write",
+    "the exact Arch smoke command ran /bin/true, verified /proc/self/status, /sys, and /dev/null, printed arch-ok, and exited zero",
+    "wsl.exe shutdown returned zero without timeout",
+    "the 217-record GuestLog retained the accepted minimal-v8 signature; only distro identity, ext4 UUID, timing, and the same expected hosts/resolv warnings seen with Alpine differed"
+  ],
+  "candidateFatalEvidence": null,
+  "windowsEvents": {
+    "count": 59,
+    "nonInformationCount": 0
+  },
+  "newCrashArtifacts": 0,
+  "recoveryEvidence": [
+    "the packaged stock kernel emitted 147 GuestLog records",
+    "the independent fixed Toybox process printed toybox-ok and exited zero",
+    "stock recovery completed at B6-T",
+    "the candidate product, .wslconfig, diagnostic relays, Arch registration, and Arch install path were absent before the fixture returned Off"
+  ],
+  "classification": {
+    "highestDirectlySupportedGate": "B6-ARCH",
+    "basis": "Arch passed the plan-defined smoke contract with the frozen package and kernel, so Arch selects no additive kernel facility."
+  },
+  "nextEvidenceAction": "Retain the frozen minimal-v8 plus K-PIDNS-001 boundary and completed Alpine result unchanged; proceed to Debian compatibility testing."
+}

@@ -1,0 +1,18 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-ARCH-001",
+    "candidateId":  "minimal-v8-k-pidns-001",
+    "candidateManifestSha256":  "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+    "packagePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v8-no-binfmt-mount\\wsl.msi",
+    "packageSha256":  "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+    "probeSha256":  "7d30d7473c3b849ff2e0539d487f6bf01a3ab25bfb6e7df011e645be8546889d",
+    "rootfsPath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz",
+    "rootfsSha256":  "c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176",
+    "wprProfilePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "expectedWslVersion":  "2.7.12.0",
+    "distribution":  "Arch-Minimal",
+    "timeoutSeconds":  45,
+    "smokeCommand":  "/bin/true \u0026\u0026 test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf arch-ok",
+    "debugConsoleCapture":  "disabled-for-fixed-comparison"
+}

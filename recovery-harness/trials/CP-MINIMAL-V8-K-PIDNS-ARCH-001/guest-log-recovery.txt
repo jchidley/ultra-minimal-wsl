@@ -1,0 +1,147 @@
+[    0.843002] brd: module loaded
+[    0.848723] loop: module loaded
+[    0.850282] Loading iSCSI transport class v2.0-870.
+[    0.852127] rdac: device handler registered
+[    0.854529] Microchip SmartPQI Driver (v2.1.34-035)
+[    0.856281] VMware PVSCSI driver - version 1.0.7.0-k
+[    0.858126] hv_vmbus: registering driver hv_storvsc
+[    0.862208] PPP generic driver version 2.4.2
+[    0.862283] scsi host0: storvsc_host_t
+[    0.864044] VMware vmxnet3 virtual NIC driver - version 1.9.0.0-k-NAPI
+[    0.866164] hv_vmbus: registering driver hv_netvsc
+[    0.867153] scsi 0:0:0:0: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+[    0.867814] Fusion MPT base driver 3.04.20
+[    0.870765] Copyright (c) 1999-2008 LSI Corporation
+[    0.873278] Fusion MPT SPI Host driver 3.04.20
+[    0.874726] Fusion MPT SAS Host driver 3.04.20
+[    0.876133] Fusion MPT misc device (ioctl) driver 3.04.20
+[    0.877602] mptctl: Registered with Fusion MPT base driver
+[    0.877803] scsi 0:0:0:1: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+[    0.878638] mptctl: /dev/mptctl @ (major,minor=10,220)
+[    0.878699] i8042: PNP: No PS/2 controller found.
+[    0.878702] hv_vmbus: registering driver hyperv_keyboard
+[    0.884375] rtc_cmos 00:00: RTC can wake from S4
+[    0.891354] rtc_cmos 00:00: registered as rtc0
+[    0.893645] rtc_cmos 00:00: setting system clock to 2026-09-03T03:00:30 UTC (1788404430)
+[    0.895728] rtc_cmos 00:00: alarms up to one month, 114 bytes nvram
+[    0.897416] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+[    0.900200] device-mapper: uevent: version 1.0.3
+[    0.901284] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[    0.901557] sd 0:0:0:0: [sda] 730960 512-byte logical blocks: (374 MB/357 MiB)
+[    0.901689] device-mapper: ioctl: 4.50.0-ioctl (2025-04-28) initialised: dm-devel@lists.linux.dev
+[    0.902222] amd_pstate: The CPPC feature is supported but currently disabled by the BIOS.
+[    0.902222] Please enable it if your BIOS has the CPPC option.
+[    0.903180] sd 0:0:0:1: Attached scsi generic sg1 type 0
+[    0.904344] sd 0:0:0:0: [sda] Write Protect is on
+[    0.904440] sd 0:0:0:1: [sdb] 326464 512-byte logical blocks: (167 MB/159 MiB)
+[    0.906653] amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+[    0.906726] sd 0:0:0:1: [sdb] Write Protect is on
+[    0.906940] hv_utils: Registering HyperV Utility Driver
+[    0.906942] hv_vmbus: registering driver hv_utils
+[    0.907011] hv_vmbus: registering driver hv_balloon
+[    0.907094] hv_vmbus: registering driver dxgkrnl
+[    0.907188] drop_monitor: Initializing network drop monitor service
+[    0.908631] sd 0:0:0:0: [sda] Mode Sense: 0f 00 80 00
+[    0.909294] sd 0:0:0:1: [sdb] Mode Sense: 0f 00 80 00
+[    0.909340] NET: Registered PF_INET6 protocol family
+[    0.911480] hv_utils: TimeSync IC version 4.0
+[    0.911898] Segment Routing with IPv6
+[    0.911920] In-situ OAM (IOAM) with IPv6
+[    0.911967] NET: Registered PF_PACKET protocol family
+[    0.912562] 9pnet: Installing 9P2000 support
+[    0.913766] sd 0:0:0:0: [sda] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[    0.913880] hv_balloon: Using Dynamic Memory protocol version 2.0
+[    0.913944] sd 0:0:0:1: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[    0.916794] NET: Registered PF_VSOCK protocol family
+[    0.917235] Free page reporting enabled
+[    0.917237] hv_balloon: Cold memory discard hint enabled with order 9
+[    0.939966] hv_vmbus: registering driver hv_sock
+[    0.942880] IPI shorthand broadcast: enabled
+[    0.948143] sched_clock: Marking stable (944016500, 2005300)->(1007237500, -61215700)
+[    0.950646] registered taskstats version 1
+[    0.951746] Loading compiled-in X.509 certificates
+[    0.956363] sd 0:0:0:1: [sdb] Attached SCSI disk
+[    0.956382] sd 0:0:0:0: [sda] Attached SCSI disk
+[    0.960921] Demotion targets for Node 0: null
+[    0.962949] ima: No TPM chip found, activating TPM-bypass!
+[    0.964117] ima: Allocated hash algorithm: sha256
+[    0.965073] ima: No architecture policies found
+[    0.966638] RAS: Correctable Errors collector initialized.
+[    0.981412] clk: Disabling unused clocks
+[    0.985016] Freeing unused decrypted memory: 2028K
+[    0.987690] Freeing unused kernel image (initmem) memory: 4852K
+[    0.989305] Write protecting the kernel read-only data: 36864k
+[    0.991668] Freeing unused kernel image (text/rodata gap) memory: 300K
+[    0.994132] Freeing unused kernel image (rodata/data gap) memory: 1564K
+[    0.995646] Run /init as init process
+[    0.996493]   with arguments:
+[    0.997208]     /init
+[    0.997696]   with environment:
+[    0.998474]     HOME=/
+[    0.999039]     TERM=linux
+[    0.999663]     WSL_ROOT_INIT=1
+[    1.000783]     WSL_ENABLE_CRASH_DUMP=1
+[    1.002342] WSL (1 - ): WSL version 2.7.12.0
+[    1.049203] scsi 0:0:0:2: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+[    1.073527] sd 0:0:0:2: Attached scsi generic sg2 type 0
+[    1.073783] sd 0:0:0:2: [sdc] 2097160 512-byte logical blocks: (1.07 GB/1.00 GiB)
+[    1.076764] sd 0:0:0:2: [sdc] 4096-byte physical blocks
+[    1.078513] sd 0:0:0:2: [sdc] Write Protect is off
+[    1.079903] sd 0:0:0:2: [sdc] Mode Sense: 0f 00 00 00
+[    1.081589] sd 0:0:0:2: [sdc] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    1.099099] EXT4-fs (sda): mounted filesystem 00000000-0000-0000-0000-000000000000 ro without journal. Quota mode: none.
+[    1.109849] EXT4-fs (sdb): mounted filesystem 00000000-0000-0000-0000-000000000000 ro without journal. Quota mode: none.
+[    1.111027] sd 0:0:0:2: [sdc] Attached SCSI disk
+[    1.168990] tun: Universal TUN/TAP device driver, 1.6
+Setting up swapspace version 1, size = 1 GiB (1073741824 bytes)
+no label, UUID=afd4d708-0b6c-4702-bd24-43d4055d1cd6
+[    1.215226] Adding 1048576k swap on /dev/sdc.  Priority:-2 extents:1 across:1048576k
+[    1.268975] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+[    1.285578] Bridge firewalling registered
+[    1.520907] hv_pci 7a9b1d72-1ed2-4fa1-b4f2-ffee8f3a46ef: PCI VMBus probing: Using version 0x10004
+[    1.525969] hv_pci 7a9b1d72-1ed2-4fa1-b4f2-ffee8f3a46ef: PCI host bridge to bus 1ed2:00
+[    1.527360] pci_bus 1ed2:00: root bus resource [mem 0xa00000000-0xc00001fff window]
+[    1.528507] pci_bus 1ed2:00: No busn resource found for root bus, will use [bus 00-ff]
+[    1.532386] pci 1ed2:00:00.0: [1af4:105a] type 00 class 0x088000 conventional PCI endpoint
+[    1.538857] pci 1ed2:00:00.0: BAR 0 [mem 0xc00000000-0xc00000fff 64bit]
+[    1.540610] pci 1ed2:00:00.0: BAR 2 [mem 0xc00001000-0xc00001fff 64bit]
+[    1.542534] pci 1ed2:00:00.0: BAR 4 [mem 0xa00000000-0xbffffffff 64bit]
+[    1.555844] pci_bus 1ed2:00: busn_res: [bus 00-ff] end is updated to 00
+[    1.556977] pci 1ed2:00:00.0: BAR 4 [mem 0xa00000000-0xbffffffff 64bit]: assigned
+[    1.558896] pci 1ed2:00:00.0: BAR 0 [mem 0xc00000000-0xc00000fff 64bit]: assigned
+[    1.560763] pci 1ed2:00:00.0: BAR 2 [mem 0xc00001000-0xc00001fff 64bit]: assigned
+[    1.566986] virtio-pci 1ed2:00:00.0: enabling device (0000 -> 0002)
+[    1.593140] virtiofs virtio1: discovered new tag: wslg
+[    1.616550] virtiofs virtio1: Cache len: 0x200000000 @ 0xa00000000
+[    2.169856] scsi 0:0:0:3: Direct-Access     Msft     Virtual Disk     1.0  PQ: 0 ANSI: 5
+[    2.189550] sd 0:0:0:3: Attached scsi generic sg3 type 0
+[    2.189948] sd 0:0:0:3: [sdd] 2147483648 512-byte logical blocks: (1.10 TB/1.00 TiB)
+[    2.192648] sd 0:0:0:3: [sdd] 4096-byte physical blocks
+[    2.194143] sd 0:0:0:3: [sdd] Write Protect is off
+[    2.195389] sd 0:0:0:3: [sdd] Mode Sense: 0f 00 00 00
+[    2.197751] sd 0:0:0:3: [sdd] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    2.228021] sd 0:0:0:3: [sdd] Attached SCSI disk
+[    2.593310] EXT4-fs (sdd): mounted filesystem 514d6a68-7d77-4129-9621-b03906159312 r/w with ordered data mode. Quota mode: none.
+[    3.852338] WSL (1 - init(Toybox-Minimal)) ERROR: ConfigApplyWindowsLibPath:2091: open /etc/ld.so.conf.d/ld.wsl.conf failed 2
+[    3.856776] WSL (1 - init(Toybox-Minimal)) WARNING: /etc/resolv.conf updating disabled in /etc/wsl.conf
+[    3.862378] WSL (1 - init(Toybox-Minimal)) WARNING: /etc/hosts updating disabled in /etc/wsl.conf
+[    3.870617] WSL (1 - init(Toybox-Minimal)) WARNING: /usr/share/zoneinfo/Europe/London not found. Is the tzdata package installed?
+[    3.874916] WSL (1 - init(Toybox-Minimal)) WARNING: /etc/resolv.conf updating disabled in /etc/wsl.conf
+[    4.120641] Exception:
+[    4.120651] Operation canceled @p9io.cpp:258 (AcceptAsync)
+[    4.123099]
+[    4.125663] WSL (1 - init()) ERROR: InitEntryUtilityVm:2555: Init has exited. Terminating distribution
+[    4.133981] WSL (1 - mini_init): Process 96 exited
+[    4.135570] WSL (1 - mini_init): Process 95 exited
+[    4.136345] WSL (1 - mini_init): Process 98 exited
+[    4.137359] WSL (1 - mini_init): Process 115 exited
+[    4.138825] WSL (1 - mini_init): Process 104 exited
+[    4.139719] WSL (1 - mini_init): Process 110 exited
+[    4.141818] WSL (1 - mini_init): Process 113 exited
+[    4.207941] EXT4-fs (sdd): unmounting filesystem 514d6a68-7d77-4129-9621-b03906159312.
+[    4.238962] WSL (1 - mini_init): Process 116 exited
+[    4.241209] WSL (1 - mini_init): Process 97 exited
+[    4.290842] sd 0:0:0:3: [sdd] Synchronizing SCSI cache
+[    4.296460] EXT4-fs (sdb): shut down requested (2)
+[    4.363078] sd 0:0:0:2: [sdc] Synchronizing SCSI cache
+[    4.409165] EXT4-fs (sda): shut down requested (2)
