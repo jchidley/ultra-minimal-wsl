@@ -1,0 +1,157 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDebianTrial.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDebian2PracticalTrial.ps1",
+      "source_sha256": "4f40c9bc07dd1d2a08bbea397f3b37bbde534283a33cbc83a795c6fc0090ce62",
+      "output_sha256": "ac32970601650f5095f20d2c4590d82ab33afdbf8c1dde19132c2fa4b10f4a37",
+      "substitutions": [
+        {
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-DEBIAN-001'",
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001'"
+        },
+        {
+          "old": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslDebianProbe.ps1'",
+          "new": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslDebian2PracticalProbe.ps1'"
+        },
+        {
+          "old": "$CandidateRootfs = Join-Path $InputRoot 'debian-13.5-amd64-wsl-rootfs.tar.gz'",
+          "new": "$ArticleVhdx = Join-Path $InputRoot 'registered-distros\\Debian2\\ext4.vhdx'"
+        },
+        {
+          "old": "$CandidateProbeSha256 = '8ccaaed1324a05d9eb83f970ca89ab7bd56902c66260cb3efd4ce60057548f50'",
+          "new": "$CandidateProbeSha256 = 'feedb4f54297305d5ca1baa2e44dedbc2979b1e09ade73c6768d2fe93e16522d'"
+        },
+        {
+          "old": "$CandidateRootfsSha256 = '5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f'",
+          "new": "$ArticleVhdxSha256 = '0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388'"
+        },
+        {
+          "old": "function Invoke-FixedProbe([bool]$Recovery) {\n    $id = if ($Recovery) { \"$TrialId-RECOVERY\" } else { $TrialId }\n    $candidateId = if ($Recovery) { 'stock-wsl-2.7.12-recovery' } else { 'minimal-v8-k-pidns-001' }\n    $manifest = if ($Recovery) { Join-Path $InputRoot 'trial-manifests\\stock-wsl-2.7.12-calibration.json' } else { $CandidateManifest }\n    $manifestHash = if ($Recovery) { 'a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7' } else { $CandidateManifestSha256 }\n    $package = if ($Recovery) { $StockPackage } else { $CandidatePackage }\n    $packageHash = if ($Recovery) { $StockPackageSha256 } else { $CandidatePackageSha256 }\n    $probe = if ($Recovery) { $RecoveryProbe } else { $CandidateProbe }\n    $probeHash = if ($Recovery) { $RecoveryProbeSha256 } else { $CandidateProbeSha256 }\n    $distribution = if ($Recovery) { 'Toybox-Minimal' } else { 'Debian-Minimal' }\n    $rootfs = if ($Recovery) { $RecoveryRootfs } else { $CandidateRootfs }\n    $rootfsHash = if ($Recovery) { $RecoveryRootfsSha256 } else { $CandidateRootfsSha256 }\n    Invoke-Fault $(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })\n    if ($script:TestState) { $script:Actions.Add($(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })) | Out-Null; return }\n    & $probe -TrialId $id -CandidateId $candidateId -CandidateManifestPath $manifest `\n        -ExpectedCandidateManifestSha256 $manifestHash -PackagePath $package `\n        -ExpectedPackageSha256 $packageHash -ExpectedProbeSha256 $probeHash `\n        -Distribution $distribution -ExpectedWslVersion $ExpectedVersion -RootfsPath $rootfs `\n        -ExpectedRootfsSha256 $rootfsHash -WprProfilePath $WprProfile `\n        -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n        -TimeoutSeconds 45 -Execute\n}\n\n",
+          "new": "function Invoke-FixedProbe([bool]$Recovery) {\n    $id = if ($Recovery) { \"$TrialId-RECOVERY\" } else { $TrialId }\n    Invoke-Fault $(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })\n    if ($script:TestState) { $script:Actions.Add($(if ($Recovery) { 'recovery-probe' } else { 'candidate-probe' })) | Out-Null; return }\n    if ($Recovery) {\n        & $RecoveryProbe -TrialId $id -CandidateId 'stock-wsl-2.7.12-recovery' `\n            -CandidateManifestPath (Join-Path $InputRoot 'trial-manifests\\stock-wsl-2.7.12-calibration.json') `\n            -ExpectedCandidateManifestSha256 'a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7' `\n            -PackagePath $StockPackage -ExpectedPackageSha256 $StockPackageSha256 `\n            -ExpectedProbeSha256 $RecoveryProbeSha256 -Distribution 'Toybox-Minimal' `\n            -ExpectedWslVersion $ExpectedVersion -RootfsPath $RecoveryRootfs `\n            -ExpectedRootfsSha256 $RecoveryRootfsSha256 -WprProfilePath $WprProfile `\n            -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n            -TimeoutSeconds 45 -Execute\n    }\n    else {\n        & $CandidateProbe -TrialId $id -CandidateId 'minimal-v8-k-pidns-001-debian2-practical' `\n            -CandidateManifestPath $CandidateManifest -ExpectedCandidateManifestSha256 $CandidateManifestSha256 `\n            -PackagePath $CandidatePackage -ExpectedPackageSha256 $CandidatePackageSha256 `\n            -ExpectedProbeSha256 $CandidateProbeSha256 -Distribution 'Debian2' `\n            -ExpectedWslVersion $ExpectedVersion -ArticleVhdxPath $ArticleVhdx `\n            -ExpectedArticleVhdxSha256 $ArticleVhdxSha256 -WprProfilePath $WprProfile `\n            -ExpectedWprProfileSha256 $WprProfileSha256 -EvidenceParent $EvidenceParent `\n            -TimeoutSeconds 45 -Execute\n    }\n}\n\nfunction Invoke-StockArticleVerification {\n    if ($script:TestState) { $script:Actions.Add('stock-article-verification') | Out-Null; return }\n    $output = Join-Path $EvidenceParent \"$TrialId-stock-article-verification.json\"\n    $command = 'set -e; test \"$(pi --version)\" = 0.84.4; pi list | tr -d \"\\r\" | grep -F \"$HOME/git/agent-skills\" >/dev/null; printf stock-article-ok'\n    $arguments = @('--distribution','Debian2','--user','jack','--exec','/bin/bash','-lic',$command)\n    $quoted = @($arguments | ForEach-Object { if ($_ -notmatch '[\\s\"]') { $_ } else { '\"' + ([regex]::Replace($_, '(\\\\*)\"', '$1$1\\\"') -replace '(\\\\+)$', '$1$1') + '\"' } }) -join ' '\n    $info = [Diagnostics.ProcessStartInfo]::new()\n    $info.FileName = Join-Path $env:SystemRoot 'System32\\wsl.exe'\n    $info.Arguments = $quoted\n    $info.UseShellExecute = $false\n    $info.CreateNoWindow = $true\n    $info.RedirectStandardOutput = $true\n    $info.RedirectStandardError = $true\n    $process = [Diagnostics.Process]::new()\n    $process.StartInfo = $info\n    if (-not $process.Start()) { throw 'Failed to start stock article verification.' }\n    $stdoutTask = $process.StandardOutput.ReadToEndAsync()\n    $stderrTask = $process.StandardError.ReadToEndAsync()\n    $timedOut = -not $process.WaitForExit(45000)\n    if ($timedOut) { $null = Start-Process (Join-Path $env:SystemRoot 'System32\\taskkill.exe') -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden; $null = $process.WaitForExit(10000) }\n    $streams = [Threading.Tasks.Task]::WaitAll(@($stdoutTask,$stderrTask),10000)\n    $stdout = if($stdoutTask.IsCompleted){$stdoutTask.GetAwaiter().GetResult()}else{'<timeout>'}\n    $stderr = if($stderrTask.IsCompleted){$stderrTask.GetAwaiter().GetResult()}else{'<timeout>'}\n    Invoke-WslShutdown\n    $result = [ordered]@{schema=1;arguments=$arguments;timedOut=$timedOut;streamsComplete=$streams;exitCode=$process.ExitCode;stdout=$stdout;stderr=$stderr;articleVhdxSha256=(Get-Sha256 $ArticleVhdx);completedUtc=[DateTime]::UtcNow.ToString('o')}\n    [IO.File]::WriteAllText($output, ($result | ConvertTo-Json -Depth 8), [Text.UTF8Encoding]::new($false))\n    if ($timedOut -or -not $streams -or $process.ExitCode -ne 0 -or -not $stdout.Contains('stock-article-ok')) { throw 'Retained article failed after stock restoration.' }\n}\n\n"
+        },
+        {
+          "old": "    Assert-Hash $CandidateRootfs $CandidateRootfsSha256\n    if ((Get-Item -LiteralPath $CandidateRootfs).Length -ne 89228801) { throw 'Debian rootfs size mismatch.' }",
+          "new": "    Assert-Hash $ArticleVhdx $ArticleVhdxSha256\n    if ((Get-Item -LiteralPath $ArticleVhdx).Length -ne 1473249280) { throw 'Debian2 article VHDX size mismatch.' }"
+        },
+        {
+          "old": "        Invoke-FixedProbe $true",
+          "new": "        Invoke-FixedProbe $true\n        Invoke-StockArticleVerification"
+        },
+        {
+          "old": "    candidateGate = 'B6-D'; candidateDistribution = 'Debian-Minimal'; candidateSmoke = '/bin/true plus the plan-defined Debian smoke contract'",
+          "new": "    candidateGate = 'P6-PI-PACKAGE'; candidateDistribution = 'Debian2'; candidateSmoke = 'six ordered offline practical-workload checkpoints'"
+        },
+        {
+          "old": "    note = 'One serial Debian compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Debian rootfs and plan-defined B6-D probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory.'",
+          "new": "    note = 'One serial offline comparison of the retained Debian2 article under frozen ultra-minimal-wsl-v1, followed by exact Toybox stock recovery and retained-article verification under stock.'"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-debian-runtime-025\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\debian2-practical-runtime-051\\Run-ControlledTrial.ps1",
+      "source_sha256": "1408942f7f75d7fc8679cce7133b85a1483570b87d804f19a82f2f5dc65d961d",
+      "output_sha256": "d6323fe83a2860c58fb89d703f4e1c732aeb50b9613c0f73b83eec5d25014ead",
+      "substitutions": [
+        {
+          "old": "$trial = 'CP-MINIMAL-V8-K-PIDNS-DEBIAN-001'",
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001'"
+        },
+        {
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDebianTrial.ps1'",
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsDebian2PracticalTrial.ps1'"
+        },
+        {
+          "old": "$probeSource = Join-Path $project 'tools\\Invoke-WslDebianProbe.ps1'",
+          "new": "$probeSource = Join-Path $project 'tools\\Invoke-WslDebian2PracticalProbe.ps1'"
+        },
+        {
+          "old": "$rootfsSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\cache\\debian\\13.5-store-1.26.0.0\\debian-13.5-amd64-wsl-rootfs.tar.gz'",
+          "new": "$articleVhdxHash = '0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388'"
+        },
+        {
+          "old": "$runnerHash = '4f40c9bc07dd1d2a08bbea397f3b37bbde534283a33cbc83a795c6fc0090ce62'",
+          "new": "$runnerHash = 'ac32970601650f5095f20d2c4590d82ab33afdbf8c1dde19132c2fa4b10f4a37'"
+        },
+        {
+          "old": "$probeHash = '8ccaaed1324a05d9eb83f970ca89ab7bd56902c66260cb3efd4ce60057548f50'",
+          "new": "$probeHash = 'feedb4f54297305d5ca1baa2e44dedbc2979b1e09ade73c6768d2fe93e16522d'"
+        },
+        {
+          "old": "$rootfsHash = '5ec7dc68216e75d1d4d4761474e99d8461a98d316537110314b137122a879e0f'",
+          "new": "$expectedArticleVhdxHash = $articleVhdxHash"
+        },
+        {
+          "old": ",@($probeSource,$probeHash),@($rootfsSource,$rootfsHash)",
+          "new": ",@($probeSource,$probeHash)"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslDebianProbe.ps1' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslDebian2PracticalProbe.ps1' -Force"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $rootfsSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\debian-13.5-amd64-wsl-rootfs.tar.gz' -Force\n",
+          "new": ""
+        },
+        {
+          "old": "    $registration = Invoke-Command -Session $session -ScriptBlock {\n        param($Trial)\n        Set-StrictMode -Version Latest\n        $ErrorActionPreference = 'Stop'\n        $wsl = 'C:\\Windows\\System32\\wsl.exe'\n        $name = 'Debian-Minimal'\n        $rootfs = 'C:\\controlled-inputs\\ultra-minimal-wsl\\debian-13.5-amd64-wsl-rootfs.tar.gz'\n        $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian-Minimal'\n        $evidence = 'C:\\controlled-wsl-trials'\n        $listed = (& $wsl --list --quiet).Replace(\"`0\", '') -split \"`r?`n\"\n        if ($LASTEXITCODE -ne 0 -or $listed -contains $name) { throw 'Debian infrastructure precondition failed: distro is already registered or list failed.' }\n        if (Test-Path -LiteralPath $install) { throw 'Debian infrastructure install path already exists.' }\n        [IO.Directory]::CreateDirectory((Split-Path $install)) | Out-Null\n        $stdout = Join-Path $evidence \"$Trial-debian-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-debian-import.stderr.log\"\n        $info = [Diagnostics.ProcessStartInfo]::new()\n        $info.FileName = $wsl\n        $info.Arguments = \"--import $name $install $rootfs --version 2\"\n        $info.UseShellExecute = $false\n        $info.CreateNoWindow = $true\n        $info.RedirectStandardOutput = $true\n        $info.RedirectStandardError = $true\n        $process = [Diagnostics.Process]::new()\n        $process.StartInfo = $info\n        if (-not $process.Start()) { throw 'Failed to start Debian import.' }\n        $stdoutTask = $process.StandardOutput.ReadToEndAsync()\n        $stderrTask = $process.StandardError.ReadToEndAsync()\n        if (-not $process.WaitForExit(45000)) {\n            $killer = Start-Process -FilePath 'C:\\Windows\\System32\\taskkill.exe' -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden\n            $null = $process.WaitForExit(10000)\n            throw \"Debian import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"\n        }\n        $streamsCompleted = [Threading.Tasks.Task]::WaitAll(@($stdoutTask,$stderrTask),10000)\n        [IO.File]::WriteAllText($stdout, $(if($stdoutTask.IsCompleted){$stdoutTask.GetAwaiter().GetResult()}else{'<stdout collection timed out>'}), [Text.UTF8Encoding]::new($false))\n        [IO.File]::WriteAllText($stderr, $(if($stderrTask.IsCompleted){$stderrTask.GetAwaiter().GetResult()}else{'<stderr collection timed out>'}), [Text.UTF8Encoding]::new($false))\n        if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Debian import failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }\n        $listed = (& $wsl --list --quiet).Replace(\"`0\", '') -split \"`r?`n\"\n        if ($LASTEXITCODE -ne 0 -or $listed -notcontains $name) { throw 'Debian import did not create the required registered distro.' }\n        & $wsl --shutdown\n        if ($LASTEXITCODE -ne 0) { throw 'Post-import WSL shutdown failed.' }\n        [pscustomobject][ordered]@{registered=$true;distribution=$name;installPath=$install;completedUtc=[DateTime]::UtcNow.ToString('o')}\n    } -ArgumentList $trial\n",
+          "new": "    $registration = Invoke-Command -Session $session -ScriptBlock {\n        param($ExpectedVhdxHash)\n        Set-StrictMode -Version Latest\n        $ErrorActionPreference = 'Stop'\n        $wsl = 'C:\\Windows\\System32\\wsl.exe'\n        $vhdx = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian2\\ext4.vhdx'\n        $listed = (& $wsl --list --quiet).Replace(\"`0\", '') -split \"`r?`n\"\n        if ($LASTEXITCODE -ne 0 -or $listed -notcontains 'Debian2') { throw 'Retained Debian2 is not registered.' }\n        & $wsl --shutdown\n        if ($LASTEXITCODE -ne 0) { throw 'Pre-comparison WSL shutdown failed.' }\n        if ((Get-FileHash -LiteralPath $vhdx -Algorithm SHA256).Hash.ToLowerInvariant() -ne $ExpectedVhdxHash) { throw 'Retained Debian2 VHDX identity mismatch.' }\n        if (Test-Path -LiteralPath (Join-Path $env:USERPROFILE '.wslconfig')) { throw 'Fixture .wslconfig must be absent.' }\n        [pscustomobject][ordered]@{registered=$true;distribution='Debian2';vhdx=$vhdx;vhdxSha256=$ExpectedVhdxHash;completedUtc=[DateTime]::UtcNow.ToString('o')}\n    } -ArgumentList $expectedArticleVhdxHash\n"
+        },
+        {
+          "old": "param($Trial,$Recovery,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$RootfsHash,$RecoveryProbeHash,$RecoveryRootfsHash,$WprHash)",
+          "new": "param($Trial,$Recovery,$RunnerHash,$ManifestHash,$KernelHash,$ConfigHash,$PackageHash,$ProbeHash,$ArticleVhdxHash,$RecoveryProbeHash,$RecoveryRootfsHash,$WprHash)"
+        },
+        {
+          "old": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslDebianProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\debian-13.5-amd64-wsl-rootfs.tar.gz'",
+          "new": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslDebian2PracticalProbe.ps1'\n            articleVhdx='C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian2\\ext4.vhdx'"
+        },
+        {
+          "old": "probe=$ProbeHash;rootfs=$RootfsHash;",
+          "new": "probe=$ProbeHash;articleVhdx=$ArticleVhdxHash;"
+        },
+        {
+          "old": "-or -not $validation.diagnosticDebugConsole",
+          "new": "-or -not $validation.diagnosticDebugConsole -or $validation.candidateGate -ne 'P6-PI-PACKAGE'"
+        },
+        {
+          "old": "} -ArgumentList $trial,$recovery,$runnerHash,$manifestHash,$kernelHash,$configHash,$packageHash,$probeHash,$rootfsHash,$recoveryProbeHash,$recoveryRootfsHash,$wprHash",
+          "new": "} -ArgumentList $trial,$recovery,$runnerHash,$manifestHash,$kernelHash,$configHash,$packageHash,$probeHash,$expectedArticleVhdxHash,$recoveryProbeHash,$recoveryRootfsHash,$wprHash"
+        },
+        {
+          "old": ",\"$trial-debian-import.stdout.log\",\"$trial-debian-import.stderr.log\",\"$trial-debian-unregister.stdout.log\",\"$trial-debian-unregister.stderr.log\"",
+          "new": ",\"$trial-stock-article-verification.json\""
+        },
+        {
+          "old": "        try {\n            $cleanup = Invoke-Command -Session $session -ScriptBlock {\n                param($Trial)\n                Set-StrictMode -Version Latest\n                $ErrorActionPreference = 'Stop'\n                $wsl = 'C:\\Windows\\System32\\wsl.exe'\n                $name = 'Debian-Minimal'\n                $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian-Minimal'\n                $evidence = 'C:\\controlled-wsl-trials'\n                $listed = (& $wsl --list --quiet).Replace(\"`0\", '') -split \"`r?`n\"\n                if ($LASTEXITCODE -ne 0) { throw 'Pre-cleanup distro list failed.' }\n                if ($listed -contains $name) {\n                    $stdout = Join-Path $evidence \"$Trial-debian-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-debian-unregister.stderr.log\"\n                    $info = [Diagnostics.ProcessStartInfo]::new()\n                    $info.FileName = $wsl\n                    $info.Arguments = \"--unregister $name\"\n                    $info.UseShellExecute = $false\n                    $info.CreateNoWindow = $true\n                    $info.RedirectStandardOutput = $true\n                    $info.RedirectStandardError = $true\n                    $process = [Diagnostics.Process]::new()\n                    $process.StartInfo = $info\n                    if (-not $process.Start()) { throw 'Failed to start Debian unregister.' }\n                    $stdoutTask = $process.StandardOutput.ReadToEndAsync()\n                    $stderrTask = $process.StandardError.ReadToEndAsync()\n                    if (-not $process.WaitForExit(45000)) {\n                        $killer = Start-Process -FilePath 'C:\\Windows\\System32\\taskkill.exe' -ArgumentList @('/PID',[string]$process.Id,'/T','/F') -Wait -PassThru -WindowStyle Hidden\n                        $null = $process.WaitForExit(10000)\n                        throw \"Debian unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"\n                    }\n                    $streamsCompleted = [Threading.Tasks.Task]::WaitAll(@($stdoutTask,$stderrTask),10000)\n                    [IO.File]::WriteAllText($stdout, $(if($stdoutTask.IsCompleted){$stdoutTask.GetAwaiter().GetResult()}else{'<stdout collection timed out>'}), [Text.UTF8Encoding]::new($false))\n                    [IO.File]::WriteAllText($stderr, $(if($stderrTask.IsCompleted){$stderrTask.GetAwaiter().GetResult()}else{'<stderr collection timed out>'}), [Text.UTF8Encoding]::new($false))\n                    if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Debian unregister failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }\n                }\n                & $wsl --shutdown\n                if ($LASTEXITCODE -ne 0) { throw 'Post-unregister WSL shutdown failed.' }\n                if (Test-Path -LiteralPath $install) { Remove-Item -LiteralPath $install -Recurse -Force }\n                $listed = (& $wsl --list --quiet).Replace(\"`0\", '') -split \"`r?`n\"\n                if ($LASTEXITCODE -ne 0 -or $listed -contains $name -or (Test-Path -LiteralPath $install)) { throw 'Debian infrastructure cleanup verification failed.' }\n                [pscustomobject][ordered]@{unregistered=$true;installPathAbsent=$true;completedUtc=[DateTime]::UtcNow.ToString('o')}\n            } -ArgumentList $trial\n        }\n        catch { if (-not $outerFailure) { $outerFailure = $_ } }\n",
+          "new": "        try {\n            $cleanup = Invoke-Command -Session $session -ScriptBlock {\n                Set-StrictMode -Version Latest\n                $ErrorActionPreference = 'Stop'\n                $wsl = 'C:\\Windows\\System32\\wsl.exe'\n                $vhdx = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian2\\ext4.vhdx'\n                & $wsl --shutdown\n                if ($LASTEXITCODE -ne 0) { throw 'Final WSL shutdown failed.' }\n                $listed = (& $wsl --list --quiet).Replace(\"`0\", '') -split \"`r?`n\"\n                if ($LASTEXITCODE -ne 0 -or $listed -notcontains 'Debian2' -or -not (Test-Path -LiteralPath $vhdx)) { throw 'Retained Debian2 final-state verification failed.' }\n                [pscustomobject][ordered]@{registered=$true;vhdxSha256=(Get-FileHash -LiteralPath $vhdx -Algorithm SHA256).Hash.ToLowerInvariant();wslconfigAbsent=-not (Test-Path -LiteralPath (Join-Path $env:USERPROFILE '.wslconfig'));completedUtc=[DateTime]::UtcNow.ToString('o')}\n            }\n        }\n        catch { if (-not $outerFailure) { $outerFailure = $_ } }\n"
+        },
+        {
+          "old": "        foreach ($name in @(\"$trial-debian-import.stdout.log\",\"$trial-debian-import.stderr.log\",\"$trial-debian-unregister.stdout.log\",\"$trial-debian-unregister.stderr.log\")) {\n            $guestPath = Join-Path 'C:\\controlled-wsl-trials' $name\n            if (Invoke-Command -Session $session -ScriptBlock { param($Path) Test-Path -LiteralPath $Path -PathType Leaf } -ArgumentList $guestPath) { Copy-Item -FromSession $session -LiteralPath $guestPath -Destination (Join-Path $extract $name) -Force }\n        }\n",
+          "new": ""
+        },
+        {
+          "old": "if (-not $registration.registered -or -not $cleanup.unregistered -or -not $cleanup.installPathAbsent) { throw 'Debian registration lifecycle requirement failed.' }",
+          "new": "if (-not $registration.registered -or -not $cleanup.registered -or -not $cleanup.wslconfigAbsent) { throw 'Debian2 article preservation requirement failed.' }"
+        },
+        {
+          "old": "if ($remote.runnerFailure) { throw $remote.runnerFailure }",
+          "new": "if ($remote.runnerFailure) { throw $remote.runnerFailure }\nif (-not $remote.candidateResult -or -not $remote.candidateResult.passed -or $remote.candidateResult.observedGate -ne 'P6-PI-PACKAGE') { throw 'Practical-workload checkpoint requirement failed.' }"
+        },
+        {
+          "old": "$vm = Get-VM -Name $vmName -ErrorAction Stop\nif ($vm.Id.Guid -ne $vmId -or $vm.State",
+          "new": "$vm = Get-VM -Name $vmName -ErrorAction Stop\nif (@(Get-VMNetworkAdapter -VM $vm -ErrorAction Stop).Count -ne 0) { throw 'Fixture must begin with zero network adapters.' }\nif ($vm.Id.Guid -ne $vmId -or $vm.State"
+        },
+        {
+          "old": "$final = Get-VM -Name $vmName -ErrorAction Stop\n$extracted",
+          "new": "$final = Get-VM -Name $vmName -ErrorAction Stop\nif (@(Get-VMNetworkAdapter -VM $final -ErrorAction Stop).Count -ne 0) { throw 'Fixture must finish with zero network adapters.' }\n$extracted"
+        }
+      ]
+    }
+  ]
+}

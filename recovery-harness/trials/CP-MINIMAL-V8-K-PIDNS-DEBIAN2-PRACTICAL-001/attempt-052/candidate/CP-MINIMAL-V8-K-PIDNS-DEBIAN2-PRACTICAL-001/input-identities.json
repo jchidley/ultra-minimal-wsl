@@ -1,0 +1,25 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+    "candidateId":  "minimal-v8-k-pidns-001-debian2-practical",
+    "candidateManifestSha256":  "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+    "packagePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\candidate-packages\\minimal-v8-no-binfmt-mount\\wsl.msi",
+    "packageSha256":  "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+    "probeSha256":  "feedb4f54297305d5ca1baa2e44dedbc2979b1e09ade73c6768d2fe93e16522d",
+    "articleVhdxPath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian2\\ext4.vhdx",
+    "articleVhdxSha256":  "0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388",
+    "wprProfilePath":  "C:\\controlled-inputs\\ultra-minimal-wsl\\diagnostics\\wsl.wprp",
+    "wprProfileSha256":  "3f829a9af733d6dce9454a1df2e2aa07096acaaed5b6865ffb5c202d089479f2",
+    "expectedWslVersion":  "2.7.12.0",
+    "distribution":  "Debian2",
+    "timeoutSeconds":  45,
+    "checkpoints":  [
+                        "01-debian-base",
+                        "02-article-manifest",
+                        "03-login-shell",
+                        "04-tool-versions",
+                        "05-core-repositories",
+                        "06-pi-package"
+                    ],
+    "debugConsoleCapture":  "disabled-for-fixed-comparison"
+}

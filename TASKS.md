@@ -4,9 +4,7 @@
 
 ## Active action
 
-Test the retained `Debian2` practical-workload article under the frozen `ultra-minimal-wsl-v1` baseline in the dedicated disposable fixture. Preserve the article and all frozen Toybox, Alpine, Arch, and Debian candidates unchanged; run one bounded offline comparison that establishes the earliest practical-workload checkpoint or failure, captures exact package/kernel/article identities and diagnostics, restores pinned stock WSL, verifies the retained article remains usable under stock, and returns the fixture Off with absent `.wslconfig` and zero adapters.
-
-The comparison must not copy secrets, credentials, SSH keys, or history, and must not promote any facility without narrow runtime evidence from the practical workload.
+None. The bounded `Debian2` practical-workload comparison is complete; no follow-on or facility addition is selected.
 
 ## Blocked
 

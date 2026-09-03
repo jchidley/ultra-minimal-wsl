@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "templateId": "debian2-practical-runtime-v1",
+  "baseTemplate": "controlled-runtime-v1",
+  "kind": "practical-workload-runtime",
+  "requiredArtifactRoles": [
+    "article_vhdx",
+    "broker",
+    "broker_client",
+    "broker_creator",
+    "broker_installer",
+    "broker_launcher",
+    "broker_policy",
+    "controller",
+    "kernel",
+    "kernel_config",
+    "manifest",
+    "package",
+    "probe",
+    "recovery_probe",
+    "recovery_rootfs",
+    "runner",
+    "wpr"
+  ],
+  "runtimeBoundary": "One serial offline practical-workload comparison of the retained Debian2 article under the frozen ultra-minimal-wsl-v1 package and K-PIDNS-001 kernel. Failure before the first Debian2 probe is infrastructure failure. Preserve the article and all frozen candidates unchanged; missing checkpoint evidence, exact stock restoration, independent stock B6-T recovery, stock article usability, absent .wslconfig, zero adapters, broker termination, or fixture Off prohibits finalization.",
+  "invariants": {
+    "article": "debian2-stock-bootstrap-v10",
+    "articleVhdxSha256": "0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388",
+    "candidate": "ultra-minimal-wsl-v1:minimal-v8-no-binfmt-mount+K-PIDNS-001",
+    "distribution": "Debian2",
+    "execution": "one-serial-offline-comparison",
+    "checkpoints": ["debian-base", "article-manifest", "login-shell", "tool-versions", "core-repositories", "pi-package"],
+    "instrumentation": ["WPR", "ETW", "events", "crash-artifacts"],
+    "packageTransaction": "candidate-then-exact-stock-restore",
+    "recovery": "independent-stock-B6-T-and-stock-article-verification",
+    "network": "zero-adapters-offline",
+    "secrets": "none",
+    "completion": ["earliest-practical-checkpoint", "evidence-manifest", "stock-recovery", "stock-article-usable", "absent-fixture-wslconfig", "zero-network-adapters", "fixture-Off", "broker-terminated"]
+  }
+}

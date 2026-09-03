@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "operationId": "debian2-practical-runtime-052",
+  "fixtureId": "dcbf722c-0702-444e-9496-04a4623c3198",
+  "fixtureState": "Off",
+  "networkAdapterCount": 0,
+  "wslconfigAbsent": true,
+  "stockProductState": 5,
+  "candidateProductState": -1,
+  "diagnosticRelayCount": 0,
+  "debian2Registered": true,
+  "stockArticleUsable": true,
+  "stockArticleMarker": "stock-article-ok",
+  "articleVhdxSha256": "1e3c8c0390eb76e377d2a7d6f3dfaded05e9a89131ffb3c2910834afc651c815",
+  "brokerState": "failed",
+  "brokerDetail": "Allowlisted workload failed with exit 1.",
+  "brokerProcessId": 27280,
+  "brokerTerminated": true,
+  "evidence": "The protected controller checked zero adapters before start and immediately before saving final Off state; runner evidence proves exact stock restoration, absent .wslconfig, zero relays, independent Toybox B6-T, and stock article usability. The terminal fail-closed broker status records forced-Off handling, and process 27280 was absent when independently queried."
+}

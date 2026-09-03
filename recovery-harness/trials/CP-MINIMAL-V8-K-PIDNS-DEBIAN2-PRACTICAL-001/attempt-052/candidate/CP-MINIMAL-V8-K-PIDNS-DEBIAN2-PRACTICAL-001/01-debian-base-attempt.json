@@ -1,0 +1,16 @@
+{
+    "schema":  1,
+    "name":  "01-debian-base",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Debian2",
+                      "--user",
+                      "jack",
+                      "--exec",
+                      "/bin/bash",
+                      "-c",
+                      "/bin/true \u0026\u0026 test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf checkpoint-01-ok"
+                  ],
+    "attemptedUtc":  "2026-09-03T18:42:17.3339137Z"
+}

@@ -1,0 +1,16 @@
+{
+    "schema":  1,
+    "name":  "04-tool-versions",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Debian2",
+                      "--user",
+                      "jack",
+                      "--exec",
+                      "/bin/bash",
+                      "-lic",
+                      "set -e; test \"$(node --version)\" = v22.19.0; test \"$(npm --version)\" = 10.9.3; test \"$(fnm --version)\" = \u0027fnm 1.38.1\u0027; test \"$(mcfly --version)\" = \u0027mcfly 0.9.4\u0027; test \"$(chezmoi --version | head -n1)\" = \u0027chezmoi version v2.69.4\u0027; printf checkpoint-04-ok"
+                  ],
+    "attemptedUtc":  "2026-09-03T18:42:40.1938509Z"
+}

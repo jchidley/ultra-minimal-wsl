@@ -1,0 +1,192 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+    "candidateId":  "minimal-v8-k-pidns-001-debian2-practical",
+    "preparationStartedUtc":  "2026-09-03T18:42:13.0939159Z",
+    "candidateStartedUtc":  "2026-09-03T18:42:13.7587952Z",
+    "completedUtc":  "2026-09-03T18:42:46.7881439Z",
+    "candidateResult":  true,
+    "disposition":  "candidate-evidence-requires-analysis",
+    "observedGate":  "P3",
+    "classification":  "P3",
+    "managementChecksPassed":  true,
+    "passed":  false,
+    "completedCheckpoints":  [
+                                 "01-debian-base",
+                                 "02-article-manifest",
+                                 "03-login-shell"
+                             ],
+    "earliestFailure":  "04-tool-versions",
+    "articleVhdxSha256AfterCandidateShutdown":  "df694346a46cd82c6b10f005bbbecae3da92ca9dc6c91e13c6416ee0fb0e299e",
+    "primaryFailure":  null,
+    "infrastructureFailure":  null,
+    "traceFailure":  null,
+    "shutdownFailure":  null,
+    "results":  {
+                    "version":  {
+                                    "schema":  1,
+                                    "name":  "wsl-version",
+                                    "file":  "C:\\Windows\\System32\\wsl.exe",
+                                    "arguments":  [
+                                                      "--version"
+                                                  ],
+                                    "processId":  3116,
+                                    "startedUtc":  "2026-09-03T18:42:13.8025369Z",
+                                    "completedUtc":  "2026-09-03T18:42:14.8081695Z",
+                                    "timedOut":  false,
+                                    "streamsCompleted":  true,
+                                    "taskkillExitCode":  null,
+                                    "exitCode":  0,
+                                    "stdout":  "W\u0000S\u0000L\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000.\u00007\u0000.\u00001\u00002\u0000.\u00000\u0000\r\u0000\n\u0000K\u0000e\u0000r\u0000n\u0000e\u0000l\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00006\u0000.\u00001\u00008\u0000.\u00003\u00003\u0000.\u00002\u0000-\u00002\u0000\r\u0000\n\u0000W\u0000S\u0000L\u0000g\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00000\u0000.\u00007\u00003\u0000.\u00002\u0000\r\u0000\n\u0000M\u0000S\u0000R\u0000D\u0000C\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00002\u0000.\u00007\u00002\u00001\u00004\u0000\r\u0000\n\u0000D\u0000i\u0000r\u0000e\u0000c\u0000t\u00003\u0000D\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00006\u00001\u00001\u0000.\u00001\u0000-\u00008\u00001\u00005\u00002\u00008\u00005\u00001\u00001\u0000\r\u0000\n\u0000D\u0000X\u0000C\u0000o\u0000r\u0000e\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00001\u00000\u00000\u0000.\u00001\u0000-\u00002\u00004\u00000\u00003\u00003\u00001\u0000-\u00001\u00004\u00003\u00005\u0000.\u0000g\u0000e\u0000-\u0000r\u0000e\u0000l\u0000e\u0000a\u0000s\u0000e\u0000\r\u0000\n\u0000W\u0000i\u0000n\u0000d\u0000o\u0000w\u0000s\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00002\u00000\u00000\u0000.\u00008\u00000\u00003\u00007\u0000\r\u0000\n\u0000M\u0000S\u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00009\u00004\u00004\u0000\r\u0000\n\u0000C\u0000o\u0000m\u0000m\u0000i\u0000t\u0000:\u0000 \u0000\r\u0000\n\u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000t\u0000i\u0000m\u0000e\u0000:\u0000 \u00000\u00002\u0000:\u00002\u00001\u0000:\u00004\u00002\u0000 \u0000S\u0000e\u0000p\u0000 \u0000 \u00002\u0000 \u00002\u00000\u00002\u00006\u0000\r\u0000\n\u0000",
+                                    "stderr":  ""
+                                },
+                    "status":  {
+                                   "schema":  1,
+                                   "name":  "wsl-status",
+                                   "file":  "C:\\Windows\\System32\\wsl.exe",
+                                   "arguments":  [
+                                                     "--status"
+                                                 ],
+                                   "processId":  5024,
+                                   "startedUtc":  "2026-09-03T18:42:14.8864343Z",
+                                   "completedUtc":  "2026-09-03T18:42:17.0804016Z",
+                                   "timedOut":  false,
+                                   "streamsCompleted":  true,
+                                   "taskkillExitCode":  null,
+                                   "exitCode":  0,
+                                   "stdout":  "D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000D\u0000i\u0000s\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000i\u0000o\u0000n\u0000:\u0000 \u0000T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000V\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000\r\u0000\n\u0000",
+                                   "stderr":  ""
+                               },
+                    "list":  {
+                                 "schema":  1,
+                                 "name":  "wsl-list-quiet",
+                                 "file":  "C:\\Windows\\System32\\wsl.exe",
+                                 "arguments":  [
+                                                   "--list",
+                                                   "--quiet"
+                                               ],
+                                 "processId":  3044,
+                                 "startedUtc":  "2026-09-03T18:42:17.1046967Z",
+                                 "completedUtc":  "2026-09-03T18:42:17.2837177Z",
+                                 "timedOut":  false,
+                                 "streamsCompleted":  true,
+                                 "taskkillExitCode":  null,
+                                 "exitCode":  0,
+                                 "stdout":  "T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000b\u0000i\u0000a\u0000n\u00002\u0000\r\u0000\n\u0000",
+                                 "stderr":  ""
+                             },
+                    "01-debian-base":  {
+                                           "schema":  1,
+                                           "name":  "01-debian-base",
+                                           "file":  "C:\\Windows\\System32\\wsl.exe",
+                                           "arguments":  [
+                                                             "--distribution",
+                                                             "Debian2",
+                                                             "--user",
+                                                             "jack",
+                                                             "--exec",
+                                                             "/bin/bash",
+                                                             "-c",
+                                                             "/bin/true \u0026\u0026 test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf checkpoint-01-ok"
+                                                         ],
+                                           "processId":  3660,
+                                           "startedUtc":  "2026-09-03T18:42:17.3418675Z",
+                                           "completedUtc":  "2026-09-03T18:42:39.1253574Z",
+                                           "timedOut":  false,
+                                           "streamsCompleted":  true,
+                                           "taskkillExitCode":  null,
+                                           "exitCode":  0,
+                                           "stdout":  "checkpoint-01-ok",
+                                           "stderr":  ""
+                                       },
+                    "02-article-manifest":  {
+                                                "schema":  1,
+                                                "name":  "02-article-manifest",
+                                                "file":  "C:\\Windows\\System32\\wsl.exe",
+                                                "arguments":  [
+                                                                  "--distribution",
+                                                                  "Debian2",
+                                                                  "--user",
+                                                                  "root",
+                                                                  "--exec",
+                                                                  "/bin/bash",
+                                                                  "-c",
+                                                                  "set -e; m=/var/lib/debian2-article/manifest.json; test -r \"$m\"; grep -F \u0027\"articleId\": \"debian2-stock-bootstrap-v10\"\u0027 \"$m\"; grep -F \u0027\"defaultUser\": \"jack\"\u0027 \"$m\"; grep -F \u0027\"secrets\": \"none\"\u0027 \"$m\"; printf checkpoint-02-ok"
+                                                              ],
+                                                "processId":  2780,
+                                                "startedUtc":  "2026-09-03T18:42:39.1568976Z",
+                                                "completedUtc":  "2026-09-03T18:42:39.4959235Z",
+                                                "timedOut":  false,
+                                                "streamsCompleted":  true,
+                                                "taskkillExitCode":  null,
+                                                "exitCode":  0,
+                                                "stdout":  "  \"articleId\": \"debian2-stock-bootstrap-v10\",\n  \"defaultUser\": \"jack\",\n  \"secrets\": \"none\",\ncheckpoint-02-ok",
+                                                "stderr":  ""
+                                            },
+                    "03-login-shell":  {
+                                           "schema":  1,
+                                           "name":  "03-login-shell",
+                                           "file":  "C:\\Windows\\System32\\wsl.exe",
+                                           "arguments":  [
+                                                             "--distribution",
+                                                             "Debian2",
+                                                             "--user",
+                                                             "jack",
+                                                             "--exec",
+                                                             "/bin/bash",
+                                                             "-lic",
+                                                             "test \"$HOME\" = /home/jack; printf checkpoint-03-ok"
+                                                         ],
+                                           "processId":  3344,
+                                           "startedUtc":  "2026-09-03T18:42:39.5099370Z",
+                                           "completedUtc":  "2026-09-03T18:42:40.1805159Z",
+                                           "timedOut":  false,
+                                           "streamsCompleted":  true,
+                                           "taskkillExitCode":  null,
+                                           "exitCode":  0,
+                                           "stdout":  "checkpoint-03-ok",
+                                           "stderr":  ""
+                                       },
+                    "04-tool-versions":  {
+                                             "schema":  1,
+                                             "name":  "04-tool-versions",
+                                             "file":  "C:\\Windows\\System32\\wsl.exe",
+                                             "arguments":  [
+                                                               "--distribution",
+                                                               "Debian2",
+                                                               "--user",
+                                                               "jack",
+                                                               "--exec",
+                                                               "/bin/bash",
+                                                               "-lic",
+                                                               "set -e; test \"$(node --version)\" = v22.19.0; test \"$(npm --version)\" = 10.9.3; test \"$(fnm --version)\" = \u0027fnm 1.38.1\u0027; test \"$(mcfly --version)\" = \u0027mcfly 0.9.4\u0027; test \"$(chezmoi --version | head -n1)\" = \u0027chezmoi version v2.69.4\u0027; printf checkpoint-04-ok"
+                                                           ],
+                                             "processId":  3828,
+                                             "startedUtc":  "2026-09-03T18:42:40.1996899Z",
+                                             "completedUtc":  "2026-09-03T18:42:41.6236175Z",
+                                             "timedOut":  false,
+                                             "streamsCompleted":  true,
+                                             "taskkillExitCode":  null,
+                                             "exitCode":  1,
+                                             "stdout":  "",
+                                             "stderr":  ""
+                                         },
+                    "shutdown":  {
+                                     "schema":  1,
+                                     "name":  "wsl-shutdown",
+                                     "file":  "C:\\Windows\\System32\\wsl.exe",
+                                     "arguments":  [
+                                                       "--shutdown"
+                                                   ],
+                                     "processId":  212,
+                                     "startedUtc":  "2026-09-03T18:42:41.6354850Z",
+                                     "completedUtc":  "2026-09-03T18:42:42.4119227Z",
+                                     "timedOut":  false,
+                                     "streamsCompleted":  true,
+                                     "taskkillExitCode":  null,
+                                     "exitCode":  0,
+                                     "stdout":  "",
+                                     "stderr":  ""
+                                 }
+                }
+}

@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+  "operationId": "debian2-practical-runtime-052",
+  "classification": "finalized-at-P3-with-P4-probe-assertion-failure",
+  "candidateResult": true,
+  "observedGate": "P3",
+  "completedCheckpoints": [
+    "01-debian-base",
+    "02-article-manifest",
+    "03-login-shell"
+  ],
+  "earliestFailedCheckpoint": "04-tool-versions",
+  "failureAnalysis": "The ordered shell command had already verified Node v22.19.0, npm 10.9.3, fnm 1.38.1, and McFly 0.9.4 before its final chezmoi equality assertion exited 1. The retained manifest records the correct chezmoi 2.69.4 output with commit/build metadata, while the probe incorrectly required the shortened string 'chezmoi version v2.69.4'. This is a probe assertion defect, not evidence selecting a kernel or control-plane facility. Per the one-comparison boundary, the frozen candidate is not rerun.",
+  "candidateArticleVhdxSha256AfterShutdown": "df694346a46cd82c6b10f005bbbecae3da92ca9dc6c91e13c6416ee0fb0e299e",
+  "stockArticleVhdxSha256AfterVerification": "1e3c8c0390eb76e377d2a7d6f3dfaded05e9a89131ffb3c2910834afc651c815",
+  "candidateGuestLogRecords": 220,
+  "candidateWindowsEvents": 262,
+  "candidateNonInformationEvents": 0,
+  "newCrashArtifacts": 0,
+  "recovery": {
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "toyboxGate": "B6-T",
+    "toyboxPassed": true,
+    "stockArticleMarker": "stock-article-ok",
+    "stockArticlePassed": true,
+    "wslconfigAbsent": true,
+    "diagnosticRelayCount": 0
+  },
+  "finalState": {
+    "fixtureId": "dcbf722c-0702-444e-9496-04a4623c3198",
+    "fixtureState": "Off",
+    "networkAdapterCount": 0,
+    "brokerState": "failed-forced-off",
+    "brokerProcessId": 27280,
+    "brokerTerminated": true
+  },
+  "facilityDisposition": "No facility promoted. The bounded comparison reached the login-shell practical checkpoint; its next checkpoint was invalidated by an over-specific output assertion."
+}

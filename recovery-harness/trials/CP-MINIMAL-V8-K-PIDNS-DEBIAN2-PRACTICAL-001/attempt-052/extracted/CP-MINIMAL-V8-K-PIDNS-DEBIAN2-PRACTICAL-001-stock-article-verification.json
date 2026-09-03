@@ -1,0 +1,20 @@
+{
+    "schema":  1,
+    "arguments":  [
+                      "--distribution",
+                      "Debian2",
+                      "--user",
+                      "jack",
+                      "--exec",
+                      "/bin/bash",
+                      "-lic",
+                      "set -e; test \"$(pi --version)\" = 0.84.4; pi list | tr -d \"\\r\" | grep -F \"$HOME/git/agent-skills\" \u003e/dev/null; printf stock-article-ok"
+                  ],
+    "timedOut":  false,
+    "streamsComplete":  true,
+    "exitCode":  0,
+    "stdout":  "stock-article-ok",
+    "stderr":  "",
+    "articleVhdxSha256":  "1e3c8c0390eb76e377d2a7d6f3dfaded05e9a89131ffb3c2910834afc651c815",
+    "completedUtc":  "2026-09-03T18:44:28.2838563Z"
+}

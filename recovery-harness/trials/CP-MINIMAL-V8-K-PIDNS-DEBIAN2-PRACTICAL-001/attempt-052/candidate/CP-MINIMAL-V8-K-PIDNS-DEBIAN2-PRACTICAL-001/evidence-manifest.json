@@ -1,0 +1,132 @@
+{
+    "schema":  1,
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+    "candidateId":  "minimal-v8-k-pidns-001-debian2-practical",
+    "files":  [
+                  {
+                      "path":  "01-debian-base-attempt.json",
+                      "bytes":  604,
+                      "sha256":  "7ca6926efc507d2169ba9502a8dd1a6a57739c8a6a96afbb4e8e074e866a96d4"
+                  },
+                  {
+                      "path":  "01-debian-base-result.json",
+                      "bytes":  847,
+                      "sha256":  "dc4ac16ee93fb9034f691f9b8d8b12a63a4336d340117fa4df63fe796eb34464"
+                  },
+                  {
+                      "path":  "02-article-manifest-attempt.json",
+                      "bytes":  735,
+                      "sha256":  "25d545f6429fd1b5827a00401b2d58194adc0d6d594148c19fea297ced8028e9"
+                  },
+                  {
+                      "path":  "02-article-manifest-result.json",
+                      "bytes":  1085,
+                      "sha256":  "c457409f0e73d75644626b323d2e886fe4ad5e19e58e124fd6bcdf9197ca8e82"
+                  },
+                  {
+                      "path":  "03-login-shell-attempt.json",
+                      "bytes":  516,
+                      "sha256":  "16fde735e91ed431e1c8892926f0bc83d315058035bcd34367d55cfe92b875ad"
+                  },
+                  {
+                      "path":  "03-login-shell-result.json",
+                      "bytes":  759,
+                      "sha256":  "8564df5f13ab26b3c5798115be982c49c9cfec8f26a99b54d98588a9b59f65b1"
+                  },
+                  {
+                      "path":  "04-tool-versions-attempt.json",
+                      "bytes":  759,
+                      "sha256":  "a04e8160fd54a4f31b8b5c6cf537c2c8af93d45cf7293877578e95aa4a402b7a"
+                  },
+                  {
+                      "path":  "04-tool-versions-result.json",
+                      "bytes":  986,
+                      "sha256":  "511f856b5506a24c13617627278e0c38982e4b2bcba590bba7eba5a47d962fbb"
+                  },
+                  {
+                      "path":  "candidate-manifest.json",
+                      "bytes":  1543,
+                      "sha256":  "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4"
+                  },
+                  {
+                      "path":  "input-identities.json",
+                      "bytes":  1422,
+                      "sha256":  "35fe172bdc0b76f5af9b93957ee0a6f8fb6bd5112188d7d8cacfc44b749f96c3"
+                  },
+                  {
+                      "path":  "interval-start.json",
+                      "bytes":  247,
+                      "sha256":  "516788264a474199ed2ac472fe4f99ca9f031a861b1b0a6bda3e10e4fc62560a"
+                  },
+                  {
+                      "path":  "Invoke-WslCandidateProbe.ps1",
+                      "bytes":  20986,
+                      "sha256":  "feedb4f54297305d5ca1baa2e44dedbc2979b1e09ade73c6768d2fe93e16522d"
+                  },
+                  {
+                      "path":  "result.json",
+                      "bytes":  15369,
+                      "sha256":  "e9a837f2e65762d33f42e678a3fde52d2f39318f5c071b17769921012dc62dd8"
+                  },
+                  {
+                      "path":  "windows-events.json",
+                      "bytes":  113880,
+                      "sha256":  "b1e2d29878f03c42d45464aa437e1c536e0183aea176284d24fcc64952c9af92"
+                  },
+                  {
+                      "path":  "windows-wsl.etl",
+                      "bytes":  2621440,
+                      "sha256":  "25bd66d69d70e064737dc99caadf45a97092ced484435ddd1b0c5ac5d1a368ba"
+                  },
+                  {
+                      "path":  "wpr-start.log",
+                      "bytes":  0,
+                      "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+                  },
+                  {
+                      "path":  "wpr-stop.log",
+                      "bytes":  79,
+                      "sha256":  "56f7594e4d60953c950db6c9a06253129b7d11f145d55c129ff61fe31f466486"
+                  },
+                  {
+                      "path":  "wsl-list-quiet-attempt.json",
+                      "bytes":  265,
+                      "sha256":  "ad0aa376914296434387a5084c64633e9785def306043f0a48d6560a4e23c3f8"
+                  },
+                  {
+                      "path":  "wsl-list-quiet-result.json",
+                      "bytes":  671,
+                      "sha256":  "3b6d44d198ff98dd8e93c2b0e668f9d6171af7d00d523f012b6822dc9f4a0976"
+                  },
+                  {
+                      "path":  "wsl-shutdown-attempt.json",
+                      "bytes":  233,
+                      "sha256":  "04535337f3cb848166f4f33b5384f93cc6e45baea160479af405257012a9ce54"
+                  },
+                  {
+                      "path":  "wsl-shutdown-result.json",
+                      "bytes":  459,
+                      "sha256":  "36f2eb871abe8300722864635e4265816592b623f367238e18441f12387ef5ea"
+                  },
+                  {
+                      "path":  "wsl-status-attempt.json",
+                      "bytes":  229,
+                      "sha256":  "f2c92e1c701036f46d039d07b6faf0dd41ada02f90c8dfb7e5d61f708997404f"
+                  },
+                  {
+                      "path":  "wsl-status-result.json",
+                      "bytes":  866,
+                      "sha256":  "51ae9dea5a75ba7dff7671b74de874e62e37240636119d6ec09b9377070d3e4e"
+                  },
+                  {
+                      "path":  "wsl-version-attempt.json",
+                      "bytes":  231,
+                      "sha256":  "0c40fc2a9c4aae04fd44e98f90adef2d90b4bbe8f161cca0c739b8d8b3f4818e"
+                  },
+                  {
+                      "path":  "wsl-version-result.json",
+                      "bytes":  2515,
+                      "sha256":  "a7974e51401b019b3eda7852d7b236a3411e73749fce7abbcc7c092271ed6afc"
+                  }
+              ]
+}

@@ -1,0 +1,5 @@
+[31;1mException: [0mC:\ProgramData\UltraMinimalWslFixtureBroker\Runs\debian2-practical-runtime-052\private\workloads\debian2-practical-runtime.ps1:212[0m
+[31;1m[0m[36;1mLine |[0m
+[31;1m[0m[36;1m[36;1m 212 | [0m if ($remote.runnerFailure) { [36;1mthrow $remote.runnerFailure[0m }[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mExact trial runner failed with exit 1.[0m

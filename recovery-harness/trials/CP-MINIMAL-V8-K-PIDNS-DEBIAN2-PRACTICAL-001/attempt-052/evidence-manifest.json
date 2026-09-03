@@ -1,0 +1,357 @@
+{
+  "schema": 1,
+  "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+  "operationId": "debian2-practical-runtime-052",
+  "files": [
+    {
+      "path": "analysis.json",
+      "bytes": 1979,
+      "sha256": "95d6ff95792149bc7d3e6372f9f96709970f6b339b5e29fb21627ffb2db06335"
+    },
+    {
+      "path": "broker-status.json",
+      "bytes": 229,
+      "sha256": "eb87232a28f220db3997ddd896ff057da5bcd9bdc1de8e8c11a2584669071ff5"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 1050,
+      "sha256": "20c966b2a9094001b365ee4f3fd0097d921f6fc5a94214a7ee65c3f0771ec2f9"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/01-debian-base-attempt.json",
+      "bytes": 604,
+      "sha256": "7ca6926efc507d2169ba9502a8dd1a6a57739c8a6a96afbb4e8e074e866a96d4"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/01-debian-base-result.json",
+      "bytes": 847,
+      "sha256": "dc4ac16ee93fb9034f691f9b8d8b12a63a4336d340117fa4df63fe796eb34464"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/02-article-manifest-attempt.json",
+      "bytes": 735,
+      "sha256": "25d545f6429fd1b5827a00401b2d58194adc0d6d594148c19fea297ced8028e9"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/02-article-manifest-result.json",
+      "bytes": 1085,
+      "sha256": "c457409f0e73d75644626b323d2e886fe4ad5e19e58e124fd6bcdf9197ca8e82"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/03-login-shell-attempt.json",
+      "bytes": 516,
+      "sha256": "16fde735e91ed431e1c8892926f0bc83d315058035bcd34367d55cfe92b875ad"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/03-login-shell-result.json",
+      "bytes": 759,
+      "sha256": "8564df5f13ab26b3c5798115be982c49c9cfec8f26a99b54d98588a9b59f65b1"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/04-tool-versions-attempt.json",
+      "bytes": 759,
+      "sha256": "a04e8160fd54a4f31b8b5c6cf537c2c8af93d45cf7293877578e95aa4a402b7a"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/04-tool-versions-result.json",
+      "bytes": 986,
+      "sha256": "511f856b5506a24c13617627278e0c38982e4b2bcba590bba7eba5a47d962fbb"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/candidate-manifest.json",
+      "bytes": 1543,
+      "sha256": "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/guest-log.txt",
+      "bytes": 12004,
+      "sha256": "a028d05ffceef9947b9cac4461923a766904082ca3e674299e3880e0944c7c44"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/input-identities.json",
+      "bytes": 1422,
+      "sha256": "35fe172bdc0b76f5af9b93957ee0a6f8fb6bd5112188d7d8cacfc44b749f96c3"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/interval-start.json",
+      "bytes": 247,
+      "sha256": "516788264a474199ed2ac472fe4f99ca9f031a861b1b0a6bda3e10e4fc62560a"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/Invoke-WslCandidateProbe.ps1",
+      "bytes": 20986,
+      "sha256": "feedb4f54297305d5ca1baa2e44dedbc2979b1e09ade73c6768d2fe93e16522d"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/result.json",
+      "bytes": 15369,
+      "sha256": "e9a837f2e65762d33f42e678a3fde52d2f39318f5c071b17769921012dc62dd8"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/windows-events.json",
+      "bytes": 113880,
+      "sha256": "b1e2d29878f03c42d45464aa437e1c536e0183aea176284d24fcc64952c9af92"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/windows-wsl.csv",
+      "bytes": 600774,
+      "sha256": "aa43c299282ab7696e1a1daed4021d3b17105775b7a97d7af245c674dbf0c639"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/windows-wsl.etl",
+      "bytes": 2621440,
+      "sha256": "25bd66d69d70e064737dc99caadf45a97092ced484435ddd1b0c5ac5d1a368ba"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wpr-start.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wpr-stop.log",
+      "bytes": 79,
+      "sha256": "56f7594e4d60953c950db6c9a06253129b7d11f145d55c129ff61fe31f466486"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-list-quiet-attempt.json",
+      "bytes": 265,
+      "sha256": "ad0aa376914296434387a5084c64633e9785def306043f0a48d6560a4e23c3f8"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-list-quiet-result.json",
+      "bytes": 671,
+      "sha256": "3b6d44d198ff98dd8e93c2b0e668f9d6171af7d00d523f012b6822dc9f4a0976"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-shutdown-attempt.json",
+      "bytes": 233,
+      "sha256": "04535337f3cb848166f4f33b5384f93cc6e45baea160479af405257012a9ce54"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-shutdown-result.json",
+      "bytes": 459,
+      "sha256": "36f2eb871abe8300722864635e4265816592b623f367238e18441f12387ef5ea"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-status-attempt.json",
+      "bytes": 229,
+      "sha256": "f2c92e1c701036f46d039d07b6faf0dd41ada02f90c8dfb7e5d61f708997404f"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-status-result.json",
+      "bytes": 866,
+      "sha256": "51ae9dea5a75ba7dff7671b74de874e62e37240636119d6ec09b9377070d3e4e"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-version-attempt.json",
+      "bytes": 231,
+      "sha256": "0c40fc2a9c4aae04fd44e98f90adef2d90b4bbe8f161cca0c739b8d8b3f4818e"
+    },
+    {
+      "path": "candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/wsl-version-result.json",
+      "bytes": 2515,
+      "sha256": "a7974e51401b019b3eda7852d7b236a3411e73749fce7abbcc7c092271ed6afc"
+    },
+    {
+      "path": "debian2-practical-runtime.stderr.log",
+      "bytes": 550,
+      "sha256": "801d9fa286ec95453ff6433888700f7dcd2244cc949c390bd414bb8c291e3478"
+    },
+    {
+      "path": "debian2-practical-runtime.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-candidate-install.log",
+      "bytes": 277160,
+      "sha256": "9c0e25a57defacaf57656072d654560726c41908027b6d0f35d7f77d2783f973"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-candidate-remove.log",
+      "bytes": 235192,
+      "sha256": "9d0473908540b462c71af89bcdc0870c1c60c178b3a67b719e9d4ab50973f8f2"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY.zip",
+      "bytes": 205952,
+      "sha256": "2f0aeb920dc353a92f4074b13caf2fe3c857143f5e550429e5795f64c7376c17"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-runner.stderr.log",
+      "bytes": 570,
+      "sha256": "b6d65474e8c27ea76b1c96230559c51608f3b8af2b18b0409d09ad7ef2e43f32"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-runner.stdout.log",
+      "bytes": 5538,
+      "sha256": "fc21d74d3c72b89ef4a9c6538e49274060cad5dcb7379ee962ec2692fd580812"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-stock-article-verification.json",
+      "bytes": 756,
+      "sha256": "cc99c45f217b00bf2e64f13ef19b42a8d289f2a07f50603d4616400afa826149"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-stock-remove.log",
+      "bytes": 1303784,
+      "sha256": "5b8cf4c404a4920cda24db23609e9e91262865861367f87e0e86b1fe0b012561"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-stock-restore.log",
+      "bytes": 1560756,
+      "sha256": "8e6920748d64b8d48ef1221cd82776b3fb1dedda5f4be074daf6e6ffc4a1ea4d"
+    },
+    {
+      "path": "extracted/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001.zip",
+      "bytes": 91738,
+      "sha256": "7c71212224ec1b0d095514fb2c35195272c4beb3eeee723e07049fd3e3f8b945"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "f6e014370002e7313d2ab86849eae14cd928b7488f00cccf75573e885293baf7"
+    },
+    {
+      "path": "final-state.json",
+      "bytes": 1011,
+      "sha256": "c41c4914c49b838170e013730c3fd3d0d16641c90e5d7f04a09a16917a213828"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "d4ec510b42c8e3ddf0172d76e61f0935dc1487970016f970a963ed0a2832e017"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/candidate-manifest.json",
+      "bytes": 562,
+      "sha256": "a7e6b7899d97797e6e5d9b4f5e7de22f6e8aef4c338405530f93004fc30075d7"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/guest-log.txt",
+      "bytes": 9779,
+      "sha256": "fb51f4ce3334205d2b50388a30ff58fd42418f783cc568575f41d8421029b0ea"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/input-identities.json",
+      "bytes": 1205,
+      "sha256": "567b509c6e8c96afd2ed5ecea6f8c8065d1f1a3ace75b7ac16b9472ea8a4dd4f"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/interval-start.json",
+      "bytes": 241,
+      "sha256": "0447e3453903ab29a9c6475c4c5eddc8f323e5812fac70ad35582be2173eda34"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/Invoke-WslCandidateProbe.ps1",
+      "bytes": 18716,
+      "sha256": "424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/result.json",
+      "bytes": 8293,
+      "sha256": "4f317420a6610fd2bc0c6f71684a6e9872d47a4efd048eed4abc190317e7af05"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/toybox-smoke-attempt.json",
+      "bytes": 513,
+      "sha256": "226fe1925efb89e5db40f7a2f11b021f5004b32ec2c5b8584526aba861802c24"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/toybox-smoke-result.json",
+      "bytes": 749,
+      "sha256": "31ba024af30f182da239cf5c290d623392e100296e8821fa891c27cfe30635bc"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/windows-events.json",
+      "bytes": 119165,
+      "sha256": "232d66d6e1b6432bcbaac293d49fce3051ac1128a57fcfa09dd5dd9d949d0d1c"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/windows-wsl.csv",
+      "bytes": 2276658,
+      "sha256": "1c179920e358bb11646fd7144e532c35995801c0a200c593c5e1fc0522b6b277"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/windows-wsl.etl",
+      "bytes": 2621440,
+      "sha256": "8ede3d9ecc3cd2be8b9a10eba2d0b0b0799bcc289fff158940676281e0dca157"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wpr-start.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wpr-stop.log",
+      "bytes": 79,
+      "sha256": "56f7594e4d60953c950db6c9a06253129b7d11f145d55c129ff61fe31f466486"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-list-quiet-attempt.json",
+      "bytes": 265,
+      "sha256": "05791c49537d185b818c966a79113866368569a85f6b12e398e7db6b5a5c7b3b"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-list-quiet-result.json",
+      "bytes": 671,
+      "sha256": "7f96bc5f52ffafe7cf6ebe42dd65743cfaae098dc61f9813e09b8a7a521b32a1"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-shutdown-attempt.json",
+      "bytes": 233,
+      "sha256": "448756d91127cc5b5504b05bef4c177711ecd60f92da752395ddc871cb7056f2"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-shutdown-result.json",
+      "bytes": 459,
+      "sha256": "36accfc08fd872ee4710246bf1ef8fa25235a2c039eaeccd0a5381157965582b"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-status-attempt.json",
+      "bytes": 229,
+      "sha256": "bf21389fa3f934606bbafb859c4b1be17f0d12f1d6ede2e721cf6794c49c2b0a"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-status-result.json",
+      "bytes": 866,
+      "sha256": "041be72269c9e7f9b0ddeccd222803ed52f4d4c465b71b38246b770096075e2a"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-version-attempt.json",
+      "bytes": 231,
+      "sha256": "c32350456a7f615a6a82dccbbba114e85a8c0bcdb711eeb9f610c180fdf8c36e"
+    },
+    {
+      "path": "recovery/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY/wsl-version-result.json",
+      "bytes": 2040,
+      "sha256": "56ae912a6737f115191b8d12b5bc44ca279450a8e440bde650119d814f0cfdbb"
+    },
+    {
+      "path": "reviewed-controller-source.ps1",
+      "bytes": 18570,
+      "sha256": "d6323fe83a2860c58fb89d703f4e1c732aeb50b9613c0f73b83eec5d25014ead"
+    },
+    {
+      "path": "reviewed-probe-source.ps1",
+      "bytes": 20986,
+      "sha256": "feedb4f54297305d5ca1baa2e44dedbc2979b1e09ade73c6768d2fe93e16522d"
+    },
+    {
+      "path": "reviewed-runner-source.ps1",
+      "bytes": 23625,
+      "sha256": "ac32970601650f5095f20d2c4590d82ab33afdbf8c1dde19132c2fa4b10f4a37"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 20030,
+      "sha256": "8766c9e5ff41dd8e22d74e0d3fedca90df0d9d94950876ba7c9f186617dc0a83"
+    }
+  ]
+}

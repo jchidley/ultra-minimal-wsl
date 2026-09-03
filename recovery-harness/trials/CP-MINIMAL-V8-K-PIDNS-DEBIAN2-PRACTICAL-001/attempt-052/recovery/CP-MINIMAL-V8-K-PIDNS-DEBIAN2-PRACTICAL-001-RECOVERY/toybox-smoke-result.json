@@ -1,0 +1,22 @@
+{
+    "schema":  1,
+    "name":  "toybox-smoke",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Toybox-Minimal",
+                      "--exec",
+                      "/bin/sh",
+                      "-c",
+                      "test -r /proc/self/status \u0026\u0026 test -d /sys \u0026\u0026 test -c /dev/null \u0026\u0026 printf toybox-ok"
+                  ],
+    "processId":  2044,
+    "startedUtc":  "2026-09-03T18:43:46.3749289Z",
+    "completedUtc":  "2026-09-03T18:43:56.6515808Z",
+    "timedOut":  false,
+    "streamsCompleted":  true,
+    "taskkillExitCode":  null,
+    "exitCode":  0,
+    "stdout":  "toybox-ok",
+    "stderr":  ""
+}

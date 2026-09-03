@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "templateId": "debian2-practical-runtime-v2",
+  "baseTemplate": "debian2-practical-runtime-v1",
+  "kind": "practical-workload-runtime",
+  "invariants": {
+    "probe": "six-ordered-offline-Debian2-practical-checkpoints"
+  }
+}

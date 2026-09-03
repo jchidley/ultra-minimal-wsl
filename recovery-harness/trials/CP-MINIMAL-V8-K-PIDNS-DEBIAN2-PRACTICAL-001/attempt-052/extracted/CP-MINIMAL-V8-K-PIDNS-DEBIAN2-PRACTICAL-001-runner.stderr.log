@@ -1,0 +1,10 @@
+Controlled WSL practical-workload probe did not complete all checkpoints.
+At C:\controlled-inputs\ultra-minimal-wsl\procedure\Invoke-WslDebian2PracticalProbe.ps1:330 
+char:116
++ ... ne $true) { throw 'Controlled WSL practical-workload probe did not co ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Controlled WSL ...ll checkpoints.:String) [], Ru 
+   ntimeException
+    + FullyQualifiedErrorId : Controlled WSL practical-workload probe did not complete all checkp 
+   oints.
+ 

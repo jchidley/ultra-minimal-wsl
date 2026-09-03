@@ -1,0 +1,16 @@
+{
+    "schema":  1,
+    "name":  "02-article-manifest",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--distribution",
+                      "Debian2",
+                      "--user",
+                      "root",
+                      "--exec",
+                      "/bin/bash",
+                      "-c",
+                      "set -e; m=/var/lib/debian2-article/manifest.json; test -r \"$m\"; grep -F \u0027\"articleId\": \"debian2-stock-bootstrap-v10\"\u0027 \"$m\"; grep -F \u0027\"defaultUser\": \"jack\"\u0027 \"$m\"; grep -F \u0027\"secrets\": \"none\"\u0027 \"$m\"; printf checkpoint-02-ok"
+                  ],
+    "attemptedUtc":  "2026-09-03T18:42:39.1495563Z"
+}

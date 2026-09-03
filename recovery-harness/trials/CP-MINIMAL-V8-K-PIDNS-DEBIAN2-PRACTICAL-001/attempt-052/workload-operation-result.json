@@ -1,0 +1,408 @@
+{
+  "schema": 1,
+  "registration": {
+    "registered": true,
+    "distribution": "Debian2",
+    "vhdx": "C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Debian2\\ext4.vhdx",
+    "vhdxSha256": "0c803f68d7cb3b0f8e0b29022df5413a43bd96bcb0a947f47712155d1895d388",
+    "completedUtc": "2026-09-03T18:40:28.7098011Z",
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "cac9f8c8-78af-45c1-a1b7-900728078f0c",
+    "PSShowComputerName": true
+  },
+  "remote": {
+    "schema": 1,
+    "selfTestFailurePaths": 19,
+    "validation": {
+      "schema": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+      "execute": false,
+      "validated": true,
+      "candidatePackageSha256": "8207049ae7a6f8a0e7da14bf4becbed438297e5a8b52c215d0d9011cdc3a5765",
+      "candidateManifestSha256": "f31ccc299f57b0c7a8c5c96c9d239a90b8ebd6f4c9874bc8377ca528deec98a4",
+      "candidateKernelSha256": "24c768730ba2b66e0afde5a53cbbc95e92440bb90510552ad9b9bf4ddf73c959",
+      "candidateKernelConfigSha256": "e7e10f27f0b802142a2ecbb52763ba49523da61f42efc23d61bab0046d9ad563",
+      "stockPackageSha256": "a460d4560215f2efe003c136244b78ea3415d773824d7a688ea9ded36dbe9145",
+      "stockProductCode": "{020F8AC8-A788-4E39-8E9B-8FECFA843632}",
+      "candidateProductCode": "{65E3A12F-0AF8-4D54-A19A-29A07D5186E3}",
+      "processTimeoutSeconds": 45,
+      "shutdownTimeoutSeconds": 30,
+      "recoveryBaseline": "CP-STOCK-2.7.12-003",
+      "candidateGate": "P6-PI-PACKAGE",
+      "candidateDistribution": "Debian2",
+      "candidateSmoke": "six ordered offline practical-workload checkpoints",
+      "recoveryGate": "B6-T",
+      "recoveryDistribution": "Toybox-Minimal",
+      "diagnosticDebugConsole": true,
+      "note": "One serial offline comparison of the retained Debian2 article under frozen ultra-minimal-wsl-v1, followed by exact Toybox stock recovery and retained-article verification under stock."
+    },
+    "runnerFailure": "Exact trial runner failed with exit 1.",
+    "runnerExitCode": 1,
+    "stockProductState": 5,
+    "candidateProductState": -1,
+    "wslconfigExists": false,
+    "diagnosticRelayCount": 0,
+    "candidateEvidenceExists": true,
+    "recoveryEvidenceExists": true,
+    "candidateManifestFilesVerified": 26,
+    "recoveryManifestFilesVerified": 20,
+    "candidateResult": {
+      "schema": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001",
+      "candidateId": "minimal-v8-k-pidns-001-debian2-practical",
+      "preparationStartedUtc": "2026-09-03T18:42:13.0939159Z",
+      "candidateStartedUtc": "2026-09-03T18:42:13.7587952Z",
+      "completedUtc": "2026-09-03T18:42:46.7881439Z",
+      "candidateResult": true,
+      "disposition": "candidate-evidence-requires-analysis",
+      "observedGate": "P3",
+      "classification": "P3",
+      "managementChecksPassed": true,
+      "passed": false,
+      "completedCheckpoints": [
+        "01-debian-base",
+        "02-article-manifest",
+        "03-login-shell"
+      ],
+      "earliestFailure": "04-tool-versions",
+      "articleVhdxSha256AfterCandidateShutdown": "df694346a46cd82c6b10f005bbbecae3da92ca9dc6c91e13c6416ee0fb0e299e",
+      "primaryFailure": null,
+      "infrastructureFailure": null,
+      "traceFailure": null,
+      "shutdownFailure": null,
+      "results": {
+        "version": {
+          "schema": 1,
+          "name": "wsl-version",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--version"
+          ],
+          "processId": 3116,
+          "startedUtc": "2026-09-03T18:42:13.8025369Z",
+          "completedUtc": "2026-09-03T18:42:14.8081695Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "W\u0000S\u0000L\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000.\u00007\u0000.\u00001\u00002\u0000.\u00000\u0000\r\u0000\n\u0000K\u0000e\u0000r\u0000n\u0000e\u0000l\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00006\u0000.\u00001\u00008\u0000.\u00003\u00003\u0000.\u00002\u0000-\u00002\u0000\r\u0000\n\u0000W\u0000S\u0000L\u0000g\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00000\u0000.\u00007\u00003\u0000.\u00002\u0000\r\u0000\n\u0000M\u0000S\u0000R\u0000D\u0000C\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00002\u0000.\u00007\u00002\u00001\u00004\u0000\r\u0000\n\u0000D\u0000i\u0000r\u0000e\u0000c\u0000t\u00003\u0000D\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00006\u00001\u00001\u0000.\u00001\u0000-\u00008\u00001\u00005\u00002\u00008\u00005\u00001\u00001\u0000\r\u0000\n\u0000D\u0000X\u0000C\u0000o\u0000r\u0000e\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00001\u00000\u00000\u0000.\u00001\u0000-\u00002\u00004\u00000\u00003\u00003\u00001\u0000-\u00001\u00004\u00003\u00005\u0000.\u0000g\u0000e\u0000-\u0000r\u0000e\u0000l\u0000e\u0000a\u0000s\u0000e\u0000\r\u0000\n\u0000W\u0000i\u0000n\u0000d\u0000o\u0000w\u0000s\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00002\u00000\u00000\u0000.\u00008\u00000\u00003\u00007\u0000\r\u0000\n\u0000M\u0000S\u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00009\u00004\u00004\u0000\r\u0000\n\u0000C\u0000o\u0000m\u0000m\u0000i\u0000t\u0000:\u0000 \u0000\r\u0000\n\u0000B\u0000u\u0000i\u0000l\u0000d\u0000 \u0000t\u0000i\u0000m\u0000e\u0000:\u0000 \u00000\u00002\u0000:\u00002\u00001\u0000:\u00004\u00002\u0000 \u0000S\u0000e\u0000p\u0000 \u0000 \u00002\u0000 \u00002\u00000\u00002\u00006\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "status": {
+          "schema": 1,
+          "name": "wsl-status",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--status"
+          ],
+          "processId": 5024,
+          "startedUtc": "2026-09-03T18:42:14.8864343Z",
+          "completedUtc": "2026-09-03T18:42:17.0804016Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000D\u0000i\u0000s\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000i\u0000o\u0000n\u0000:\u0000 \u0000T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000V\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "list": {
+          "schema": 1,
+          "name": "wsl-list-quiet",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--list",
+            "--quiet"
+          ],
+          "processId": 3044,
+          "startedUtc": "2026-09-03T18:42:17.1046967Z",
+          "completedUtc": "2026-09-03T18:42:17.2837177Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000b\u0000i\u0000a\u0000n\u00002\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "01-debian-base": {
+          "schema": 1,
+          "name": "01-debian-base",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--distribution",
+            "Debian2",
+            "--user",
+            "jack",
+            "--exec",
+            "/bin/bash",
+            "-c",
+            "/bin/true && test -r /proc/self/status && test -d /sys && test -c /dev/null && printf checkpoint-01-ok"
+          ],
+          "processId": 3660,
+          "startedUtc": "2026-09-03T18:42:17.3418675Z",
+          "completedUtc": "2026-09-03T18:42:39.1253574Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "checkpoint-01-ok",
+          "stderr": ""
+        },
+        "02-article-manifest": {
+          "schema": 1,
+          "name": "02-article-manifest",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--distribution",
+            "Debian2",
+            "--user",
+            "root",
+            "--exec",
+            "/bin/bash",
+            "-c",
+            "set -e; m=/var/lib/debian2-article/manifest.json; test -r \"$m\"; grep -F '\"articleId\": \"debian2-stock-bootstrap-v10\"' \"$m\"; grep -F '\"defaultUser\": \"jack\"' \"$m\"; grep -F '\"secrets\": \"none\"' \"$m\"; printf checkpoint-02-ok"
+          ],
+          "processId": 2780,
+          "startedUtc": "2026-09-03T18:42:39.1568976Z",
+          "completedUtc": "2026-09-03T18:42:39.4959235Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "  \"articleId\": \"debian2-stock-bootstrap-v10\",\n  \"defaultUser\": \"jack\",\n  \"secrets\": \"none\",\ncheckpoint-02-ok",
+          "stderr": ""
+        },
+        "03-login-shell": {
+          "schema": 1,
+          "name": "03-login-shell",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--distribution",
+            "Debian2",
+            "--user",
+            "jack",
+            "--exec",
+            "/bin/bash",
+            "-lic",
+            "test \"$HOME\" = /home/jack; printf checkpoint-03-ok"
+          ],
+          "processId": 3344,
+          "startedUtc": "2026-09-03T18:42:39.5099370Z",
+          "completedUtc": "2026-09-03T18:42:40.1805159Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "checkpoint-03-ok",
+          "stderr": ""
+        },
+        "04-tool-versions": {
+          "schema": 1,
+          "name": "04-tool-versions",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--distribution",
+            "Debian2",
+            "--user",
+            "jack",
+            "--exec",
+            "/bin/bash",
+            "-lic",
+            "set -e; test \"$(node --version)\" = v22.19.0; test \"$(npm --version)\" = 10.9.3; test \"$(fnm --version)\" = 'fnm 1.38.1'; test \"$(mcfly --version)\" = 'mcfly 0.9.4'; test \"$(chezmoi --version | head -n1)\" = 'chezmoi version v2.69.4'; printf checkpoint-04-ok"
+          ],
+          "processId": 3828,
+          "startedUtc": "2026-09-03T18:42:40.1996899Z",
+          "completedUtc": "2026-09-03T18:42:41.6236175Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 1,
+          "stdout": "",
+          "stderr": ""
+        },
+        "shutdown": {
+          "schema": 1,
+          "name": "wsl-shutdown",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--shutdown"
+          ],
+          "processId": 212,
+          "startedUtc": "2026-09-03T18:42:41.6354850Z",
+          "completedUtc": "2026-09-03T18:42:42.4119227Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    "recoveryResult": {
+      "schema": 1,
+      "trialId": "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY",
+      "candidateId": "stock-wsl-2.7.12-recovery",
+      "preparationStartedUtc": "2026-09-03T18:43:44.6150621Z",
+      "candidateStartedUtc": "2026-09-03T18:43:45.0827036Z",
+      "completedUtc": "2026-09-03T18:44:01.3628695Z",
+      "candidateResult": true,
+      "disposition": "candidate-pass",
+      "observedGate": "B6-T",
+      "classification": "B6-T",
+      "managementChecksPassed": true,
+      "passed": true,
+      "primaryFailure": null,
+      "infrastructureFailure": null,
+      "traceFailure": null,
+      "shutdownFailure": null,
+      "results": {
+        "version": {
+          "schema": 1,
+          "name": "wsl-version",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--version"
+          ],
+          "processId": 1836,
+          "startedUtc": "2026-09-03T18:43:45.1107438Z",
+          "completedUtc": "2026-09-03T18:43:45.4429318Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "W\u0000S\u0000L\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000.\u00007\u0000.\u00001\u00002\u0000.\u00000\u0000\r\u0000\n\u0000K\u0000e\u0000r\u0000n\u0000e\u0000l\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00006\u0000.\u00001\u00008\u0000.\u00003\u00003\u0000.\u00002\u0000-\u00002\u0000\r\u0000\n\u0000W\u0000S\u0000L\u0000g\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00000\u0000.\u00007\u00003\u0000.\u00002\u0000\r\u0000\n\u0000M\u0000S\u0000R\u0000D\u0000C\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00002\u0000.\u00007\u00002\u00001\u00004\u0000\r\u0000\n\u0000D\u0000i\u0000r\u0000e\u0000c\u0000t\u00003\u0000D\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u0000.\u00006\u00001\u00001\u0000.\u00001\u0000-\u00008\u00001\u00005\u00002\u00008\u00005\u00001\u00001\u0000\r\u0000\n\u0000D\u0000X\u0000C\u0000o\u0000r\u0000e\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00001\u00000\u00000\u0000.\u00001\u0000-\u00002\u00004\u00000\u00003\u00003\u00001\u0000-\u00001\u00004\u00003\u00005\u0000.\u0000g\u0000e\u0000-\u0000r\u0000e\u0000l\u0000e\u0000a\u0000s\u0000e\u0000\r\u0000\n\u0000W\u0000i\u0000n\u0000d\u0000o\u0000w\u0000s\u0000 \u0000v\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00001\u00000\u0000.\u00000\u0000.\u00002\u00006\u00002\u00000\u00000\u0000.\u00008\u00000\u00003\u00007\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "status": {
+          "schema": 1,
+          "name": "wsl-status",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--status"
+          ],
+          "processId": 2004,
+          "startedUtc": "2026-09-03T18:43:45.4731397Z",
+          "completedUtc": "2026-09-03T18:43:46.1868762Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000D\u0000i\u0000s\u0000t\u0000r\u0000i\u0000b\u0000u\u0000t\u0000i\u0000o\u0000n\u0000:\u0000 \u0000T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000f\u0000a\u0000u\u0000l\u0000t\u0000 \u0000V\u0000e\u0000r\u0000s\u0000i\u0000o\u0000n\u0000:\u0000 \u00002\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "list": {
+          "schema": 1,
+          "name": "wsl-list-quiet",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--list",
+            "--quiet"
+          ],
+          "processId": 3092,
+          "startedUtc": "2026-09-03T18:43:46.2028315Z",
+          "completedUtc": "2026-09-03T18:43:46.3594470Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "T\u0000o\u0000y\u0000b\u0000o\u0000x\u0000-\u0000M\u0000i\u0000n\u0000i\u0000m\u0000a\u0000l\u0000\r\u0000\n\u0000D\u0000e\u0000b\u0000i\u0000a\u0000n\u00002\u0000\r\u0000\n\u0000",
+          "stderr": ""
+        },
+        "smoke": {
+          "schema": 1,
+          "name": "toybox-smoke",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--distribution",
+            "Toybox-Minimal",
+            "--exec",
+            "/bin/sh",
+            "-c",
+            "test -r /proc/self/status && test -d /sys && test -c /dev/null && printf toybox-ok"
+          ],
+          "processId": 2044,
+          "startedUtc": "2026-09-03T18:43:46.3749289Z",
+          "completedUtc": "2026-09-03T18:43:56.6515808Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "toybox-ok",
+          "stderr": ""
+        },
+        "shutdown": {
+          "schema": 1,
+          "name": "wsl-shutdown",
+          "file": "C:\\Windows\\System32\\wsl.exe",
+          "arguments": [
+            "--shutdown"
+          ],
+          "processId": 992,
+          "startedUtc": "2026-09-03T18:43:56.6771794Z",
+          "completedUtc": "2026-09-03T18:43:57.9671438Z",
+          "timedOut": false,
+          "streamsCompleted": true,
+          "taskkillExitCode": null,
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      }
+    },
+    "completedUtc": "2026-09-03T18:44:31.4234921Z",
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "cac9f8c8-78af-45c1-a1b7-900728078f0c",
+    "PSShowComputerName": true
+  },
+  "cleanup": {
+    "registered": true,
+    "vhdxSha256": "1e3c8c0390eb76e377d2a7d6f3dfaded05e9a89131ffb3c2910834afc651c815",
+    "wslconfigAbsent": true,
+    "completedUtc": "2026-09-03T18:44:46.6842308Z",
+    "PSComputerName": "ultra-minimal-wsl-dev",
+    "RunspaceId": "cac9f8c8-78af-45c1-a1b7-900728078f0c",
+    "PSShowComputerName": true
+  },
+  "outerFailure": null,
+  "extracted": {
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-candidate-install.log": {
+      "bytes": 277160,
+      "sha256": "9c0e25a57defacaf57656072d654560726c41908027b6d0f35d7f77d2783f973"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-candidate-remove.log": {
+      "bytes": 235192,
+      "sha256": "9d0473908540b462c71af89bcdc0870c1c60c178b3a67b719e9d4ab50973f8f2"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY.zip": {
+      "bytes": 205952,
+      "sha256": "2f0aeb920dc353a92f4074b13caf2fe3c857143f5e550429e5795f64c7376c17"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-runner.stderr.log": {
+      "bytes": 570,
+      "sha256": "b6d65474e8c27ea76b1c96230559c51608f3b8af2b18b0409d09ad7ef2e43f32"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-runner.stdout.log": {
+      "bytes": 5538,
+      "sha256": "fc21d74d3c72b89ef4a9c6538e49274060cad5dcb7379ee962ec2692fd580812"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-stock-article-verification.json": {
+      "bytes": 756,
+      "sha256": "cc99c45f217b00bf2e64f13ef19b42a8d289f2a07f50603d4616400afa826149"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-stock-remove.log": {
+      "bytes": 1303784,
+      "sha256": "5b8cf4c404a4920cda24db23609e9e91262865861367f87e0e86b1fe0b012561"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-stock-restore.log": {
+      "bytes": 1560756,
+      "sha256": "8e6920748d64b8d48ef1221cd82776b3fb1dedda5f4be074daf6e6ffc4a1ea4d"
+    },
+    "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001.zip": {
+      "bytes": 91738,
+      "sha256": "7c71212224ec1b0d095514fb2c35195272c4beb3eeee723e07049fd3e3f8b945"
+    }
+  },
+  "finalVmId": "dcbf722c-0702-444e-9496-04a4623c3198",
+  "finalVmState": "Off",
+  "completedUtc": "2026-09-03T18:44:58.9186716Z"
+}

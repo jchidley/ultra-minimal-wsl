@@ -1,0 +1,7 @@
+{
+    "schema":  1,
+    "action":  "candidate-interval-start",
+    "trialId":  "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001-RECOVERY",
+    "candidateId":  "stock-wsl-2.7.12-recovery",
+    "startedUtc":  "2026-09-03T18:43:45.0827036Z"
+}

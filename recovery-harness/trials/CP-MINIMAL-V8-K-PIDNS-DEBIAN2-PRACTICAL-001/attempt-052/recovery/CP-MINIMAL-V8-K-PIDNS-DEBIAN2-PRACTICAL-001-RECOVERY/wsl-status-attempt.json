@@ -1,0 +1,9 @@
+{
+    "schema":  1,
+    "name":  "wsl-status",
+    "file":  "C:\\Windows\\System32\\wsl.exe",
+    "arguments":  [
+                      "--status"
+                  ],
+    "attemptedUtc":  "2026-09-03T18:43:45.4689850Z"
+}

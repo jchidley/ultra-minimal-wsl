@@ -6,10 +6,12 @@ inventory/experiments.sqlite binary
 inventory/*.v1.csv text eol=lf
 control-plane/deferred-runtime-plan.v1.json text eol=lf
 control-plane/generation/minimal-v8-k-pidns-alpine*.json -text whitespace=-trailing-space
+control-plane/generation/minimal-v8-k-pidns-debian2-practical*.json -text whitespace=-trailing-space
 recovery-harness/trials/**/guest-log-*.txt binary
 recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-ALPINE-*/** -text
 recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-ARCH-*/** -text
 recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-DEBIAN-*/** -text
+recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-*/** -text
 recovery-harness/trials/DEBIAN2-ARTICLE-MANIFEST-REPAIR-*/** -text
 recovery-harness/trials/DEBIAN2-ARTICLE-MANIFEST-RECONCILIATION-*/** -text
 recovery-harness/trials/K-OVERLAY-DIAG-001/** -text
