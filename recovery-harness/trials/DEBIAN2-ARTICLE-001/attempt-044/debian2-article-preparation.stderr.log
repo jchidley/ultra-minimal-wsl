@@ -1,0 +1,5 @@
+[31;1mException: [0mC:\ProgramData\UltraMinimalWslFixtureBroker\Runs\debian2-article-preparation-044\private\workloads\debian2-article-preparation.ps1:120[0m
+[31;1m[0m[36;1mLine |[0m
+[31;1m[0m[36;1m[36;1m 120 | [0m     [36;1m$remoteResult = Invoke-Command -Session $session -ScriptBlock {[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m     | [31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[31;1m[0m[36;1m[36;1m[0m[36;1m[0m[36;1m[31;1m[31;1m[36;1m     | [31;1mbootstrap failed: timeout=False streams=True exit=1.[0m

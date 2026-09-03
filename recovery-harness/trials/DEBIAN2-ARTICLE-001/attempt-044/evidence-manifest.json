@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-044",
+  "classification": "root-run-post-bootstrap-git-verifier-rejected-jack-owned-repository",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 229,
+      "sha256": "9751f3afed77b3234bf9c901b84aa986cb67ebf4a055bfcfb123a45cfc123e0b"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 1050,
+      "sha256": "20c966b2a9094001b365ee4f3fd0097d921f6fc5a94214a7ee65c3f0771ec2f9"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 584,
+      "sha256": "1fe32026b0efcd6bb6f72009f596621462bb1eaf666003900a229fa50b15d7d6"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 3148,
+      "sha256": "6661493a207e5b9cd090a17d69755a89f4762b369e2368b23d209c984da5a2f5"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 37237,
+      "sha256": "c8ce0dc51d9459c80b2860599edbb1295a7494b84779a9a2e10b175b70fba2bd"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "4ac47c049120997e9bb1a4b5a8757158ea2be24eef26b6976bb2243b97361045"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "ec60543cca86382b4e6ceb12059e509236664d1c794cfcbeefcd0b7b349f9571"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 418,
+      "sha256": "ae0a9c76f09560ec37e746002f715c8b3544d17cd183a543f14c96de269b675a"
+    }
+  ]
+}

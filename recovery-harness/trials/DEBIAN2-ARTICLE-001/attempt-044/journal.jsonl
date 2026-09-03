@@ -1,0 +1,3 @@
+{"utc":"2026-09-03T17:16:24.2505628Z","event":"broker-ready","data":{"expectedSequence":1}}
+{"utc":"2026-09-03T17:21:41.1544348Z","event":"job-failed","data":{"sequence":1,"error":"Allowlisted workload failed with exit 1."}}
+{"utc":"2026-09-03T17:21:41.3828972Z","event":"broker-failed","data":{"error":"Allowlisted workload failed with exit 1."}}
