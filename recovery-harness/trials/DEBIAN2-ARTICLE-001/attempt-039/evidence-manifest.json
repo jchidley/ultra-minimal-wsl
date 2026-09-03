@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "operation": "debian2-article-preparation-039",
+  "classification": "premature-tools-directory-conflicts-with-repository-clone",
+  "files": [
+    {
+      "path": "broker-status.json",
+      "bytes": 231,
+      "sha256": "7846de2f2c45c366ac8a42aab016b9692be44251a9b49f6412cfa099299aacdf"
+    },
+    {
+      "path": "broker.stderr.log",
+      "bytes": 1050,
+      "sha256": "20c966b2a9094001b365ee4f3fd0097d921f6fc5a94214a7ee65c3f0771ec2f9"
+    },
+    {
+      "path": "broker.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2-article-preparation.stderr.log",
+      "bytes": 584,
+      "sha256": "e586eb7a5b0013a80e9b9dd89e2ff14ceb469becb72e45fa450c6286bccc1221"
+    },
+    {
+      "path": "debian2-article-preparation.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\bootstrap.stderr.log",
+      "bytes": 1875,
+      "sha256": "72b348aae945f0654c5f01f4632cbf4fdc4563415a1f9047dd8dae3a6b9c23dd"
+    },
+    {
+      "path": "debian2\\bootstrap.stdout.log",
+      "bytes": 34686,
+      "sha256": "1702bf12f1029d44bf4e7e7cdb7d684ea45d28f8f91c8b441eafdb507d06e1ea"
+    },
+    {
+      "path": "debian2\\import.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "debian2\\import.stdout.log",
+      "bytes": 80,
+      "sha256": "8142c88d677422c8bd8eace714d36efe1f981de931960c2e99ee38717f810ede"
+    },
+    {
+      "path": "failure-000000001.json",
+      "bytes": 125,
+      "sha256": "84fd0ba911d4b6dc6727991aed98f1bb40d3f6cff45d399e707f70c6d5d82f5d"
+    },
+    {
+      "path": "journal.jsonl",
+      "bytes": 348,
+      "sha256": "bcd5b3e01de4085cbb79b54a55ece9f58e8aacf2a3348533b8ba1b8f59c1f5ab"
+    },
+    {
+      "path": "workload-operation-result.json",
+      "bytes": 418,
+      "sha256": "fcd5732e46e31dfeb896573cd8d82719d905c787df2de6c96ae58e14891f1446"
+    }
+  ]
+}
