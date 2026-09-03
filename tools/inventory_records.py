@@ -197,7 +197,7 @@ def sync_trials(
                   m.parent_trial,m.change_group,m.explicit_symbols,
                   m.autoselected_symbols,l.kernel_image_path,l.kernel_image_sha256,
                   m.boot_level,
-                  l.toybox_result,l.alpine_result,l.failure_signature,l.windows_error,
+                  l.toybox_result,l.alpine_result,l.arch_result,l.failure_signature,l.windows_error,
                   l.kernel_log_path,l.crash_log_path,l.classification,
                   l.stock_restore_verified,m.analysis_path,m.notes AS metadata_notes,
                   l.notes AS ledger_notes
@@ -222,7 +222,7 @@ def export_experiment_records(experiments: Path, directory: Path) -> tuple[Path,
             "trial_id", "status", "started_utc", "finished_utc", "source_commit", "toolchain",
             "kernel_config_path", "kernel_config_sha256", "parent_trial", "change_group",
             "explicit_symbols", "autoselected_symbols", "kernel_image_path", "kernel_image_sha256",
-            "boot_level", "toybox_result", "alpine_result", "failure_signature", "windows_error",
+            "boot_level", "toybox_result", "alpine_result", "arch_result", "failure_signature", "windows_error",
             "kernel_log_path", "crash_log_path", "classification", "stock_restore_verified", "notes",
         ]
         with trials.open("w", newline="", encoding="utf-8") as stream:

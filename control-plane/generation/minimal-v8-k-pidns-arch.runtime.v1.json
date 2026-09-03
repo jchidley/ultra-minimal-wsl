@@ -1,0 +1,165 @@
+{
+  "schema": 2,
+  "generator": "candidate-powershell-v2",
+  "phase": "runtime",
+  "files": [
+    {
+      "name": "runner",
+      "source": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial003.ps1",
+      "output": "C:\\Users\\jackc\\git\\ultra-minimal-wsl\\control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsArchTrial.ps1",
+      "source_sha256": "4da8de3d51507a34f45e42492cfd6396f6706ee737bf6c4f9854b012bc584916",
+      "output_sha256": "48b9fbfa353d944857750a92c4fb222350fb9b8e1f2b6791f1ae6530ab8149f7",
+      "substitutions": [
+        {
+          "old": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-003'",
+          "new": "$TrialId = 'CP-MINIMAL-V8-K-PIDNS-ARCH-001'"
+        },
+        {
+          "old": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslAlpineProbe.ps1'",
+          "new": "$CandidateProbe = Join-Path $InputRoot 'procedure\\Invoke-WslArchProbe.ps1'"
+        },
+        {
+          "old": "$CandidateRootfs = Join-Path $InputRoot 'alpine-minirootfs-3.24.0-x86_64.tar.gz'",
+          "new": "$CandidateRootfs = Join-Path $InputRoot 'archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'"
+        },
+        {
+          "old": "$CandidateProbeSha256 = '9f13a204e83d2f85f24100fbad8b757421d1e7892962885e6ff7628f1611fa5c'",
+          "new": "$CandidateProbeSha256 = '7d30d7473c3b849ff2e0539d487f6bf01a3ab25bfb6e7df011e645be8546889d'"
+        },
+        {
+          "old": "$CandidateRootfsSha256 = 'de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89'",
+          "new": "$CandidateRootfsSha256 = 'c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176'"
+        },
+        {
+          "old": "    $distribution = if ($Recovery) { 'Toybox-Minimal' } else { 'Alpine-Minimal' }",
+          "new": "    $distribution = if ($Recovery) { 'Toybox-Minimal' } else { 'Arch-Minimal' }"
+        },
+        {
+          "old": "    if ((Get-Item -LiteralPath $CandidateRootfs).Length -ne 3717879) { throw 'Alpine rootfs size mismatch.' }",
+          "new": "    if ((Get-Item -LiteralPath $CandidateRootfs).Length -ne 214122848) { throw 'Arch rootfs size mismatch.' }"
+        },
+        {
+          "old": "    candidateGate = 'B6-A'; candidateDistribution = 'Alpine-Minimal'; candidateSmoke = '/bin/busybox true plus the plan-defined Alpine smoke contract'\n    recoveryGate = 'B6-T'; recoveryDistribution = 'Toybox-Minimal'; diagnosticDebugConsole = $true\n    note = 'One serial Alpine compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Alpine rootfs and plan-defined B6-A probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory.'",
+          "new": "    candidateGate = 'B6-ARCH'; candidateDistribution = 'Arch-Minimal'; candidateSmoke = '/bin/true plus the plan-defined Arch smoke contract'\n    recoveryGate = 'B6-T'; recoveryDistribution = 'Toybox-Minimal'; diagnosticDebugConsole = $true\n    note = 'One serial Arch compatibility interval with the frozen minimal-v8 plus K-PIDNS-001 package and kernel. Only the pinned Arch rootfs and plan-defined B6-ARCH probe replace candidate-probe inputs; exact Toybox stock recovery remains mandatory.'"
+        }
+      ]
+    },
+    {
+      "name": "controller",
+      "source": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-alpine-runtime-023\\Run-ControlledTrial.ps1",
+      "output": "C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\approval-state\\minimal-v8-k-pidns-arch-runtime-024\\Run-ControlledTrial.ps1",
+      "source_sha256": "14440dfb95083787dbafa52fbe093b9590782244438884590c29fdb23918ee65",
+      "output_sha256": "0ecc83563b54e2abd1e8d86de39959004b3faa30d66ed3368e90f7f79ed3e060",
+      "substitutions": [
+        {
+          "old": "$trial = 'CP-MINIMAL-V8-K-PIDNS-ALPINE-003'",
+          "new": "$trial = 'CP-MINIMAL-V8-K-PIDNS-ARCH-001'"
+        },
+        {
+          "old": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsAlpineTrial003.ps1'",
+          "new": "$runnerSource = Join-Path $project 'control-plane\\controlled-package-offline\\Invoke-MinimalV8KPidNsArchTrial.ps1'"
+        },
+        {
+          "old": "$probeSource = Join-Path $project 'tools\\Invoke-WslAlpineProbe.ps1'",
+          "new": "$probeSource = Join-Path $project 'tools\\Invoke-WslArchProbe.ps1'"
+        },
+        {
+          "old": "$rootfsSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\cache\\alpine\\v3.24\\alpine-minirootfs-3.24.0-x86_64.tar.gz'",
+          "new": "$rootfsSource = 'C:\\Users\\jackc\\AppData\\Local\\ultra-minimal-wsl\\cache\\arch\\2026.07.01\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'"
+        },
+        {
+          "old": "$runnerHash = '4da8de3d51507a34f45e42492cfd6396f6706ee737bf6c4f9854b012bc584916'",
+          "new": "$runnerHash = '48b9fbfa353d944857750a92c4fb222350fb9b8e1f2b6791f1ae6530ab8149f7'"
+        },
+        {
+          "old": "$probeHash = '9f13a204e83d2f85f24100fbad8b757421d1e7892962885e6ff7628f1611fa5c'",
+          "new": "$probeHash = '7d30d7473c3b849ff2e0539d487f6bf01a3ab25bfb6e7df011e645be8546889d'"
+        },
+        {
+          "old": "$rootfsHash = 'de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89'",
+          "new": "$rootfsHash = 'c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176'"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslAlpineProbe.ps1' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $probeSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslArchProbe.ps1' -Force"
+        },
+        {
+          "old": "    Copy-Item -ToSession $session -LiteralPath $rootfsSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\alpine-minirootfs-3.24.0-x86_64.tar.gz' -Force",
+          "new": "    Copy-Item -ToSession $session -LiteralPath $rootfsSource -Destination 'C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz' -Force"
+        },
+        {
+          "old": "        $name = 'Alpine-Minimal'\n        $rootfs = 'C:\\controlled-inputs\\ultra-minimal-wsl\\alpine-minirootfs-3.24.0-x86_64.tar.gz'\n        $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Alpine-Minimal'",
+          "new": "        $name = 'Arch-Minimal'\n        $rootfs = 'C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'\n        $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Arch-Minimal'"
+        },
+        {
+          "old": "        if ($LASTEXITCODE -ne 0 -or $listed -contains $name) { throw 'Alpine infrastructure precondition failed: distro is already registered or list failed.' }",
+          "new": "        if ($LASTEXITCODE -ne 0 -or $listed -contains $name) { throw 'Arch infrastructure precondition failed: distro is already registered or list failed.' }"
+        },
+        {
+          "old": "        if (Test-Path -LiteralPath $install) { throw 'Alpine infrastructure install path already exists.' }",
+          "new": "        if (Test-Path -LiteralPath $install) { throw 'Arch infrastructure install path already exists.' }"
+        },
+        {
+          "old": "        $stdout = Join-Path $evidence \"$Trial-alpine-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-alpine-import.stderr.log\"",
+          "new": "        $stdout = Join-Path $evidence \"$Trial-arch-import.stdout.log\"\n        $stderr = Join-Path $evidence \"$Trial-arch-import.stderr.log\""
+        },
+        {
+          "old": "        if (-not $process.Start()) { throw 'Failed to start Alpine import.' }",
+          "new": "        if (-not $process.Start()) { throw 'Failed to start Arch import.' }"
+        },
+        {
+          "old": "            throw \"Alpine import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"",
+          "new": "            throw \"Arch import timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\""
+        },
+        {
+          "old": "        if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Alpine import failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }",
+          "new": "        if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Arch import failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }"
+        },
+        {
+          "old": "        if ($LASTEXITCODE -ne 0 -or $listed -notcontains $name) { throw 'Alpine import did not create the required registered distro.' }",
+          "new": "        if ($LASTEXITCODE -ne 0 -or $listed -notcontains $name) { throw 'Arch import did not create the required registered distro.' }"
+        },
+        {
+          "old": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslAlpineProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\alpine-minirootfs-3.24.0-x86_64.tar.gz'",
+          "new": "            probe='C:\\controlled-inputs\\ultra-minimal-wsl\\procedure\\Invoke-WslArchProbe.ps1'\n            rootfs='C:\\controlled-inputs\\ultra-minimal-wsl\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz'"
+        },
+        {
+          "old": "    foreach ($name in @(\"$trial.zip\",\"$recovery.zip\",\"$trial-stock-remove.log\",\"$trial-candidate-install.log\",\"$trial-candidate-remove.log\",\"$trial-stock-restore.log\",\"$trial-runner.stdout.log\",\"$trial-runner.stderr.log\",\"$trial-alpine-import.stdout.log\",\"$trial-alpine-import.stderr.log\",\"$trial-alpine-unregister.stdout.log\",\"$trial-alpine-unregister.stderr.log\")) {",
+          "new": "    foreach ($name in @(\"$trial.zip\",\"$recovery.zip\",\"$trial-stock-remove.log\",\"$trial-candidate-install.log\",\"$trial-candidate-remove.log\",\"$trial-stock-restore.log\",\"$trial-runner.stdout.log\",\"$trial-runner.stderr.log\",\"$trial-arch-import.stdout.log\",\"$trial-arch-import.stderr.log\",\"$trial-arch-unregister.stdout.log\",\"$trial-arch-unregister.stderr.log\")) {"
+        },
+        {
+          "old": "                $name = 'Alpine-Minimal'\n                $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Alpine-Minimal'",
+          "new": "                $name = 'Arch-Minimal'\n                $install = 'C:\\controlled-inputs\\ultra-minimal-wsl\\registered-distros\\Arch-Minimal'"
+        },
+        {
+          "old": "                    $stdout = Join-Path $evidence \"$Trial-alpine-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-alpine-unregister.stderr.log\"",
+          "new": "                    $stdout = Join-Path $evidence \"$Trial-arch-unregister.stdout.log\"\n                    $stderr = Join-Path $evidence \"$Trial-arch-unregister.stderr.log\""
+        },
+        {
+          "old": "                    if (-not $process.Start()) { throw 'Failed to start Alpine unregister.' }",
+          "new": "                    if (-not $process.Start()) { throw 'Failed to start Arch unregister.' }"
+        },
+        {
+          "old": "                        throw \"Alpine unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\"",
+          "new": "                        throw \"Arch unregister timed out; taskkill exit $($killer.ExitCode), process stopped $($process.HasExited).\""
+        },
+        {
+          "old": "                    if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Alpine unregister failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }",
+          "new": "                    if (-not $streamsCompleted -or $process.ExitCode -ne 0) { throw \"Arch unregister failed with exit $($process.ExitCode); streams completed $streamsCompleted.\" }"
+        },
+        {
+          "old": "                if ($LASTEXITCODE -ne 0 -or $listed -contains $name -or (Test-Path -LiteralPath $install)) { throw 'Alpine infrastructure cleanup verification failed.' }",
+          "new": "                if ($LASTEXITCODE -ne 0 -or $listed -contains $name -or (Test-Path -LiteralPath $install)) { throw 'Arch infrastructure cleanup verification failed.' }"
+        },
+        {
+          "old": "        foreach ($name in @(\"$trial-alpine-import.stdout.log\",\"$trial-alpine-import.stderr.log\",\"$trial-alpine-unregister.stdout.log\",\"$trial-alpine-unregister.stderr.log\")) {",
+          "new": "        foreach ($name in @(\"$trial-arch-import.stdout.log\",\"$trial-arch-import.stderr.log\",\"$trial-arch-unregister.stdout.log\",\"$trial-arch-unregister.stderr.log\")) {"
+        },
+        {
+          "old": "if (-not $registration.registered -or -not $cleanup.unregistered -or -not $cleanup.installPathAbsent) { throw 'Alpine registration lifecycle requirement failed.' }",
+          "new": "if (-not $registration.registered -or -not $cleanup.unregistered -or -not $cleanup.installPathAbsent) { throw 'Arch registration lifecycle requirement failed.' }"
+        }
+      ]
+    }
+  ]
+}

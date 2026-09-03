@@ -10,8 +10,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 DEFAULT_DB = ROOT / "inventory/experiments.sqlite"
-MIGRATIONS = {1: ROOT / "inventory/migrations/002-operation-templates.sql"}
-TARGET_VERSION = 2
+MIGRATIONS = {
+    1: ROOT / "inventory/migrations/002-operation-templates.sql",
+    2: ROOT / "inventory/migrations/003-arch-trial-result.sql",
+}
+TARGET_VERSION = 3
 
 
 def sha256(path: Path) -> str:

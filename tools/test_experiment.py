@@ -51,7 +51,7 @@ class ExperimentInventoryTests(unittest.TestCase):
         try:
             result = validate(db)
             self.assertEqual(result["integrity"], "ok")
-            self.assertEqual(result["schemaVersion"], 2)
+            self.assertEqual(result["schemaVersion"], 3)
             self.assertGreaterEqual(result["trials"], 20)
             self.assertLessEqual(len(list(db.execute("SELECT * FROM active_operation"))), 1)
         finally:

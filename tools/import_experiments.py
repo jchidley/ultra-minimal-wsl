@@ -72,7 +72,7 @@ def main() -> None:
 
     with db:
         for key, value in {
-            "schema": "2",
+            "schema": "3",
             "migrated_from_plan": "control-plane/deferred-runtime-plan.v1.json",
             "migrated_plan_sha256": sha256(PLAN_PATH),
             "migrated_configs_sha256": sha256(CONFIG_PATH),
@@ -183,7 +183,7 @@ def main() -> None:
             "trial_id", "status", "started_utc", "finished_utc", "source_commit", "toolchain",
             "kernel_config_path", "kernel_config_sha256", "parent_trial", "change_group",
             "explicit_symbols", "autoselected_symbols", "kernel_image_path", "kernel_image_sha256",
-            "boot_level", "toybox_result", "alpine_result", "failure_signature", "windows_error",
+            "boot_level", "toybox_result", "alpine_result", "arch_result", "failure_signature", "windows_error",
             "kernel_log_path", "crash_log_path", "classification", "stock_restore_verified", "notes",
         ]
         for row in trial_rows:
@@ -194,11 +194,17 @@ def main() -> None:
                 meta["parent_trial"] or None, meta["config_name"] or None, meta["change_group"],
                 meta["explicit_symbols"], meta["autoselected_symbols"], row["kernel_image_path"],
                 row["kernel_image_sha256"], meta["boot_level"], row["toybox_result"], row["alpine_result"],
-                row["failure_signature"], row["windows_error"], row["kernel_log_path"], row["crash_log_path"],
+                row.get("arch_result", ""), row["failure_signature"], row["windows_error"], row["kernel_log_path"], row["crash_log_path"],
                 row["classification"], row["stock_restore_verified"], meta["analysis_path"],
                 meta["notes"], row["notes"],
             ]
-            db.execute(f"INSERT INTO trials VALUES ({','.join('?' for _ in values)})", values)
+            columns = [field for field in ledger_fields if field != "notes"]
+            columns[columns.index("parent_trial"):columns.index("parent_trial") + 1] = ["parent_trial", "config_name"]
+            columns.extend(["analysis_path", "metadata_notes", "ledger_notes"])
+            db.execute(
+                f"INSERT INTO trials ({','.join(columns)}) VALUES ({','.join('?' for _ in values)})",
+                values,
+            )
 
         if db.execute("SELECT 1 FROM trials WHERE trial_id='CP-MINIMAL-V6-K-PIDNS-001'").fetchone():
             db.execute(

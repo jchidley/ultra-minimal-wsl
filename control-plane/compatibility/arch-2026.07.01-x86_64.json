@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "distribution": "Arch Linux",
+  "release": "2026.07.01",
+  "architecture": "x86_64",
+  "sourceArtifact": "archlinux-bootstrap-2026.07.01-x86_64.tar.zst",
+  "sourceUrl": "https://geo.mirror.pkgbuild.com/iso/2026.07.01/archlinux-bootstrap-2026.07.01-x86_64.tar.zst",
+  "checksumUrl": "https://geo.mirror.pkgbuild.com/iso/2026.07.01/sha256sums.txt",
+  "sourceSha256": "9cadf82e389427fb61739ad3b0c213b2abd331354fab6460972e4e52bb8ff9e8",
+  "sourceBytes": 125853825,
+  "artifact": "archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz",
+  "sha256": "c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176",
+  "bytes": 214122848,
+  "cachePath": "%LOCALAPPDATA%\\ultra-minimal-wsl\\cache\\arch\\2026.07.01\\archlinux-bootstrap-2026.07.01-x86_64-wsl-rootfs.tar.gz",
+  "derivation": "On LFS-Builder ext4, independently extract the pinned source twice; for each extraction archive root.x86_64/ contents with GNU tar --sort=name --format=gnu --mtime=@1782864000 --numeric-owner, then gzip -n -1. Require byte identity between both outputs.",
+  "offlinePolicy": "Accept only exact source and derived hash-and-size cache hits; runtime fails closed without the derived cache hit and performs no network access."
+}

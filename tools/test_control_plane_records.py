@@ -298,6 +298,35 @@ class ControlPlaneRecordTests(unittest.TestCase):
         self.assertEqual(next_build["fixture_final_state"], "Off")
         self.assertNotIn("msiexec", next_script.read_text(encoding="utf-8").lower())
 
+    def test_arch_compatibility_contract_is_bounded_and_keeps_toybox_recovery(self):
+        input_record = json.loads((CONTROL / "compatibility/arch-2026.07.01-x86_64.json").read_text(encoding="utf-8"))
+        self.assertEqual(input_record["sourceSha256"], "9cadf82e389427fb61739ad3b0c213b2abd331354fab6460972e4e52bb8ff9e8")
+        self.assertEqual(input_record["sha256"], "c3db227b048aa0e509b8a64d8fd6ab644a73c686fa5198a03e59d69627bad176")
+        self.assertEqual(input_record["bytes"], 214122848)
+        self.assertIn("exact source and derived hash-and-size cache hits", input_record["offlinePolicy"])
+
+        probe = (ROOT / "tools/Invoke-WslArchProbe.ps1").read_text(encoding="utf-8")
+        smoke = "/bin/true && test -r /proc/self/status && test -d /sys && test -c /dev/null && printf arch-ok"
+        self.assertIn(f"$SmokeCommand = '{smoke}'", probe)
+        self.assertIn("Invoke-BoundedProcess 'arch-smoke'", probe)
+        self.assertIn("{ 'B6-ARCH' }", probe)
+        for forbidden in ("Start-VM", "Stop-VM", "Restore-VMSnapshot", "New-PSSession", "Invoke-Command", "msiexec"):
+            self.assertNotIn(forbidden, probe)
+
+        runner = (CONTROL / "controlled-package-offline/Invoke-MinimalV8KPidNsArchTrial.ps1").read_text(encoding="utf-8")
+        self.assertIn("if ($Recovery) { 'Toybox-Minimal' } else { 'Arch-Minimal' }", runner)
+        self.assertIn("$RecoveryProbeSha256 = '424b0d4f26cef5c717a4805b2577feebf6973de4656778d7800474aad1bf4ebb'", runner)
+        self.assertIn("$RecoveryRootfsSha256 = 'a8e81e6d29eac6afa7b9438916df3db00de6f833faf8ab8dfaed482bb9a16fa4'", runner)
+        self.assertIn("-TimeoutSeconds 45 -Execute", runner)
+        self.assertIn("Invoke-Recovery $recoveryFailures", runner)
+
+        delta = json.loads((CONTROL / "generation/minimal-v8-k-pidns-arch.runtime.v1.json").read_text(encoding="utf-8"))
+        self.assertEqual(delta["schema"], 2)
+        self.assertEqual(delta["phase"], "runtime")
+        self.assertEqual({item["name"] for item in delta["files"]}, {"runner", "controller"})
+        for item in delta["files"]:
+            self.assertEqual(sha256(Path(item["output"])), item["output_sha256"])
+
     def test_alpine_compatibility_contract_is_bounded_and_keeps_toybox_recovery(self):
         input_record = json.loads((CONTROL / "compatibility/alpine-3.24.0-x86_64.json").read_text(encoding="utf-8"))
         self.assertEqual(input_record["sha256"], "de9a11c0e0e7e9c94db3ed8af7b450eafc0b13687bd7e9199d55050f20aa0a89")
