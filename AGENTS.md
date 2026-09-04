@@ -15,7 +15,7 @@ Read `STATUS.md`, `TASKS.md`, `MINIMAL-BOOT-PLAN.md`, and `build-host/README.md`
 ## Documentation and relay ownership
 
 - `STATUS.md` owns verified current facts; `TASKS.md` owns incomplete work; `MINIMAL-BOOT-PLAN.md` owns durable strategy and acceptance criteria.
-- Exact candidates, artifacts, operations, dispositions, configs, and trials belong in committed `inventory/experiments.sqlite`; immutable trial evidence belongs in trial directories. `control-plane/deferred-runtime-plan.v1.json` and the `inventory/*.v1.csv` files are frozen migration inputs and must never be edited.
+- Exact candidates, artifacts, operations, dispositions, configs, trials, and append-only interpretation corrections belong in committed `inventory/experiments.sqlite`; immutable trial evidence belongs in trial directories. Read effective trial views by default; inspect raw records only with their correction history. `control-plane/deferred-runtime-plan.v1.json` and the `inventory/*.v1.csv` files are frozen migration inputs and must never be edited.
 - Keep `README.md` and `PROJECT-MODEL.md` explanatory. Do not copy transient blockers, hashes, or task detail into them.
 - `NEXT-SESSION.md` is Relay-owned generated output, not canonical truth. Use it only when it agrees with `STATUS.md`, `TASKS.md`, and `MINIMAL-BOOT-PLAN.md`; reconcile it through `/relay`, not ordinary edits.
 - Before relaying, update only canonical documents whose facts or tasks changed, validate them, and ensure the generated session name matches the bounded objective.
@@ -31,9 +31,9 @@ Present Windows host and Pi session commands in PowerShell first. Agent-executed
 
 ## Current phase
 
-- Stock and the retained mount-plus-PID control plane pass `B6-T`; IPC and UTS remain omitted. The minimal-v6 overlay-plus-PID comparison and its debug-console diagnostic finalized at `B3`. Guest evidence selected removal of the excluded `LaunchDistro` cross-distro temporary-mount block, not another kernel facility.
+- The v1 baseline is frozen at its pinned Toybox/cold-start and Alpine/Arch/Debian smoke boundary, not proven globally minimal. Preserve unresolved facility classifications and historical evidence; completed source-selection findings are not new work orders.
 - Do not add `CONFIG_INOTIFY_USER`, storage hotplug, PCI, networking, IPC namespaces, or UTS namespaces speculatively, and do not rerun a finalized candidate unchanged.
-- `STATUS.md` owns the complete verified boundary and `TASKS.md` the bounded active action. Never copy an active operation number into this file: obtain exact executable state with `uv run python tools/experiment.py active`.
+- Debian3 practical bootstrap/migration work belongs to the `dotfiles` project and its sessions, not this frozen experiment. `STATUS.md` owns the complete verified boundary and `TASKS.md` the bounded active action. Never copy an active operation number into this file: obtain exact executable state with `uv run python tools/experiment.py active`.
 
 Operations wholly confined to the dedicated disposable fixture are standing-authorized when they use pinned hash-verified offline inputs, preserve evidence, follow the recorded recovery path, and finish with independently verified fixture state. No standing authorization crosses into the physical host or a shared WSL instance. Record and plan-validate produced hashes and exact installation/restoration commands before runtime; these are agent-executed technical checks, not human approval points.
 

@@ -11,7 +11,8 @@ The inventory uses two SQLite databases with deliberately different ownership.
 - build and runtime operations;
 - append-only operation dispositions;
 - kernel configuration snapshots;
-- immutable terminal trials and evidence links.
+- immutable terminal trials and evidence links;
+- append-only interpretation corrections with hash-bound evidence.
 
 Use only the repository CLI:
 
@@ -63,6 +64,21 @@ Before commit, validation requires SQLite integrity and foreign-key checks, at m
 Privileged execution never queries this normal-user-writable database. Preflight selects and validates the operation from SQL, then the protected broker snapshots the exact hash-bound controller. The controller carries the compact executable contract and does not trust mutable planning state.
 
 `control-plane/deferred-runtime-plan.v1.json`, `config-snapshots.v1.csv`, `trials.v1.csv`, and `trial-metadata.v1.csv` are frozen migration inputs. Never edit them. `tools/import_experiments.py --output <temporary-path>` reproduces the migration for verification; it refuses to replace the canonical database unless the exceptional `--replace-canonical` flag is explicit. Reviewed schema changes are applied in order from `inventory/migrations/` through `tools/migrate_experiments.py`.
+
+## Trial interpretation corrections
+
+`trials` preserves the original terminal record. Read `trial_effective` for its effective interpretation, or use the existing `trial_summary` and `show trial` commands. The summary reports `correction_count`; `show trial` includes the full correction history. `analysis_path` still points to the immutable original analysis, which may contain superseded claims. Generated inventory exports consume `trial_effective`, not raw `trials`.
+
+Append a correction through `uv run python tools/experiment.py trial-correction-add --record <RECORD.json>`. Its exact string fields are:
+
+- `trial_id` and `field` (`failure_signature`, `metadata_notes`, or `ledger_notes` only);
+- `superseded_value`: the exact current effective field value;
+- `corrected_value` and `reason`: nonempty interpretation and justification;
+- `evidence_path`: an existing repository-relative supporting file.
+
+The CLI calculates the evidence SHA-256 and UTC recording time. Increasing `correction_id`, not timestamps, defines append order independently for each trial/field. Further corrections must supersede the current value; they cannot erase other fields' corrections. Outcome, checkpoint, classification, recovery, and artifact fields cannot be corrected through this mechanism. Update/delete/replace of corrections is rejected; validation checks the chain from the original value and verifies evidence identities. `diff-head` includes appended correction IDs; query `trial_corrections` or `show trial` to inspect their full contents.
+
+Candidate `status` is historical preparation metadata, not an aggregate runtime verdict or frozen selection. Runtime outcomes already belong to trials and their producing operations; `STATUS.md` owns the retained boundary. No additional candidate lifecycle is implied by this correction mechanism.
 
 ## Generated Kconfig query database
 

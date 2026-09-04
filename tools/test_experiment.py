@@ -9,9 +9,13 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from tools.generate_candidate_scripts import generate, render_text
+from tools.inventory_records import export_experiment_records, sync_trials
+from tools.migrate_experiments import migrate
 from tools.experiment import (
+    add_trial_correction,
     close_operation,
     connect,
     derive_operation,
@@ -51,7 +55,7 @@ class ExperimentInventoryTests(unittest.TestCase):
         try:
             result = validate(db)
             self.assertEqual(result["integrity"], "ok")
-            self.assertEqual(result["schemaVersion"], 4)
+            self.assertEqual(result["schemaVersion"], 5)
             self.assertGreaterEqual(result["trials"], 20)
             self.assertLessEqual(len(list(db.execute("SELECT * FROM active_operation"))), 1)
         finally:
@@ -536,6 +540,148 @@ class ExperimentInventoryTests(unittest.TestCase):
             finally:
                 migrated.close()
                 canonical.close()
+
+
+class TrialCorrectionTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporary.cleanup)
+        self.path = Path(self.temporary.name) / "experiments.sqlite"
+        shutil.copy2(DB, self.path)
+        migrate(self.path)
+        self.db = connect(self.path, writable=True)
+        self.addCleanup(self.db.close)
+        self.trial_id = "G-001"
+        self.original = dict(self.db.execute("SELECT * FROM trials WHERE trial_id=?", (self.trial_id,)).fetchone())
+        self.evidence = "recovery-harness/trials/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/attempt-052/candidate/CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001/04-tool-versions-result.json"
+
+    def record(self, field: str = "metadata_notes", text: str = "Corrected interpretation") -> dict:
+        effective = self.db.execute("SELECT * FROM trial_effective WHERE trial_id=?", (self.trial_id,)).fetchone()
+        return dict(trial_id=self.trial_id, field=field, superseded_value=effective[field],
+                    corrected_value=text, reason="test correction", evidence_path=self.evidence)
+
+    def test_ordering_is_per_field_and_preserves_raw_trial(self) -> None:
+        before = logical_state(self.db)
+        # Deliberately equal/backdated clocks: only append IDs may choose precedence.
+        with patch("tools.experiment.datetime") as clock:
+            clock.now.return_value.isoformat.return_value = "2026-09-05T00:00:00+00:00"
+            add_trial_correction(self.db, self.record(text="First interpretation"))
+            add_trial_correction(self.db, self.record("failure_signature", "Independent field correction"))
+            clock.now.return_value.isoformat.return_value = "2026-09-04T00:00:00+00:00"
+            add_trial_correction(self.db, self.record(text="Second interpretation"))
+        effective = self.db.execute("SELECT * FROM trial_effective WHERE trial_id=?", (self.trial_id,)).fetchone()
+        self.assertEqual(effective["metadata_notes"], "Second interpretation")
+        self.assertEqual(effective["failure_signature"], "Independent field correction")
+        self.assertEqual(dict(self.db.execute("SELECT * FROM trials WHERE trial_id=?", (self.trial_id,)).fetchone()), self.original)
+        delta = logical_diff(before, logical_state(self.db))
+        self.assertEqual(len(delta["trial_corrections"]["added"]), 3)
+        self.assertEqual(delta["trials"], {"added": [], "removed": [], "changed": {}})
+        self.assertEqual(validate(self.db)["integrity"], "ok")
+
+    def test_corrections_reject_update_delete_and_replace(self) -> None:
+        add_trial_correction(self.db, self.record())
+        self.db.commit()
+        for statement in (
+            "UPDATE trial_corrections SET corrected_value='rewritten'",
+            "DELETE FROM trial_corrections",
+            "INSERT OR REPLACE INTO trial_corrections SELECT * FROM trial_corrections",
+        ):
+            with self.subTest(statement=statement), self.assertRaisesRegex(sqlite3.IntegrityError, "append-only"):
+                self.db.execute(statement)
+
+    def test_rejects_stale_unknown_observational_and_invalid_evidence_records(self) -> None:
+        stale = self.record()
+        add_trial_correction(self.db, stale)
+        invalid = [stale, self.record() | {"trial_id": "missing"},
+                   self.record() | {"field": "status"},
+                   self.record() | {"evidence_path": "../outside"},
+                   self.record() | {"evidence_path": "missing.json"},
+                   self.record() | {"recorded_utc": "caller-controlled"}]
+        for record in invalid:
+            with self.subTest(record=record), self.assertRaises(SystemExit):
+                add_trial_correction(self.db, record)
+        for record in (self.record(text=""), self.record() | {"reason": " "}):
+            with self.assertRaises(sqlite3.IntegrityError):
+                add_trial_correction(self.db, record)
+
+    def test_validation_detects_broken_chain_and_evidence_hash(self) -> None:
+        record = self.record()
+        add_trial_correction(self.db, record)
+        self.db.commit()
+        columns = "trial_id,field,superseded_value,corrected_value,reason,evidence_path,evidence_sha256,recorded_utc"
+        original = dict(self.db.execute("SELECT * FROM trial_corrections ORDER BY correction_id DESC LIMIT 1").fetchone())
+        for change, expected in (({"superseded_value": "stale"}, "chain mismatch"),
+                                 ({"evidence_sha256": "0" * 64}, "evidence hash mismatch")):
+            bad = original | {"superseded_value": record["corrected_value"], "corrected_value": "Next interpretation"} | change
+            self.db.execute(f"INSERT INTO trial_corrections ({columns}) VALUES ({','.join('?' for _ in columns.split(','))})",
+                            tuple(bad[name] for name in columns.split(',')))
+            with self.assertRaisesRegex(SystemExit, expected):
+                validate(self.db)
+            self.db.rollback()
+
+    def test_normal_cli_summary_and_generated_exports_use_effective_values(self) -> None:
+        add_trial_correction(self.db, self.record("failure_signature", "Corrected failure"))
+        add_trial_correction(self.db, self.record("ledger_notes", "Corrected ledger"))
+        self.db.commit()
+        record_path = Path(self.temporary.name) / "correction.json"
+        record_path.write_text(json.dumps(self.record(text="Corrected metadata")), encoding="utf-8")
+        command = ["uv", "run", "python", "tools/experiment.py", "--db", str(self.path),
+                   "trial-correction-add", "--record", str(record_path)]
+        subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=True)
+        rejected = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+        self.assertNotEqual(rejected.returncode, 0)
+        self.assertIn("exact current effective value", rejected.stderr)
+        summary = self.db.execute("SELECT * FROM trial_summary WHERE trial_id=?", (self.trial_id,)).fetchone()
+        self.assertEqual(summary["failure_signature"], "Corrected failure")
+        self.assertEqual(summary["correction_count"], 3)
+        result = subprocess.run(
+            ["uv", "run", "python", "tools/experiment.py", "--db", str(self.path), "show", "trial", self.trial_id],
+            cwd=ROOT, capture_output=True, text=True, check=True,
+        )
+        shown = json.loads(result.stdout)[0]
+        self.assertEqual(shown["metadata_notes"], "Corrected metadata")
+        self.assertEqual(len(shown["corrections"]), 3)
+        _, trials, metadata = export_experiment_records(self.path, Path(self.temporary.name))
+        generated = sqlite3.connect(":memory:")
+        try:
+            generated.execute("CREATE TABLE configs(name TEXT PRIMARY KEY)")
+            generated.executemany("INSERT INTO configs VALUES (?)", self.db.execute("SELECT name FROM configs"))
+            sync_trials(generated, trials, metadata, ROOT)
+            row = generated.execute("SELECT failure_signature,metadata_notes,ledger_notes FROM trial_inventory WHERE trial_id=?", (self.trial_id,)).fetchone()
+            self.assertEqual(row, ("Corrected failure", "Corrected metadata", "Corrected ledger"))
+        finally:
+            generated.close()
+
+    def test_recorded_debian2_correction_matches_silent_p4_evidence(self) -> None:
+        trial_id = "CP-MINIMAL-V8-K-PIDNS-DEBIAN2-PRACTICAL-001"
+        raw = self.db.execute("SELECT * FROM trials WHERE trial_id=?", (trial_id,)).fetchone()
+        effective = self.db.execute("SELECT * FROM trial_effective WHERE trial_id=?", (trial_id,)).fetchone()
+        evidence = json.loads((ROOT / self.evidence).read_text(encoding="utf-8-sig"))
+        self.assertEqual((evidence["exitCode"], evidence["stdout"], evidence["stderr"]), (1, "", ""))
+        self.assertIn("after Node/npm/fnm/McFly checks", raw["failure_signature"])
+        self.assertIn("no individual", effective["failure_signature"])
+        self.assertNotEqual(raw["metadata_notes"], effective["metadata_notes"])
+        for field in set(raw.keys()) - {"failure_signature", "metadata_notes"}:
+            self.assertEqual(raw[field], effective[field])
+
+    def test_v4_migration_preserves_rows_and_matches_fresh_schema(self) -> None:
+        before = [tuple(row) for row in self.db.execute("SELECT * FROM trials ORDER BY trial_id")]
+        self.db.executescript("""DROP VIEW trial_summary; DROP VIEW trial_effective;
+            DROP TABLE trial_corrections;
+            CREATE VIEW trial_summary AS SELECT trial_id FROM trials;
+            UPDATE metadata SET value='4' WHERE key='schema'; PRAGMA user_version=4;""")
+        migrate(self.path)
+        self.assertEqual([tuple(row) for row in self.db.execute("SELECT * FROM trials ORDER BY trial_id")], before)
+        self.assertEqual(self.db.execute("SELECT count(*) FROM trial_corrections").fetchone()[0], 0)
+        fresh = sqlite3.connect(":memory:")
+        try:
+            fresh.executescript((ROOT / "inventory/experiment-schema.sql").read_text())
+            for name in ("trial_corrections", "trial_effective", "trial_summary", "corrections_no_update", "corrections_no_delete", "corrections_no_replace"):
+                expected = fresh.execute("SELECT sql FROM sqlite_master WHERE name=?", (name,)).fetchone()[0]
+                actual = self.db.execute("SELECT sql FROM sqlite_master WHERE name=?", (name,)).fetchone()[0]
+                self.assertEqual(actual, expected)
+        finally:
+            fresh.close()
 
 
 if __name__ == "__main__":

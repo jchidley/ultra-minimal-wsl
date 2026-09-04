@@ -228,7 +228,7 @@ def export_experiment_records(experiments: Path, directory: Path) -> tuple[Path,
         with trials.open("w", newline="", encoding="utf-8") as stream:
             writer = csv.DictWriter(stream, fieldnames=ledger_fields)
             writer.writeheader()
-            for row in source.execute("SELECT * FROM trials ORDER BY started_utc,trial_id"):
+            for row in source.execute("SELECT * FROM trial_effective ORDER BY started_utc,trial_id"):
                 value = dict(row)
                 value["parent_trial"] = value["parent_trial"] or ""
                 value["notes"] = value.pop("ledger_notes")
@@ -238,7 +238,7 @@ def export_experiment_records(experiments: Path, directory: Path) -> tuple[Path,
         with metadata.open("w", newline="", encoding="utf-8") as stream:
             writer = csv.DictWriter(stream, fieldnames=TRIAL_METADATA_FIELDS)
             writer.writeheader()
-            for row in source.execute("SELECT * FROM trials ORDER BY started_utc,trial_id"):
+            for row in source.execute("SELECT * FROM trial_effective ORDER BY started_utc,trial_id"):
                 value = dict(row)
                 writer.writerow({
                     "trial_id": value["trial_id"], "parent_trial": value["parent_trial"] or "",

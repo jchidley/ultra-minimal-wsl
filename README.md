@@ -43,11 +43,11 @@ Minimal Viable WSL
 
 Everything beyond this boundary is an optional integration profile. A separate, inactive follow-on project for a practical Rust userspace is chartered in `RUST-MINIMAL-WSL-FOLLOW-ON.md`; it must not change either measured baseline.
 
-## Current position
+## Achieved boundary
 
-Toybox passes QEMU `G4`, and stock WSL 2.7.12 passes the fixed probe at `B6-T`. Controlled control-plane comparison proved that mount plus PID namespace semantics can execute the same Toybox command while IPC and UTS remain omitted. The first PID-enabled reduced kernels currently stop at `B2` after mini-init configuration and before registered-distro mount; retaining overlay reproduced the same boundary.
+The frozen `ultra-minimal-wsl-v1` baseline passes Toybox, ten cold starts, and the pinned Alpine, Arch, and Debian smoke contracts without compatibility additions. It retains mount plus PID namespace semantics, omits IPC/UTS and overlay, and has independent stock-recovery evidence.
 
-The active work removes reachable mini-init initialization hard-fails that implement excluded policy, then retests the reduced PID kernel without speculative Kconfig additions. See `STATUS.md` for verified facts and `TASKS.md` for the bounded queue.
+This is a measured baseline, not proof of global minimality or general-purpose distro compatibility; some retained facilities remain individually unresolved. See `STATUS.md` for the exact evidence boundary and practical-workload ownership, `MINIMAL-BOOT-PLAN.md` for the acceptance contract, and `TASKS.md` for any authorized incomplete work.
 
 ## Documentation
 

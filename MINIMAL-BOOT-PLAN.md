@@ -95,7 +95,7 @@ A symbol is not “required” merely because Microsoft enables it or because it
 | `B6-ARCH` | Arch smoke test passes |
 | `B6-D` | Debian smoke test passes |
 
-Extend the durable trial schema before using the Arch or Debian result fields.
+The durable trial schema includes separate Arch and Debian result fields.
 
 ## Candidate comparison and instrumentation
 
@@ -103,13 +103,13 @@ The experiment target is the WSL Linux configuration, not its outer fixture. Fix
 
 Use one active writer and fixture operator per checkout. Concurrent sessions may independently review immutable evidence, but they must remain read-only. Report lifecycle state exactly as `prepared`, `UAC requested`, `worker started`, `first probe started`, or `candidate finalized`; preparation or a pending prompt is not a running experiment.
 
-Every candidate uses `tools/Invoke-WslCandidateProbe.ps1` with identical inputs and rules. It runs separate bounded `wsl.exe --version`, `--status`, `--list --quiet`, and exact Toybox smoke processes, then shuts WSL down. The interval captures exact package/candidate/rootfs/probe hashes; arguments, timestamps, stdout, stderr, exit, and timeout for every process; WSL WPR/ETW, relevant event delta, debug-console evidence where applicable, and new crash artifacts; an evidence manifest; and independent stock recovery proof.
+Every Toybox candidate comparison uses `tools/Invoke-WslCandidateProbe.ps1` with identical inputs and rules. That probe runs separate bounded `wsl.exe --version`, `--status`, `--list --quiet`, and exact Toybox smoke processes, then shuts WSL down. Compatibility trials use their preserved distro-specific probes with the smoke contract below. The interval captures exact package/candidate/rootfs/probe hashes; arguments, timestamps, stdout, stderr, exit, and timeout for every process; WSL WPR/ETW, relevant event delta, debug-console evidence where applicable, and new crash artifacts; an evidence manifest; and independent stock recovery proof.
 
 Before elevation, the active operation must pass semantic preflight: PowerShell AST parsing and analysis, exact hash and size binding, host-versus-guest path review, evidence-directory creation before first write, the actual elevation/child-launch parameter and quoting path, the production runner fault matrix, inventory integrity, and exact recovery validation. Text-presence tests alone do not satisfy this gate. The planned operation enters `uac-requested` only through the focused SQLite preflight command, which requires the complete invariant unit suite to pass against the current lifecycle state immediately before the checked transition.
 
 Missing hashes, interval bounds, process results, trace evidence, manifest, or recovery prevents a positive classification. Finalize the operation and trial transactionally in `inventory/experiments.sqlite` only after evidence and recovery complete, and preserve immutable files under `recovery-harness/trials/<TRIAL_ID>/`. Infrastructure attempts receive an operation disposition but no experiment trial row.
 
-Accepted controlled comparisons establish the current retained boundary: mount plus PID namespace semantics passes `B6-T`, while IPC and UTS remain omitted. Under minimal v5, PID-enabled storage-floor and overlay-floor reduced kernels both stopped at `B2` before registered-distro mount, so overlay was not the missing facility at that boundary. After the evidence-selected minimal-v6 source reduction, the storage-floor PID kernel reached `B3` and crashed in the absent writable-overlay path, selecting a new minimal-v6 plus overlay-and-PID comparison without selecting any unrelated kernel group. Exact trial chronology and identities belong in `STATUS.md` and immutable evidence, not in this contract.
+Controlled comparisons distinguish source-policy failures from missing kernel facilities; an excluded startup hard-fail is not evidence to add the corresponding facility. Historical source-selection findings must not be treated as current work orders. Exact retained boundaries, trial chronology, and identities belong in `STATUS.md` and immutable evidence, not in this contract.
 
 ## Smoke-test contract
 
@@ -135,7 +135,7 @@ Alpine additionally runs `/bin/busybox true`; Arch and Debian run `/bin/true`. D
 7. **Fail-closed static gate:** permit only handshake, one registered LUN/ext4 launch, minimal initialization, direct process relay, exit status, and termination; reject every other mini-init and distro-init operation in both implementation and tests.
 8. **Namespace variants:** derive coherent IPC/mount/PID/UTS and mount-only launch variants from one fail-closed parent; preserve both and do not select namespace Kconfig from source preference alone.
 9. **Command dispatch:** in the isolated controlled-package environment, establish the minimum root transition, process creation, relay, and lifecycle path through the reduced control plane.
-10. **Prove minimality:** ablate every provisional WSL bundle and freeze `minimal-viable-wsl-v1`.
+10. **Investigate minimality:** use controlled ablation to isolate provisional WSL requirements. The full-ablation goal was not exhausted for v1: its freeze records a reproducibly passing, fully classified baseline with explicit unresolved individual necessity, not proof of global minimality.
 11. **Compatibility:** test Alpine, Arch, and Debian in order; attribute and ablate each addition; freeze `ultra-minimal-wsl-v1`.
 
 If a failure does not select a narrow subsystem, delta-debug coherent feature groups between the candidate and Stage 1. Never bisect arbitrary individual symbols across dependency boundaries.
@@ -181,10 +181,12 @@ Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-D
 
 - QEMU `G4` and WSL `B6-T` pass reproducibly.
 - The retained control plane implements only the target contract.
-- Every non-mkroot feature is classified.
+- Every non-mkroot feature is classified; `UNRESOLVED` preserves an evidence limit and is not a necessity claim.
 - Ten cold starts pass without unexpected warnings, oopses, or init crashes.
 - Source, config, image, and recovery hashes are reproducible.
 - Stock-kernel restoration is proven.
+
+A v1 freeze records acceptance of this bounded contract, not completion of every possible ablation or a distributable release. Six explicit retained platform/transport/storage facilities remain individually `UNRESOLVED`; the freeze does not silently promote them or authorize further trials.
 
 ### `ultra-minimal-wsl-v1`
 
@@ -193,4 +195,4 @@ Every candidate and trial follows `AGENTS.md`, `inventory/README.md`, and `WSL-D
 - Each compatibility addition is attributed and proven necessary.
 - The same reproducibility, cold-start, clean-log, and recovery gates pass.
 
-Optional integration work must use separate additive profiles so these two measured baselines remain intact. A practical-workload article may be constructed under stock WSL from pinned inputs, then tested separately against the frozen reduced baseline; article construction is infrastructure preparation, not a compatibility rerun or evidence that a facility is required. Preserve its source identities, installed-version manifest, VHDX identity, and secret-free boundary. The practical Rust-userspace idea is recorded as a separate, inactive follow-on in `RUST-MINIMAL-WSL-FOLLOW-ON.md`; its start gate is a frozen, reproducible Minimal Viable WSL result, and its work must not alter this experiment's candidates or evidence.
+Optional integration work must use separate additive profiles so these two measured baselines remain intact. Evolving Debian3 bootstrap and practical migration are owned by `dotfiles`; this repository preserves only the frozen experiment and its bounded comparison evidence. A practical-workload article may be constructed under stock WSL from pinned inputs, then tested separately against the frozen reduced baseline; article construction is infrastructure preparation, not a compatibility rerun or evidence that a facility is required. Preserve its source identities, installed-version manifest, VHDX identity, and secret-free boundary. The practical Rust-userspace idea is recorded as a separate, inactive follow-on in `RUST-MINIMAL-WSL-FOLLOW-ON.md`; its start gate is a frozen, reproducible Minimal Viable WSL result, and its work must not alter this experiment's candidates or evidence.

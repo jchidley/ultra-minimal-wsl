@@ -72,7 +72,7 @@ def main() -> None:
 
     with db:
         for key, value in {
-            "schema": "4",
+            "schema": "5",
             "migrated_from_plan": "control-plane/deferred-runtime-plan.v1.json",
             "migrated_plan_sha256": sha256(PLAN_PATH),
             "migrated_configs_sha256": sha256(CONFIG_PATH),

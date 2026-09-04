@@ -17,9 +17,11 @@ All layers apply to WSL tag 2.7.12, commit `68f601bba8eac1df20a0bbd403c6c87c9236
 | `minimal-v3` | Remove unconditional `binfmt_misc`/`WSLInterop` initialization rather than enabling excluded kernel support. | `minimal-v3-audit.md`, `candidates/minimal-v3-*` |
 | `minimal-v4` | Zero excluded GUI, GPU, and networking fields on the retained Windows sender. | `candidates/minimal-v4-*`, runtime trial evidence |
 | `minimal-v5` | Retain mount plus PID namespaces while omitting IPC and UTS. | `candidates/minimal-v5-mount-pid-ns/`, runtime trial evidence |
-| next layer | Remove only reachable `Initialize` hard-fails that implement excluded policy, then retest the reduced PID kernel. | `kernel-contract-review.md`, `TASKS.md` |
+| `minimal-v6` | Remove evidence-selected excluded mini-init initialization hard-fails. | `candidates/minimal-v6-excluded-initialize/`, runtime trial evidence |
+| `minimal-v7` | Remove the unconditional cross-distro launch mount and fallback. | `candidates/minimal-v7-no-cross-distro-launch/`, runtime trial evidence |
+| `minimal-v8` | Remove distro-init's excluded `binfmt_misc` startup mount. | `candidates/minimal-v8-no-binfmt-mount/`, runtime trial evidence |
 
-Earlier generations are immutable evidence, not alternative current plans. `minimal-v5-mount-pid-ns` is the passing control-plane baseline: stock-like namespaces passed, mount-only stopped after `B3`, and mount plus PID restored `B6-T`. Runtime proof and exact hashes remain in the trial and candidate records rather than being repeated here.
+Earlier generations are immutable evidence, not alternative current plans. The retained minimal-v8 source plus no-overlay PID kernel establishes the frozen smoke-test boundary described in `../STATUS.md`. Passing that bounded contract does not establish arbitrary-workload compatibility or individual necessity of every retained facility. Runtime proof and exact hashes remain in the trial and candidate records rather than being repeated here.
 
 ## Validation
 

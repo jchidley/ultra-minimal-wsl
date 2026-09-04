@@ -11,11 +11,13 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 DEFAULT_DB = ROOT / "inventory/experiments.sqlite"
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
+CORRECTION_FIELDS = {"failure_signature", "metadata_notes", "ledger_notes"}
 TERMINAL_OPERATION_STATES = {
     "completed", "candidate-finalized", "infrastructure-failure", "superseded", "cancelled"
 }
@@ -209,6 +211,20 @@ def validate(db: sqlite3.Connection, *, verify_files: bool = True) -> dict:
                 problems.append(f"artifact {artifact['artifact_id']} hash mismatch: {path}")
             if artifact["bytes"] is not None and path.stat().st_size != artifact["bytes"]:
                 problems.append(f"artifact {artifact['artifact_id']} size mismatch: {path}")
+    effective = {row["trial_id"]: dict(row) for row in db.execute("SELECT * FROM trials")}
+    for correction in rows(db, "SELECT * FROM trial_corrections ORDER BY correction_id"):
+        trial = effective.get(correction["trial_id"])
+        field = correction["field"]
+        if not trial or field not in CORRECTION_FIELDS or trial[field] != correction["superseded_value"]:
+            problems.append(f"correction chain mismatch: {correction['correction_id']}")
+            continue
+        trial[field] = correction["corrected_value"]
+        try:
+            evidence = correction_evidence(correction["evidence_path"])
+            if verify_files and sha256(evidence) != correction["evidence_sha256"]:
+                problems.append(f"correction evidence hash mismatch: {correction['correction_id']}")
+        except SystemExit as error:
+            problems.append(str(error))
     database_path = Path(db.execute("PRAGMA database_list").fetchone()[2])
     for suffix in ("-wal", "-shm"):
         if Path(str(database_path) + suffix).exists():
@@ -539,6 +555,31 @@ def transition_operation(db: sqlite3.Connection, record: dict, *, preflight_pass
     db.execute(f"UPDATE operations SET status=?,{field}=? WHERE operation_id=?", (record["status"], record[field], record["operation_id"]))
 
 
+def correction_evidence(value: str) -> Path:
+    path = (ROOT / value).resolve()
+    if Path(value).is_absolute() or not path.is_relative_to(ROOT.resolve()) or not path.is_file():
+        raise SystemExit(f"Correction evidence must be an existing repository-relative file: {value}")
+    return path
+
+
+def add_trial_correction(db: sqlite3.Connection, record: dict) -> None:
+    fields = ("trial_id", "field", "superseded_value", "corrected_value", "reason", "evidence_path")
+    require(record, fields)
+    if set(record) != set(fields) or any(not isinstance(record[name], str) for name in fields):
+        raise SystemExit("trial-correction-add accepts only the documented string fields")
+    if record["field"] not in CORRECTION_FIELDS:
+        raise SystemExit("Only trial interpretation fields may be corrected")
+    trial = db.execute("SELECT * FROM trial_effective WHERE trial_id=?", (record["trial_id"],)).fetchone()
+    if not trial or trial[record["field"]] != record["superseded_value"]:
+        raise SystemExit("Correction must supersede the exact current effective value of an existing trial")
+    evidence = correction_evidence(record["evidence_path"])
+    db.execute(
+        f"INSERT INTO trial_corrections ({','.join(fields)},evidence_sha256,recorded_utc) "
+        f"VALUES ({','.join('?' for _ in range(len(fields) + 2))})",
+        (*[record[name] for name in fields], sha256(evidence), datetime.now(timezone.utc).isoformat()),
+    )
+
+
 def finalize_trial(db: sqlite3.Connection, record: dict) -> None:
     fields = (
         "trial_id", "status", "started_utc", "finished_utc", "source_commit", "toolchain",
@@ -608,6 +649,7 @@ STATE_TABLES = (
     ("operation_template_bindings", ("operation_id",)),
     ("operation_dispositions", ("disposition_id",)),
     ("trials", ("trial_id",)),
+    ("trial_corrections", ("correction_id",)),
     ("trial_operation_results", ("trial_id",)),
     ("configs", ("name",)),
 )
@@ -691,7 +733,7 @@ def main() -> None:
     for name in (
         "artifact-add", "candidate-add", "candidate-prepare", "config-add", "candidate-artifact-link",
         "operation-template-add", "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
-        "operation-close", "trial-finalize", "runtime-finalize",
+        "operation-close", "trial-finalize", "runtime-finalize", "trial-correction-add",
     ):
         item = commands.add_parser(name)
         item.add_argument("--record", required=True)
@@ -700,7 +742,7 @@ def main() -> None:
     writable = args.command in {
         "artifact-add", "candidate-add", "candidate-prepare", "config-add", "candidate-artifact-link",
         "operation-template-add", "operation-derive", "operation-retry", "operation-transition", "operation-request-uac",
-        "operation-close", "trial-finalize", "runtime-finalize",
+        "operation-close", "trial-finalize", "runtime-finalize", "trial-correction-add",
     }
     db = connect(path, writable=writable)
     try:
@@ -735,8 +777,13 @@ def main() -> None:
                 "  -Confirmed"
             )
         elif args.command == "show":
-            table, key = {"candidate": ("candidates", "candidate_id"), "operation": ("operations", "operation_id"), "trial": ("trials", "trial_id")}[args.kind]
-            print_json(rows(db, f"SELECT * FROM {table} WHERE {key}=?", (args.identifier,)))
+            table, key = {"candidate": ("candidates", "candidate_id"), "operation": ("operations", "operation_id"), "trial": ("trial_effective", "trial_id")}[args.kind]
+            result = rows(db, f"SELECT * FROM {table} WHERE {key}=?", (args.identifier,))
+            if args.kind == "trial" and result:
+                result[0]["corrections"] = rows(
+                    db, "SELECT * FROM trial_corrections WHERE trial_id=? ORDER BY correction_id", (args.identifier,),
+                )
+            print_json(result)
         elif args.command == "query":
             statement = args.sql.strip()
             if not statement.lower().startswith(("select ", "with ", "pragma ")) or ";" in statement.rstrip(";"):
@@ -772,6 +819,7 @@ def main() -> None:
                     "operation-close": close_operation,
                     "trial-finalize": finalize_trial,
                     "runtime-finalize": finalize_runtime,
+                    "trial-correction-add": add_trial_correction,
                 }
                 actions[args.command](db, record)
                 validate(db)

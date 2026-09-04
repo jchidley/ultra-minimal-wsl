@@ -14,8 +14,9 @@ MIGRATIONS = {
     1: ROOT / "inventory/migrations/002-operation-templates.sql",
     2: ROOT / "inventory/migrations/003-arch-trial-result.sql",
     3: ROOT / "inventory/migrations/004-debian-trial-result.sql",
+    4: ROOT / "inventory/migrations/005-trial-corrections.sql",
 }
-TARGET_VERSION = 4
+TARGET_VERSION = 5
 
 
 def sha256(path: Path) -> str:
